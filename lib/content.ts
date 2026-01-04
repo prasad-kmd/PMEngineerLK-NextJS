@@ -1,0 +1,150 @@
+import fs from "fs"
+import path from "path"
+import matter from "gray-matter"
+import { marked } from "marked"
+
+export interface ContentItem {
+  slug: string
+  title: string
+  date?: string
+  description?: string
+  content: string
+  rawContent: string
+  final?: boolean
+  firstImage?: string
+}
+
+function extractFirstImage(content: string, isMarkdown: boolean): string | undefined {
+  if (isMarkdown) {
+    // Match markdown image syntax: ![alt](url)
+    const markdownImageRegex = /!\[.*?\]$$(.*?)$$/
+    const match = content.match(markdownImageRegex)
+    if (match && match[1]) {
+      return match[1]
+    }
+  }
+
+  // Match HTML image syntax: <img src="url" or <img ... src="url"
+  const htmlImageRegex = /<img[^>]+src=["']([^"']+)["']/i
+  const match = content.match(htmlImageRegex)
+  if (match && match[1]) {
+    return match[1]
+  }
+
+  return undefined
+}
+
+const contentDirectory = path.join(process.cwd(), "content")
+
+export function getContentByType(type: "ideas" | "diary" | "workflow" | "posts"): ContentItem[] {
+  const typeDirectory = path.join(contentDirectory, type)
+
+  // Create directory if it doesn't exist
+  if (!fs.existsSync(typeDirectory)) {
+    return []
+  }
+
+  const files = fs.readdirSync(typeDirectory)
+
+  const items = files
+    .filter((file) => file.endsWith(".md") || file.endsWith(".html"))
+    .map((file) => {
+      const slug = file.replace(/\.(md|html)$/, "")
+      const fullPath = path.join(typeDirectory, file)
+      const fileContents = fs.readFileSync(fullPath, "utf8")
+
+      if (file.endsWith(".md")) {
+        const { data, content } = matter(fileContents)
+        const htmlContent = marked(content)
+        const firstImage = extractFirstImage(content, true)
+
+        return {
+          slug,
+          title: data.title || slug,
+          date: data.date,
+          description: data.description,
+          content: htmlContent as string,
+          rawContent: content,
+          final: data.final || false,
+          firstImage,
+        }
+      } else {
+        // HTML file
+        const { data, content } = matter(fileContents)
+        const firstImage = extractFirstImage(content, false)
+
+        return {
+          slug,
+          title: data.title || slug,
+          date: data.date,
+          description: data.description,
+          content: content,
+          rawContent: content,
+          final: data.final || false,
+          firstImage,
+        }
+      }
+    })
+    .sort((a, b) => {
+      if (a.date && b.date) {
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      }
+      return 0
+    })
+
+  return items
+}
+
+export function getContentItem(type: "ideas" | "diary" | "workflow" | "posts", slug: string): ContentItem | null {
+  const typeDirectory = path.join(contentDirectory, type)
+
+  // Try .md first, then .html
+  const mdPath = path.join(typeDirectory, `${slug}.md`)
+  const htmlPath = path.join(typeDirectory, `${slug}.html`)
+
+  let fullPath: string
+  let isMarkdown: boolean
+
+  if (fs.existsSync(mdPath)) {
+    fullPath = mdPath
+    isMarkdown = true
+  } else if (fs.existsSync(htmlPath)) {
+    fullPath = htmlPath
+    isMarkdown = false
+  } else {
+    return null
+  }
+
+  const fileContents = fs.readFileSync(fullPath, "utf8")
+
+  if (isMarkdown) {
+    const { data, content } = matter(fileContents)
+    const htmlContent = marked(content)
+    const firstImage = extractFirstImage(content, true)
+
+    return {
+      slug,
+      title: data.title || slug,
+      date: data.date,
+      description: data.description,
+      content: htmlContent as string,
+      rawContent: content,
+      final: data.final || false,
+      firstImage,
+    }
+  } else {
+    const { data, content } = matter(fileContents)
+    const firstImage = extractFirstImage(content, false)
+
+    return {
+      slug,
+      title: data.title || slug,
+      date: data.date,
+      description: data.description,
+      content: content,
+      rawContent: content,
+      final: data.final || false,
+      firstImage,
+    }
+  }
+}

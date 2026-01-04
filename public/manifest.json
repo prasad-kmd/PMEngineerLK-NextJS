@@ -1,0 +1,26 @@
+{
+  "name": "Engineering Project",
+  "short_name": "EngProject",
+  "description": "An engineering project web application.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/img/favicon/icons8_project_management_16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/favicon/icons8_project_management_32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/favicon/icons8_project_management_256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ]
+}
