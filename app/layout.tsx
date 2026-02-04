@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
+import { SidebarProvider } from "@/components/sidebar-context";
 import "katex/dist/katex.min.css";
 
 // import { Inter, JetBrains_Mono } from "next/font/google";
@@ -109,10 +110,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${amoriaregular.variable} ${mozillaHeadline.variable} ${philosopher.variable}`}>
       <body className="antialiased">
-        <Navigation />
-        <main className="lg:pl-64">{children}</main>
-        <SpeedInsights />
-        <ServiceWorkerRegistrar />
+        <SidebarProvider>
+          <Navigation />
+          <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
+            {children}
+          </main>
+          <SpeedInsights />
+          <ServiceWorkerRegistrar />
+        </SidebarProvider>
       </body>
     </html>
   );

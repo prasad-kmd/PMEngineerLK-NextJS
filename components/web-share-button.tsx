@@ -4,7 +4,7 @@ import { Share2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 
-export function WebShareButton() {
+export function WebShareButton({ isCollapsed }: { isCollapsed?: boolean }) {
   const [copied, setCopied] = useState(false)
 
   const handleShare = async () => {
@@ -36,13 +36,23 @@ export function WebShareButton() {
     <button
       onClick={handleShare}
       data-testid="share-button"
+      title={isCollapsed ? "Share" : undefined}
       className={cn(
-        "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+        "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
         "text-muted-foreground hover:bg-muted hover:text-foreground",
+        isCollapsed ? "lg:justify-center lg:px-2 lg:gap-0" : "justify-start"
       )}
     >
-      <Share2 className="h-5 w-5" />
-      <span>{copied ? "Copied!" : "Share"}</span>
+      <Share2 className="h-5 w-5 shrink-0" />
+      {!isCollapsed ? (
+        <span className="animate-in fade-in slide-in-from-left-2 duration-300">
+          {copied ? "Copied!" : "Share"}
+        </span>
+      ) : (
+        <span className="animate-in fade-in slide-in-from-left-2 duration-300 lg:hidden">
+          {copied ? "Copied!" : "Share"}
+        </span>
+      )}
     </button>
   )
 }

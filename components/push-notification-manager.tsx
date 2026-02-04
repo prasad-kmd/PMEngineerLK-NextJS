@@ -4,7 +4,7 @@ import { Bell } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState, useEffect } from "react"
 
-export function PushNotificationManager() {
+export function PushNotificationManager({ isCollapsed }: { isCollapsed?: boolean }) {
   const [permission, setPermission] = useState<NotificationPermission>("default")
   const [isClient, setIsClient] = useState(false)
 
@@ -59,16 +59,26 @@ export function PushNotificationManager() {
       onClick={requestPermission}
       disabled={permission !== "default"}
       data-testid="notification-button"
+      title={isCollapsed ? getButtonText() : undefined}
       className={cn(
-        "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+        "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
         permission === "granted"
           ? "cursor-default text-primary"
           : "text-muted-foreground hover:bg-muted hover:text-foreground",
         permission === "denied" ? "cursor-not-allowed opacity-50" : "",
+        isCollapsed ? "lg:justify-center lg:px-2 lg:gap-0" : "justify-start"
       )}
     >
-      <Bell className="h-5 w-5" />
-      <span>{getButtonText()}</span>
+      <Bell className="h-5 w-5 shrink-0" />
+      {!isCollapsed ? (
+        <span className="animate-in fade-in slide-in-from-left-2 duration-300">
+          {getButtonText()}
+        </span>
+      ) : (
+        <span className="animate-in fade-in slide-in-from-left-2 duration-300 lg:hidden">
+          {getButtonText()}
+        </span>
+      )}
     </button>
   )
 }
