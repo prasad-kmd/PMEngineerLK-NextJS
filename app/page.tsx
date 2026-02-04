@@ -15,10 +15,10 @@ function getPostCount(directory: string): number {
 }
 
 export default function HomePage() {
-  const ideasCount = getPostCount("ideas")
-  const diaryCount = getPostCount("diary")
-  const workflowCount = getPostCount("workflow")
-  const postsCount = getPostCount("posts")
+  const blogCount = getPostCount("blog")
+  const articlesCount = getPostCount("articles")
+  const projectsCount = getPostCount("projects")
+  const tutorialsCount = getPostCount("tutorials")
 
   return (
     <div className="min-h-screen">
@@ -36,16 +36,16 @@ export default function HomePage() {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
-              href="/ideas"
+              href="/blog"
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Explore Ideas
+              Explore Blog
             </Link>
             <Link
-              href="/workflow"
+              href="/projects"
               className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-6 py-3 font-semibold transition-colors hover:bg-muted"
             >
-              View Workflow
+              View Projects
             </Link>
           </div>
         </div>
@@ -57,75 +57,75 @@ export default function HomePage() {
           <h2 className="mb-10 text-center text-3xl font-bold philosopher">Project Documentation</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <Link
-              href="/ideas"
+              href="/blog"
               className="group rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5"
             >
               <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
                 <FileText className="h-6 w-6" />
               </div>
-              <h3 className="mb-2 text-xl font-semibold">Ideas</h3>
+              <h3 className="mb-2 text-xl font-semibold">Blog</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Explore comprehensive project ideas addressing engineering challenges in Sri Lanka
+                Explore comprehensive articles and project logs on our blog
               </p>
             </Link>
 
             <Link
-              href="/diary"
+              href="/articles"
               className="group rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5"
             >
               <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
                 <BookOpen className="h-6 w-6" />
               </div>
-              <h3 className="mb-2 text-xl font-semibold">Diary</h3>
+              <h3 className="mb-2 text-xl font-semibold">Articles</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Daily progress logs and reflections on our project development journey
+                Technical articles and in-depth reflections on our engineering journey
               </p>
             </Link>
 
             <Link
-              href="/workflow"
+              href="/projects"
               className="group rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5"
             >
               <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
                 <GitBranch className="h-6 w-6" />
               </div>
-              <h3 className="mb-2 text-xl font-semibold">Workflow</h3>
+              <h3 className="mb-2 text-xl font-semibold">Projects</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Methodologies, processes, and technical documentation for our approach
+                Showcase of our engineering projects and technical demonstrations
               </p>
             </Link>
 
             <Link
-              href="/posts"
+              href="/tutorials"
               className="group rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5"
             >
               <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
                 <Newspaper className="h-6 w-6" />
               </div>
-              <h3 className="mb-2 text-xl font-semibold">Posts</h3>
+              <h3 className="mb-2 text-xl font-semibold">Tutorials</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Updates, announcements, and general insights from our team
+                Step-by-step guides, tutorials, and educational resources
               </p>
             </Link>
           </div>
         </div>
       </section>
 
-{/* Magic Bento Section */}
+      {/* Magic Bento Section */}
       <section className="border-t border-border bg-muted/10 px-6 py-16 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <h2 className="mb-10 text-center text-3xl font-bold philosopher">Project Overview</h2>
           <div className="flex items-center justify-center">
             <MagicBentoClient
-              ideasCount={ideasCount}
-              diaryCount={diaryCount}
-              workflowCount={workflowCount}
-              postsCount={postsCount}
+              blogCount={blogCount}
+              articlesCount={articlesCount}
+              projectsCount={projectsCount}
+              tutorialsCount={tutorialsCount}
             />
           </div>
         </div>
       </section>
-      
+
       {/* About Section */}
       <section className="px-6 py-16 lg:px-8">
         <div className="mx-auto max-w-4xl">

@@ -3,8 +3,8 @@ import Link from "next/link"
 import { getContentByType } from "@/lib/content"
 import { Calendar, ArrowRight } from "lucide-react"
 
-const title = "Project Diary"
-const description = "Daily progress logs and reflections documenting our project development journey."
+const title = "Projects"
+const description = "Technical documentation, processes, and methodologies guiding our project approach."
 
 export const metadata: Metadata = {
   title,
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title,
     description,
-    url: "/diary",
+    url: "/projects",
     images: [
       {
         url: `/api/og?title=${encodeURIComponent(title)}`,
@@ -30,61 +30,62 @@ export const metadata: Metadata = {
   },
 }
 
-export default function DiaryPage() {
-  const entries = getContentByType("diary")
+export default function ProjectsPage() {
+  const projects = getContentByType("projects")
 
   return (
-    <div className="min-h-screen px-6 py-12 lg:px-8 diary_page img_grad_pm">
+    <div className="min-h-screen px-6 py-12 lg:px-8 projects_page img_grad_pm">
       <div className="mx-auto max-w-4xl">
         <div className="mb-12">
-          <h1 className="mb-4 text-4xl font-bold mozilla-headline">Project Diary</h1>
+          <h1 className="mb-4 text-4xl font-bold mozilla-headline">Projects</h1>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Daily progress logs and reflections documenting our project development journey.
+            Technical documentation, processes, and methodologies guiding our project approach.
           </p>
         </div>
 
-        {entries.length === 0 ? (
+        {projects.length === 0 ? (
           <div className="rounded-xl border border-border bg-card p-12 text-center">
             <p className="text-muted-foreground">
-              No diary entries yet. Create a <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.md</code>{" "}
-              or <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.html</code> file in the{" "}
-              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">content/diary/</code> directory.
+              No project documents yet. Create a{" "}
+              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.md</code> or{" "}
+              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.html</code> file in the{" "}
+              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">content/projects/</code> directory.
             </p>
           </div>
         ) : (
           <div className="space-y-6">
-            {entries.map((entry, index) => {
+            {projects.map((project, index) => {
               const borderColor = index === 0 ? "border-blue-500/70" : "border-border"
               const hoverBorderColor = index === 0 ? "hover:border-blue-500" : "hover:border-primary/50"
 
-              const backgroundStyle = entry.firstImage
+              const backgroundStyle = project.firstImage
                 ? {
-                    backgroundImage: `linear-gradient(45deg, #00000000 0%, #0000003d 30%, #00000063 40%, #00000088 50%, #000000c5 65%, #000000 90%), url("${entry.firstImage}")`,
-                    backgroundBlendMode: "overlay" as const,
-                    backgroundOrigin: "border-box" as const,
-                    backgroundPosition: "right" as const,
-                    backgroundSize: "cover" as const,
-                    backgroundAttachment: "scroll" as const,
-                  }
+                  backgroundImage: `linear-gradient(45deg, #00000000 0%, #0000003d 30%, #00000063 40%, #00000088 50%, #000000c5 65%, #000000 90%), url("${project.firstImage}")`,
+                  backgroundBlendMode: "overlay" as const,
+                  backgroundOrigin: "border-box" as const,
+                  backgroundPosition: "right" as const,
+                  backgroundSize: "cover" as const,
+                  backgroundAttachment: "scroll" as const,
+                }
                 : undefined
 
               return (
                 <Link
-                  key={entry.slug}
-                  href={`/diary/${entry.slug}`}
+                  key={project.slug}
+                  href={`/projects/${project.slug}`}
                   className={`group block rounded-xl border ${borderColor} ${hoverBorderColor} bg-card p-6 transition-all hover:shadow-lg hover:shadow-primary/5 overflow-hidden`}
                   style={backgroundStyle}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <h2 className="mb-2 text-2xl font-semibold group-hover:text-primary">{entry.title}</h2>
-                      {entry.description && (
-                        <p className="mb-3 text-muted-foreground leading-relaxed">{entry.description}</p>
+                      <h2 className="mb-2 text-2xl font-semibold group-hover:text-primary">{project.title}</h2>
+                      {project.description && (
+                        <p className="mb-3 text-muted-foreground leading-relaxed">{project.description}</p>
                       )}
-                      {entry.date && (
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      {project.date && (
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground invisible">
                           <Calendar className="h-4 w-4" />
-                          {new Date(entry.date).toLocaleDateString("en-US", {
+                          {new Date(project.date).toLocaleDateString("en-US", {
                             year: "numeric",
                             month: "long",
                             day: "numeric",

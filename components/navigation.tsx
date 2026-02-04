@@ -10,10 +10,10 @@ import { PushNotificationManager } from "./push-notification-manager"
 
 const primaryNav = [
   { name: "Home", href: "/", icon: Home },
-  { name: "Ideas", href: "/ideas", icon: FileText },
-  { name: "Diary", href: "/diary", icon: BookOpen },
-  { name: "Workflow", href: "/workflow", icon: GitBranch },
-  { name: "Posts", href: "/posts", icon: Newspaper },
+  { name: "Blog", href: "/blog", icon: FileText },
+  { name: "Articles", href: "/articles", icon: BookOpen },
+  { name: "Projects", href: "/projects", icon: GitBranch },
+  { name: "Tutorials", href: "/tutorials", icon: Newspaper },
 ]
 
 const secondaryNav = [

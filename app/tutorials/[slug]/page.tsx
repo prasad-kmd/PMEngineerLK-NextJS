@@ -11,7 +11,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string }
 }): Promise<Metadata> {
-  const post = getContentItem("posts", params.slug)
+  const post = getContentItem("tutorials", params.slug)
 
   if (!post) {
     notFound()
@@ -22,7 +22,7 @@ export async function generateMetadata({
   const ogImage = `${siteConfig.url}/api/og?title=${encodeURIComponent(
     post.title
   )}`
-  const postUrl = `${siteConfig.url}/posts/${post.slug}`
+  const postUrl = `${siteConfig.url}/tutorials/${post.slug}`
 
   return {
     title: post.title,
@@ -51,14 +51,14 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const posts = getContentByType("posts")
+  const posts = getContentByType("tutorials")
   return posts.map((post) => ({
     slug: post.slug,
   }))
 }
 
-export default function PostPage({ params }: { params: { slug: string } }) {
-  const post = getContentItem("posts", params.slug)
+export default function TutorialPage({ params }: { params: { slug: string } }) {
+  const post = getContentItem("tutorials", params.slug)
 
   if (!post) {
     notFound()
@@ -68,11 +68,11 @@ export default function PostPage({ params }: { params: { slug: string } }) {
     <div className="min-h-screen px-6 py-12 lg:px-8">
       <div className="mx-auto max-w-4xl">
         <Link
-          href="/posts"
+          href="/tutorials"
           className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Posts
+          Back to Tutorials
         </Link>
 
         <article>

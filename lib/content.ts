@@ -36,7 +36,7 @@ function extractFirstImage(content: string, isMarkdown: boolean): string | undef
 
 const contentDirectory = path.join(process.cwd(), "content")
 
-export function getContentByType(type: "ideas" | "diary" | "workflow" | "posts"): ContentItem[] {
+export function getContentByType(type: "blog" | "articles" | "projects" | "tutorials"): ContentItem[] {
   const typeDirectory = path.join(contentDirectory, type)
 
   // Create directory if it doesn't exist
@@ -95,7 +95,7 @@ export function getContentByType(type: "ideas" | "diary" | "workflow" | "posts")
   return items
 }
 
-export function getContentItem(type: "ideas" | "diary" | "workflow" | "posts", slug: string): ContentItem | null {
+export function getContentItem(type: "blog" | "articles" | "projects" | "tutorials", slug: string): ContentItem | null {
   const typeDirectory = path.join(contentDirectory, type)
 
   // Try .md first, then .html

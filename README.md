@@ -1,10 +1,8 @@
-# Engineering Project Webapp
+# Blogfolio Webapp
 
 A modern, responsive web application for documenting a mechanical and mechatronics engineering undergraduate group project. Built with Next.js, Tailwind CSS, and featuring integrated support for mathematical equations (KaTeX), charts (Chart.js), and code syntax highlighting (Highlight.js).
 
-## Overview
-
-This webapp serves as a comprehensive documentation platform for our engineering group project focused on identifying and solving real-world challenges in Sri Lanka. The project combines mechanical and mechatronics engineering expertise to develop practical, implementable solutions.
+This webapp serves as a comprehensive blogfolio platform for documenting engineering journeys, identifying and solving real-world challenges, and sharing technical expertise.
 
 ## Features
 
@@ -12,10 +10,10 @@ This webapp serves as a comprehensive documentation platform for our engineering
 
 - **Automatic Page Generation**: Create `.md` or `.html` files in content directories to automatically generate pages
 - **Four Content Types**:
-  - **Ideas** (`/ideas/`) - Detailed project proposals and technical analyses
-  - **Diary** (`/diary/`) - Progress logs and reflections
-  - **Workflow** (`/workflow/`) - Methodologies and processes
-  - **Posts** (`/posts/`) - General updates and announcements
+  - **Blog** (`/blog/`) - Detailed project proposals and technical analyses
+  - **Articles** (`/articles/`) - Progress logs and reflections
+  - **Projects** (`/projects/`) - Methodologies and processes
+  - **Tutorials** (`/tutorials/`) - General updates and announcements
 - **Dynamic Routing**: Files automatically become accessible at `/{type}/{filename}`
 - **Frontmatter Support**: YAML frontmatter for metadata (title, date, description)
 
@@ -100,10 +98,10 @@ Content is managed through files in the `content/` directory:
 
 ```
 content/
-├── ideas/
-├── diary/
-├── workflow/
-└── posts/
+├── blog/
+├── articles/
+├── projects/
+└── tutorials/
 ```
 
 ### File Format
@@ -158,14 +156,14 @@ description: "Brief description"
 <p>Write your content using HTML.</p>
 ```
 
-### Example: Creating a New Idea
+### Example: Creating a New Blog Post
 
-1. Create a new file: `content/ideas/my-new-idea.md`
+1. Create a new file: `content/blog/my-new-post.md`
 2. Add frontmatter and content:
 
 ```markdown
 ---
-title: "My Innovative Engineering Idea"
+title: "My Innovative Engineering Journey"
 date: "2025-01-20"
 description: "A revolutionary approach to solving problem X"
 ---
@@ -179,7 +177,7 @@ Describe the problem...
 Explain your solution...
 ```
 
-3. The page will automatically be available at `/ideas/my-new-idea`
+3. The page will automatically be available at `/blog/my-new-post`
 
 ## Project Structure
 
@@ -189,21 +187,21 @@ engineering-project-webapp/
 │   ├── page.tsx             # Homepage
 │   ├── layout.tsx           # Root layout with navigation
 │   ├── globals.css          # Global styles and theme
-│   ├── ideas/               # Ideas section
-│   │   ├── page.tsx         # Ideas list page
-│   │   └── [slug]/          # Dynamic idea pages
-│   ├── diary/               # Diary section
-│   ├── workflow/            # Workflow section
-│   └── posts/               # Posts section
+│   ├── blog/                # Blog section
+│   │   ├── page.tsx         # Blog list page
+│   │   └── [slug]/          # Dynamic blog pages
+│   ├── articles/            # Articles section
+│   ├── projects/            # Projects section
+│   └── tutorials/           # Tutorials section
 ├── components/              # React components
 │   ├── navigation.tsx       # Sidebar navigation
 │   ├── content-renderer.tsx # Content display with KaTeX/Highlight.js
 │   └── chart-example.tsx    # Chart.js examples
-├── content/                 # Content files (create this directory)
-│   ├── ideas/              # Project ideas (.md or .html files)
-│   ├── diary/              # Diary entries
-│   ├── workflow/           # Workflow documentation
-│   └── posts/              # Blog posts
+├── content/                 # Content files
+│   ├── blog/               # Project blog (.md or .html files)
+│   ├── articles/           # Diary entries
+│   ├── projects/           # Workflow documentation
+│   └── tutorials/          # Blog posts
 ├── lib/                     # Utility functions
 │   ├── utils.ts            # Helper functions
 │   └── content.ts          # Content management system

@@ -3,10 +3,10 @@
 import dynamic from "next/dynamic"
 
 interface MagicBentoClientProps {
-  ideasCount: number
-  diaryCount: number
-  workflowCount: number
-  postsCount: number
+  blogCount: number
+  articlesCount: number
+  projectsCount: number
+  tutorialsCount: number
 }
 
 const MagicBento = dynamic(() => import("@/components/MagicBento"), {
@@ -15,17 +15,17 @@ const MagicBento = dynamic(() => import("@/components/MagicBento"), {
 })
 
 export default function MagicBentoClient({
-  ideasCount,
-  diaryCount,
-  workflowCount,
-  postsCount,
+  blogCount,
+  articlesCount,
+  projectsCount,
+  tutorialsCount,
 }: MagicBentoClientProps) {
   return (
     <MagicBento
-      ideasCount={ideasCount}
-      diaryCount={diaryCount}
-      workflowCount={workflowCount}
-      postsCount={postsCount}
+      blogCount={blogCount}
+      articlesCount={articlesCount}
+      projectsCount={projectsCount}
+      tutorialsCount={tutorialsCount}
     />
   )
 }

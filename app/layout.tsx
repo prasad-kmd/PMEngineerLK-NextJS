@@ -25,17 +25,17 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 const amoriaregular = localFont({
-  src: '../public/font/en/AMORIARegular.woff2',
+  src: '../public/fonts/en/AMORIARegular.woff2',
   variable: '--font-amoria-regular',
   display: 'swap',
 });
 const mozillaHeadline = localFont({
-  src: '../public/font/en/MozillaHeadline-Regular.woff2',
+  src: '../public/fonts/en/MozillaHeadline-Regular.woff2',
   variable: '--font-mozilla-headline',
   display: 'swap',
 });
 const philosopher = localFont({
-  src: '../public/font/en/Philosopher.woff2',
+  src: '../public/fonts/en/Philosopher.woff2',
   variable: '--font-philosopher',
   display: 'swap',
 });
@@ -46,7 +46,7 @@ import ServiceWorkerRegistrar from "@/components/service-worker-registrar";
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    template: "%s | Engineering Project",
+    template: "%s | Blogfolio",
     default: siteConfig.title,
   },
   description: siteConfig.description,
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
     url: siteConfig.url,
-    siteName: "Engineering Project",
+    siteName: "Blogfolio",
     images: [
       {
         url: `/api/og?title=${encodeURIComponent(siteConfig.title)}`,
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "EngProject",
+    title: "Blogfolio",
   },
 };
 

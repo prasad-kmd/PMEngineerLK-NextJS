@@ -3,8 +3,8 @@ import { NextRequest } from "next/server"
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
-  const title = searchParams.get("title") || "Engineering Project"
-  const description = searchParams.get("description") || "Undergraduate group project documentation for identifying and solving engineering challenges in Sri Lanka."
+  const title = searchParams.get("title") || "Blogfolio"
+  const description = searchParams.get("description") || "Personal blogfolio documenting my engineering and development journey."
   const type = searchParams.get("type") || "default"
 
   return new ImageResponse(
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
             `,
           }}
         />
-        
+
         {/* Content Container */}
         <div
           style={{
@@ -68,10 +68,10 @@ export async function GET(req: NextRequest) {
               letterSpacing: "1px",
             }}
           >
-            {type === "research" ? "Research Article" : 
-             type === "diary" ? "Project Diary" :
-             type === "ideas" ? "Innovation Ideas" :
-             type === "workflow" ? "Engineering Workflow" : "Project Update"}
+            {type === "research" ? "Research Article" :
+              type === "articles" ? "Articles" :
+                type === "blog" ? "Blog" :
+                  type === "projects" ? "Projects" : "Update"}
           </div>
 
           {/* Main Title */}
@@ -156,7 +156,7 @@ export async function GET(req: NextRequest) {
                     fontWeight: 600,
                   }}
                 >
-                  DMX4102 - Engineering Project
+                  Blogfolio
                 </div>
                 <div
                   style={{
@@ -164,7 +164,7 @@ export async function GET(req: NextRequest) {
                     color: "rgba(255, 255, 255, 0.8)",
                   }}
                 >
-                  The Open University of Sri Lanka - 2023/2024
+                  Documenting the Engineering Journey
                 </div>
               </div>
             </div>
