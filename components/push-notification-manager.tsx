@@ -59,9 +59,8 @@ export function PushNotificationManager({ isCollapsed }: { isCollapsed?: boolean
       onClick={requestPermission}
       disabled={permission !== "default"}
       data-testid="notification-button"
-      title={isCollapsed ? getButtonText() : undefined}
       className={cn(
-        "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
+        "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all relative group",
         permission === "granted"
           ? "cursor-default text-primary"
           : "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -70,12 +69,14 @@ export function PushNotificationManager({ isCollapsed }: { isCollapsed?: boolean
       )}
     >
       <Bell className="h-5 w-5 shrink-0" />
-      {!isCollapsed ? (
-        <span className="animate-in fade-in slide-in-from-left-2 duration-300">
-          {getButtonText()}
-        </span>
-      ) : (
-        <span className="animate-in fade-in slide-in-from-left-2 duration-300 lg:hidden">
+      <span className={cn(
+        "animate-in fade-in slide-in-from-left-2 duration-300",
+        isCollapsed ? "lg:hidden" : ""
+      )}>
+        {getButtonText()}
+      </span>
+      {isCollapsed && (
+        <span className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm z-50">
           {getButtonText()}
         </span>
       )}

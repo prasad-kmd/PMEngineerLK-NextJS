@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils"
 import { WebShareButton } from "./web-share-button"
 import { PushNotificationManager } from "./push-notification-manager"
 import { useSidebar } from "./sidebar-context"
+import { FloatingNavbar } from "./floating-navbar"
 
 const primaryNav = [
   { name: "Home", href: "/", icon: Home },
@@ -37,9 +38,8 @@ export function Navigation() {
         key={item.name}
         href={item.href}
         onClick={() => setMobileMenuOpen(false)}
-        title={isCollapsed ? item.name : undefined}
         className={cn(
-          "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all gap-3",
+          "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all gap-3 relative group",
           isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
           isCollapsed ? "lg:justify-center lg:px-2 lg:gap-0" : "justify-start"
         )}
@@ -51,6 +51,11 @@ export function Navigation() {
         )}>
           {item.name}
         </span>
+        {isCollapsed && (
+          <span className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm z-50">
+            {item.name}
+          </span>
+        )}
       </Link>
     )
   }
@@ -70,7 +75,7 @@ export function Navigation() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 border-r border-border bg-card transition-all duration-300 ease-in-out lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 border-r border-border bg-card/70 backdrop-blur-xl transition-all duration-300 ease-in-out lg:translate-x-0",
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full",
           isCollapsed ? "lg:w-20 w-64" : "w-64"
         )}
@@ -79,10 +84,13 @@ export function Navigation() {
           {/* Collapse Toggle Button (Desktop only) */}
           <button
             onClick={toggleSidebar}
-            className="absolute -right-3 top-20 z-50 hidden lg:flex h-6 w-6 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:text-foreground shadow-sm transition-transform hover:scale-110"
+            className="absolute -right-3 top-20 z-50 hidden lg:flex h-6 w-6 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:text-foreground shadow-sm transition-transform hover:scale-110 group"
             title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+            <span className="absolute left-full ml-4 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm z-50">
+              {isCollapsed ? "Expand" : "Collapse"}
+            </span>
           </button>
           {/* Logo */}
           <div className={cn(
@@ -115,6 +123,9 @@ export function Navigation() {
             <WebShareButton isCollapsed={isCollapsed} />
             <hr className="my-2 border-border" />
             {secondaryNav.map(renderNavItem)}
+            <div className="mt-auto pt-4 pb-2 border-t border-border lg:hidden">
+              <FloatingNavbar isMobileSidebar={true} />
+            </div>
           </nav>
 
           {/* Footer */}

@@ -4,6 +4,45 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --background-rgb: 250, 250, 250;
+  /* Light theme defaults */
+  --background: oklch(0.98 0.01 264);
+  --foreground: oklch(0.145 0.01 264);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0.01 264);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0.01 264);
+  --primary: oklch(0.55 0.15 195);
+  --primary-foreground: oklch(0.98 0.01 264);
+  --secondary: oklch(0.92 0.01 264);
+  --secondary-foreground: oklch(0.145 0.01 264);
+  --muted: oklch(0.92 0.01 264);
+  --muted-foreground: oklch(0.45 0.01 264);
+  --accent: oklch(0.92 0.01 264);
+  --accent-foreground: oklch(0.145 0.01 264);
+  --destructive: oklch(0.6 0.18 27);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.88 0.01 264);
+  --input: oklch(0.88 0.01 264);
+  --ring: oklch(0.55 0.15 195);
+  --chart-1: oklch(0.55 0.15 195);
+  --chart-2: oklch(0.6 0.18 145);
+  --chart-3: oklch(0.65 0.2 85);
+  --chart-4: oklch(0.5 0.2 25);
+  --chart-5: oklch(0.58 0.18 320);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.96 0.01 264);
+  --sidebar-foreground: oklch(0.145 0.01 264);
+  --sidebar-primary: oklch(0.55 0.15 195);
+  --sidebar-primary-foreground: oklch(0.98 0.01 264);
+  --sidebar-accent: oklch(0.92 0.01 264);
+  --sidebar-accent-foreground: oklch(0.145 0.01 264);
+  --sidebar-border: oklch(0.88 0.01 264);
+  --sidebar-ring: oklch(0.55 0.15 195);
+}
+
+.dark {
+  --background-rgb: 3, 7, 18;
   /* Updated color palette for dark theme with teal accent */
   --background: oklch(0.145 0.01 264);
   --foreground: oklch(0.95 0.01 264);
@@ -29,7 +68,6 @@
   --chart-3: oklch(0.75 0.2 85);
   --chart-4: oklch(0.6 0.2 25);
   --chart-5: oklch(0.68 0.18 320);
-  --radius: 0.625rem;
   --sidebar: oklch(0.16 0.01 264);
   --sidebar-foreground: oklch(0.95 0.01 264);
   --sidebar-primary: oklch(0.65 0.15 195);
@@ -98,6 +136,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -158,6 +197,7 @@ code.hljs {
 }
 
 @layer base {
+
   .prose *,
   .prose ::after,
   .prose ::before,
@@ -166,6 +206,7 @@ code.hljs {
     margin: revert;
     padding: revert;
   }
+
   .prose h1,
   .prose h2,
   .prose h3,
@@ -175,11 +216,13 @@ code.hljs {
     font-size: revert;
     font-weight: revert;
   }
+
   .prose ol,
   .prose ul,
   .prose menu {
     list-style: revert;
   }
+
   .prose table,
   .prose td,
   .prose th {
@@ -187,10 +230,12 @@ code.hljs {
     padding: 0.5rem;
     border-collapse: collapse;
   }
+
   .prose table {
     width: 100%;
   }
 }
+
 .img_grad_pm {
   background-blend-mode: normal;
   background-origin: border-box;
@@ -199,81 +244,79 @@ code.hljs {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
 .blog_page {
-  background-image: linear-gradient(
-      to bottom,
+  background-image: linear-gradient(to bottom,
       rgba(0, 0, 0, 0.4) 0%,
       rgba(0, 0, 0, 0.6) 25%,
       rgba(0, 0, 0, 0.8) 40%,
       rgba(0, 0, 0, 0.9) 60%,
-      rgb(0, 0, 0) 75%
-    ),
+      rgb(0, 0, 0) 75%),
     url("/img/page/ideas_2.webp");
 }
+
 .blog_item {
-  background-image: linear-gradient(
-      to bottom,
+  background-image: linear-gradient(to bottom,
       rgba(0, 0, 0, 0.4) 0%,
       rgba(0, 0, 0, 0.6) 25%,
       rgba(0, 0, 0, 0.8) 40%,
       rgba(0, 0, 0, 0.9) 60%,
-      rgb(0, 0, 0) 75%
-    ),
+      rgb(0, 0, 0) 75%),
     url("/img/page/ideas_item.webp");
 }
+
 .articles_page {
-  background-image: linear-gradient(
-      to bottom,
+  background-image: linear-gradient(to bottom,
       rgba(0, 0, 0, 0.4) 0%,
       rgba(0, 0, 0, 0.6) 25%,
       rgba(0, 0, 0, 0.8) 40%,
       rgba(0, 0, 0, 0.9) 60%,
-      rgb(0, 0, 0) 75%
-    ),
+      rgb(0, 0, 0) 75%),
     url("/img/page/diary.webp");
 }
+
 .articles_item {
-  background-image: linear-gradient(
-      to bottom,
+  background-image: linear-gradient(to bottom,
       rgba(0, 0, 0, 0.4) 0%,
       rgba(0, 0, 0, 0.6) 25%,
       rgba(0, 0, 0, 0.8) 40%,
       rgba(0, 0, 0, 0.9) 60%,
-      rgb(0, 0, 0) 75%
-    ),
+      rgb(0, 0, 0) 75%),
     url("/img/page/diary_page.webp");
 }
-.tutorials_page{
-  background-image: linear-gradient(
-      to bottom,
+
+.tutorials_page {
+  background-image: linear-gradient(to bottom,
       rgba(0, 0, 0, 0.4) 0%,
       rgba(0, 0, 0, 0.6) 25%,
       rgba(0, 0, 0, 0.8) 40%,
       rgba(0, 0, 0, 0.9) 60%,
-      rgb(0, 0, 0) 75%
-    ),
+      rgb(0, 0, 0) 75%),
     url("/img/page/posts.webp");
 }
-.projects_page{
-  background-image: linear-gradient(
-      to bottom,
+
+.projects_page {
+  background-image: linear-gradient(to bottom,
       rgba(0, 0, 0, 0.4) 0%,
       rgba(0, 0, 0, 0.6) 25%,
       rgba(0, 0, 0, 0.8) 40%,
       rgba(0, 0, 0, 0.9) 60%,
-      rgb(0, 0, 0) 75%
-    ),
+      rgb(0, 0, 0) 75%),
     url("/img/page/workflow.webp");
 }
-:root{
+
+:root {
   --font-amoria-regular: 'amoriaregular', sans-serif;
 }
-.amoriaregular{
+
+.amoriaregular {
   font-family: var(--font-amoria-regular);
 }
-.mozilla-headline{
+
+.mozilla-headline {
   font-family: var(--font-mozilla-headline);
 }
-.philosopher{
+
+.philosopher {
   font-family: var(--font-philosopher);
 }
