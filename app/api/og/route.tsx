@@ -1,11 +1,14 @@
-import { ImageResponse } from "@vercel/og"
+import { ImageResponse } from "next/og"
 import { NextRequest } from "next/server"
+
+export const runtime = "edge"
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
   const title = searchParams.get("title") || "Blogfolio"
   const description = searchParams.get("description") || "Personal blogfolio documenting my engineering and development journey."
   const type = searchParams.get("type") || "default"
+
   const typeLabels: Record<string, string> = {
     research: "Research Article",
     articles: "Articles",
@@ -13,6 +16,17 @@ export async function GET(req: NextRequest) {
     projects: "Projects",
     default: "Blogfolio"
   }
+
+  // Accent colors based on content type for a dynamic feel
+  const accents: Record<string, string> = {
+    research: "#10b981", // Emerald
+    articles: "#3b82f6", // Blue
+    blog: "#f59e0b",     // Amber
+    projects: "#8b5cf6", // Violet
+    default: "#6366f1"   // Indigo
+  }
+
+  const accentColor = accents[type] || accents.default
 
   return new ImageResponse(
     (
@@ -22,16 +36,14 @@ export async function GET(req: NextRequest) {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "flex-start",
-          justifyContent: "flex-end",
-          background: "linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%)",
+          backgroundColor: "#030712",
           color: "white",
           fontFamily: '"Inter", "sans-serif"',
           position: "relative",
           overflow: "hidden",
         }}
       >
-        {/* Background Pattern */}
+        {/* Engineering Grid Background */}
         <div
           style={{
             position: "absolute",
@@ -39,107 +51,139 @@ export async function GET(req: NextRequest) {
             left: 0,
             right: 0,
             bottom: 0,
-            background: `
-              radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)
-            `,
+            backgroundImage: `linear-gradient(${accentColor}15 1px, transparent 1px), linear-gradient(90deg, ${accentColor}15 1px, transparent 1px)`,
+            backgroundSize: "60px 60px",
+            opacity: 0.4,
           }}
         />
 
-        {/* Content Container */}
+        {/* Ambient Glow Orbs */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-100px",
+            right: "-100px",
+            width: "500px",
+            height: "500px",
+            background: `radial-gradient(circle, ${accentColor}33 0%, transparent 70%)`,
+            borderRadius: "50%",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-150px",
+            left: "-50px",
+            width: "400px",
+            height: "400px",
+            background: `radial-gradient(circle, ${accentColor}22 0%, transparent 70%)`,
+            borderRadius: "50%",
+          }}
+        />
+
+        {/* Main Content Layout */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start",
-            padding: "60px",
-            zIndex: 1,
-            gap: "24px",
+            justifyContent: "space-between",
+            height: "100%",
             width: "100%",
+            padding: "80px",
+            zIndex: 10,
           }}
         >
-          {/* Content Type Badge */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              background: "rgba(255, 255, 255, 0.2)",
-              backdropFilter: "blur(10px)",
-              borderRadius: "50px",
-              padding: "12px 24px",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              fontSize: "20px",
-              color: "white",
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "1px",
-            }}
-          >
-            {typeLabels[type] || "Blogfolio"}
-          </div>
-
-          {/* Main Title */}
-          <h1
-            style={{
-              fontSize: "68px",
-              fontWeight: "bold",
-              margin: 0,
-              lineHeight: 1.1,
-              textWrap: "balance",
-              maxWidth: "90%",
-              textShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            {title}
-          </h1>
-
-          {/* Description */}
-          {description && (
+          {/* Top Content: Badge, Title, and Description */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
             <div
               style={{
-                fontSize: "28px",
-                color: "rgba(255, 255, 255, 0.9)",
-                lineHeight: 1.4,
-                maxWidth: "80%",
-                fontWeight: 500,
-                marginTop: "8px",
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
               }}
             >
-              {description.length > 120 ? description.substring(0, 120) + "..." : description}
+              <div style={{
+                width: "12px",
+                height: "12px",
+                borderRadius: "50%",
+                backgroundColor: accentColor,
+                boxShadow: `0 0 15px ${accentColor}`
+              }} />
+              <span
+                style={{
+                  fontSize: "22px",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.15em",
+                  color: accentColor,
+                }}
+              >
+                {typeLabels[type] || "Blogfolio"}
+              </span>
             </div>
-          )}
 
-          {/* Footer Section */}
+            <h1
+              style={{
+                fontSize: "84px",
+                fontWeight: 900,
+                margin: 0,
+                lineHeight: 1.25,
+                letterSpacing: "-0.04em",
+                maxWidth: "1000px",
+                backgroundImage: "linear-gradient(to bottom right, #ffffff 60%, rgba(255,255,255,0.5))",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              {title}
+            </h1>
+
+            <p
+              style={{
+                fontSize: "32px",
+                color: "#9ca3af",
+                lineHeight: 1.4,
+                maxWidth: "850px",
+                margin: 0,
+                fontWeight: 400,
+              }}
+            >
+              {description.length > 140 ? description.substring(0, 140) + "..." : description}
+            </p>
+          </div>
+
+          {/* Bottom Branding Section */}
           <div
             style={{
               display: "flex",
-              alignItems: "center",
+              alignItems: "flex-end",
               justifyContent: "space-between",
               width: "100%",
-              marginTop: "40px",
-              paddingTop: "24px",
-              borderTop: "1px solid rgba(255, 255, 255, 0.3)",
             }}
           >
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "16px",
+                gap: "24px",
+                padding: "16px 28px",
+                background: "rgba(255, 255, 255, 0.03)",
+                borderRadius: "24px",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                backdropFilter: "blur(12px)",
               }}
             >
-              {/* Project Logo/Badge */}
+              {/* Logo with Dynamic Glow */}
               <div
                 style={{
-                  width: "50px",
-                  height: "50px",
-                  background: "rgba(255, 255, 255, 0.2)",
-                  borderRadius: "10px",
-                  border: "2px solid rgba(255, 255, 255, 0.3)",
+                  width: "64px",
+                  height: "64px",
+                  background: `linear-gradient(135deg, ${accentColor} 0%, #1e1b4b 100%)`,
+                  borderRadius: "16px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  backdropFilter: "blur(5px)",
+                  boxShadow: `0 8px 30px rgba(0,0,0,0.5), 0 0 20px ${accentColor}44`,
                   overflow: "hidden",
                 }}
               >
@@ -153,79 +197,51 @@ export async function GET(req: NextRequest) {
                   }}
                 />
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "20px",
-                    color: "white",
-                    fontWeight: 600,
-                  }}
-                >
-                  Blogfolio
-                </div>
-                <div
-                  style={{
-                    fontSize: "16px",
-                    color: "rgba(255, 255, 255, 0.8)",
-                  }}
-                >
-                  Documenting the Engineering Journey
-                </div>
+
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <span style={{ fontSize: "24px", fontWeight: 700, color: "white" }}>Blogfolio</span>
+                <span style={{ fontSize: "16px", color: "#6b7280", fontWeight: 500 }}>by PrasadM</span>
               </div>
             </div>
 
-            {/* Website URL */}
             <div
               style={{
-                fontSize: "18px",
-                color: "rgba(255, 255, 255, 0.8)",
-                fontWeight: 500,
-                background: "rgba(255, 255, 255, 0.1)",
-                padding: "8px 16px",
-                borderRadius: "6px",
-                backdropFilter: "blur(5px)",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                fontSize: "20px",
+                fontWeight: 600,
+                color: "#9ca3af",
+                padding: "12px 20px",
               }}
             >
-              PrasadM
+              <div style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                border: `2px solid ${accentColor}`
+              }} />
+              <span>prasadm.dev</span>
             </div>
           </div>
         </div>
 
-        {/* Decorative Elements */}
+        {/* Bottom-right corner accent */}
         <div
           style={{
-            position: "absolute",
-            top: "40px",
-            right: "40px",
-            width: "100px",
-            height: "100px",
-            background: "rgba(255, 255, 255, 0.1)",
-            borderRadius: "50%",
-            backdropFilter: "blur(5px)",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: "100px",
-            right: "100px",
-            width: "60px",
-            height: "60px",
-            background: "rgba(255, 255, 255, 0.15)",
-            borderRadius: "15px",
-            transform: "rotate(45deg)",
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+            width: '120px',
+            height: '120px',
+            background: `linear-gradient(135deg, transparent 50%, ${accentColor}33 100%)`,
           }}
         />
       </div>
     ),
     {
-      width: 1200,
-      height: 630,
+      width: 1280,
+      height: 720,
     }
   )
 }
