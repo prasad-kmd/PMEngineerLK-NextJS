@@ -6,6 +6,13 @@ export async function GET(req: NextRequest) {
   const title = searchParams.get("title") || "Blogfolio"
   const description = searchParams.get("description") || "Personal blogfolio documenting my engineering and development journey."
   const type = searchParams.get("type") || "default"
+  const typeLabels: Record<string, string> = {
+    research: "Research Article",
+    articles: "Articles",
+    blog: "Blog",
+    projects: "Projects",
+    default: "Blogfolio"
+  }
 
   return new ImageResponse(
     (
@@ -68,10 +75,7 @@ export async function GET(req: NextRequest) {
               letterSpacing: "1px",
             }}
           >
-            {type === "research" ? "Research Article" :
-              type === "articles" ? "Articles" :
-                type === "blog" ? "Blog" :
-                  type === "projects" ? "Projects" : "Update"}
+            {typeLabels[type] || "Blogfolio"}
           </div>
 
           {/* Main Title */}
@@ -135,13 +139,19 @@ export async function GET(req: NextRequest) {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "20px",
-                  color: "white",
-                  fontWeight: "bold",
                   backdropFilter: "blur(5px)",
+                  overflow: "hidden",
                 }}
               >
-                Eng.
+                <img
+                  src={`${req.nextUrl.origin}/img/blogfolios_og_icon.png`}
+                  alt="Logo"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
               </div>
               <div
                 style={{
