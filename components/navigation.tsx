@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   FileText, BookOpen, GitBranch, Newspaper, Home, Menu, X, Users, Mail,
-  ChevronLeft, ChevronRight, PanelLeft
+  ChevronLeft, ChevronRight, PanelLeft, Wrench
 } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
@@ -19,6 +19,7 @@ const primaryNav = [
   { name: "Articles", href: "/articles", icon: BookOpen },
   { name: "Projects", href: "/projects", icon: GitBranch },
   { name: "Tutorials", href: "/tutorials", icon: Newspaper },
+  { name: "Tools", href: "/tools", icon: Wrench },
 ]
 
 const secondaryNav = [
