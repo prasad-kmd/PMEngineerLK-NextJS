@@ -1,7 +1,7 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { Sun, Moon, Bookmark } from "lucide-react"
+import { Sun, Moon, Bookmark, Share2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Search } from "./search"
@@ -19,6 +19,7 @@ export function FloatingNavbar({ className, isMobileSidebar = false }: FloatingN
     const [mounted, setMounted] = useState(false)
     const [isBookmarksOpen, setIsBookmarksOpen] = useState(false)
     const { bookmarks } = useBookmarks()
+    const [copied, setCopied] = useState(false)
 
     // Avoid hydration mismatch
     useEffect(() => {
@@ -33,7 +34,38 @@ export function FloatingNavbar({ className, isMobileSidebar = false }: FloatingN
         setTheme(theme === "dark" ? "light" : "dark")
     }
 
+    const handleShare = async () => {
+        const shareData = {
+            title: document.title,
+            text: "Check out this page!",
+            url: window.location.href,
+        }
+
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData)
+            } catch (error) {
+                console.error("Error sharing:", error)
+            }
+        } else {
+            try {
+                await navigator.clipboard.writeText(shareData.url)
+                setCopied(true)
+                toast.success("URL copied to clipboard")
+                setTimeout(() => setCopied(false), 2000)
+            } catch (error) {
+                console.error("Failed to copy URL:", error)
+                toast.error("Failed to copy URL")
+            }
+        }
+    }
+
     const navItems = [
+        {
+            icon: Share2,
+            label: copied ? "Copied!" : "Share",
+            onClick: handleShare,
+        },
         {
             icon: Bookmark,
             label: "Bookmarks",
@@ -52,9 +84,9 @@ export function FloatingNavbar({ className, isMobileSidebar = false }: FloatingN
     return (
         <div
             className={cn(
-                "flex items-center gap-1 p-1 rounded-full border border-border bg-background/80 backdrop-blur shadow-lg transition-all",
-                !isMobileSidebar && "fixed top-6 right-6 z-[60]",
-                isMobileSidebar && "relative mt-auto w-fit mx-auto border-none shadow-none bg-transparent",
+                "flex items-center gap-1 transition-all",
+                !isMobileSidebar && "fixed top-6 right-6 z-[60] p-1 rounded-full border border-border bg-background/80 backdrop-blur shadow-lg",
+                isMobileSidebar && "relative flex-row p-0 border-none bg-transparent shadow-none",
                 className
             )}
         >

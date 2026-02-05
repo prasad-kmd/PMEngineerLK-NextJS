@@ -62,14 +62,16 @@ export function Navigation() {
 
   return (
     <>
-      {/* Mobile menu button */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-border bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60 lg:hidden">
+      <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-border bg-background/95 px-4 py-2 backdrop-blur supports-[backdrop-filter]:bg-background/60 lg:hidden">
         <Link href="/" className="text-lg font-bold">
           Engineering Project
         </Link>
-        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="rounded-lg p-2 hover:bg-muted">
-          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <FloatingNavbar isMobileSidebar={true} className="!relative !top-0 !right-0 !shadow-none !bg-transparent !p-0" />
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="rounded-lg p-2 hover:bg-muted ml-1">
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Sidebar */}
@@ -123,9 +125,6 @@ export function Navigation() {
             <WebShareButton isCollapsed={isCollapsed} />
             <hr className="my-2 border-border" />
             {secondaryNav.map(renderNavItem)}
-            <div className="mt-auto pt-4 pb-2 border-t border-border lg:hidden">
-              <FloatingNavbar isMobileSidebar={true} />
-            </div>
           </nav>
 
           {/* Footer */}
