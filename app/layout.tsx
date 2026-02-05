@@ -45,6 +45,7 @@ const philosopher = localFont({
 
 import { siteConfig } from "@/lib/config";
 import ServiceWorkerRegistrar from "@/components/service-worker-registrar";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -124,6 +125,7 @@ export default function RootLayout({
             <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
               {children}
             </main>
+            <ScrollToTop />
             <SpeedInsights />
             <ServiceWorkerRegistrar />
           </SidebarProvider>
