@@ -71,7 +71,7 @@ export default function BlogPage() {
 
               const backgroundStyle = post.firstImage
                 ? {
-                  backgroundImage: `linear-gradient(45deg, #00000000 0%, #0000003d 30%, #00000063 40%, #00000088 50%, #000000c5 65%, #000000 90%), url("${post.firstImage}")`,
+                  backgroundImage: `var(--item-gradient), url("${post.firstImage}")`,
                   backgroundBlendMode: "overlay" as const,
                   backgroundOrigin: "border-box" as const,
                   backgroundPosition: "right" as const,

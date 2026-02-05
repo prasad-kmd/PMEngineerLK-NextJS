@@ -60,7 +60,7 @@ export default function ProjectsPage() {
 
               const backgroundStyle = project.firstImage
                 ? {
-                  backgroundImage: `linear-gradient(45deg, #00000000 0%, #0000003d 30%, #00000063 40%, #00000088 50%, #000000c5 65%, #000000 90%), url("${project.firstImage}")`,
+                  backgroundImage: `var(--item-gradient), url("${project.firstImage}")`,
                   backgroundBlendMode: "overlay" as const,
                   backgroundOrigin: "border-box" as const,
                   backgroundPosition: "right" as const,
