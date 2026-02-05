@@ -6,6 +6,7 @@ import { Navigation } from "@/components/navigation";
 import { SidebarProvider } from "@/components/sidebar-context";
 import { ThemeProvider } from "@/components/theme-provider";
 import { FloatingNavbar } from "@/components/floating-navbar";
+import { Toaster } from "sonner";
 import "katex/dist/katex.min.css";
 
 // import { Inter, JetBrains_Mono } from "next/font/google";
@@ -46,6 +47,7 @@ const philosopher = localFont({
 import { siteConfig } from "@/lib/config";
 import ServiceWorkerRegistrar from "@/components/service-worker-registrar";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { BookmarksProvider } from "@/hooks/use-bookmarks";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -120,14 +122,17 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider>
-            <FloatingNavbar className="hidden lg:flex" />
-            <Navigation />
-            <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
-              {children}
-            </main>
-            <ScrollToTop />
-            <SpeedInsights />
-            <ServiceWorkerRegistrar />
+            <BookmarksProvider>
+              <FloatingNavbar className="hidden lg:flex" />
+              <Navigation />
+              <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
+                {children}
+              </main>
+              <ScrollToTop />
+              <Toaster position="bottom-right" richColors />
+              <SpeedInsights />
+              <ServiceWorkerRegistrar />
+            </BookmarksProvider>
           </SidebarProvider>
         </ThemeProvider>
       </body>

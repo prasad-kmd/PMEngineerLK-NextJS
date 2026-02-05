@@ -5,6 +5,9 @@ import { Sun, Moon, Bookmark } from "lucide-react"
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Search } from "./search"
+import { BookmarksModal } from "./bookmarks-modal"
+import { useBookmarks } from "@/hooks/use-bookmarks"
+import { toast } from "sonner"
 
 interface FloatingNavbarProps {
     className?: string
@@ -14,6 +17,8 @@ interface FloatingNavbarProps {
 export function FloatingNavbar({ className, isMobileSidebar = false }: FloatingNavbarProps) {
     const { theme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
+    const [isBookmarksOpen, setIsBookmarksOpen] = useState(false)
+    const { bookmarks } = useBookmarks()
 
     // Avoid hydration mismatch
     useEffect(() => {
@@ -32,7 +37,15 @@ export function FloatingNavbar({ className, isMobileSidebar = false }: FloatingN
         {
             icon: Bookmark,
             label: "Bookmarks",
-            onClick: () => console.log("Bookmark clicked - implementation planned"),
+            onClick: () => {
+                if (bookmarks.length === 0) {
+                    toast.info("No bookmarks saved yet", {
+                        description: "Bookmark posts to see them here"
+                    });
+                } else {
+                    setIsBookmarksOpen(true);
+                }
+            },
         },
     ]
 
@@ -74,6 +87,10 @@ export function FloatingNavbar({ className, isMobileSidebar = false }: FloatingN
                     </span>
                 )}
             </button>
+            <BookmarksModal
+                isOpen={isBookmarksOpen}
+                onClose={() => setIsBookmarksOpen(false)}
+            />
         </div>
     )
 }

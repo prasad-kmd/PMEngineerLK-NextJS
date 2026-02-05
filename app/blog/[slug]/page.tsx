@@ -4,6 +4,7 @@ import { getContentByType, getContentItem } from "@/lib/content"
 import { Calendar, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { ContentRenderer } from "@/components/content-renderer"
+import { BookmarkButton } from "@/components/bookmark-button"
 
 export async function generateStaticParams() {
   const blogPosts = getContentByType("blog")
@@ -47,13 +48,24 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <header className="mb-8 border-b border-border pb-8">
             <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl">{post.title}</h1>
             {post.date && (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Calendar className="h-4 w-4" />
-                {new Date(post.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+              <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </div>
+                <BookmarkButton
+                  key={post.slug}
+                  item={{
+                    slug: post.slug,
+                    title: post.title,
+                    date: post.date,
+                    type: "blog"
+                  }}
+                />
               </div>
             )}
           </header>
