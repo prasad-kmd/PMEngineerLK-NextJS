@@ -1,9 +1,10 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { Sun, Moon, Search, Bookmark } from "lucide-react"
+import { Sun, Moon, Bookmark } from "lucide-react"
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
+import { Search } from "./search"
 
 interface FloatingNavbarProps {
     className?: string
@@ -29,11 +30,6 @@ export function FloatingNavbar({ className, isMobileSidebar = false }: FloatingN
 
     const navItems = [
         {
-            icon: Search,
-            label: "Search",
-            onClick: () => console.log("Search clicked - implementation planned"),
-        },
-        {
             icon: Bookmark,
             label: "Bookmarks",
             onClick: () => console.log("Bookmark clicked - implementation planned"),
@@ -49,6 +45,7 @@ export function FloatingNavbar({ className, isMobileSidebar = false }: FloatingN
                 className
             )}
         >
+            <Search isMobileSidebar={isMobileSidebar} />
             {navItems.map((item) => (
                 <button
                     key={item.label}
