@@ -7,6 +7,12 @@ interface MagicBentoClientProps {
   articlesCount: number
   projectsCount: number
   tutorialsCount: number
+  latestItems: {
+    blog?: { title: string; description?: string }
+    articles?: { title: string; description?: string }
+    projects?: { title: string; description?: string }
+    tutorials?: { title: string; description?: string }
+  }
 }
 
 const MagicBento = dynamic(() => import("@/components/MagicBento"), {
@@ -19,6 +25,7 @@ export default function MagicBentoClient({
   articlesCount,
   projectsCount,
   tutorialsCount,
+  latestItems,
 }: MagicBentoClientProps) {
   return (
     <MagicBento
@@ -26,6 +33,7 @@ export default function MagicBentoClient({
       articlesCount={articlesCount}
       projectsCount={projectsCount}
       tutorialsCount={tutorialsCount}
+      latestItems={latestItems}
     />
   )
 }

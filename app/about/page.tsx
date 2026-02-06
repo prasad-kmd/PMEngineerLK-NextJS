@@ -1,7 +1,9 @@
+import React from "react"
 import type { Metadata } from "next"
 import Image from "next/image"
-import { Users, Target, Award, Mail, Linkedin, Github } from "lucide-react"
-
+import Link from "next/link"
+import { Target, Lightbulb, Users, ArrowRight, Settings, Cpu, HardDrive, ShieldCheck } from "lucide-react"
+import Roadmap from "@/components/roadmap"
 const title = "About Us"
 const description =
   "A collaborative undergraduate engineering initiative focused on solving real-world challenges in Sri Lanka through innovative mechanical and mechatronics solutions."
@@ -30,57 +32,9 @@ export const metadata: Metadata = {
   },
 }
 
-const teamMembers = [
-  {
-    name: "Ashan Perera",
-    role: "Team Lead - Mechatronics Engineering",
-    image: "https://placehold.co/400x400/1e293b/14b8a6?text=AP",
-    bio: "Specializing in automation systems and robotics. Passionate about IoT solutions for agricultural applications.",
-    email: "ashan.perera@example.lk",
-    linkedin: "#",
-    github: "#",
-  },
-  {
-    name: "Nimal Fernando",
-    role: "Mechanical Engineering",
-    image: "https://placehold.co/400x400/1e293b/14b8a6?text=NF",
-    bio: "Focused on mechanical design and manufacturing processes. Interested in sustainable engineering solutions.",
-    email: "nimal.fernando@example.lk",
-    linkedin: "#",
-    github: "#",
-  },
-  {
-    name: "Sanduni Silva",
-    role: "Mechatronics Engineering",
-    image: "https://placehold.co/400x400/1e293b/14b8a6?text=SS",
-    bio: "Expert in embedded systems and control theory. Working on smart sensor integration for industrial applications.",
-    email: "sanduni.silva@example.lk",
-    linkedin: "#",
-    github: "#",
-  },
-  {
-    name: "Kasun Rajapaksa",
-    role: "Mechanical Engineering",
-    image: "https://placehold.co/400x400/1e293b/14b8a6?text=KR",
-    bio: "Specializing in thermodynamics and energy systems. Passionate about renewable energy solutions for Sri Lanka.",
-    email: "kasun.rajapaksa@example.lk",
-    linkedin: "#",
-    github: "#",
-  },
-  {
-    name: "Dilini Wickramasinghe",
-    role: "Mechatronics Engineering",
-    image: "https://placehold.co/400x400/1e293b/14b8a6?text=DW",
-    bio: "Focused on machine learning and computer vision applications in industrial automation and quality control.",
-    email: "dilini.wickramasinghe@example.lk",
-    linkedin: "#",
-    github: "#",
-  },
-]
-
 export default function AboutPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-20">
       {/* Hero Section */}
       <section className="relative border-b border-border">
         <Image src="/img/about_us.webp" alt="About Us" fill className="object-cover" priority />
@@ -96,124 +50,118 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Mission & Vision */}
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div className="rounded-xl border border-border bg-card p-8 shadow-sm">
-            <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3">
-              <Target className="h-6 w-6 text-primary" />
+      <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        {/* Core Pillars */}
+        <div className="mt-20 grid gap-8 md:grid-cols-3">
+          <div className="rounded-2xl border border-border bg-card p-8 transition-all hover:shadow-lg">
+            <div className="mb-6 inline-flex rounded-xl bg-primary/10 p-4 text-primary">
+              <Target className="h-6 w-6" />
             </div>
-            <h3 className="text-xl font-semibold">Our Mission</h3>
-            <p className="mt-4 text-muted-foreground">
-              To identify pressing challenges in Sri Lanka and develop practical, sustainable engineering solutions that
-              make a meaningful impact on communities and industries.
+            <h2 className="mb-4 text-xl font-bold">Our Mission</h2>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              To identify pressing challenges in Sri Lanka and develop practical, sustainable engineering solutions that make a meaningful impact on communities and industries.
             </p>
           </div>
 
-          <div className="rounded-xl border border-border bg-card p-8 shadow-sm">
-            <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3">
-              <Award className="h-6 w-6 text-primary" />
+          <div className="rounded-2xl border border-border bg-card p-8 transition-all hover:shadow-lg">
+            <div className="mb-6 inline-flex rounded-xl bg-primary/10 p-4 text-primary">
+              <Lightbulb className="h-6 w-6" />
             </div>
-            <h3 className="text-xl font-semibold">Our Approach</h3>
-            <p className="mt-4 text-muted-foreground">
-              Combining mechanical and mechatronics expertise to create interdisciplinary solutions. We focus on
-              innovation, sustainability, and real-world applicability.
+            <h2 className="mb-4 text-xl font-bold">Our Approach</h2>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Combining mechanical and mechatronics expertise to create interdisciplinary solutions. We focus on innovation, sustainability, and real-world applicability.
             </p>
           </div>
 
-          <div className="rounded-xl border border-border bg-card p-8 shadow-sm">
-            <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3">
-              <Users className="h-6 w-6 text-primary" />
+          <div className="rounded-2xl border border-border bg-card p-8 transition-all hover:shadow-lg">
+            <div className="mb-6 inline-flex rounded-xl bg-primary/10 p-4 text-primary">
+              <Users className="h-6 w-6" />
             </div>
-            <h3 className="text-xl font-semibold">Our Team</h3>
-            <p className="mt-4 text-muted-foreground">
-              A diverse group of mechanical and mechatronics engineering students bringing together different
-              perspectives, skills, and experiences to tackle complex problems.
+            <h2 className="mb-4 text-xl font-bold">Our Team</h2>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              A diverse group of mechanical and mechatronics engineering students bringing together different perspectives, skills, and experiences to tackle complex problems.
             </p>
           </div>
         </div>
-      </div>
 
-      {/* Team Members */}
-      <div className="border-t border-border bg-muted/30">
-        <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight philosopher">Meet Our Team</h2>
-            <p className="mt-4 text-muted-foreground">
-              Dedicated engineering students working together to create innovative solutions for Sri Lanka.
-            </p>
-          </div>
-
-          <div className="mx-auto mt-16 grid max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {teamMembers.map((member) => (
-              <div
-                key={member.name}
-                className="group flex flex-col rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-md"
-              >
-                <div className="relative mb-4 aspect-square overflow-hidden rounded-lg bg-muted">
-                  <Image
-                    src={member.image || "/placeholder.svg"}
-                    alt={member.name}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
-                  />
-                </div>
-                <h3 className="text-lg font-semibold">{member.name}</h3>
-                <p className="mt-1 text-sm text-primary">{member.role}</p>
-                <p className="mt-3 text-sm text-muted-foreground">{member.bio}</p>
-
-                <div className="mt-auto flex gap-2 pt-4">
-                  <a
-                    href={`mailto:${member.email}`}
-                    className="rounded-lg bg-muted p-2 transition-colors hover:bg-primary/10 hover:text-primary"
-                    aria-label="Email"
-                  >
-                    <Mail className="h-4 w-4" />
-                  </a>
-                  <a
-                    href={member.linkedin}
-                    className="rounded-lg bg-muted p-2 transition-colors hover:bg-primary/10 hover:text-primary"
-                    aria-label="LinkedIn"
-                  >
-                    <Linkedin className="h-4 w-4" />
-                  </a>
-                  <a
-                    href={member.github}
-                    className="rounded-lg bg-muted p-2 transition-colors hover:bg-primary/10 hover:text-primary"
-                    aria-label="GitHub"
-                  >
-                    <Github className="h-4 w-4" />
-                  </a>
-                </div>
+        <div className="mt-24 grid gap-16 lg:grid-cols-2">
+          {/* Detailed Context */}
+          <div className="space-y-8">
+            <section>
+              <h2 className="mb-6 text-3xl font-bold philosopher">Project Context</h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed">
+                <p>
+                  This project is part of our undergraduate engineering degree program at the Open University of Sri Lanka (OUSL), where we are tasked with identifying a &quot;Big Idea&quot; - a broad area worthy of investigation to uncover meaningful challenges that require innovative solutions.
+                </p>
+                <p>
+                  Our focus is on Sri Lanka, where we aim to address local challenges through the lens of mechanical and mechatronics engineering. By combining our diverse skill sets and perspectives, we strive to develop solutions that are not only technically sound but also practical and sustainable for implementation in our country.
+                </p>
+                <p>
+                  Throughout this project, we are documenting our journey - from initial ideation and research to design, prototyping, and testing. This platform serves as our collaborative workspace and public portfolio, showcasing our progress and findings.
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
+            </section>
 
-      {/* Project Context */}
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="text-3xl font-bold tracking-tight philosopher">Project Context</h2>
-          <div className="mt-8 space-y-6 text-muted-foreground">
-            <p>
-              This project is part of our undergraduate engineering degree program, where we are tasked with identifying
-              a &quot;Big Idea&quot; - a broad area worthy of investigation to uncover meaningful challenges that require
-              innovative solutions.
-            </p>
-            <p>
-              Our focus is on Sri Lanka, where we aim to address local challenges through the lens of mechanical and
-              mechatronics engineering. By combining our diverse skill sets and perspectives, we strive to develop
-              solutions that are not only technically sound but also practical and sustainable for implementation in our
-              country.
-            </p>
-            <p>
-              Throughout this project, we are documenting our journey - from initial ideation and research to design,
-              prototyping, and testing. This platform serves as our collaborative workspace and public portfolio,
-              showcasing our progress and findings.
-            </p>
+            {/* Engineering Toolbox */}
+            <section className="rounded-2xl border border-border bg-muted/30 p-8">
+              <h2 className="mb-6 text-2xl font-bold philosopher flex items-center gap-2">
+                <Settings className="h-6 w-6 text-primary" />
+                Engineering Toolbox
+              </h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {[
+                  { title: "Design & CAD", icon: HardDrive, items: ["SolidWorks", "AutoCAD", "Fusion 360"] },
+                  { title: "Mechatronics", icon: Cpu, items: ["Arduino", "Raspberry Pi", "ROS"] },
+                  { title: "Analysis", icon: Target, items: ["ANSYS", "MATLAB", "Simulation"] },
+                  { title: "Standards", icon: ShieldCheck, items: ["ISO", "SLS", "Safety Protocols"] },
+                ].map((category, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="flex items-center gap-2 font-semibold text-foreground">
+                      <category.icon className="h-4 w-4 text-primary" />
+                      {category.title}
+                    </div>
+                    <ul className="text-xs text-muted-foreground space-y-1 ml-6 list-disc">
+                      {category.items.map((item, i) => <li key={i}>{item}</li>)}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
+
+          {/* Project Roadmap */}
+          <section>
+            <h2 className="mb-8 text-3xl font-bold philosopher flex items-center gap-3">
+              Project Roadmap
+            </h2>
+            <div className="rounded-2xl border border-border bg-card p-8">
+              <Roadmap />
+            </div>
+          </section>
         </div>
+
+        {/* CTA Section */}
+        <section className="mt-24 rounded-3xl bg-primary/5 border border-primary/20 p-12 text-center backdrop-blur-sm">
+          <h2 className="mb-4 text-3xl font-bold philosopher">Interested in our work?</h2>
+          <p className="mx-auto mb-8 max-w-2xl text-muted-foreground">
+            Explore our latest project logs, technical articles, and demonstrations as we work towards developing innovative engineering solutions.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link 
+              href="/team" 
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground transition-all hover:bg-primary/90"
+            >
+              Meet the Team
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link 
+              href="/blog" 
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-8 py-3 font-semibold transition-all hover:bg-muted"
+            >
+              Read Project Blog
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   )

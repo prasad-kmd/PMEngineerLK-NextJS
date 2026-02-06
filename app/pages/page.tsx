@@ -13,7 +13,8 @@ import {
   ArrowRight,
   ShieldCheck,
   Scale,
-  AlertTriangle
+  AlertTriangle,
+  Image as ImageIcon
 } from "lucide-react"
 
 const title = "Site Directory"
@@ -120,6 +121,22 @@ const mainPages = [
     icon: Mail,
     color: "text-red-500",
     bgColor: "bg-red-500/10",
+  },
+  {
+    name: "Gallery",
+    href: "/gallery",
+    description: "Visual documentation of our engineering journey and field work.",
+    icon: ImageIcon,
+    color: "text-amber-500",
+    bgColor: "bg-amber-500/10",
+  },
+  {
+    name: "Our Team",
+    href: "/team",
+    description: "Meet the dedicated mechatronics and mechanical engineering students.",
+    icon: Users,
+    color: "text-teal-500",
+    bgColor: "bg-teal-500/10",
   },
 ]
 

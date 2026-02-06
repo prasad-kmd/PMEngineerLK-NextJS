@@ -6,6 +6,7 @@ import { FileText, BookOpen, GitBranch, Newspaper, Info, Github, Images, Users }
 export interface BentoCardProps {
   color?: string
   title?: string
+  subtitle?: string
   description?: string
   href?: string
   icon?: React.ReactNode
@@ -29,6 +30,12 @@ export interface BentoProps {
   articlesCount?: number
   projectsCount?: number
   tutorialsCount?: number
+  latestItems?: {
+    blog?: { title: string; description?: string }
+    articles?: { title: string; description?: string }
+    projects?: { title: string; description?: string }
+    tutorials?: { title: string; description?: string }
+  }
 }
 
 const DEFAULT_PARTICLE_COUNT = 12
@@ -499,35 +506,40 @@ const MagicBento: React.FC<BentoProps> = ({
   articlesCount = 0,
   projectsCount = 0,
   tutorialsCount = 0,
+  latestItems = {},
 }) => {
   const gridRef = useRef<HTMLDivElement>(null)
   const isMobile = useMobileDetection()
   const shouldDisableAnimations = disableAnimations || isMobile
 
-  const cardData: BentoCardProps[] = [
+  const cardData: (BentoCardProps & { latest?: { title: string; description?: string } })[] = [
     {
       icon: <FileText className="h-6 w-6 text-primary" />,
       title: "Blog",
-      description: `${blogCount} item${blogCount !== 1 ? "s" : ""}`,
+      subtitle: `${blogCount} item${blogCount !== 1 ? "s" : ""}`,
       href: "/blog",
+      latest: latestItems.blog,
     },
     {
       icon: <BookOpen className="h-6 w-6 text-primary" />,
       title: "Articles",
-      description: `${articlesCount} item${articlesCount !== 1 ? "s" : ""}`,
+      subtitle: `${articlesCount} item${articlesCount !== 1 ? "s" : ""}`,
       href: "/articles",
+      latest: latestItems.articles,
     },
     {
       icon: <GitBranch className="h-6 w-6 text-primary" />,
       title: "Projects",
-      description: `${projectsCount} item${projectsCount !== 1 ? "s" : ""}`,
+      subtitle: `${projectsCount} item${projectsCount !== 1 ? "s" : ""}`,
       href: "/projects",
+      latest: latestItems.projects,
     },
     {
       icon: <Newspaper className="h-6 w-6 text-primary" />,
       title: "Tutorials",
-      description: `${tutorialsCount} item${tutorialsCount !== 1 ? "s" : ""}`,
+      subtitle: `${tutorialsCount} item${tutorialsCount !== 1 ? "s" : ""}`,
       href: "/tutorials",
+      latest: latestItems.tutorials,
     },
     {
       icon: <Info className="h-6 w-6 text-primary" />,
@@ -565,12 +577,8 @@ const MagicBento: React.FC<BentoProps> = ({
             --glow-intensity: 0;
             --glow-radius: 200px;
             --glow-color: ${glowColor};
-            --border-color: #392e4e;
-            --background-dark: #060010;
-            --white: hsl(0, 0%, 100%);
-            --purple-primary: rgba(132, 0, 255, 1);
-            --purple-glow: rgba(132, 0, 255, 0.2);
-            --purple-border: rgba(132, 0, 255, 0.8);
+            --border-color: var(--border);
+            --background-dark: var(--background);
           }
           
           .card-responsive {
@@ -709,20 +717,39 @@ const MagicBento: React.FC<BentoProps> = ({
 
             const cardContent = (
               <>
-                <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3">{card.icon}</div>
-                <div className="card__content flex flex-col relative">
+                <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3 shadow-inner shadow-primary/20">
+                  {card.icon}
+                </div>
+                <div className="card__content flex flex-col relative flex-grow">
                   <h3
-                    className={`card__title text-xl font-semibold mb-2 text-foreground ${textAutoHide ? "text-clamp-1" : ""
+                    className={`card__title text-xl font-semibold mb-1 text-foreground ${textAutoHide ? "text-clamp-1" : ""
                       }`}
                   >
                     {card.title}
                   </h3>
-                  <p
-                    className={`card__description text-sm leading-relaxed text-muted-foreground ${textAutoHide ? "text-clamp-2" : ""
-                      }`}
-                  >
-                    {card.description}
-                  </p>
+                  
+                  {card.subtitle && (
+                    <p
+                      className={`card__subtitle text-xs font-medium text-primary mb-3 uppercase tracking-wider ${textAutoHide ? "text-clamp-1" : ""
+                        }`}
+                    >
+                      {card.subtitle}
+                    </p>
+                  )}
+                  
+                  {card.latest && (
+                    <div className="mt-2 rounded-lg bg-muted/40 p-3 border border-border/50 backdrop-blur-sm">
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1 block">Latest</span>
+                      <h4 className="text-sm font-semibold text-foreground line-clamp-1">{card.latest.title}</h4>
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{card.latest.description}</p>
+                    </div>
+                  )}
+                  
+                  {card.description && (
+                    <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2 mt-auto">
+                      {card.description}
+                    </p>
+                  )}
                 </div>
               </>
             )
