@@ -1,8 +1,9 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { Sun, Moon, Bookmark, Share2 } from "lucide-react"
+import { Sun, Moon, Bookmark, Share2, LayoutGrid } from "lucide-react"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Search } from "./search"
 import { BookmarksModal } from "./bookmarks-modal"
@@ -62,6 +63,11 @@ export function FloatingNavbar({ className, isMobileSidebar = false }: FloatingN
 
     const navItems = [
         {
+            icon: LayoutGrid,
+            label: "Pages",
+            href: "/pages",
+        },
+        {
             icon: Share2,
             label: copied ? "Copied!" : "Share",
             onClick: handleShare,
@@ -92,19 +98,35 @@ export function FloatingNavbar({ className, isMobileSidebar = false }: FloatingN
         >
             <Search isMobileSidebar={isMobileSidebar} />
             {navItems.map((item) => (
-                <button
-                    key={item.label}
-                    onClick={item.onClick}
-                    className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors relative group"
-                    aria-label={item.label}
-                >
-                    <item.icon className="h-5 w-5" />
-                    {!isMobileSidebar && (
-                        <span className="absolute left-1/2 -bottom-8 -translate-x-1/2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm">
-                            {item.label}
-                        </span>
-                    )}
-                </button>
+                item.href ? (
+                    <Link
+                        key={item.label}
+                        href={item.href}
+                        className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors relative group"
+                        aria-label={item.label}
+                    >
+                        <item.icon className="h-5 w-5" />
+                        {!isMobileSidebar && (
+                            <span className="absolute left-1/2 -bottom-8 -translate-x-1/2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm">
+                                {item.label}
+                            </span>
+                        )}
+                    </Link>
+                ) : (
+                    <button
+                        key={item.label}
+                        onClick={item.onClick}
+                        className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors relative group"
+                        aria-label={item.label}
+                    >
+                        <item.icon className="h-5 w-5" />
+                        {!isMobileSidebar && (
+                            <span className="absolute left-1/2 -bottom-8 -translate-x-1/2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm">
+                                {item.label}
+                            </span>
+                        )}
+                    </button>
+                )
             ))}
             <hr className="h-4 w-[1px] bg-border mx-1" />
             <button

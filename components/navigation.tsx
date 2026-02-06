@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   FileText, BookOpen, GitBranch, Newspaper, Home, Menu, X, Users, Mail,
-  ChevronLeft, ChevronRight, PanelLeft, Wrench
+  ChevronLeft, ChevronRight, PanelLeft, Wrench, UserRound
 } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
@@ -15,6 +15,7 @@ import { FloatingNavbar } from "./floating-navbar"
 
 const primaryNav = [
   { name: "Home", href: "/", icon: Home },
+  { name: "Portfolio", href: "/portfolio", icon: UserRound },
   { name: "Blog", href: "/blog", icon: FileText },
   { name: "Articles", href: "/articles", icon: BookOpen },
   { name: "Projects", href: "/projects", icon: GitBranch },
