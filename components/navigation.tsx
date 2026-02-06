@@ -66,7 +66,7 @@ export function Navigation() {
     <>
       <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-border bg-background/95 px-4 py-2 backdrop-blur supports-[backdrop-filter]:bg-background/60 lg:hidden">
         <Link href="/" className="text-lg font-bold">
-          Engineering Project
+          PrasadM
         </Link>
         <div className="flex items-center gap-2">
           <FloatingNavbar isMobileSidebar={true} className="!relative !top-0 !right-0 !shadow-none !bg-transparent !p-0" />
@@ -106,14 +106,14 @@ export function Navigation() {
                 <PanelLeft className={cn("h-6 w-6 text-primary shrink-0 transition-transform", isCollapsed && "scale-110")} />
                 {!isCollapsed && (
                   <div className="animate-in fade-in slide-in-from-left-2 duration-300 hidden lg:block">
-                    <h1 className="text-xl font-bold text-balance leading-tight mozilla-headline">DMY4102</h1>
-                    <p className="mt-1 text-xs text-muted-foreground">Mechanical & Mechatronics Engineering Project</p>
+                    <h1 className="text-xl font-bold text-balance leading-tight mozilla-headline">PrasadM</h1>
+                    <p className="mt-1 text-xs text-muted-foreground">Engineering Undergraduate</p>
                   </div>
                 )}
                 {/* Always show on mobile logo */}
                 <div className="lg:hidden">
-                  <h1 className="text-xl font-bold text-balance leading-tight mozilla-headline">DMY4102</h1>
-                  <p className="mt-1 text-xs text-muted-foreground">Mechanical & Mechatronics Engineering Project</p>
+                  <h1 className="text-xl font-bold text-balance leading-tight mozilla-headline">PrasadM</h1>
+                  <p className="mt-1 text-xs text-muted-foreground"></p>
                 </div>
               </div>
             </Link>
@@ -136,9 +136,7 @@ export function Navigation() {
               isCollapsed && "lg:hidden"
             )}>
               <p className="text-xs text-muted-foreground">
-                Undergraduate Group Project
-                <br />
-                The Open University of Sri Lanka
+                &copy; PrasadM
               </p>
             </div>
           )}
