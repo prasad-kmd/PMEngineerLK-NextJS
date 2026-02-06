@@ -5,6 +5,11 @@ import { createPortal } from "react-dom"
 import { Search as SearchIcon, X, Calendar, ArrowRight, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface SearchResult {
     slug: string
@@ -117,21 +122,25 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
                     )}
                 </div>
 
-                <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className={cn(
-                        "p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors relative group shrink-0",
-                        isOpen && "ml-2"
-                    )}
-                    aria-label="Search"
-                >
-                    {isOpen ? <X className="h-5 w-5" /> : <SearchIcon className="h-5 w-5" />}
+                <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className={cn(
+                                "p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors relative group shrink-0",
+                                isOpen && "ml-2"
+                            )}
+                            aria-label="Search"
+                        >
+                            {isOpen ? <X className="h-5 w-5" /> : <SearchIcon className="h-5 w-5" />}
+                        </button>
+                    </TooltipTrigger>
                     {!isOpen && (
-                        <span className="absolute left-1/2 -bottom-8 -translate-x-1/2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm">
+                        <TooltipContent side="bottom" sideOffset={8}>
                             Search
-                        </span>
+                        </TooltipContent>
                     )}
-                </button>
+                </Tooltip>
 
                 {isOpen && query && (
                     <div className="absolute top-full right-0 mt-4 w-80 max-h-[400px] overflow-y-auto rounded-xl border border-border bg-background/95 backdrop-blur-xl shadow-2xl z-[70] animate-in fade-in slide-in-from-top-2 duration-200">

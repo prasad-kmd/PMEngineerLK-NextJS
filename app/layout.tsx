@@ -7,6 +7,7 @@ import { SidebarProvider } from "@/components/sidebar-context";
 import { ThemeProvider } from "@/components/theme-provider";
 import { FloatingNavbar } from "@/components/floating-navbar";
 import { Toaster } from "sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "katex/dist/katex.min.css";
 
 // import { Inter, JetBrains_Mono } from "next/font/google";
@@ -186,19 +187,21 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <BookmarksProvider>
-              <FloatingNavbar className="hidden lg:flex" />
-              <Navigation />
-              <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
-                {children}
-              </main>
-              <ScrollToTop />
-              <Toaster position="bottom-right" richColors />
-              <SpeedInsights />
-              <ServiceWorkerRegistrar />
-            </BookmarksProvider>
-          </SidebarProvider>
+          <TooltipProvider>
+            <SidebarProvider>
+              <BookmarksProvider>
+                <FloatingNavbar className="hidden lg:flex" />
+                <Navigation />
+                <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
+                  {children}
+                </main>
+                <ScrollToTop />
+                <Toaster position="bottom-right" richColors />
+                <SpeedInsights />
+                <ServiceWorkerRegistrar />
+              </BookmarksProvider>
+            </SidebarProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

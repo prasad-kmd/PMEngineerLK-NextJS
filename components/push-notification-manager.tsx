@@ -3,6 +3,11 @@
 import { Bell } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState, useEffect } from "react"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export function PushNotificationManager({ isCollapsed }: { isCollapsed?: boolean }) {
   const [permission, setPermission] = useState<NotificationPermission>("default")
@@ -55,31 +60,35 @@ export function PushNotificationManager({ isCollapsed }: { isCollapsed?: boolean
   }
 
   return (
-    <button
-      onClick={requestPermission}
-      disabled={permission !== "default"}
-      data-testid="notification-button"
-      className={cn(
-        "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all relative group",
-        permission === "granted"
-          ? "cursor-default text-primary"
-          : "text-muted-foreground hover:bg-muted hover:text-foreground",
-        permission === "denied" ? "cursor-not-allowed opacity-50" : "",
-        isCollapsed ? "lg:justify-center lg:px-2 lg:gap-0" : "justify-start"
-      )}
-    >
-      <Bell className="h-5 w-5 shrink-0" />
-      <span className={cn(
-        "animate-in fade-in slide-in-from-left-2 duration-300",
-        isCollapsed ? "lg:hidden" : ""
-      )}>
-        {getButtonText()}
-      </span>
+    <Tooltip delayDuration={0}>
+      <TooltipTrigger asChild>
+        <button
+          onClick={requestPermission}
+          disabled={permission !== "default"}
+          data-testid="notification-button"
+          className={cn(
+            "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all relative group local-jetbrains-mono",
+            permission === "granted"
+              ? "cursor-default text-primary"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground",
+            permission === "denied" ? "cursor-not-allowed opacity-50" : "",
+            isCollapsed ? "lg:justify-center lg:px-2 lg:gap-0" : "justify-start"
+          )}
+        >
+          <Bell className="h-5 w-5 shrink-0" />
+          <span className={cn(
+            "animate-in fade-in slide-in-from-left-2 duration-300",
+            isCollapsed ? "lg:hidden" : ""
+          )}>
+            {getButtonText()}
+          </span>
+        </button>
+      </TooltipTrigger>
       {isCollapsed && (
-        <span className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm z-50">
+        <TooltipContent side="right" className="ml-2">
           {getButtonText()}
-        </span>
+        </TooltipContent>
       )}
-    </button>
+    </Tooltip>
   )
 }

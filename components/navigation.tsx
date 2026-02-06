@@ -12,6 +12,11 @@ import { WebShareButton } from "./web-share-button"
 import { PushNotificationManager } from "./push-notification-manager"
 import { useSidebar } from "./sidebar-context"
 import { FloatingNavbar } from "./floating-navbar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 const primaryNav = [
   { name: "Home", href: "/", icon: Home },
@@ -36,29 +41,32 @@ export function Navigation() {
   const renderNavItem = (item: { name: string; href: string; icon: React.ElementType }) => {
     const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
     return (
-      <Link
-        key={item.name}
-        href={item.href}
-        onClick={() => setMobileMenuOpen(false)}
-        className={cn(
-          "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all gap-3 relative group local-jetbrains-mono",
-          isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
-          isCollapsed ? "lg:justify-center lg:px-2 lg:gap-0" : "justify-start"
-        )}
-      >
-        <item.icon className="h-5 w-5 shrink-0" />
-        <span className={cn(
-          "transition-opacity duration-300",
-          isCollapsed ? "lg:opacity-0 lg:w-0 lg:overflow-hidden" : "opacity-100"
-        )}>
-          {item.name}
-        </span>
+      <Tooltip key={item.name} delayDuration={0}>
+        <TooltipTrigger asChild>
+          <Link
+            href={item.href}
+            onClick={() => setMobileMenuOpen(false)}
+            className={cn(
+              "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all gap-3 relative group local-jetbrains-mono",
+              isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              isCollapsed ? "lg:justify-center lg:px-2 lg:gap-0" : "justify-start"
+            )}
+          >
+            <item.icon className="h-5 w-5 shrink-0" />
+            <span className={cn(
+              "transition-opacity duration-300",
+              isCollapsed ? "lg:opacity-0 lg:w-0 lg:overflow-hidden" : "opacity-100"
+            )}>
+              {item.name}
+            </span>
+          </Link>
+        </TooltipTrigger>
         {isCollapsed && (
-          <span className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm z-50 google-sans">
+          <TooltipContent side="right" className="ml-2">
             {item.name}
-          </span>
+          </TooltipContent>
         )}
-      </Link>
+      </Tooltip>
     )
   }
 
@@ -120,7 +128,7 @@ export function Navigation() {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 space-y-1 px-3 py-4">
+          <nav className="flex-1 space-y-1 px-3 py-4 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
             {primaryNav.map(renderNavItem)}
             <hr className="my-2 border-border" />
             <PushNotificationManager isCollapsed={isCollapsed} />
