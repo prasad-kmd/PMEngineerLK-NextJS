@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Edit3, Calculator, Replace, Code2, Sigma, ArrowRight, Scaling, Braces, Terminal, FileCode } from "lucide-react"
+import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 const title = "Engineering Workspace"
 const description = "Professional-grade utilities for technical documentation, advanced calculations, and structured content development."
@@ -165,6 +166,7 @@ export default function ToolsPage() {
                     </div>
                 </div>
             </div>
+            <AIContentIndicator />
         </div>
     )
 }

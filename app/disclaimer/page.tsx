@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { AlertTriangle, ArrowLeft } from "lucide-react"
+import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 export const metadata: Metadata = {
   title: "Disclaimer",
@@ -69,6 +70,7 @@ export default function DisclaimerPage() {
           </section>
         </div>
       </div>
+      <AIContentIndicator />
     </div>
   )
 }

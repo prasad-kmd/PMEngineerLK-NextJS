@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { Scale, ArrowLeft } from "lucide-react"
+import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 export const metadata: Metadata = {
   title: "Terms and Conditions",
@@ -82,6 +83,7 @@ export default function TermsAndConditionsPage() {
           </section>
         </div>
       </div>
+      <AIContentIndicator />
     </div>
   )
 }
