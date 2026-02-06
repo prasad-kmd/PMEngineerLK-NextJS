@@ -46,7 +46,7 @@ export function AIContentIndicator() {
                             AI-Assisted Content
                         </DialogTitle>
                         <DialogDescription className="pt-4 text-base leading-relaxed">
-                            To provide you with the most accurate and up-to-date information, parts of this page's content have been drafted or refined using <b>Artificial Intelligence</b>.
+                            To provide you with the most accurate and up-to-date information, parts of this page&apos;s content have been drafted or refined using <b>Artificial Intelligence</b>.
                             <br /><br />
                             While we leverage AI to enhance efficiency and coverage, all content is manually reviewed and edited by our team to maintain high quality and reliability.
                         </DialogDescription>
