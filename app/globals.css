@@ -109,6 +109,18 @@
 @theme inline {
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
+  --font-amoria: var(--font-amoria-regular);
+  --font-mozilla-headline: var(--font-mozilla-headline);
+  --font-philosopher: var(--font-philosopher);
+  --font-google-sans: var(--font-google-sans);
+  --font-mozilla-text: var(--font-mozilla-text);
+  --font-noto-sans: var(--font-noto-sans);
+  --font-noto-sans-display: var(--font-noto-sans-display);
+  --font-noto-serif-sinhala: var(--font-noto-serif-sinhala);
+  --font-roboto: var(--font-roboto);
+  --font-space-mono: var(--font-space-mono);
+  --font-local-inter: var(--font-local-inter);
+  --font-local-jetbrains-mono: var(--font-local-jetbrains-mono);
 
   /* Color System - Dark theme with teal accent */
   --color-background: var(--background);
@@ -312,4 +324,40 @@ code.hljs {
 
 .philosopher {
   font-family: var(--font-philosopher);
+}
+
+.google-sans {
+  font-family: var(--font-google-sans);
+}
+
+.mozilla-text {
+  font-family: var(--font-mozilla-text);
+}
+
+.noto-sans {
+  font-family: var(--font-noto-sans);
+}
+
+.noto-sans-display {
+  font-family: var(--font-noto-sans-display);
+}
+
+.noto-serif-sinhala {
+  font-family: var(--font-noto-serif-sinhala);
+}
+
+.roboto {
+  font-family: var(--font-roboto);
+}
+
+.space-mono {
+  font-family: var(--font-space-mono);
+}
+
+.local-inter {
+  font-family: var(--font-local-inter);
+}
+
+.local-jetbrains-mono {
+  font-family: var(--font-local-jetbrains-mono);
 }

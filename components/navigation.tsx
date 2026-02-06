@@ -41,7 +41,7 @@ export function Navigation() {
         href={item.href}
         onClick={() => setMobileMenuOpen(false)}
         className={cn(
-          "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all gap-3 relative group",
+          "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all gap-3 relative group local-jetbrains-mono",
           isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
           isCollapsed ? "lg:justify-center lg:px-2 lg:gap-0" : "justify-start"
         )}
@@ -54,7 +54,7 @@ export function Navigation() {
           {item.name}
         </span>
         {isCollapsed && (
-          <span className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm z-50">
+          <span className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm z-50 google-sans">
             {item.name}
           </span>
         )}
@@ -88,7 +88,7 @@ export function Navigation() {
           {/* Collapse Toggle Button (Desktop only) */}
           <button
             onClick={toggleSidebar}
-            className="absolute -right-3 top-20 z-50 hidden lg:flex h-6 w-6 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:text-foreground shadow-sm transition-transform hover:scale-110 group"
+            className="absolute -right-3 top-20 z-50 hidden lg:flex h-6 w-6 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:text-foreground shadow-sm transition-transform hover:scale-110 group google-sans"
             title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
@@ -107,7 +107,7 @@ export function Navigation() {
                 {!isCollapsed && (
                   <div className="animate-in fade-in slide-in-from-left-2 duration-300 hidden lg:block">
                     <h1 className="text-xl font-bold text-balance leading-tight mozilla-headline">PrasadM</h1>
-                    <p className="mt-1 text-xs text-muted-foreground">Engineering Undergraduate</p>
+                    <p className="mt-1 text-xs text-muted-foreground google-sans">Engineering Undergraduate</p>
                   </div>
                 )}
                 {/* Always show on mobile logo */}
@@ -135,7 +135,7 @@ export function Navigation() {
               "border-t border-border px-6 py-4 animate-in fade-in slide-in-from-bottom-2 duration-300",
               isCollapsed && "lg:hidden"
             )}>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground google-sans">
                 &copy; PrasadM
               </p>
             </div>

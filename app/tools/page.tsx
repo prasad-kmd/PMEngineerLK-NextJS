@@ -119,12 +119,12 @@ export default function ToolsPage() {
                                 </div>
                                 <div className="flex-1">
                                     <div className="flex items-center justify-between">
-                                        <h2 className="text-xl font-semibold group-hover:text-primary transition-colors">
+                                        <h2 className="text-xl font-semibold group-hover:text-primary transition-colors google-sans">
                                             {tool.name}
                                         </h2>
                                         <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
                                     </div>
-                                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed local-inter">
                                         {tool.description}
                                     </p>
                                 </div>

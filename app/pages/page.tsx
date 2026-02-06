@@ -129,7 +129,7 @@ export default function PagesOverview() {
       <div className="mx-auto max-w-5xl">
         <div className="mb-12 text-center lg:text-left">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline">Site Directory</h1>
-          <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl google-sans">
             {description}
           </p>
         </div>
@@ -144,7 +144,7 @@ export default function PagesOverview() {
               <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${page.bgColor} ${page.color} transition-transform group-hover:scale-110`}>
                 <page.icon className="h-4 w-4" />
               </div>
-              <span className="text-sm font-medium group-hover:text-primary transition-colors philosopher">
+              <span className="text-sm font-medium group-hover:text-primary transition-colors google-sans">
                 {page.name}
               </span>
               <div className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
@@ -164,12 +164,12 @@ export default function PagesOverview() {
               </div>
               <div className="flex flex-1 flex-col">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold group-hover:text-primary transition-colors philosopher">
+                  <h2 className="text-xl font-bold group-hover:text-primary transition-colors google-sans">
                     {page.name}
                   </h2>
                   <ArrowRight className="h-5 w-5 text-muted-foreground opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100 group-hover:text-primary" />
                 </div>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed local-inter">
                   {page.description}
                 </p>
               </div>
