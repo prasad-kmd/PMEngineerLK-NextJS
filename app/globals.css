@@ -40,19 +40,23 @@
   --sidebar-border: oklch(0.88 0.01 264);
   --sidebar-ring: oklch(0.55 0.15 195);
 
-  --page-gradient: linear-gradient(to bottom,
-      rgba(255, 255, 255, 0.4) 0%,
-      rgba(255, 255, 255, 0.6) 25%,
-      rgba(255, 255, 255, 0.8) 40%,
-      rgba(255, 255, 255, 0.9) 60%,
-      rgba(255, 255, 255, 1) 75%);
-  --item-gradient: linear-gradient(45deg,
-      rgba(255, 255, 255, 0.0) 0%,
-      rgba(255, 255, 255, 0.2) 30%,
-      rgba(255, 255, 255, 0.4) 40%,
-      rgba(255, 255, 255, 0.5) 50%,
-      rgba(255, 255, 255, 0.7) 65%,
-      rgba(255, 255, 255, 0.9) 90%);
+  --page-gradient: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.6) 25%,
+    rgba(255, 255, 255, 0.8) 40%,
+    rgba(255, 255, 255, 0.9) 60%,
+    rgba(255, 255, 255, 1) 75%
+  );
+  --item-gradient: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 30%,
+    rgba(255, 255, 255, 0.4) 40%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.7) 65%,
+    rgba(255, 255, 255, 0.9) 90%
+  );
 }
 
 .dark {
@@ -91,19 +95,23 @@
   --sidebar-border: oklch(0.28 0.01 264);
   --sidebar-ring: oklch(0.65 0.15 195);
 
-  --page-gradient: linear-gradient(to bottom,
-      rgba(0, 0, 0, 0.4) 0%,
-      rgba(0, 0, 0, 0.6) 25%,
-      rgba(0, 0, 0, 0.8) 40%,
-      rgba(0, 0, 0, 0.9) 60%,
-      rgb(0, 0, 0) 75%);
-  --item-gradient: linear-gradient(45deg,
-      #00000000 0%,
-      #0000003d 30%,
-      #00000063 40%,
-      #00000088 50%,
-      #000000c5 65%,
-      #000000 90%);
+  --page-gradient: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.6) 25%,
+    rgba(0, 0, 0, 0.8) 40%,
+    rgba(0, 0, 0, 0.9) 60%,
+    rgb(0, 0, 0) 75%
+  );
+  --item-gradient: linear-gradient(
+    45deg,
+    #00000000 0%,
+    #0000003d 30%,
+    #00000063 40%,
+    #00000088 50%,
+    #000000c5 65%,
+    #000000 90%
+  );
 }
 
 @theme inline {
@@ -180,6 +188,22 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  @media (min-width: 768px) {
+    *,
+    body {
+      cursor: none !important;
+    }
+
+    a,
+    button,
+    [role="button"],
+    input,
+    textarea,
+    select {
+      cursor: none !important;
+    }
+  }
 }
 
 /* Custom scrollbar */
@@ -238,7 +262,6 @@ code.hljs {
 }
 
 @layer base {
-
   .prose *,
   .prose ::after,
   .prose ::before,
@@ -311,7 +334,7 @@ code.hljs {
 }
 
 :root {
-  --font-amoria-regular: 'amoriaregular', sans-serif;
+  --font-amoria-regular: "amoriaregular", sans-serif;
 }
 
 .amoriaregular {

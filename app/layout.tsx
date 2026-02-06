@@ -114,6 +114,8 @@ import { siteConfig } from "@/lib/config";
 import ServiceWorkerRegistrar from "@/components/service-worker-registrar";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { BookmarksProvider } from "@/hooks/use-bookmarks";
+import { CustomCursor } from "@/components/custom-cursor";
+import { CustomContextMenu } from "@/components/custom-context-menu";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -190,6 +192,8 @@ export default function RootLayout({
           <TooltipProvider>
             <SidebarProvider>
               <BookmarksProvider>
+                <CustomCursor />
+                <CustomContextMenu />
                 <FloatingNavbar className="hidden lg:flex" />
                 <Navigation />
                 <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
