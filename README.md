@@ -1,8 +1,8 @@
-# Blogfolio Webapp
+# PrasadM | Engineering Blogfolio
 
-A modern, responsive web application for documenting a mechanical and mechatronics engineering undergraduate group project. Built with Next.js, Tailwind CSS, and featuring integrated support for mathematical equations (KaTeX), charts (Chart.js), and code syntax highlighting (Highlight.js).
+A modern, responsive personal blogfolio for documenting a mechatronics and mechanical engineering journey. Built with Next.js, Tailwind CSS, and featuring integrated support for mathematical equations (KaTeX), charts (Chart.js), and code syntax highlighting (Highlight.js).
 
-This webapp serves as a comprehensive blogfolio platform for documenting engineering journeys, identifying and solving real-world challenges, and sharing technical expertise.
+This platform serves as a comprehensive blogfolio for documenting projects, identifying and solving real-world engineering challenges, and sharing technical expertise.
 
 ## Features
 
@@ -386,29 +386,23 @@ npm run lint
 
 ## Contributing
 
-This is an academic project. For questions or suggestions:
-
-1. Document issues in project diary
-2. Discuss with team members
-3. Update workflow documentation
-4. Commit changes with clear messages
+This is a personal blogfolio. For questions or suggestions, please reach out via the contact page.
 
 ## License
 
-This project is for educational purposes as part of an undergraduate engineering program.
+This project is for educational purposes and personal documentation of an engineering journey.
 
 ## Acknowledgments
 
-- **Supervisor**: For guidance and support
-- **University**: For resources and facilities
-- **Open Source Community**: For the amazing tools and libraries
+- **The Open University of Sri Lanka**: For providing the academic foundation and resources.
+- **Open Source Community**: For the amazing tools and libraries.
 
 ## Contact
 
-For more information about this project, please refer to the content on the website or contact the project team through your university.
+For more information about this project, please refer to the contact page on the website.
 
 ---
 
-**Built with ❤️ by Mechanical & Mechatronics Engineering Students**
+**Built with ❤️ by PrasadM**
 
 **Sri Lanka | 2025**

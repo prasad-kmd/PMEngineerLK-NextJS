@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 
 const title = "Project Gallery"
-const description = "Visual documentation of our engineering journey, prototypes, and field work."
+const description = "Visual documentation of my engineering journey, prototypes and field work."
 
 export const metadata: Metadata = {
   title,
@@ -68,7 +68,7 @@ export default function GalleryPage() {
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold philosopher lg:text-5xl mb-4">Project Gallery</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Visual highlights from our engineering journey. From early concepts to technical implementations and field work.
+            Visual highlights from my engineering journey. From early concepts to technical implementations and field work.
           </p>
         </div>
 

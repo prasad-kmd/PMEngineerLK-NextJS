@@ -125,8 +125,8 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   generator: "PrasadM",
-  creator: "Project Team",
-  publisher: "Project Team",
+  creator: siteConfig.author,
+  publisher: siteConfig.author,
   robots: {
     index: true,
     follow: true,

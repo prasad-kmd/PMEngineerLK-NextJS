@@ -3,8 +3,8 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
-  FileText, BookOpen, GitBranch, Newspaper, Home, Menu, X, Users, Mail,
-  ChevronLeft, ChevronRight, PanelLeft, Wrench, UserRound
+  FileText, BookOpen, GitBranch, Newspaper, Home, Menu, X, Mail,
+  ChevronLeft, ChevronRight, PanelLeft, Wrench, UserRound, Info
 } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
@@ -29,7 +29,7 @@ const primaryNav = [
 ]
 
 const secondaryNav = [
-  { name: "About", href: "/about", icon: Users },
+  { name: "About", href: "/about", icon: Info },
   { name: "Contact", href: "/contact", icon: Mail },
 ]
 

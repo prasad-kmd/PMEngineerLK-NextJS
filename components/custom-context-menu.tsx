@@ -11,6 +11,7 @@ import {
   Info
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface MenuItemProps {
   icon: React.ElementType;
@@ -118,6 +119,7 @@ export const CustomContextMenu = () => {
         label="Copy URL" 
         onClick={() => {
           navigator.clipboard.writeText(window.location.href);
+          toast.success("URL copied to clipboard");
           setVisible(false);
         }} 
       />

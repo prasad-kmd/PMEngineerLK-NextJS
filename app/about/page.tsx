@@ -2,11 +2,11 @@ import React from "react"
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { Target, Lightbulb, Users, ArrowRight, Settings, Cpu, HardDrive, ShieldCheck } from "lucide-react"
+import { Target, Lightbulb, ArrowRight, Settings, Cpu, HardDrive, ShieldCheck } from "lucide-react"
 import Roadmap from "@/components/roadmap"
-const title = "About Us"
+const title = "About Me"
 const description =
-  "A collaborative undergraduate engineering initiative focused on solving real-world challenges in Sri Lanka through innovative mechanical and mechatronics solutions."
+  "A personal engineering initiative focused on solving real-world challenges through innovative mechanical and mechatronics solutions."
 
 export const metadata: Metadata = {
   title,
@@ -37,14 +37,14 @@ export default function AboutPage() {
     <div className="min-h-screen pb-20">
       {/* Hero Section */}
       <section className="relative border-b border-border">
-        <Image src="/img/about_us.webp" alt="About Us" fill className="object-cover" priority />
+        <Image src="/img/about_us.webp" alt="About Me" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-3xl text-center text-white">
-            <h1 className="text-4xl font-bold tracking-tight text-balance lg:text-5xl amoriaregular">About Our Project</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-balance lg:text-5xl amoriaregular">About My Journey</h1>
             <p className="mt-6 text-lg leading-8 text-gray-200 text-pretty">
-              A collaborative undergraduate engineering initiative focused on identifying and solving real-world
-              challenges in Sri Lanka through innovative mechanical and mechatronics solutions.
+              A personal engineering journey focused on identifying and solving real-world
+              challenges through innovative mechanical and mechatronics solutions.
             </p>
           </div>
         </div>
@@ -57,9 +57,9 @@ export default function AboutPage() {
             <div className="mb-6 inline-flex rounded-xl bg-primary/10 p-4 text-primary">
               <Target className="h-6 w-6" />
             </div>
-            <h2 className="mb-4 text-xl font-bold">Our Mission</h2>
+            <h2 className="mb-4 text-xl font-bold">My Mission</h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              To identify pressing challenges in Sri Lanka and develop practical, sustainable engineering solutions that make a meaningful impact on communities and industries.
+              To identify pressing engineering challenges and develop practical, sustainable solutions that make a meaningful impact on communities and industries.
             </p>
           </div>
 
@@ -67,19 +67,19 @@ export default function AboutPage() {
             <div className="mb-6 inline-flex rounded-xl bg-primary/10 p-4 text-primary">
               <Lightbulb className="h-6 w-6" />
             </div>
-            <h2 className="mb-4 text-xl font-bold">Our Approach</h2>
+            <h2 className="mb-4 text-xl font-bold">My Approach</h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Combining mechanical and mechatronics expertise to create interdisciplinary solutions. We focus on innovation, sustainability, and real-world applicability.
+              Combining mechanical and mechatronics expertise to create interdisciplinary solutions. I focus on innovation, sustainability, and real-world applicability.
             </p>
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-8 transition-all hover:shadow-lg">
             <div className="mb-6 inline-flex rounded-xl bg-primary/10 p-4 text-primary">
-              <Users className="h-6 w-6" />
+              <Cpu className="h-6 w-6" />
             </div>
-            <h2 className="mb-4 text-xl font-bold">Our Team</h2>
+            <h2 className="mb-4 text-xl font-bold">My Expertise</h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              A diverse group of mechanical and mechatronics engineering students bringing together different perspectives, skills, and experiences to tackle complex problems.
+              Specializing in mechatronics systems, mechanical design, and automation. I bring a comprehensive technical background to tackle complex engineering problems.
             </p>
           </div>
         </div>
@@ -88,16 +88,16 @@ export default function AboutPage() {
           {/* Detailed Context */}
           <div className="space-y-8">
             <section>
-              <h2 className="mb-6 text-3xl font-bold philosopher">Project Context</h2>
+              <h2 className="mb-6 text-3xl font-bold philosopher">Professional Context</h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  This project is part of our undergraduate engineering degree program at the Open University of Sri Lanka (OUSL), where we are tasked with identifying a &quot;Big Idea&quot; - a broad area worthy of investigation to uncover meaningful challenges that require innovative solutions.
+                  As an engineering undergraduate at the Open University of Sri Lanka (OUSL), I am dedicated to exploring the &quot;Big Idea&quot; - identifying meaningful challenges that require innovative engineering solutions.
                 </p>
                 <p>
-                  Our focus is on Sri Lanka, where we aim to address local challenges through the lens of mechanical and mechatronics engineering. By combining our diverse skill sets and perspectives, we strive to develop solutions that are not only technically sound but also practical and sustainable for implementation in our country.
+                  My focus is on addressing complex problems through the lens of mechanical and mechatronics engineering. By leveraging my technical skills and interdisciplinary perspective, I strive to develop solutions that are not only technically sound but also practical and sustainable.
                 </p>
                 <p>
-                  Throughout this project, we are documenting our journey - from initial ideation and research to design, prototyping, and testing. This platform serves as our collaborative workspace and public portfolio, showcasing our progress and findings.
+                  Throughout my journey, I am documenting my progress - from initial ideation and research to design, prototyping, and testing. This platform serves as my personal workspace and public portfolio, showcasing my expertise and findings.
                 </p>
               </div>
             </section>
@@ -142,23 +142,23 @@ export default function AboutPage() {
 
         {/* CTA Section */}
         <section className="mt-24 rounded-3xl bg-primary/5 border border-primary/20 p-12 text-center backdrop-blur-sm">
-          <h2 className="mb-4 text-3xl font-bold philosopher">Interested in our work?</h2>
+          <h2 className="mb-4 text-3xl font-bold philosopher">Interested in my work?</h2>
           <p className="mx-auto mb-8 max-w-2xl text-muted-foreground">
-            Explore our latest project logs, technical articles, and demonstrations as we work towards developing innovative engineering solutions.
+            Explore my latest project logs, technical articles, and demonstrations as I work towards developing innovative engineering solutions.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link 
-              href="/team" 
+              href="/portfolio" 
               className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground transition-all hover:bg-primary/90"
             >
-              Meet the Team
+              View Portfolio
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link 
               href="/blog" 
               className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-8 py-3 font-semibold transition-all hover:bg-muted"
             >
-              Read Project Blog
+              Read My Blog
             </Link>
           </div>
         </section>

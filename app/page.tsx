@@ -31,12 +31,12 @@ export default function HomePage() {
         <HeroSlideshow />
         <div className="relative z-10 mx-auto max-w-4xl text-center text-white">
           <h1 className="mb-6 text-5xl font-bold tracking-tight text-balance lg:text-6xl amoriaregular">
-            The OUSL Engineering Project
-            <span className="block text-primary mozilla-headline">DMY4102 / DMY4101</span>
+            Prasad Madhuranga&apos;s Blogfolio
+            <span className="block text-primary mozilla-headline">Engineering Blogfolio</span>
           </h1>
           <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-200 text-pretty leading-relaxed">
-            Documenting our journey to identify and solve engineering challenges in Sri Lanka. A collaborative
-            undergraduate group project exploring innovative solutions for real-world problems.
+            Documenting my journey to identify and solve engineering challenges through innovation and technical excellence. 
+            Exploring mechatronics and mechanical solutions for real-world problems.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link

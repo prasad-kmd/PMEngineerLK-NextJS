@@ -16,8 +16,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
-const title = "Portfolio | Engineering Professional"
-const description = "Showcasing the professional journey, technical expertise, and engineering projects of a Mechatronics Engineering lead."
+const title = "Portfolio | PrasadM"
+const description = "Showcasing the professional journey, technical expertise, and engineering projects of PrasadM, a Mechatronics and Mechanical Engineering undergraduate."
 
 export const metadata: Metadata = {
     title,
@@ -74,10 +74,10 @@ export default function PortfolioPage() {
                         </div>
                         <div className="text-center lg:text-left">
                             <h1 className="text-4xl font-bold tracking-tight sm:text-6xl amoriaregular">
-                                Alex <span className="text-primary">Perera</span>
+                                Prasad<span className="text-primary">M</span>
                             </h1>
                             <p className="mt-4 text-xl font-medium text-muted-foreground philosopher">
-                                Mechatronics Engineer & Technical Architect
+                                Mechatronics & Mechanical Engineering Undergraduate
                             </p>
                             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
                                 Passionate about bridging the gap between hardware and software. I specialize in

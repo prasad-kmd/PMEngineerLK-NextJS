@@ -4,7 +4,7 @@ import Image from "next/image"
 
 const title = "Get In Touch"
 const description =
-  "Have questions about our project? Want to collaborate or provide feedback? We'd love to hear from you."
+  "Have questions about my work? Want to collaborate or provide feedback? I'd love to hear from you."
 
 export const metadata: Metadata = {
   title,
@@ -41,7 +41,7 @@ export default function ContactPage() {
           <div className="mx-auto max-w-3xl text-center text-white">
             <h1 className="text-4xl font-bold tracking-tight text-balance lg:text-5xl amoriaregular">Get In Touch</h1>
             <p className="mt-6 text-lg leading-8 text-gray-200 text-pretty">
-              Have questions about our project? Want to collaborate or provide feedback? We&apos;d love to hear from you.
+              Have questions about my work? Want to collaborate or provide feedback? I&apos;d love to hear from you.
             </p>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function ContactPage() {
           <div>
             <h2 className="text-2xl font-bold">Contact Information</h2>
             <p className="mt-4 text-muted-foreground">
-              Reach out to us through any of the following channels. We typically respond within 24-48 hours.
+              Reach out to me through any of the following channels. I typically respond within 24-48 hours.
             </p>
 
             <div className="mt-8 space-y-6">
@@ -65,7 +65,6 @@ export default function ContactPage() {
                 <div>
                   <h3 className="font-semibold">Email</h3>
                   <p className="mt-1 text-sm text-muted-foreground">engineering.project@example.lk</p>
-                  <p className="mt-1 text-sm text-muted-foreground">team.contact@example.lk</p>
                 </div>
               </div>
 
@@ -94,7 +93,7 @@ export default function ContactPage() {
             </div>
 
             {/* Additional Info */}
-            <div className="mt-12 rounded-xl border border-border bg-card p-6">
+            {/* <div className="mt-12 rounded-xl border border-border bg-card p-6">
               <h3 className="font-semibold">Project Supervisor</h3>
               <p className="mt-2 text-sm text-muted-foreground">
                 For academic inquiries or collaboration opportunities, please contact our project supervisor:
@@ -106,7 +105,7 @@ export default function ContactPage() {
                 <br />
                 <span className="text-muted-foreground">supervisor@example.lk</span>
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -118,26 +117,24 @@ export default function ContactPage() {
             <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
             <div className="mt-8 space-y-6">
               <div className="rounded-lg border border-border bg-card p-6">
-                <h3 className="font-semibold">Can I collaborate on this project?</h3>
+                <h3 className="font-semibold">Can I collaborate with you?</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  We welcome collaboration opportunities! Please reach out via email with details about your background
-                  and how you&apos;d like to contribute.
+                  I welcome collaboration opportunities! Please reach out via email with details about your background
+                  and how you&apos;d like to work together.
                 </p>
               </div>
 
               <div className="rounded-lg border border-border bg-card p-6">
-                <h3 className="font-semibold">Are you looking for industry partnerships?</h3>
+                <h3 className="font-semibold">Are you looking for professional opportunities?</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Yes! We&apos;re interested in connecting with industry partners who can provide insights, resources, or
-                  potential implementation opportunities for our solutions.
+                  Yes! I&apos;m interested in connecting with industry partners and exploring professional opportunities where I can apply my engineering skills.
                 </p>
               </div>
 
               <div className="rounded-lg border border-border bg-card p-6">
-                <h3 className="font-semibold">How can I stay updated on your progress?</h3>
+                <h3 className="font-semibold">How can I stay updated on your work?</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Check our Diary and Posts sections regularly for updates. You can also reach out to be added to our
-                  mailing list for major announcements.
+                  Check my Blog and Projects sections regularly for updates. You can also follow me on LinkedIn for major professional updates.
                 </p>
               </div>
             </div>

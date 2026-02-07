@@ -4,7 +4,7 @@ import { getContentByType } from "@/lib/content"
 import { Calendar, ArrowRight } from "lucide-react"
 
 const title = "Articles"
-const description = "Daily progress logs and reflections documenting our project development journey."
+const description = "Technical articles and reflections documenting my engineering journey."
 
 export const metadata: Metadata = {
   title,
@@ -39,7 +39,7 @@ export default function ArticlesPage() {
         <div className="mb-12">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline">Articles</h1>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Daily progress logs and reflections documenting our project development journey.
+            Technical articles and reflections documenting my engineering journey.
           </p>
         </div>
 

@@ -5,7 +5,7 @@ import { Calendar, ArrowRight, CheckCircle2 } from "lucide-react"
 
 const title = "Blog"
 const description =
-  "Comprehensive engineering ideas addressing challenges in Sri Lanka. Each idea explores practical solutions combining mechanical and mechatronics expertise."
+  "Comprehensive engineering ideas and technical insights. Each post explores practical solutions combining mechanical and mechatronics expertise."
 
 export const metadata: Metadata = {
   title,
@@ -41,7 +41,7 @@ export default function BlogPage() {
         <div className="mb-12">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline">Blog</h1>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Comprehensive engineering ideas addressing challenges in Sri Lanka. Each idea explores practical solutions
+            Comprehensive engineering ideas and technical insights. Each post explores practical solutions
             combining mechanical and mechatronics expertise.
           </p>
         </div>
