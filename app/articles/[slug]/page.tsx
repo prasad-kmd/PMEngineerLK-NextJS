@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getContentByType, getContentItem } from "@/lib/content"
-import { Calendar, ArrowLeft } from "lucide-react"
+import { Calendar, ArrowLeft, Clock } from "lucide-react"
 import Link from "next/link"
 import { ContentRenderer } from "@/components/content-renderer"
 import { BookmarkButton } from "@/components/bookmark-button"
+import { ScrollProgress } from "@/components/scroll-progress"
+import { RelatedContent } from "@/components/related-content"
 
 export async function generateStaticParams() {
   const entries = getContentByType("articles")
@@ -35,6 +37,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 articles_item img_grad_pm">
+      <ScrollProgress />
       <div className="mx-auto max-w-4xl">
         <Link
           href="/articles"
@@ -56,6 +59,12 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
                     month: "long",
                     day: "numeric",
                   })}
+                  {entry.readingTime && (
+                    <span className="flex items-center gap-1.5 ml-4 border-l border-border pl-4">
+                      <Clock className="h-3.5 w-3.5" />
+                      {entry.readingTime} min read
+                    </span>
+                  )}
                 </div>
                 <BookmarkButton
                   key={entry.slug}
@@ -72,6 +81,8 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
 
           <ContentRenderer content={entry.content} />
         </article>
+
+        <RelatedContent type="articles" currentSlug={entry.slug} />
       </div>
     </div>
   )

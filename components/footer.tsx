@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { PanelLeft, Github, Twitter, Linkedin, Mail, ArrowUpRight, Globe, Shield, Terminal } from "lucide-react"
+import { PanelLeft, Github, Twitter, Linkedin, Mail, ArrowUpRight, Globe, Shield, Terminal, Rss } from "lucide-react"
 import { siteConfig } from "@/lib/config"
 
 export function Footer() {
@@ -31,9 +31,10 @@ export function Footer() {
             </p>
             <div className="flex gap-3">
               {[
-                { icon: Github, href: "https://github.com", label: "GitHub" },
-                { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-                { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
+                { icon: Github, href: siteConfig.socialLinks.github, label: "GitHub" },
+                { icon: Twitter, href: siteConfig.socialLinks.twitter, label: "Twitter" },
+                { icon: Linkedin, href: siteConfig.socialLinks.linkedin, label: "LinkedIn" },
+                { icon: Rss, href: "/feed.xml", label: "RSS Feed" },
                 { icon: Mail, href: "/contact", label: "Contact" },
               ].map((social) => (
                 <Link

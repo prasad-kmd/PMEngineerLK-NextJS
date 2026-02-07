@@ -12,6 +12,13 @@ export interface ContentItem {
   rawContent: string
   final?: boolean
   firstImage?: string
+  readingTime?: number
+}
+
+function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200
+  const words = content.trim().split(/\s+/).length
+  return Math.ceil(words / wordsPerMinute)
 }
 
 function extractFirstImage(content: string, isMarkdown: boolean): string | undefined {
@@ -67,6 +74,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           rawContent: content,
           final: data.final || false,
           firstImage,
+          readingTime: calculateReadingTime(content),
         }
       } else {
         // HTML file
@@ -82,6 +90,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           rawContent: content,
           final: data.final || false,
           firstImage,
+          readingTime: calculateReadingTime(content),
         }
       }
     })
@@ -131,6 +140,7 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       rawContent: content,
       final: data.final || false,
       firstImage,
+      readingTime: calculateReadingTime(content),
     }
   } else {
     const { data, content } = matter(fileContents)
@@ -145,6 +155,7 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       rawContent: content,
       final: data.final || false,
       firstImage,
+      readingTime: calculateReadingTime(content),
     }
   }
 }

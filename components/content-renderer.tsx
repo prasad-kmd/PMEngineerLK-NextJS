@@ -25,11 +25,39 @@ export function ContentRenderer({ content }: ContentRendererProps) {
   useEffect(() => {
     if (!contentRef.current) return
 
+    const addCopyButtons = () => {
+      const preBlocks = contentRef.current?.querySelectorAll("pre")
+      preBlocks?.forEach((pre) => {
+        if (pre.querySelector(".copy-button")) return
+
+        pre.style.position = "relative"
+        const button = document.createElement("button")
+        button.className = "copy-button absolute right-2 top-2 p-1.5 rounded-md bg-muted/80 text-muted-foreground hover:text-foreground hover:bg-muted transition-all opacity-0 group-hover:opacity-100"
+        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>'
+
+        pre.classList.add("group")
+
+        button.onclick = () => {
+          const code = pre.querySelector("code")?.innerText || ""
+          navigator.clipboard.writeText(code).then(() => {
+            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+            setTimeout(() => {
+              button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>'
+            }, 2000)
+          })
+        }
+
+        pre.appendChild(button)
+      })
+    }
+
     // Initialize Highlight.js for code blocks
     const codeBlocks = contentRef.current.querySelectorAll("pre code")
     codeBlocks.forEach((block) => {
       hljs.highlightElement(block as HTMLElement)
     })
+
+    addCopyButtons()
 
     // Initialize KaTeX for math expressions
     const renderMath = async () => {
@@ -74,6 +102,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
       newCodeBlocks.forEach((block) => {
         hljs.highlightElement(block as HTMLElement)
       })
+      addCopyButtons()
     }
 
     renderMath()

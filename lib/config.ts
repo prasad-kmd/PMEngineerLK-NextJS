@@ -3,6 +3,12 @@ export const siteConfig = {
   description: "Personal blogfolio documenting my engineering projects, technical insights, and development journey.",
   author: "PrasadM",
   url: process.env.SITE_URL || "http://localhost:3000/",
+  socialLinks: {
+    github: "https://github.com",
+    twitter: "https://twitter.com",
+    linkedin: "https://linkedin.com",
+    email: "mailto:engineering.project@example.lk",
+  },
 }
 
 export const ogConfig = {

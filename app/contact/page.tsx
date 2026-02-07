@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Mail, Phone, MapPin } from "lucide-react"
 import Image from "next/image"
+import { siteConfig } from "@/lib/config"
 
 const title = "Get In Touch"
 const description =
@@ -64,7 +65,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold">Email</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">engineering.project@example.lk</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{siteConfig.socialLinks.email.replace("mailto:", "")}</p>
                 </div>
               </div>
 

@@ -13,7 +13,7 @@ export default function Loading() {
 
             <div className="space-y-2">
                 <h2 className="text-xl font-bold mozilla-headline animate-pulse tracking-wide text-foreground">
-                    DMY4102
+                    &copy; PrasadM 2026
                 </h2>
                 <div className="flex items-center justify-center gap-1.5">
                     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:-0.3s]" />
@@ -21,7 +21,7 @@ export default function Loading() {
                     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" />
                 </div>
                 <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground/60">
-                    Initializing Workspace
+                    Initializing Webapp
                 </p>
             </div>
 

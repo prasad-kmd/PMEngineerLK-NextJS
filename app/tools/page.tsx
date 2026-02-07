@@ -71,14 +71,17 @@ const tools = [
         color: "text-pink-500",
         bgColor: "bg-pink-500/10",
     },
+    {
+        name: "Precision Unit Converter",
+        slug: "unit-converter",
+        description: "Standardized metric and imperial unit conversions for engineering parameters like torque, pressure, and energy.",
+        icon: Scaling,
+        color: "text-cyan-500",
+        bgColor: "bg-cyan-500/10",
+    },
 ]
 
 const upcomingTools = [
-    {
-        name: "Precision Unit Converter",
-        description: "Standardized metric and imperial unit conversions for engineering parameters like torque, pressure, and energy.",
-        icon: Scaling,
-    },
     {
         name: "JSON Structure Validator",
         description: "Advanced linting and formatting engine for complex JSON data structures with schema validation support.",

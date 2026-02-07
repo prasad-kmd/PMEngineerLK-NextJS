@@ -4,6 +4,7 @@ import {
     Github,
     Linkedin,
     Mail,
+    FileDown,
     ExternalLink,
     Code2,
     Cpu,
@@ -34,21 +35,24 @@ const skills = [
 const projects = [
     {
         title: "Autonomous Delivery Drone",
-        description: "Developed a GPS-guided autonomous drone for medical supply delivery in remote areas.",
+        description: "Developed a GPS-guided autonomous drone for medical supply delivery. Features custom PID tuning and fail-safe return-to-home protocols.",
+        technical: "Pixhawk 4, M8N GPS, telemetry over LTE.",
         tags: ["Robotics", "ArduPilot", "IoT"],
         link: "#",
         image: "https://placehold.co/600x400/1e293b/14b8a6?text=Drone+Project"
     },
     {
         title: "Smart Grid Monitor",
-        description: "Industrial IoT platform for real-time monitoring of power distribution networks.",
+        description: "Industrial IoT platform for real-time monitoring of power distribution networks with predictive fault detection algorithms.",
+        technical: "ESP32, React, Node.js, MQTT, Time-series DB.",
         tags: ["React", "Node.js", "MQTT"],
         link: "#",
         image: "https://placehold.co/600x400/1e293b/14b8a6?text=Smart+Grid"
     },
     {
         title: "Precision CNC Controller",
-        description: "Custom FPGA-based motion controller for 5-axis precision machining applications.",
+        description: "Custom FPGA-based motion controller for 5-axis precision machining. Optimized for micro-step pulse generation and G-code parsing.",
+        technical: "Verilog, Spartan-6, C++, Real-time Linux.",
         tags: ["FPGA", "C++", "Mechatronics"],
         link: "#",
         image: "https://placehold.co/600x400/1e293b/14b8a6?text=CNC+Controller"
@@ -89,6 +93,10 @@ export default function PortfolioPage() {
                                     <Mail className="mr-2 h-4 w-4" />
                                     Contact Me
                                 </Button>
+                                <Button variant="outline" className="rounded-full px-8 border-primary/20 hover:bg-primary/10">
+                                    <FileDown className="mr-2 h-4 w-4" />
+                                    Download CV
+                                </Button>
                                 <div className="flex gap-2">
                                     <Button variant="outline" size="icon" className="rounded-full transition-colors hover:bg-primary/10 hover:text-primary">
                                         <Github className="h-5 w-5" />
@@ -127,8 +135,11 @@ export default function PortfolioPage() {
                                         </div>
                                         <CardContent className="p-6">
                                             <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{project.title}</h3>
-                                            <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                                            <p className="text-sm text-muted-foreground mb-2 leading-relaxed">
                                                 {project.description}
+                                            </p>
+                                            <p className="text-xs font-mono text-primary/70 mb-4">
+                                                Stack: {project.technical}
                                             </p>
                                             <div className="flex flex-wrap gap-2 mb-4">
                                                 {project.tags.map(tag => (
@@ -220,6 +231,24 @@ export default function PortfolioPage() {
                                     <p className="font-bold">Advanced Diploma in Industrial Electronics</p>
                                     <p className="text-muted-foreground">Ceylon-German Technical Training Institute</p>
                                 </div>
+                            </div>
+                        </section>
+
+                        {/* Research Interests */}
+                        <section className="rounded-2xl border border-border bg-card p-8 shadow-sm">
+                            <h3 className="text-xl font-bold mb-4 philosopher">Research Interests</h3>
+                            <div className="space-y-3">
+                                {[
+                                    "Bio-Inspired Robotics",
+                                    "Autonomous Navigation",
+                                    "Renewable Energy Systems",
+                                    "Smart Materials"
+                                ].map(interest => (
+                                    <div key={interest} className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                                        {interest}
+                                    </div>
+                                ))}
                             </div>
                         </section>
 

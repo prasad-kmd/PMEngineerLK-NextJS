@@ -2,10 +2,12 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { getContentByType, getContentItem } from "@/lib/content"
 import { siteConfig } from "@/lib/config"
-import { Calendar, ArrowLeft } from "lucide-react"
+import { Calendar, ArrowLeft, Clock } from "lucide-react"
 import Link from "next/link"
 import { ContentRenderer } from "@/components/content-renderer"
 import { BookmarkButton } from "@/components/bookmark-button"
+import { ScrollProgress } from "@/components/scroll-progress"
+import { RelatedContent } from "@/components/related-content"
 
 export async function generateMetadata({
   params,
@@ -66,7 +68,8 @@ export default function TutorialPage({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="min-h-screen px-6 py-12 lg:px-8">
+    <div className="min-h-screen px-6 py-12 lg:px-8 tutorials_item img_grad_pm">
+      <ScrollProgress />
       <div className="mx-auto max-w-4xl">
         <Link
           href="/tutorials"
@@ -88,6 +91,12 @@ export default function TutorialPage({ params }: { params: { slug: string } }) {
                     month: "long",
                     day: "numeric",
                   })}
+                  {post.readingTime && (
+                    <span className="flex items-center gap-1.5 ml-4 border-l border-border pl-4">
+                      <Clock className="h-3.5 w-3.5" />
+                      {post.readingTime} min read
+                    </span>
+                  )}
                 </div>
                 <BookmarkButton
                   key={post.slug}
@@ -104,6 +113,8 @@ export default function TutorialPage({ params }: { params: { slug: string } }) {
 
           <ContentRenderer content={post.content} />
         </article>
+
+        <RelatedContent type="tutorials" currentSlug={post.slug} />
       </div>
     </div>
   )
