@@ -59,6 +59,39 @@ export function ContentRenderer({ content }: ContentRendererProps) {
 
     addCopyButtons()
 
+    // Process external links
+    const processExternalLinks = () => {
+        const links = contentRef.current?.querySelectorAll("a")
+        links?.forEach((link) => {
+            const href = link.getAttribute("href")
+            if (href && (href.startsWith("http") || href.startsWith("//"))) {
+                 try {
+                     const url = new URL(href, window.location.href)
+                     if (url.hostname !== window.location.hostname) {
+                         link.setAttribute("href", `/external-link?url=${encodeURIComponent(href)}`)
+                         link.setAttribute("target", "_blank")
+                         link.setAttribute("rel", "noopener noreferrer")
+                         
+                         // Add distinct styling to external links
+                         link.classList.add("text-blue-600", "dark:text-blue-400", "underline-offset-4", "hover:underline", "inline-flex", "items-center", "gap-0.5")
+                         
+                         // Add external link icon if not present
+                         if (!link.querySelector(".external-link-icon")) {
+                             const icon = document.createElement("span")
+                             icon.className = "external-link-icon"
+                             icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`
+                             link.appendChild(icon)
+                         }
+                     }
+                 } catch (e) {
+                     // Ignore invalid URLs
+                 }
+            }
+        })
+    }
+
+    processExternalLinks()
+
     // Initialize KaTeX for math expressions
     const renderMath = async () => {
       const katex = (await import("katex")).default
