@@ -1,10 +1,6 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import {
-    Github,
-    Linkedin,
-    Mail,
-    FileDown,
     ExternalLink,
     Code2,
     Cpu,
@@ -16,6 +12,9 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { getContentByType } from "@/lib/content"
+import Link from "next/link"
+import { PortfolioHeroActions } from "@/components/portfolio-hero-actions"
 
 const title = "Portfolio | PrasadM"
 const description = "Showcasing the professional journey, technical expertise, and engineering projects of PrasadM, a Mechatronics and Mechanical Engineering undergraduate."
@@ -32,34 +31,8 @@ const skills = [
     { name: "IoT Solutions", icon: Globe, level: 88 },
 ]
 
-const projects = [
-    {
-        title: "Autonomous Delivery Drone",
-        description: "Developed a GPS-guided autonomous drone for medical supply delivery. Features custom PID tuning and fail-safe return-to-home protocols.",
-        technical: "Pixhawk 4, M8N GPS, telemetry over LTE.",
-        tags: ["Robotics", "ArduPilot", "IoT"],
-        link: "#",
-        image: "https://placehold.co/600x400/1e293b/14b8a6?text=Drone+Project"
-    },
-    {
-        title: "Smart Grid Monitor",
-        description: "Industrial IoT platform for real-time monitoring of power distribution networks with predictive fault detection algorithms.",
-        technical: "ESP32, React, Node.js, MQTT, Time-series DB.",
-        tags: ["React", "Node.js", "MQTT"],
-        link: "#",
-        image: "https://placehold.co/600x400/1e293b/14b8a6?text=Smart+Grid"
-    },
-    {
-        title: "Precision CNC Controller",
-        description: "Custom FPGA-based motion controller for 5-axis precision machining. Optimized for micro-step pulse generation and G-code parsing.",
-        technical: "Verilog, Spartan-6, C++, Real-time Linux.",
-        tags: ["FPGA", "C++", "Mechatronics"],
-        link: "#",
-        image: "https://placehold.co/600x400/1e293b/14b8a6?text=CNC+Controller"
-    }
-]
-
 export default function PortfolioPage() {
+    const dynamicProjects = getContentByType("projects")
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
@@ -88,24 +61,7 @@ export default function PortfolioPage() {
                                 developing intelligent systems that solve real-world engineering challenges
                                 through innovative design and robust implementation.
                             </p>
-                            <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
-                                <Button className="rounded-full px-8">
-                                    <Mail className="mr-2 h-4 w-4" />
-                                    Contact Me
-                                </Button>
-                                <Button variant="outline" className="rounded-full px-8 border-primary/20 hover:bg-primary/10">
-                                    <FileDown className="mr-2 h-4 w-4" />
-                                    Download CV
-                                </Button>
-                                <div className="flex gap-2">
-                                    <Button variant="outline" size="icon" className="rounded-full transition-colors hover:bg-primary/10 hover:text-primary">
-                                        <Github className="h-5 w-5" />
-                                    </Button>
-                                    <Button variant="outline" size="icon" className="rounded-full transition-colors hover:bg-primary/10 hover:text-primary">
-                                        <Linkedin className="h-5 w-5" />
-                                    </Button>
-                                </div>
-                            </div>
+                            <PortfolioHeroActions />
                         </div>
                     </div>
                 </div>
@@ -123,34 +79,40 @@ export default function PortfolioPage() {
                                 <h2 className="text-2xl font-bold mozilla-headline">Featured Engineering Projects</h2>
                             </div>
                             <div className="grid gap-6 sm:grid-cols-2">
-                                {projects.map((project) => (
-                                    <Card key={project.title} className="group overflow-hidden border-border/50 transition-all hover:border-primary/30 hover:shadow-lg">
+                                {dynamicProjects.map((project) => (
+                                    <Card key={project.slug} className="group overflow-hidden border-border/50 transition-all hover:border-primary/30 hover:shadow-lg flex flex-col">
                                         <div className="relative h-48 w-full overflow-hidden bg-muted">
                                             <Image
-                                                src={project.image}
+                                                src={project.firstImage || `https://placehold.co/600x400/1e293b/14b8a6?text=${encodeURIComponent(project.title)}`}
                                                 alt={project.title}
                                                 fill
                                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                                             />
                                         </div>
-                                        <CardContent className="p-6">
-                                            <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{project.title}</h3>
-                                            <p className="text-sm text-muted-foreground mb-2 leading-relaxed">
+                                        <CardContent className="p-6 flex flex-1 flex-col">
+                                            <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-1">{project.title}</h3>
+                                            <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-3 flex-1">
                                                 {project.description}
                                             </p>
-                                            <p className="text-xs font-mono text-primary/70 mb-4">
-                                                Stack: {project.technical}
-                                            </p>
-                                            <div className="flex flex-wrap gap-2 mb-4">
-                                                {project.tags.map(tag => (
-                                                    <span key={tag} className="px-2 py-1 bg-primary/5 text-primary text-[10px] font-semibold rounded uppercase tracking-wider">
-                                                        {tag}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                            <Button variant="link" className="p-0 text-primary h-auto group-hover:underline">
-                                                View Case Study <ExternalLink className="ml-1 h-3 w-3" />
-                                            </Button>
+                                            {project.technical && (
+                                                <p className="text-xs font-mono text-primary/70 mb-4">
+                                                    Stack: {project.technical}
+                                                </p>
+                                            )}
+                                            {project.tags && project.tags.length > 0 && (
+                                                <div className="flex flex-wrap gap-2 mb-4">
+                                                    {project.tags.map(tag => (
+                                                        <span key={tag} className="px-2 py-1 bg-primary/5 text-primary text-[10px] font-semibold rounded uppercase tracking-wider">
+                                                            {tag}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            <Link href={`/projects/${project.slug}`}>
+                                                <Button variant="link" className="p-0 text-primary h-auto group-hover:underline">
+                                                    View Case Study <ExternalLink className="ml-1 h-3 w-3" />
+                                                </Button>
+                                            </Link>
                                         </CardContent>
                                     </Card>
                                 ))}

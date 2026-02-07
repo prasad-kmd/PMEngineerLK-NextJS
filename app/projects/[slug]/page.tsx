@@ -1,9 +1,26 @@
 import { notFound } from "next/navigation"
+import type { Metadata } from "next"
 import { getContentByType, getContentItem } from "@/lib/content"
 import { Calendar, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { ContentRenderer } from "@/components/content-renderer"
 import { BookmarkButton } from "@/components/bookmark-button"
+import { ScrollProgress } from "@/components/scroll-progress"
+import { RelatedContent } from "@/components/related-content"
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const project = getContentItem("projects", slug)
+
+  if (!project) {
+    return {}
+  }
+
+  return {
+    title: project.title,
+    description: project.description,
+  }
+}
 
 export async function generateStaticParams() {
   const projects = getContentByType("projects")
@@ -12,15 +29,17 @@ export async function generateStaticParams() {
   }))
 }
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = getContentItem("projects", params.slug)
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const project = getContentItem("projects", slug)
 
   if (!project) {
     notFound()
   }
 
   return (
-    <div className="min-h-screen px-6 py-12 lg:px-8">
+    <div className="min-h-screen px-6 py-12 lg:px-8 projects_item img_grad_pm">
+      <ScrollProgress />
       <div className="mx-auto max-w-4xl">
         <Link
           href="/projects"
@@ -58,6 +77,8 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
 
           <ContentRenderer content={project.content} />
         </article>
+
+        <RelatedContent type="projects" currentSlug={project.slug} />
       </div>
     </div>
   )

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
-import { Search as SearchIcon, X, Calendar, ArrowRight, Loader2 } from "lucide-react"
+import { Search as SearchIcon, X, Calendar, ArrowRight, Loader2, Home, User, Briefcase, FileText, Settings, Scaling, Calculator, Image as ImageIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import {
@@ -95,6 +95,16 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
         router.push(`/${type}/${slug}`)
         handleClose()
     }
+
+    const quickLinks = [
+        { name: "Home", href: "/", icon: Home },
+        { name: "Portfolio", href: "/portfolio", icon: Briefcase },
+        { name: "Blog", href: "/blog", icon: FileText },
+        { name: "Engineering Tools", href: "/tools", icon: Settings },
+        { name: "Visual Gallery", href: "/gallery", icon: ImageIcon },
+        { name: "Unit Converter", href: "/tools/unit-converter", icon: Scaling },
+        { name: "Calculator", href: "/tools/scientific-calculator", icon: Calculator },
+    ]
 
     // Desktop Search (Expands)
     if (!isMobileSidebar) {
@@ -220,7 +230,7 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
                             </button>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-2 max-h-[70vh]">
+                        <div className="flex-1 overflow-y-auto p-2 max-h-[70vh] custom-scrollbar">
                             {isFetching ? (
                                 <div className="p-12 text-center text-muted-foreground">
                                     <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
@@ -261,18 +271,45 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
                                     </div>
                                 )
                             ) : (
-                                <div className="p-12 text-center text-muted-foreground">
-                                    <p>Start typing to search...</p>
-                                    <div className="mt-4 flex flex-wrap justify-center gap-2">
-                                        {["blog", "articles", "projects", "tutorials"].map((tag) => (
-                                            <button
-                                                key={tag}
-                                                onClick={() => setQuery(tag)}
-                                                className="px-3 py-1 rounded-full bg-muted hover:bg-primary/10 hover:text-primary text-xs transition-colors capitalize"
-                                            >
-                                                {tag}
-                                            </button>
-                                        ))}
+                                <div className="p-2">
+                                    <div className="mb-4 px-3">
+                                        <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground/70">Navigation</h3>
+                                        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
+                                            {quickLinks.map((link) => (
+                                                <button
+                                                    key={link.href}
+                                                    onClick={() => {
+                                                        router.push(link.href)
+                                                        handleClose()
+                                                    }}
+                                                    className="flex items-center gap-3 rounded-lg p-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                                >
+                                                    <link.icon className="h-4 w-4" />
+                                                    {link.name}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="px-3">
+                                        <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground/70">Categories</h3>
+                                        <div className="mt-2 flex flex-wrap gap-2">
+                                            {["blog", "articles", "projects", "tutorials"].map((tag) => (
+                                                <button
+                                                    key={tag}
+                                                    onClick={() => setQuery(tag)}
+                                                    className="px-3 py-1 rounded-full bg-muted hover:bg-primary/10 hover:text-primary text-xs transition-colors capitalize"
+                                                >
+                                                    {tag}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="mt-6 border-t border-border pt-4 px-3 pb-2 text-[10px] text-muted-foreground flex items-center justify-between">
+                                        <div className="flex gap-4">
+                                            <span><kbd className="rounded bg-muted px-1.5 py-0.5 font-sans">↑↓</kbd> to navigate</span>
+                                            <span><kbd className="rounded bg-muted px-1.5 py-0.5 font-sans">↵</kbd> to select</span>
+                                        </div>
+                                        <span><kbd className="rounded bg-muted px-1.5 py-0.5 font-sans">esc</kbd> to close</span>
                                     </div>
                                 </div>
                             )}

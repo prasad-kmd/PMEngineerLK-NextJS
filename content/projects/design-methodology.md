@@ -1,7 +1,9 @@
 ---
 title: "Engineering Design Methodology"
 date: "2025-01-12"
-description: "Our systematic approach to engineering design, from problem identification to solution implementation."
+description: "Our systematic approach to engineering design, from problem identification to solution identification."
+technical: "SolidWorks, MATLAB, ANSYS, FMEA Analysis."
+tags: ["Methodology", "Design", "Quality"]
 ---
 <p><img
         src="/api/og?title=Engineering Design Methodology&description=Our systematic approach to engineering design, from problem identification to solution implementation.&type=workflow"/>

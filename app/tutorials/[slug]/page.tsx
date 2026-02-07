@@ -12,9 +12,10 @@ import { RelatedContent } from "@/components/related-content"
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  const post = getContentItem("tutorials", params.slug)
+  const { slug } = await params
+  const post = getContentItem("tutorials", slug)
 
   if (!post) {
     notFound()
@@ -60,8 +61,9 @@ export async function generateStaticParams() {
   }))
 }
 
-export default function TutorialPage({ params }: { params: { slug: string } }) {
-  const post = getContentItem("tutorials", params.slug)
+export default async function TutorialPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const post = getContentItem("tutorials", slug)
 
   if (!post) {
     notFound()

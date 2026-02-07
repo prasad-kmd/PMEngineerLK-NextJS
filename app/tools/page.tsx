@@ -79,14 +79,17 @@ const tools = [
         color: "text-cyan-500",
         bgColor: "bg-cyan-500/10",
     },
+    {
+        name: "JSON Structure Validator",
+        slug: "json-formatter",
+        description: "Advanced linting and formatting engine for complex JSON data structures with schema validation support.",
+        icon: Braces,
+        color: "text-yellow-500",
+        bgColor: "bg-yellow-500/10",
+    },
 ]
 
 const upcomingTools = [
-    {
-        name: "JSON Structure Validator",
-        description: "Advanced linting and formatting engine for complex JSON data structures with schema validation support.",
-        icon: Braces,
-    },
     {
         name: "Regex Pattern Architect",
         description: "Visual regular expression builder and tester with real-time match highlighting and explanation.",

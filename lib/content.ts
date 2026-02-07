@@ -13,6 +13,9 @@ export interface ContentItem {
   final?: boolean
   firstImage?: string
   readingTime?: number
+  technical?: string
+  tags?: string[]
+  type?: "blog" | "articles" | "projects" | "tutorials"
 }
 
 function calculateReadingTime(content: string): number {
@@ -75,6 +78,9 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           final: data.final || false,
           firstImage,
           readingTime: calculateReadingTime(content),
+          technical: data.technical,
+          tags: data.tags,
+          type: type,
         }
       } else {
         // HTML file
@@ -91,6 +97,9 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           final: data.final || false,
           firstImage,
           readingTime: calculateReadingTime(content),
+          technical: data.technical,
+          tags: data.tags,
+          type: type,
         }
       }
     })
@@ -141,6 +150,9 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       final: data.final || false,
       firstImage,
       readingTime: calculateReadingTime(content),
+      technical: data.technical,
+      tags: data.tags,
+      type: type,
     }
   } else {
     const { data, content } = matter(fileContents)
@@ -156,6 +168,9 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       final: data.final || false,
       firstImage,
       readingTime: calculateReadingTime(content),
+      technical: data.technical,
+      tags: data.tags,
+      type: type,
     }
   }
 }
