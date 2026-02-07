@@ -3,6 +3,15 @@ import path from "path"
 import matter from "gray-matter"
 import { marked } from "marked"
 
+// Custom renderer to add IDs to headings for TOC
+const renderer = new marked.Renderer()
+renderer.heading = ({ text, depth, raw }) => {
+  const id = raw.toLowerCase().replace(/[^\w]+/g, "-")
+  return `<h${depth} id="${id}">${text}</h${depth}>`
+}
+
+marked.setOptions({ renderer })
+
 export interface ContentItem {
   slug: string
   title: string

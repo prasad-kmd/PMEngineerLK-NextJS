@@ -101,8 +101,12 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
         { name: "Portfolio", href: "/portfolio", icon: Briefcase },
         { name: "Blog", href: "/blog", icon: FileText },
         { name: "Engineering Tools", href: "/tools", icon: Settings },
-        { name: "Visual Gallery", href: "/gallery", icon: ImageIcon },
-        { name: "Unit Converter", href: "/tools/unit-converter", icon: Scaling },
+        { name: "Snippets", href: "/snippets", icon: FileText },
+        { name: "Roadmap", href: "/roadmap", icon: Settings },
+        { name: "What's Now", href: "/now", icon: User },
+        { name: "Setup / Uses", href: "/uses", icon: Settings },
+        { name: "Diff Checker", href: "/tools/diff-checker", icon: Settings },
+        { name: "Persona Creator", href: "/tools/user-persona-creator", icon: User },
         { name: "Calculator", href: "/tools/scientific-calculator", icon: Calculator },
     ]
 

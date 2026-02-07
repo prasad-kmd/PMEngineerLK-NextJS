@@ -82,8 +82,12 @@ export function Footer() {
             </h3>
             <ul className="space-y-4">
               {[
-                { name: "About Us", href: "/about" },
-                { name: "Meet the Team", href: "/team" },
+                { name: "About Me", href: "/about" },
+                { name: "What's Now", href: "/now" },
+                { name: "Setup / Uses", href: "/uses" },
+                { name: "Roadmap", href: "/roadmap" },
+                { name: "Changelog", href: "/changelog" },
+                { name: "Snippets", href: "/snippets" },
                 { name: "Visual Gallery", href: "/gallery" },
                 { name: "Site Directory", href: "/pages" },
               ].map((link) => (
