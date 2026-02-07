@@ -1,6 +1,7 @@
 import React from "react"
 import type { Metadata } from "next"
 import { Clock, BookOpen, Rocket, Code, Coffee } from "lucide-react"
+import { SafeLink } from "@/components/ui/safe-link"
 
 const title = "Now"
 const description = "A snapshot of what I'm currently focused on - learning, building, and reading."
@@ -84,7 +85,7 @@ export default function NowPage() {
         </div>
 
         <footer className="mt-20 pt-8 border-t border-border text-center text-sm text-muted-foreground">
-          This is a &quot;now page&quot;, and you should <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">have one too</a>.
+          This is a &quot;now page&quot;, and you should <SafeLink href="https://nownownow.com/about" className="text-primary hover:underline">have one too</SafeLink>.
         </footer>
       </div>
     </div>
