@@ -20,13 +20,14 @@ export function TOC({ content }: TOCProps) {
 
   useEffect(() => {
     // Extract headings from HTML content
-    const headingRegex = /<h([2-3])[^>]*id="([^"]*)"[^>]*>(.*?)<\/h\1>/g
+    // Improved regex to be more flexible with attribute order and case sensitivity
+    const headingRegex = /<h([2-3])\s+[^>]*id=["']([^"']+)["'][^>]*>(.*?)<\/h\1>/gi
     const matches = Array.from(content.matchAll(headingRegex))
 
     const extractedHeadings = matches.map((match) => ({
       level: parseInt(match[1]),
       id: match[2],
-      text: match[3].replace(/<[^>]*>/g, ""), // Remove any nested HTML tags in heading
+      text: match[3].replace(/<[^>]*>/g, "").trim(), // Remove any nested HTML tags in heading
     }))
 
     setHeadings(extractedHeadings)
@@ -55,7 +56,7 @@ export function TOC({ content }: TOCProps) {
   if (headings.length === 0) return null
 
   return (
-    <nav className="hidden xl:block sticky top-24 h-fit w-64 shrink-0 overflow-y-auto max-h-[calc(100vh-8rem)] custom-scrollbar">
+    <nav className="hidden lg:block sticky top-24 h-fit w-64 shrink-0 overflow-y-auto max-h-[calc(100vh-8rem)] custom-scrollbar">
       <div className="flex items-center gap-2 mb-4 px-2">
         <List className="h-4 w-4 text-primary" />
         <h3 className="text-xs font-bold uppercase tracking-widest text-foreground">Table of Contents</h3>

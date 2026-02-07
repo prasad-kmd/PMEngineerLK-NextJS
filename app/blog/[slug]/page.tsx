@@ -50,7 +50,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           Back to Blog
         </Link>
 
-        <div className="flex flex-col xl:flex-row gap-12">
+        <div className="flex flex-col lg:flex-row gap-12">
           <article className="flex-1 min-w-0">
             <header className="mb-8 border-b border-border pb-8">
               <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl">{post.title}</h1>

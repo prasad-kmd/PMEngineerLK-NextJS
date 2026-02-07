@@ -94,6 +94,7 @@ const tools = [
         icon: Split,
         color: "text-red-500",
         bgColor: "bg-red-500/10",
+        isNew: true,
     },
     {
         name: "User Persona Architect",
@@ -102,6 +103,7 @@ const tools = [
         icon: Users,
         color: "text-indigo-500",
         bgColor: "bg-indigo-500/10",
+        isNew: true,
     },
 ]
 
@@ -142,9 +144,16 @@ export default function ToolsPage() {
                                 </div>
                                 <div className="flex-1">
                                     <div className="flex items-center justify-between">
-                                        <h2 className="text-xl font-semibold group-hover:text-primary transition-colors google-sans">
-                                            {tool.name}
-                                        </h2>
+                                        <div className="flex items-center gap-2">
+                                            <h2 className="text-xl font-semibold group-hover:text-primary transition-colors google-sans">
+                                                {tool.name}
+                                            </h2>
+                                            {(tool as any).isNew && (
+                                                <span className="inline-flex items-center rounded-full bg-primary/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
+                                                    New
+                                                </span>
+                                            )}
+                                        </div>
                                         <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
                                     </div>
                                     <p className="mt-2 text-sm text-muted-foreground leading-relaxed local-inter">
