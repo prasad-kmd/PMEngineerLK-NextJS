@@ -116,6 +116,7 @@ import { ScrollToTop } from "@/components/scroll-to-top";
 import { BookmarksProvider } from "@/hooks/use-bookmarks";
 import { CustomCursor } from "@/components/custom-cursor";
 import { CustomContextMenu } from "@/components/custom-context-menu";
+import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -198,6 +199,7 @@ export default function RootLayout({
                 <Navigation />
                 <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
                   {children}
+                   <Footer />
                 </main>
                 <ScrollToTop />
                 <Toaster position="bottom-right" richColors />
