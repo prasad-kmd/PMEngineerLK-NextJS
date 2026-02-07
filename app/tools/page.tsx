@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Edit3, Calculator, Replace, Code2, Sigma, ArrowRight, Scaling, Braces, Terminal, FileCode } from "lucide-react"
+import { Edit3, Calculator, Replace, Code2, Sigma, ArrowRight, Scaling, Braces, Terminal, FileCode, Split, Users } from "lucide-react"
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 const title = "Engineering Workspace"
@@ -86,6 +86,22 @@ const tools = [
         icon: Braces,
         color: "text-yellow-500",
         bgColor: "bg-yellow-500/10",
+    },
+    {
+        name: "Diff Comparison Engine",
+        slug: "diff-checker",
+        description: "Side-by-side text and code comparison tool with intelligent change highlighting for documentation review.",
+        icon: Split,
+        color: "text-red-500",
+        bgColor: "bg-red-500/10",
+    },
+    {
+        name: "User Persona Architect",
+        slug: "user-persona-creator",
+        description: "Design and export professional user personas to enhance empathy-driven engineering and product design.",
+        icon: Users,
+        color: "text-indigo-500",
+        bgColor: "bg-indigo-500/10",
     },
 ]
 

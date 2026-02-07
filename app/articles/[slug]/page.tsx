@@ -7,6 +7,7 @@ import { ContentRenderer } from "@/components/content-renderer"
 import { BookmarkButton } from "@/components/bookmark-button"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { RelatedContent } from "@/components/related-content"
+import { TOC } from "@/components/toc"
 
 export async function generateStaticParams() {
   const entries = getContentByType("articles")
@@ -49,40 +50,44 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           Back to Articles
         </Link>
 
-        <article>
-          <header className="mb-8 border-b border-border pb-8">
-            <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl">{entry.title}</h1>
-            {entry.date && (
-              <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  {new Date(entry.date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                  {entry.readingTime && (
-                    <span className="flex items-center gap-1.5 ml-4 border-l border-border pl-4">
-                      <Clock className="h-3.5 w-3.5" />
-                      {entry.readingTime} min read
-                    </span>
-                  )}
+        <div className="flex flex-col lg:flex-row gap-12">
+          <article className="flex-1 min-w-0">
+            <header className="mb-8 border-b border-border pb-8">
+              <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl">{entry.title}</h1>
+              {entry.date && (
+                <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    {new Date(entry.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                    {entry.readingTime && (
+                      <span className="flex items-center gap-1.5 ml-4 border-l border-border pl-4">
+                        <Clock className="h-3.5 w-3.5" />
+                        {entry.readingTime} min read
+                      </span>
+                    )}
+                  </div>
+                  <BookmarkButton
+                    key={entry.slug}
+                    item={{
+                      slug: entry.slug,
+                      title: entry.title,
+                      date: entry.date,
+                      type: "articles"
+                    }}
+                  />
                 </div>
-                <BookmarkButton
-                  key={entry.slug}
-                  item={{
-                    slug: entry.slug,
-                    title: entry.title,
-                    date: entry.date,
-                    type: "articles"
-                  }}
-                />
-              </div>
-            )}
-          </header>
+              )}
+            </header>
 
-          <ContentRenderer content={entry.content} />
-        </article>
+            <ContentRenderer content={entry.content} />
+          </article>
+          
+          <TOC content={entry.content} />
+        </div>
 
         <RelatedContent type="articles" currentSlug={entry.slug} />
       </div>

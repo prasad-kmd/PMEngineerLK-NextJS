@@ -82,17 +82,22 @@ export function Footer() {
             </h3>
             <ul className="space-y-4">
               {[
-                { name: "About Us", href: "/about" },
-                { name: "Meet the Team", href: "/team" },
+                { name: "About Me", href: "/about" },
+                { name: "What's Now", href: "/now" },
+                { name: "Setup / Uses", href: "/uses" },
+                { name: "Roadmap", href: "/roadmap" },
+                { name: "Changelog", href: "/changelog" },
+                { name: "Snippets", href: "/snippets" },
                 { name: "Visual Gallery", href: "/gallery" },
                 { name: "Site Directory", href: "/pages" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link 
                     href={link.href} 
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors google-sans"
+                    className="group flex items-center text-sm text-muted-foreground hover:text-primary transition-colors google-sans"
                   >
                     {link.name}
+                    <ArrowUpRight className="h-3 w-3 ml-1 opacity-0 -translate-y-1 transition-all group-hover:opacity-100 group-hover:translate-y-0" />
                   </Link>
                 </li>
               ))}
@@ -113,9 +118,10 @@ export function Footer() {
                 <li key={link.name}>
                   <Link 
                     href={link.href} 
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors google-sans"
+                    className="group flex items-center text-sm text-muted-foreground hover:text-primary transition-colors google-sans"
                   >
                     {link.name}
+                    <ArrowUpRight className="h-3 w-3 ml-1 opacity-0 -translate-y-1 transition-all group-hover:opacity-100 group-hover:translate-y-0" />
                   </Link>
                 </li>
               ))}

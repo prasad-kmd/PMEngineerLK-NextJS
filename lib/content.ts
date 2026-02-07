@@ -3,6 +3,23 @@ import path from "path"
 import matter from "gray-matter"
 import { marked } from "marked"
 
+// Custom renderer to add IDs to headings for TOC
+const renderer = new marked.Renderer()
+renderer.heading = ({ text, depth }) => {
+  const id = text.toLowerCase().replace(/<[^>]*>/g, "").replace(/[^\w]+/g, "-").replace(/^-+|-+$/g, "")
+  return `<h${depth} id="${id}">${text}</h${depth}>`
+}
+
+marked.use({ renderer })
+
+function injectHeadingIds(html: string): string {
+  return html.replace(/<h([2-3])([^>]*)>(.*?)<\/h\1>/gi, (match, level, attrs, text) => {
+    if (attrs.toLowerCase().includes('id=')) return match
+    const id = text.replace(/<[^>]*>/g, "").toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '')
+    return `<h${level}${attrs} id="${id}">${text}</h${level}>`
+  })
+}
+
 export interface ContentItem {
   slug: string
   title: string
@@ -65,7 +82,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
 
       if (file.endsWith(".md")) {
         const { data, content } = matter(fileContents)
-        const htmlContent = marked(content)
+        const htmlContent = marked(content) as string
         const firstImage = extractFirstImage(content, true)
 
         return {
@@ -73,7 +90,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           title: data.title || slug,
           date: data.date,
           description: data.description,
-          content: htmlContent as string,
+          content: injectHeadingIds(htmlContent),
           rawContent: content,
           final: data.final || false,
           firstImage,
@@ -92,7 +109,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           title: data.title || slug,
           date: data.date,
           description: data.description,
-          content: content,
+          content: injectHeadingIds(content),
           rawContent: content,
           final: data.final || false,
           firstImage,
@@ -137,7 +154,7 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
 
   if (isMarkdown) {
     const { data, content } = matter(fileContents)
-    const htmlContent = marked(content)
+    const htmlContent = marked(content) as string
     const firstImage = extractFirstImage(content, true)
 
     return {
@@ -145,7 +162,7 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       title: data.title || slug,
       date: data.date,
       description: data.description,
-      content: htmlContent as string,
+      content: injectHeadingIds(htmlContent),
       rawContent: content,
       final: data.final || false,
       firstImage,
@@ -163,7 +180,7 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       title: data.title || slug,
       date: data.date,
       description: data.description,
-      content: content,
+      content: injectHeadingIds(content),
       rawContent: content,
       final: data.final || false,
       firstImage,
