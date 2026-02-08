@@ -20,6 +20,8 @@ interface Persona {
   motivations: string[]
 }
 
+type PersonaArrayField = "goals" | "painPoints" | "motivations"
+
 const initialPersona: Persona = {
   name: "Alex Johnson",
   role: "Senior Project Manager",
@@ -39,17 +41,17 @@ export default function UserPersonaCreator() {
     setPersona((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleArrayChange = (field: "goals" | "painPoints" | "motivations", index: number, value: string) => {
+  const handleArrayChange = (field: PersonaArrayField, index: number, value: string) => {
     const newArray = [...persona[field]]
     newArray[index] = value
     setPersona((prev) => ({ ...prev, [field]: newArray }))
   }
 
-  const addArrayItem = (field: "goals" | "painPoints" | "motivations") => {
+  const addArrayItem = (field: PersonaArrayField) => {
     setPersona((prev) => ({ ...prev, [field]: [...prev[field], ""] }))
   }
 
-  const removeArrayItem = (field: "goals" | "painPoints" | "motivations", index: number) => {
+  const removeArrayItem = (field: PersonaArrayField, index: number) => {
     setPersona((prev) => ({ ...prev, [field]: prev[field].filter((_, i) => i !== index) }))
   }
 
@@ -124,19 +126,19 @@ export default function UserPersonaCreator() {
                      <h3 className="text-lg font-bold flex items-center gap-2 philosopher">
                        <section.icon className={`h-5 w-5 ${section.color}`} /> {section.title}
                      </h3>
-                     <Button variant="ghost" size="sm" onClick={() => addArrayItem(section.field as any)}>
+                     <Button variant="ghost" size="sm" onClick={() => addArrayItem(section.field as PersonaArrayField)}>
                        <Plus className="h-4 w-4" />
                      </Button>
                    </div>
                    <div className="space-y-3">
-                     {persona[section.field as keyof Persona] instanceof Array && (persona[section.field as keyof Persona] as string[]).map((item, idx) => (
+                     {persona[section.field as PersonaArrayField].map((item, idx) => (
                        <div key={idx} className="flex gap-2">
                          <Input 
                            value={item} 
-                           onChange={(e) => handleArrayChange(section.field as any, idx, e.target.value)}
+                           onChange={(e) => handleArrayChange(section.field as PersonaArrayField, idx, e.target.value)}
                            placeholder={`Add a ${section.title.toLowerCase()}...`}
                          />
-                         <Button variant="ghost" size="icon" className="shrink-0" onClick={() => removeArrayItem(section.field as any, idx)}>
+                         <Button variant="ghost" size="icon" className="shrink-0" onClick={() => removeArrayItem(section.field as PersonaArrayField, idx)}>
                            <Trash2 className="h-4 w-4 text-muted-foreground hover:text-red-500" />
                          </Button>
                        </div>

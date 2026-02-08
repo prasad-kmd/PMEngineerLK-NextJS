@@ -38,8 +38,8 @@ export default function JsonFormatterPage() {
       const formatted = JSON.stringify(parsed, null, indent)
       setOutput(formatted)
       setError(null)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err))
       setOutput("")
     }
   }, [input, spaces])
@@ -50,8 +50,8 @@ export default function JsonFormatterPage() {
       const parsed = JSON.parse(input)
       setOutput(JSON.stringify(parsed))
       setError(null)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err))
       setOutput("")
     }
   }, [input])
