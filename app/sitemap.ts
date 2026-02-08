@@ -8,9 +8,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ? siteConfig.url.slice(0, -1) 
     : siteConfig.url
 
-  const types = ['blog', 'articles', 'projects', 'tutorials']
+  const types = ['blog', 'articles', 'projects', 'tutorials'] as const
   const contentRoutes = types.flatMap((type) => {
-    const items = getContentByType(type as any)
+    const items = getContentByType(type)
     return items.map((item) => ({
       url: `${baseUrl}/${type}/${item.slug}`,
       lastModified: item.date ? new Date(item.date) : new Date(),
@@ -31,6 +31,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/gallery',
     '/contact',
     '/pages',
+    '/game-deal',
+    '/feeds',
+    '/researches',
+    '/open-books',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),

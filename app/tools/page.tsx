@@ -4,7 +4,7 @@ import {
     Edit3, Calculator, Replace, Code2, Sigma, ArrowRight, Scaling, Braces,
     Terminal, FileCode, Split, Users, Zap, Cpu, Timer, Lightbulb, Activity,
     Settings, Waypoints, Settings2, Wrench, MoveUpRight, Battery, LineChart, Ruler,
-    Database, Rocket
+    Database, Rocket, Gamepad2, Rss, FlaskConical, Library
 } from "lucide-react"
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
@@ -221,6 +221,41 @@ const mechanicalTools = [
     },
 ]
 
+const discoveryTools = [
+    {
+        name: "Engineering Researches",
+        slug: "../researches",
+        description: "Access and search through millions of scholarly articles and research papers on arXiv.",
+        icon: FlaskConical,
+        color: "text-teal-500",
+        bgColor: "bg-teal-500/10",
+    },
+    {
+        name: "Open Books Library",
+        slug: "../open-books",
+        description: "Discover millions of books and digital resources from the Open Library database.",
+        icon: Library,
+        color: "text-blue-500",
+        bgColor: "bg-blue-500/10",
+    },
+    {
+        name: "External Blog Feeds",
+        slug: "../feeds",
+        description: "Stay updated with the latest posts and engineering logs from external RSS feeds.",
+        icon: Rss,
+        color: "text-orange-500",
+        bgColor: "bg-orange-500/10",
+    },
+    {
+        name: "Game Deal Finder",
+        slug: "../game-deal",
+        description: "Search and compare the best game discounts across various digital stores.",
+        icon: Gamepad2,
+        color: "text-rose-500",
+        bgColor: "bg-rose-500/10",
+    },
+]
+
 const mechatronicsTools = [
     {
         name: "Stepper Motor Calculator",
@@ -320,6 +355,7 @@ export default function ToolsPage() {
                 <ToolSection title="Electronics Engineering" tools={electronicsTools} />
                 <ToolSection title="Mechanical Engineering" tools={mechanicalTools} />
                 <ToolSection title="Mechatronics & Robotics" tools={mechatronicsTools} />
+                <ToolSection title="Discovery & Research" tools={discoveryTools} />
                 <ToolSection title="Core Utilities" tools={coreTools} />
 
                 <div className="mt-20">

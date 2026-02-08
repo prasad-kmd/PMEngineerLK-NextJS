@@ -187,6 +187,7 @@ export async function GET(req: NextRequest) {
                   overflow: "hidden",
                 }}
               >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`${req.nextUrl.origin}/img/blogfolios_og_icon.png`}
                   alt="Logo"

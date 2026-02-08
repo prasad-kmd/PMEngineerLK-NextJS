@@ -117,6 +117,7 @@ import { BookmarksProvider } from "@/hooks/use-bookmarks";
 import { CustomCursor } from "@/components/custom-cursor";
 import { CustomContextMenu } from "@/components/custom-context-menu";
 import { Footer } from "@/components/footer";
+import ClickSpark from "@/components/ClickSpark";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -193,18 +194,29 @@ export default function RootLayout({
           <TooltipProvider>
             <SidebarProvider>
               <BookmarksProvider>
-                <CustomCursor />
-                <CustomContextMenu />
-                <FloatingNavbar className="hidden lg:flex" />
-                <Navigation />
-                <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
-                  {children}
-                   <Footer />
-                </main>
-                <ScrollToTop />
-                <Toaster position="bottom-right" richColors />
-                <SpeedInsights />
-                <ServiceWorkerRegistrar />
+                <ClickSpark
+                  sparkColor="#ffffff"
+                  sparkSize={10}
+                  sparkRadius={15}
+                  sparkCount={8}
+                  duration={400}
+                  easing="linear"
+                  extraScale={1.5}
+                  // className="min-h-screen flex flex-col"
+                >
+                  <CustomCursor />
+                  <CustomContextMenu />
+                  <FloatingNavbar className="hidden lg:flex" />
+                  <Navigation />
+                  <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
+                    {children}
+                    <Footer />
+                  </main>
+                  <ScrollToTop />
+                  <Toaster position="bottom-right" richColors />
+                  <SpeedInsights />
+                  <ServiceWorkerRegistrar />
+                </ClickSpark>
               </BookmarksProvider>
             </SidebarProvider>
           </TooltipProvider>

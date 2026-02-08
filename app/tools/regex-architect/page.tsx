@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useMemo } from "react"
 import { 
   Terminal, 
   ArrowRight, 
@@ -43,8 +43,8 @@ export default function RegexArchitectPage() {
         }
       }
       return matchesArray
-    } catch (e: any) {
-      setError(e.message)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Invalid regular expression")
       return []
     }
   }, [pattern, flags, testString])

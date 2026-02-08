@@ -14,7 +14,11 @@ import {
   ShieldCheck,
   Scale,
   AlertTriangle,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Gamepad2,
+  Rss,
+  FlaskConical,
+  Library
 } from "lucide-react"
 
 const title = "Site Directory"
@@ -73,6 +77,22 @@ const mainPages = [
     icon: FileText,
     color: "text-orange-500",
     bgColor: "bg-orange-500/10",
+  },
+  {
+    name: "Engineering Researches",
+    href: "/researches",
+    description: "Search scholarly articles and research papers on arXiv.",
+    icon: FlaskConical,
+    color: "text-teal-500",
+    bgColor: "bg-teal-500/10",
+  },
+  {
+    name: "Open Books",
+    href: "/open-books",
+    description: "Access millions of books and digital resources from Open Library.",
+    icon: Library,
+    color: "text-blue-500",
+    bgColor: "bg-blue-500/10",
   },
   {
     name: "Articles",
@@ -153,6 +173,22 @@ const mainPages = [
     icon: FileText,
     color: "text-pink-500",
     bgColor: "bg-pink-500/10",
+  },
+  {
+    name: "Game Deals",
+    href: "/game-deal",
+    description: "Search and find the best game discounts across various stores.",
+    icon: Gamepad2,
+    color: "text-rose-500",
+    bgColor: "bg-rose-500/10",
+  },
+  {
+    name: "External Feeds",
+    href: "/feeds",
+    description: "Latest posts from external engineering blogs and RSS feeds.",
+    icon: Rss,
+    color: "text-orange-500",
+    bgColor: "bg-orange-500/10",
   },
   {
     name: "Contact",

@@ -34,7 +34,7 @@ export default function Error({
                     Something went wrong
                 </h1>
                 <p className="mt-6 text-lg leading-7 text-muted-foreground">
-                    An unexpected error has occurred. We've been notified and are working to fix it.
+                    An unexpected error has occurred. We&apos;ve been notified and are working to fix it.
                     Please try refreshing the page or contact support if the problem persists.
                 </p>
 
