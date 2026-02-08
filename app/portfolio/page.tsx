@@ -2,19 +2,17 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import {
     ExternalLink,
-    Code2,
-    Cpu,
-    Layers,
-    Globe,
     Briefcase,
     GraduationCap,
-    Award
+    Award,
+    Dna
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { getContentByType } from "@/lib/content"
 import Link from "next/link"
 import { PortfolioHeroActions } from "@/components/portfolio-hero-actions"
+import SkillMatrix from "@/components/skill-matrix"
 
 const title = "Portfolio | PrasadM"
 const description = "Showcasing the professional journey, technical expertise, and engineering projects of PrasadM, a Mechatronics and Mechanical Engineering undergraduate."
@@ -23,13 +21,6 @@ export const metadata: Metadata = {
     title,
     description,
 }
-
-const skills = [
-    { name: "Embedded Systems", icon: Cpu, level: 90 },
-    { name: "Full-Stack Development", icon: Code2, level: 85 },
-    { name: "Mechanical Design", icon: Layers, level: 80 },
-    { name: "IoT Solutions", icon: Globe, level: 88 },
-]
 
 export default function PortfolioPage() {
     const dynamicProjects = getContentByType("projects")
@@ -69,6 +60,21 @@ export default function PortfolioPage() {
 
             {/* Content Sections */}
             <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+                {/* Advanced Skill Matrix */}
+                <section className="mb-24">
+                    <div className="mb-12 flex flex-col items-center text-center">
+                        <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+                            <Dna className="h-4 w-4" />
+                            Competency Framework
+                        </div>
+                        <h2 className="text-3xl font-bold mozilla-headline sm:text-4xl">Technical Expertise Matrix</h2>
+                        <p className="mt-4 max-w-2xl text-muted-foreground philosopher">
+                            A comprehensive overview of my engineering competencies across hardware, software, and interdisciplinary domains.
+                        </p>
+                    </div>
+                    <SkillMatrix />
+                </section>
+
                 <div className="grid gap-16 lg:grid-cols-3">
                     {/* Left Column: Experience & Education */}
                     <div className="lg:col-span-2 space-y-16">
@@ -150,32 +156,8 @@ export default function PortfolioPage() {
                         </section>
                     </div>
 
-                    {/* Right Column: Skills & Info */}
+                    {/* Right Column: Info & Interests */}
                     <div className="space-y-12">
-                        {/* Expertise */}
-                        <section className="rounded-2xl border border-border bg-card p-8 shadow-sm">
-                            <h3 className="text-xl font-bold mb-6 philosopher">Technical Expertise</h3>
-                            <div className="space-y-6">
-                                {skills.map((skill) => (
-                                    <div key={skill.name}>
-                                        <div className="flex justify-between mb-2">
-                                            <div className="flex items-center gap-2">
-                                                <skill.icon className="h-4 w-4 text-primary" />
-                                                <span className="text-sm font-medium">{skill.name}</span>
-                                            </div>
-                                            <span className="text-xs font-bold text-muted-foreground">{skill.level}%</span>
-                                        </div>
-                                        <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                                            <div
-                                                className="h-full bg-primary transition-all duration-1000"
-                                                style={{ width: `${skill.level}%` }}
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-
                         {/* Education */}
                         <section className="rounded-2xl border border-border bg-card p-8 shadow-sm">
                             <div className="flex items-center gap-3 mb-6">

@@ -3,7 +3,8 @@ import Link from "next/link"
 import {
     Edit3, Calculator, Replace, Code2, Sigma, ArrowRight, Scaling, Braces,
     Terminal, FileCode, Split, Users, Zap, Cpu, Timer, Lightbulb, Activity,
-    Settings, Waypoints, Settings2, Wrench, MoveUpRight, Battery, LineChart, Ruler
+    Settings, Waypoints, Settings2, Wrench, MoveUpRight, Battery, LineChart, Ruler,
+    Database, Rocket
 } from "lucide-react"
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
@@ -116,6 +117,22 @@ const coreTools = [
         color: "text-indigo-500",
         bgColor: "bg-indigo-500/10",
     },
+    {
+        name: "Regex Pattern Architect",
+        slug: "regex-architect",
+        description: "Visual regular expression builder and tester with real-time match highlighting and explanation.",
+        icon: Terminal,
+        color: "text-fuchsia-500",
+        bgColor: "bg-fuchsia-500/10",
+    },
+    {
+        name: "Data Transformation Suite",
+        slug: "data-transform",
+        description: "Comprehensive Base64, Hex, and URL encoding/decoding utilities for secure data handling.",
+        icon: FileCode,
+        color: "text-sky-500",
+        bgColor: "bg-sky-500/10",
+    },
 ]
 
 const electronicsTools = [
@@ -194,6 +211,14 @@ const mechanicalTools = [
         color: "text-zinc-500",
         bgColor: "bg-zinc-500/10",
     },
+    {
+        name: "Material Property Database",
+        slug: "material-database",
+        description: "High-fidelity technical specifications for common engineering materials.",
+        icon: Database,
+        color: "text-blue-500",
+        bgColor: "bg-blue-500/10",
+    },
 ]
 
 const mechatronicsTools = [
@@ -229,18 +254,21 @@ const mechatronicsTools = [
         color: "text-lime-500",
         bgColor: "bg-lime-500/10",
     },
+    {
+        name: "PID Controller Tuner",
+        slug: "pid-tuner",
+        description: "Real-time Proportional-Integral-Derivative simulation for control systems analysis.",
+        icon: Activity,
+        color: "text-teal-500",
+        bgColor: "bg-teal-500/10",
+    },
 ]
 
 const upcomingTools = [
     {
-        name: "Regex Pattern Architect",
-        description: "Visual regular expression builder and tester with real-time match highlighting and explanation.",
-        icon: Terminal,
-    },
-    {
-        name: "Data Transformation Suite",
-        description: "Comprehensive Base64, Hex, and URL encoding/decoding utilities for secure data handling.",
-        icon: FileCode,
+        name: "More Tools Coming Soon",
+        description: "We are constantly building new tools to expand your engineering toolkit. Stay tuned!",
+        icon: Rocket,
     },
 ]
 
