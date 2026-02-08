@@ -26,6 +26,8 @@
     "gray-matter": "latest",
     "gsap": "^3.13.0",
     "highlight.js": "latest",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.1.0",
     "katex": "latest",
     "lucide-react": "^0.454.0",
     "marked": "latest",
