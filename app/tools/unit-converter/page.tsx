@@ -74,7 +74,7 @@ const unitData: Record<UnitCategory, Unit[]> = {
     ]
 }
 
-const categories: { label: string; value: UnitCategory; icon: any }[] = [
+const categories: { label: string, value: UnitCategory, icon: React.ElementType }[] = [
     { label: "Length", value: "length", icon: Ruler },
     { label: "Mass", value: "mass", icon: Weight },
     { label: "Temperature", value: "temperature", icon: Thermometer },

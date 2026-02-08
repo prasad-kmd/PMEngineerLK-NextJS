@@ -10,7 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const types = ['blog', 'articles', 'projects', 'tutorials']
   const contentRoutes = types.flatMap((type) => {
-    const items = getContentByType(type as any)
+    const items = getContentByType(type as "blog" | "articles" | "projects" | "tutorials")
     return items.map((item) => ({
       url: `${baseUrl}/${type}/${item.slug}`,
       lastModified: item.date ? new Date(item.date) : new Date(),

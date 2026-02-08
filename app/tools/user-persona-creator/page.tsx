@@ -1,13 +1,16 @@
 "use client"
 
 import React, { useState, useRef } from "react"
-import { Users, User, Target, AlertCircle, Quote, Download, Trash2, Plus, Briefcase, Heart } from "lucide-react"
+import Image from "next/image"
+import { Users, User, Target, AlertCircle, Quote, Download, Trash2, Plus, Briefcase, Heart, Camera, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
+import html2canvas from "html2canvas"
+import jsPDF from "jspdf"
 
 interface Persona {
   name: string
@@ -15,10 +18,13 @@ interface Persona {
   age: string
   location: string
   bio: string
+  image: string | null
   goals: string[]
   painPoints: string[]
   motivations: string[]
 }
+
+type PersonaArrayField = "goals" | "painPoints" | "motivations"
 
 const initialPersona: Persona = {
   name: "Alex Johnson",
@@ -26,6 +32,7 @@ const initialPersona: Persona = {
   age: "34",
   location: "New York, USA",
   bio: "Alex is a results-driven professional with over 10 years of experience in leading cross-functional teams. They are always looking for ways to optimize workflow and improve team communication.",
+  image: null,
   goals: ["Streamline project delivery", "Reduce meeting overhead"],
   painPoints: ["Lack of clear documentation", "Tool fragmentation"],
   motivations: ["Efficiency", "Team Growth"],
@@ -33,31 +40,80 @@ const initialPersona: Persona = {
 
 export default function UserPersonaCreator() {
   const [persona, setPersona] = useState<Persona>(initialPersona)
+  const [isExporting, setIsExporting] = useState(false)
   const personaRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleInputChange = (field: keyof Persona, value: string) => {
     setPersona((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleArrayChange = (field: "goals" | "painPoints" | "motivations", index: number, value: string) => {
+  const handleArrayChange = (field: PersonaArrayField, index: number, value: string) => {
     const newArray = [...persona[field]]
     newArray[index] = value
     setPersona((prev) => ({ ...prev, [field]: newArray }))
   }
 
-  const addArrayItem = (field: "goals" | "painPoints" | "motivations") => {
+  const addArrayItem = (field: PersonaArrayField) => {
     setPersona((prev) => ({ ...prev, [field]: [...prev[field], ""] }))
   }
 
-  const removeArrayItem = (field: "goals" | "painPoints" | "motivations", index: number) => {
+  const removeArrayItem = (field: PersonaArrayField, index: number) => {
     setPersona((prev) => ({ ...prev, [field]: prev[field].filter((_, i) => i !== index) }))
   }
 
-  const handleExport = () => {
-    // In a real app, we'd use html-to-image
-    // For now, we'll trigger a print
-    window.print()
-    toast.success("Opening print dialog for export...")
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("Image size must be less than 2MB")
+        return
+      }
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setPersona((prev) => ({ ...prev, image: event.target?.result as string }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const removeImage = () => {
+    setPersona((prev) => ({ ...prev, image: null }))
+    if (fileInputRef.current) fileInputRef.current.value = ""
+  }
+
+  const handleExport = async () => {
+    if (!personaRef.current) return
+
+    setIsExporting(true)
+    const toastId = toast.loading("Generating PDF...")
+
+    try {
+      const element = personaRef.current
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: null,
+        logging: false
+      })
+
+      const imgData = canvas.toDataURL("image/png")
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "px",
+        format: [canvas.width / 2, canvas.height / 2]
+      })
+
+      pdf.addImage(imgData, "PNG", 0, 0, canvas.width / 2, canvas.height / 2)
+      pdf.save(`${persona.name.replace(/\s+/g, "_")}_Persona.pdf`)
+
+      toast.success("Persona exported successfully", { id: toastId })
+    } catch (error) {
+      console.error("Export error:", error)
+      toast.error("Failed to export persona", { id: toastId })
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   return (
@@ -81,6 +137,41 @@ export default function UserPersonaCreator() {
               <h3 className="text-xl font-bold mb-6 flex items-center gap-2 philosopher">
                 <User className="h-5 w-5 text-primary" /> Basic Information
               </h3>
+
+              <div className="mb-6">
+                <Label className="block mb-2">Persona Photo</Label>
+                <div className="flex items-center gap-4">
+                  <div
+                    className="relative h-20 w-20 rounded-xl bg-muted border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:bg-muted/80 transition-colors"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    {persona.image ? (
+                      <Image src={persona.image} alt="Persona" className="h-full w-full object-cover" width={80} height={80} unoptimized />
+                    ) : (
+                      <Camera className="h-8 w-8 text-muted-foreground" />
+                    )}
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
+                      {persona.image ? "Change Photo" : "Upload Photo"}
+                    </Button>
+                    {persona.image && (
+                      <Button variant="ghost" size="sm" className="text-destructive flex items-center gap-1" onClick={removeImage}>
+                        <X className="h-3 w-3" /> Remove
+                      </Button>
+                    )}
+                    <p className="text-[10px] text-muted-foreground">JPG, PNG (max 2MB)</p>
+                  </div>
+                </div>
+              </div>
+
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
@@ -124,19 +215,19 @@ export default function UserPersonaCreator() {
                      <h3 className="text-lg font-bold flex items-center gap-2 philosopher">
                        <section.icon className={`h-5 w-5 ${section.color}`} /> {section.title}
                      </h3>
-                     <Button variant="ghost" size="sm" onClick={() => addArrayItem(section.field as any)}>
+                     <Button variant="ghost" size="sm" onClick={() => addArrayItem(section.field as PersonaArrayField)}>
                        <Plus className="h-4 w-4" />
                      </Button>
                    </div>
                    <div className="space-y-3">
-                     {persona[section.field as keyof Persona] instanceof Array && (persona[section.field as keyof Persona] as string[]).map((item, idx) => (
+                     {persona[section.field as PersonaArrayField].map((item, idx) => (
                        <div key={idx} className="flex gap-2">
                          <Input 
                            value={item} 
-                           onChange={(e) => handleArrayChange(section.field as any, idx, e.target.value)}
+                           onChange={(e) => handleArrayChange(section.field as PersonaArrayField, idx, e.target.value)}
                            placeholder={`Add a ${section.title.toLowerCase()}...`}
                          />
-                         <Button variant="ghost" size="icon" className="shrink-0" onClick={() => removeArrayItem(section.field as any, idx)}>
+                         <Button variant="ghost" size="icon" className="shrink-0" onClick={() => removeArrayItem(section.field as PersonaArrayField, idx)}>
                            <Trash2 className="h-4 w-4 text-muted-foreground hover:text-red-500" />
                          </Button>
                        </div>
@@ -147,19 +238,31 @@ export default function UserPersonaCreator() {
             </div>
 
             <div className="flex justify-center pt-4">
-               <Button size="lg" className="rounded-full px-12 font-bold" onClick={handleExport}>
+               <Button
+                size="lg"
+                className="rounded-full px-12 font-bold"
+                onClick={handleExport}
+                disabled={isExporting}
+               >
                  <Download className="mr-2 h-5 w-5" />
-                 Export Persona (PDF)
+                 {isExporting ? "Generating PDF..." : "Export Persona (PDF)"}
                </Button>
             </div>
           </div>
 
           {/* Preview */}
-          <div className="print:block" ref={personaRef}>
-             <Card className="sticky top-24 overflow-hidden border-border bg-white dark:bg-zinc-950 shadow-2xl print:shadow-none print:border-none print:static">
+          <div className="print:block">
+             <Card
+              ref={personaRef}
+              className="sticky top-24 overflow-hidden border-border bg-white dark:bg-zinc-950 shadow-2xl print:shadow-none print:border-none print:static"
+             >
                 <div className="h-32 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20 flex items-end px-8 pb-4">
-                   <div className="h-24 w-24 rounded-2xl bg-background border-4 border-white dark:border-zinc-950 flex items-center justify-center shadow-lg -mb-12">
-                      <User className="h-12 w-12 text-primary" />
+                   <div className="h-24 w-24 rounded-2xl bg-background border-4 border-white dark:border-zinc-950 flex items-center justify-center shadow-lg -mb-12 overflow-hidden">
+                      {persona.image ? (
+                        <Image src={persona.image} alt={persona.name} className="h-full w-full object-cover" width={96} height={96} unoptimized />
+                      ) : (
+                        <User className="h-12 w-12 text-primary" />
+                      )}
                    </div>
                 </div>
                 <div className="px-8 pt-16 pb-8">
