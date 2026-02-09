@@ -1,11 +1,12 @@
 {
-  "name": "Engineering Project",
-  "short_name": "EngProject",
-  "description": "An engineering project web application.",
+  "name": "PrasadM | Engineering Blogfolio",
+  "short_name": "Blogfolio",
+  "description": "Personal blogfolio documenting my engineering projects and technical insights.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#000000",
   "theme_color": "#000000",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/img/favicon/icons8_project_management_16.png",
@@ -19,8 +20,45 @@
     },
     {
       "src": "/img/favicon/icons8_project_management_256.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/favicon/icons8_project_management_256.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/img/favicon/icons8_project_management_256.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/favicon/icons8_project_management_256.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/img/favicon/icons8_project_management_256.png",
       "sizes": "256x256",
       "type": "image/png"
+    }
+  ],
+  "categories": ["education", "productivity", "utilities"],
+  "shortcuts": [
+    {
+      "name": "Blog",
+      "url": "/blog",
+      "icons": [{ "src": "/img/favicon/icons8_project_management_32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Projects",
+      "url": "/projects",
+      "icons": [{ "src": "/img/favicon/icons8_project_management_32.png", "sizes": "32x32" }]
     }
   ]
 }

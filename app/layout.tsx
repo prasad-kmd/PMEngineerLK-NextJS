@@ -112,6 +112,7 @@ const localJetBrainsMono = localFont({
 
 import { siteConfig } from "@/lib/config";
 import ServiceWorkerRegistrar from "@/components/service-worker-registrar";
+import { ConnectivityListener } from "@/components/connectivity-listener";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { BookmarksProvider } from "@/hooks/use-bookmarks";
 import { CustomCursor } from "@/components/custom-cursor";
@@ -163,7 +164,13 @@ export const metadata: Metadata = {
     images: [`/api/og?title=${encodeURIComponent(siteConfig.title)}`],
   },
   icons: {
-    icon: "/img/favicon/icons8_project_management.ico",
+    icon: [
+      { url: "/img/favicon/icons8_project_management.ico" },
+      { url: "/img/favicon/icons8_project_management_32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [
+      { url: "/img/favicon/icons8_project_management_256.png", sizes: "256x256", type: "image/png" },
+    ],
   },
   manifest: "/manifest.json",
   appleWebApp: {
@@ -214,6 +221,7 @@ export default function RootLayout({
                   </main>
                   <ScrollToTop />
                   <Toaster position="bottom-right" richColors />
+                  <ConnectivityListener />
                   <SpeedInsights />
                   <ServiceWorkerRegistrar />
                 </ClickSpark>
