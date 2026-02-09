@@ -1,9 +1,9 @@
 import Link from "next/link"
 import { FileText, BookOpen, GitBranch, Newspaper } from "lucide-react"
-import HeroSlideshow from "@/components/hero-slideshow"
+import FeaturedHero, { type HeroItem } from "@/components/featured-hero"
 import MagicBentoClient from "@/components/magic-bento-client"
 import { getContentByType } from "@/lib/content"
-import { ChevronDown, Calendar, ArrowRight, Calculator, Sigma, Edit3, Code2 } from "lucide-react"
+import { Calendar, ArrowRight, Calculator, Sigma, Edit3, Code2 } from "lucide-react"
 import Image from "next/image"
 
 export default function HomePage() {
@@ -24,39 +24,55 @@ export default function HomePage() {
     tutorials: tutorials[0],
   }
 
+  const heroItems: HeroItem[] = [
+    {
+      title: "Engineering Workspace",
+      description: "Documenting our journey in mechanical and mechatronics engineering, featuring research, projects, and professional tools.",
+      image: "/img/hero/1.webp",
+      link: "/about",
+      label: "Introduction",
+    },
+    {
+      title: blogs[0]?.title || "Engineering Blog",
+      description: blogs[0]?.description || "Insights and updates from my engineering journey.",
+      image: blogs[0]?.firstImage || "/img/page/ideas_item.webp",
+      link: blogs[0] ? `/blog/${blogs[0].slug}` : "/blog",
+      label: "Latest Blog",
+    },
+    {
+      title: projects[0]?.title || "Featured Projects",
+      description: projects[0]?.description || "Explore my latest engineering projects and demonstrations.",
+      image: projects[0]?.firstImage || "/img/page/workflow.webp",
+      link: projects[0] ? `/projects/${projects[0].slug}` : "/projects",
+      label: "Latest Project",
+    },
+    {
+      title: "Project Gallery",
+      description: "Visual documentation of my engineering journey, prototypes and field work.",
+      image: "/img/page/ideas.webp",
+      link: "/gallery",
+      label: "Visual Gallery",
+    },
+    {
+      title: articles[0]?.title || "Technical Articles",
+      description: articles[0]?.description || "In-depth technical articles and reflections.",
+      image: articles[0]?.firstImage || "/img/page/diary_page.webp",
+      link: articles[0] ? `/articles/${articles[0].slug}` : "/articles",
+      label: "Featured Article",
+    },
+    {
+      title: tutorials[0]?.title || "Practical Tutorials",
+      description: tutorials[0]?.description || "Step-by-step guides and educational resources.",
+      image: tutorials[0]?.firstImage || "/img/page/posts.webp",
+      link: tutorials[0] ? `/tutorials/${tutorials[0].slug}` : "/tutorials",
+      label: "New Tutorial",
+    },
+  ]
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center border-b border-border px-6 py-20 lg:px-8">
-        <HeroSlideshow />
-        <div className="relative z-10 mx-auto max-w-4xl text-center text-white">
-          <h1 className="mb-6 text-5xl font-bold tracking-tight text-balance lg:text-6xl amoriaregular">
-            Prasad Madhuranga&apos;s Blogfolio
-            <span className="block text-primary mozilla-headline">Engineering Blogfolio</span>
-          </h1>
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-200 text-pretty leading-relaxed">
-            Documenting my journey to identify and solve engineering challenges through innovation and technical excellence. 
-            Exploring mechatronics and mechanical solutions for real-world problems.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 shadow-[0_0_20px_rgba(var(--primary),0.3)]"
-            >
-              Explore Blog
-            </Link>
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/20"
-            >
-              View Projects
-            </Link>
-          </div>
-        </div>
-        <div className="absolute bottom-10 left-1/2 z-10 -translate-x-1/2 animate-bounce text-white/50">
-          <ChevronDown className="h-8 w-8" />
-        </div>
-      </section>
+      <FeaturedHero items={heroItems} />
 
       {/* Content Sections Grid */}
       <section className="px-6 py-20 lg:px-8">
