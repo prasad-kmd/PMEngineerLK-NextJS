@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
@@ -22,57 +22,74 @@ export default function FeaturedHero({ items }: FeaturedHeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [progress, setProgress] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+  const [isInView, setIsInView] = useState(true)
+  const containerRef = useRef<HTMLElement>(null)
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null)
+  const progressRef = useRef(0)
   const duration = 8000 // 8 seconds per slide
 
   useEffect(() => {
-    if (!isHovered) {
-      startTimer()
-    } else {
-      stopTimer()
-    }
-    return () => stopTimer()
-  }, [currentIndex, isHovered])
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.1 }
+    )
+    if (containerRef.current) observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [])
 
-  const startTimer = () => {
+  const stopTimer = useCallback(() => {
+    if (autoPlayRef.current) {
+      clearInterval(autoPlayRef.current)
+    }
+  }, [])
+
+  const handleNext = useCallback(() => {
+    progressRef.current = 0
+    setProgress(0)
+    setCurrentIndex((prev) => (prev + 1) % items.length)
+  }, [items.length])
+
+  const startTimer = useCallback(() => {
     stopTimer()
-    const startTime = Date.now() - (progress / 100) * duration
+    const startTime = Date.now() - (progressRef.current / 100) * duration
     
     autoPlayRef.current = setInterval(() => {
       const elapsed = Date.now() - startTime
       const newProgress = Math.min((elapsed / duration) * 100, 100)
+      progressRef.current = newProgress
       setProgress(newProgress)
       
       if (newProgress >= 100) {
         handleNext()
       }
     }, 50)
-  }
+  }, [duration, stopTimer, handleNext])
 
-  const stopTimer = () => {
-    if (autoPlayRef.current) {
-      clearInterval(autoPlayRef.current)
+  useEffect(() => {
+    if (!isHovered && isInView) {
+      startTimer()
+    } else {
+      stopTimer()
     }
-  }
+    return () => stopTimer()
+  }, [currentIndex, isHovered, isInView, startTimer, stopTimer])
 
-  const handleNext = () => {
-    setProgress(0)
-    setCurrentIndex((prev) => (prev + 1) % items.length)
-  }
-
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
+    progressRef.current = 0
     setProgress(0)
     setCurrentIndex((prev) => (prev - 1 + items.length) % items.length)
-  }
+  }, [items.length])
 
-  const handleSelect = (index: number) => {
+  const handleSelect = useCallback((index: number) => {
     if (index === currentIndex) return
+    progressRef.current = 0
     setProgress(0)
     setCurrentIndex(index)
-  }
+  }, [currentIndex])
 
   return (
     <section 
+      ref={containerRef}
       className="relative w-full h-[calc(100vh-4rem)] min-h-[600px] overflow-hidden group bg-black border-b border-border"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -83,16 +100,20 @@ export default function FeaturedHero({ items }: FeaturedHeroProps) {
           key={index}
           className={cn(
             "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-            index === currentIndex ? "opacity-100" : "opacity-0"
+            index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
           )}
         >
-          <Image
-            src={item.image}
-            alt={item.title}
-            fill
-            className="object-cover"
-            priority={index === 0}
-          />
+          {(index === currentIndex || Math.abs(index - currentIndex) <= 1) && (
+            <Image
+              src={item.image}
+              alt={item.title}
+              fill
+              className="object-cover"
+              priority={index === 0}
+              sizes="100vw"
+              quality={85}
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent lg:bg-gradient-to-r lg:from-black/80 lg:via-black/20 lg:to-transparent" />
         </div>
       ))}

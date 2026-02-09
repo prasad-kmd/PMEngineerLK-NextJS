@@ -10,6 +10,10 @@ export const CustomCursor = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Check if it's a touch device or if we're on a small screen
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isTouchDevice || window.innerWidth < 768) return;
+
     const cursor = cursorRef.current;
     if (!cursor) return;
 
