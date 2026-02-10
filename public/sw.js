@@ -2,9 +2,9 @@ const CACHE_NAME = 'prasadm-cache-v1';
 const ASSETS_TO_CACHE = [
   '/',
   '/manifest.json',
-  '/img/favicon/icons8_project_management_16.png',
-  '/img/favicon/icons8_project_management_32.png',
-  '/img/favicon/icons8_project_management_256.png',
+  '/img/favicon/icons8_working_with_a_laptop_16.png',
+  '/img/favicon/icons8_working_with_a_laptop_32.png',
+  '/img/favicon/icons8_working_with_a_laptop_256.png',
 ];
 
 self.addEventListener('install', (event) => {

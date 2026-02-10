@@ -12,22 +12,22 @@ import "katex/dist/katex.min.css";
 
 // import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from 'next/font/local'
-import {
-  Inter,
-  JetBrains_Mono,
-} from "next/font/google";
+// import {
+//   Inter,
+//   JetBrains_Mono,
+// } from "next/font/google";
 
 // Initialize fonts
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
+// const inter = Inter({
+//   subsets: ["latin"],
+//   variable: "--font-inter",
+// });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-});
+// const jetbrainsMono = JetBrains_Mono({
+//   subsets: ["latin"],
+//   variable: "--font-jetbrains-mono",
+// });
 
 const amoriaregular = localFont({
   src: '../public/fonts/en/AMORIARegular.woff2',
@@ -145,16 +145,16 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
     url: siteConfig.url,
-    siteName: "Blogfolio",
+    siteName: "PrasadM's Blogfolio",
     images: [
       {
         url: `/api/og?title=${encodeURIComponent(siteConfig.title)}`,
-        width: 1200,
-        height: 630,
+        width: 1280,
+        height: 720,
         alt: siteConfig.description,
       },
     ],
-    locale: "en_US",
+    locale: "en_LK",
     type: "website",
   },
   twitter: {
@@ -165,18 +165,28 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/img/favicon/icons8_project_management.ico" },
-      { url: "/img/favicon/icons8_project_management_32.png", sizes: "32x32", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop.ico" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_16.png", sizes: "16x16", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_32.png", sizes: "32x32", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_48.png", sizes: "48x48", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_64.png", sizes: "64x64", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_128.png", sizes: "128x128", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_256.png", sizes: "256x256", type: "image/png" },
     ],
     apple: [
-      { url: "/img/favicon/icons8_project_management_256.png", sizes: "256x256", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_16.png", sizes: "16x16", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_32.png", sizes: "32x32", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_48.png", sizes: "48x48", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_64.png", sizes: "64x64", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_128.png", sizes: "128x128", type: "image/png" },
+      { url: "/img/favicon/icons8_working_with_a_laptop_256.png", sizes: "256x256", type: "image/png" },
     ],
   },
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
-    title: "Blogfolio",
+    statusBarStyle: "black-translucent",
+    title: "PrasadM's Blogfolio",
   },
 };
 
@@ -190,7 +200,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${amoriaregular.variable} ${mozillaHeadline.variable} ${philosopher.variable} ${googleSans.variable} ${mozillaText.variable} ${notoSans.variable} ${notoSansDisplay.variable} ${notoSerifSinhala.variable} ${roboto.variable} ${spaceMono.variable} ${localInter.variable} ${localJetBrainsMono.variable}`}>
+    // ${inter.variable} ${jetbrainsMono.variable} 
+    <html lang="en" className={`${amoriaregular.variable} ${mozillaHeadline.variable} ${philosopher.variable} ${googleSans.variable} ${mozillaText.variable} ${notoSans.variable} ${notoSansDisplay.variable} ${notoSerifSinhala.variable} ${roboto.variable} ${spaceMono.variable} ${localInter.variable} ${localJetBrainsMono.variable}`}>
       <body className="antialiased">
         <ThemeProvider
           attribute="class"

@@ -1,6 +1,6 @@
 {
-  "name": "PrasadM | Engineering Blogfolio",
-  "short_name": "Blogfolio",
+  "name": "PrasadM | Engineer's' Blogfolio",
+  "short_name": "PrasadM",
   "description": "Personal blogfolio documenting my engineering projects and technical insights.",
   "start_url": "/",
   "display": "standalone",
@@ -9,41 +9,41 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/img/favicon/icons8_project_management_16.png",
+      "src": "/img/favicon/icons8_working_with_a_laptop_16.png",
       "sizes": "16x16",
       "type": "image/png"
     },
     {
-      "src": "/img/favicon/icons8_project_management_32.png",
+      "src": "/img/favicon/icons8_working_with_a_laptop_32.png",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "/img/favicon/icons8_project_management_256.png",
-      "sizes": "192x192",
+      "src": "/img/favicon/icons8_working_with_a_laptop_48.png",
+      "sizes": "48x48",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/img/favicon/icons8_project_management_256.png",
-      "sizes": "192x192",
+      "src": "/img/favicon/icons8_working_with_a_laptop_64.png",
+      "sizes": "64x64",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/img/favicon/icons8_project_management_256.png",
-      "sizes": "512x512",
+      "src": "/img/favicon/icons8_working_with_a_laptop_128.png",
+      "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/img/favicon/icons8_project_management_256.png",
+      "src": "/img/favicon/icons8_working_with_a_laptop_256.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/img/favicon/icons8_project_management_256.png",
+      "src": "/img/favicon/icons8_working_with_a_laptop_256.png",
       "sizes": "256x256",
       "type": "image/png"
     }
@@ -51,14 +51,24 @@
   "categories": ["education", "productivity", "utilities"],
   "shortcuts": [
     {
+      "name": "Portfolio",
+      "url": "/portfolio",
+      "icons": [{ "src": "/img/favicon/portfolio_48px.png", "sizes": "48x48" }]
+    },
+    {
       "name": "Blog",
       "url": "/blog",
-      "icons": [{ "src": "/img/favicon/icons8_project_management_32.png", "sizes": "32x32" }]
+      "icons": [{ "src": "/img/favicon/blog_48px.png", "sizes": "48x48" }]
     },
     {
       "name": "Projects",
       "url": "/projects",
-      "icons": [{ "src": "/img/favicon/icons8_project_management_32.png", "sizes": "32x32" }]
+      "icons": [{ "src": "/img/favicon/projects_48px.png", "sizes": "48x48" }]
+    },
+    {
+      "name": "Site Directory",
+      "url": "/pages",
+      "icons": [{ "src": "/img/favicon/pages_48px.png", "sizes": "48x48" }]
     }
   ]
 }

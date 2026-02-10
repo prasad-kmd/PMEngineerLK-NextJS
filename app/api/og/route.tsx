@@ -5,7 +5,7 @@ export const runtime = "edge"
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
-  const title = searchParams.get("title") || "Blogfolio"
+  const title = searchParams.get("title") || "PrasadM's Blogfolio"
   const description = searchParams.get("description") || "Personal blogfolio documenting my engineering and development journey."
   const type = searchParams.get("type") || "default"
 
@@ -14,7 +14,9 @@ export async function GET(req: NextRequest) {
     articles: "Articles",
     blog: "Blog",
     projects: "Projects",
-    default: "Blogfolio"
+    tools: "Tools",
+    pages: "Site Page",
+    default: "Welcome Back"
   }
 
   // Accent colors based on content type for a dynamic feel
@@ -23,6 +25,8 @@ export async function GET(req: NextRequest) {
     articles: "#3b82f6", // Blue
     blog: "#f59e0b",     // Amber
     projects: "#8b5cf6", // Violet
+    tools: "#c3e42fff",
+    pages: "#0ea6ccff",
     default: "#6366f1"   // Indigo
   }
 
@@ -38,7 +42,8 @@ export async function GET(req: NextRequest) {
           flexDirection: "column",
           backgroundColor: "#030712",
           color: "white",
-          fontFamily: '"Inter", "sans-serif"',
+          // fontFamily: '"Inter", "sans-serif"',
+          fontFamily: '"Google Sans", "sans-serif"',
           position: "relative",
           overflow: "hidden",
         }}
@@ -65,7 +70,7 @@ export async function GET(req: NextRequest) {
             right: "-100px",
             width: "500px",
             height: "500px",
-            background: `radial-gradient(circle, ${accentColor}33 0%, transparent 70%)`,
+            background: `radial-gradient(circle, ${accentColor}50 0%, transparent 70%)`,
             borderRadius: "50%",
           }}
         />
@@ -76,7 +81,7 @@ export async function GET(req: NextRequest) {
             left: "-50px",
             width: "400px",
             height: "400px",
-            background: `radial-gradient(circle, ${accentColor}22 0%, transparent 70%)`,
+            background: `radial-gradient(circle, ${accentColor}50 0%, transparent 50%)`,
             borderRadius: "50%",
           }}
         />
@@ -118,7 +123,7 @@ export async function GET(req: NextRequest) {
                   color: accentColor,
                 }}
               >
-                {typeLabels[type] || "Blogfolio"}
+                {typeLabels[type] || "PrasadM's Blogfolio"}
               </span>
             </div>
 
@@ -200,8 +205,8 @@ export async function GET(req: NextRequest) {
               </div>
 
               <div style={{ display: "flex", flexDirection: "column" }}>
-                <span style={{ fontSize: "24px", fontWeight: 700, color: "white" }}>Blogfolio</span>
-                <span style={{ fontSize: "16px", color: "#6b7280", fontWeight: 500 }}>by PrasadM</span>
+                <span style={{ fontSize: "24px", fontWeight: 700, color: "white" }}>PrasadM's Blogfolio</span>
+                <span style={{ fontSize: "16px", color: "#6b7280", fontWeight: 500 }}>by Prasad Madhuranga</span>
               </div>
             </div>
 
@@ -222,7 +227,7 @@ export async function GET(req: NextRequest) {
                 borderRadius: "50%",
                 border: `2px solid ${accentColor}`
               }} />
-              <span>prasadm.dev</span>
+              <span>prasadm.vercel.app</span>
             </div>
           </div>
         </div>
