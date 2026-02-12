@@ -8,6 +8,8 @@ import { Waypoints, ChevronLeft, Info, Ruler } from "lucide-react"
 import Link from "next/link"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { InlineMath, BlockMath } from "react-katex"
+import "katex/dist/katex.min.css"
 
 export default function BeamDeflectionCalculator() {
     const [type, setType] = useState<string>("cantilever")
@@ -104,11 +106,13 @@ export default function BeamDeflectionCalculator() {
 
                         <div className="flex items-start gap-3 p-4 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-[11px] text-indigo-200 italic">
                             <Info className="h-4 w-4 shrink-0 mt-0.5" />
-                            <p>
-                                Formula ({type === 'cantilever' ? 'Cantilever' : 'Simply Supported'}): <br />
-                                δmax = {type === 'cantilever' ? 'PL³ / 3EI' : 'PL³ / 48EI'} <br />
-                                Assumes small deflections and linear elastic material properties.
-                            </p>
+                            <div className="flex-1">
+                                <p className="font-semibold mb-2 text-xs">Formula ({type === 'cantilever' ? 'Cantilever' : 'Simply Supported'}):</p>
+                                <div className="py-1 text-xl">
+                                    <InlineMath math={type === 'cantilever' ? "\\delta_{max} = \\frac{PL^3}{3EI}" : "\\delta_{max} = \\frac{PL^3}{48EI}"} />
+                                </div>
+                                <p>Assumes small deflections and linear elastic material properties.</p>
+                            </div>
                         </div>
                     </div>
 
@@ -129,7 +133,7 @@ export default function BeamDeflectionCalculator() {
                                     <div className="text-xs font-bold uppercase text-muted-foreground">Deformation Preview</div>
                                     <div className="relative w-full h-24 border-b-2 border-border/50">
                                         {/* Original Beam */}
-                                        <div className="absolute top-0 w-full h-[1px] border-t border-dashed border-muted-foreground/30" />
+                                        <div className="absolute top-0 w-full h-px border-t border-dashed border-muted-foreground/30" />
                                         {/* Support */}
                                         {type === "cantilever" ? (
                                             <div className="absolute left-0 top-0 h-4 w-1 bg-muted-foreground" />

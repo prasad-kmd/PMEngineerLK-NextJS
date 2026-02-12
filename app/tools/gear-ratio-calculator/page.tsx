@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Settings2, ChevronLeft, Info, Cog, ArrowRight, Activity } from "lucide-react"
 import Link from "next/link"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { InlineMath, BlockMath } from "react-katex"
+import "katex/dist/katex.min.css"
 
 export default function GearRatioCalculator() {
     const [driverTeeth, setDriverTeeth] = useState<string>("12")
@@ -81,11 +83,15 @@ export default function GearRatioCalculator() {
 
                         <div className="flex items-start gap-3 p-4 rounded-lg bg-orange-500/10 border border-orange-500/20 text-[11px] text-orange-200">
                             <Info className="h-4 w-4 shrink-0 mt-0.5" />
-                            <div>
+                            <div className="flex-1">
                                 <p className="font-semibold mb-1">Fundamental Laws:</p>
-                                <p>Ratio = N_driven / N_driver</p>
-                                <p>ω_out = ω_in / Ratio</p>
-                                <p>τ_out = τ_in * Ratio (assuming 100% efficiency)</p>
+                                <p className="text-xl">
+                                    <InlineMath math="\begin{array}{rcl}
+                                    \text{Ratio} &=& \frac{N_{driven}}{N_{driver}} \\
+                                    \omega_{out} &=& \frac{\omega_{in}}{\text{Ratio}} \\
+                                    \tau_{out}&=&\frac{\tau_{in}}{\text{Ratio}}
+                                    \end{array}"/></p>
+                                <p className="text-xs">(assuming 100% efficiency)</p>
                             </div>
                         </div>
                     </div>

@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Battery, ChevronLeft, Info, Clock, AlertTriangle } from "lucide-react"
 import Link from "next/link"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { InlineMath, BlockMath } from "react-katex"
+import "katex/dist/katex.min.css"
 
 export default function BatteryLifeEstimator() {
     const [capacity, setCapacity] = useState<string>("2500") // mAh
@@ -110,10 +112,15 @@ export default function BatteryLifeEstimator() {
 
                         <div className="flex items-start gap-3 p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-[11px] text-green-200">
                             <Info className="h-4 w-4 shrink-0 mt-0.5" />
-                            <p>
-                                Standard calculation: T = Capacity / Current. <br />
+                            <div className="flex-1">
+                            <p className="font-semibold mb-2 text-xs">
+                                Standard calculation: </p>
+                                <div className="space-y-2 text-xl">
+                      <div><InlineMath math="\text{T}=\frac{\text{Capacity}}{\text{Current}}"/></div></div>
+                                <br/>
+                                <p className="font-semibold text-xs">
                                 Peukert&apos;s Law accounts for the fact that battery capacity decreases as the rate of discharge increases.
-                            </p>
+                            </p></div>
                         </div>
                     </div>
 
