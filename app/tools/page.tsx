@@ -4,7 +4,7 @@ import {
     Edit3, Calculator, Replace, Code2, Sigma, ArrowRight, Scaling, Braces,
     Terminal, FileCode, Split, Users, Zap, Cpu, Timer, Lightbulb, Activity,
     Settings, Waypoints, Settings2, Wrench, MoveUpRight, Battery, LineChart, Ruler,
-    Database, Rocket, Gamepad2, Rss, FlaskConical, Library
+    Database, Rocket, Gamepad2, Rss, FlaskConical, Library, Search, Grid3X3, Compass, Palette
 } from "lucide-react"
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
@@ -44,98 +44,23 @@ export const metadata: Metadata = {
     },
 }
 
-const coreTools = [
+const electronicsTools = [
     {
-        name: "Technical Document Editor",
-        slug: "markdown-editor",
-        description: "High-performance Markdown environment with real-time GitHub-flavored preview and direct export capabilities.",
-        icon: Edit3,
+        name: "PCB Impedance Calculator",
+        slug: "pcb-impedance-calculator",
+        description: "Calculate microstrip and stripline characteristic impedance for high-speed PCB design.",
+        icon: Zap,
+        color: "text-amber-500",
+        bgColor: "bg-amber-500/10",
+    },
+    {
+        name: "Voltage Divider Designer",
+        slug: "voltage-divider-designer",
+        description: "Find the best standard resistor values (E12/E24) for your desired output voltage.",
+        icon: Search,
         color: "text-blue-500",
         bgColor: "bg-blue-500/10",
     },
-    {
-        name: "Precision Engineering Calculator",
-        slug: "scientific-calculator",
-        description: "Comprehensive computational engine with support for trigonometric, logarithmic, and advanced algebraic functions.",
-        icon: Calculator,
-        color: "text-green-500",
-        bgColor: "bg-green-500/10",
-    },
-    {
-        name: "MathML Integration Engine",
-        slug: "latex-mathml-converter",
-        description: "Seamlessly transform LaTeX syntax into standards-compliant MathML for high-fidelity web-based mathematical rendering.",
-        icon: Replace,
-        color: "text-purple-500",
-        bgColor: "bg-purple-500/10",
-    },
-    {
-        name: "Security & Syntax Escaper",
-        slug: "html-encoder",
-        description: "Enterprise-grade HTML entity encoder/decoder designed for secure code presentation and XSS prevention.",
-        icon: Code2,
-        color: "text-orange-500",
-        bgColor: "bg-orange-500/10",
-    },
-    {
-        name: "Mathematical Formula Architect",
-        slug: "latex-equation-editor",
-        description: "Advanced LaTeX authoring environment with dynamic block mathematical rendering and formula templates.",
-        icon: Sigma,
-        color: "text-pink-500",
-        bgColor: "bg-pink-500/10",
-    },
-    {
-        name: "Precision Unit Converter",
-        slug: "unit-converter",
-        description: "Standardized metric and imperial unit conversions for engineering parameters like torque, pressure, and energy.",
-        icon: Scaling,
-        color: "text-cyan-500",
-        bgColor: "bg-cyan-500/10",
-    },
-    {
-        name: "JSON Structure Validator",
-        slug: "json-formatter",
-        description: "Advanced linting and formatting engine for complex JSON data structures with schema validation support.",
-        icon: Braces,
-        color: "text-yellow-500",
-        bgColor: "bg-yellow-500/10",
-    },
-    {
-        name: "Diff Comparison Engine",
-        slug: "diff-checker",
-        description: "Side-by-side text and code comparison tool with intelligent change highlighting for documentation review.",
-        icon: Split,
-        color: "text-red-500",
-        bgColor: "bg-red-500/10",
-    },
-    {
-        name: "User Persona Architect",
-        slug: "user-persona-creator",
-        description: "Design and export professional user personas to enhance empathy-driven engineering and product design.",
-        icon: Users,
-        color: "text-indigo-500",
-        bgColor: "bg-indigo-500/10",
-    },
-    {
-        name: "Regex Pattern Architect",
-        slug: "regex-architect",
-        description: "Visual regular expression builder and tester with real-time match highlighting and explanation.",
-        icon: Terminal,
-        color: "text-fuchsia-500",
-        bgColor: "bg-fuchsia-500/10",
-    },
-    {
-        name: "Data Transformation Suite",
-        slug: "data-transform",
-        description: "Comprehensive Base64, Hex, and URL encoding/decoding utilities for secure data handling.",
-        icon: FileCode,
-        color: "text-sky-500",
-        bgColor: "bg-sky-500/10",
-    },
-]
-
-const electronicsTools = [
     {
         name: "Resistor Color Code Solver",
         slug: "resistor-color-code",
@@ -180,6 +105,14 @@ const electronicsTools = [
 
 const mechanicalTools = [
     {
+        name: "Moment of Inertia",
+        slug: "moment-of-inertia-calculator",
+        description: "Compute Ixx and Iyy for standard cross-sections like I-beams, rectangles, and circles.",
+        icon: Waypoints,
+        color: "text-indigo-500",
+        bgColor: "bg-indigo-500/10",
+    },
+    {
         name: "ISO Fits & Tolerances",
         slug: "iso-fits-tolerances",
         description: "Standardized fit calculator for shafts and holes based on ISO 286 diameter and tolerance classes.",
@@ -221,42 +154,15 @@ const mechanicalTools = [
     },
 ]
 
-const discoveryTools = [
+const mechatronicsTools = [
     {
-        name: "Engineering Researches",
-        slug: "../researches",
-        description: "Access and search through millions of scholarly articles and research papers on arXiv.",
-        icon: FlaskConical,
-        color: "text-teal-500",
-        bgColor: "bg-teal-500/10",
-    },
-    {
-        name: "Open Books Library",
-        slug: "../open-books",
-        description: "Discover millions of books and digital resources from the Open Library database.",
-        icon: Library,
-        color: "text-blue-500",
-        bgColor: "bg-blue-500/10",
-    },
-    {
-        name: "External Blog Feeds",
-        slug: "../feeds",
-        description: "Stay updated with the latest posts and engineering logs from external RSS feeds.",
-        icon: Rss,
-        color: "text-orange-500",
-        bgColor: "bg-orange-500/10",
-    },
-    {
-        name: "Game Deal Finder",
-        slug: "../game-deal",
-        description: "Search and compare the best game discounts across various digital stores.",
-        icon: Gamepad2,
+        name: "PWM to Voltage Converter",
+        slug: "pwm-voltage-converter",
+        description: "Convert duty cycle to average voltage for microcontroller and signal processing projects.",
+        icon: Activity,
         color: "text-rose-500",
         bgColor: "bg-rose-500/10",
     },
-]
-
-const mechatronicsTools = [
     {
         name: "Stepper Motor Calculator",
         slug: "stepper-motor-calculator",
@@ -299,37 +205,216 @@ const mechatronicsTools = [
     },
 ]
 
-const upcomingTools = [
+const mathTools = [
     {
-        name: "More Tools Coming Soon",
-        description: "We are constantly building new tools to expand your engineering toolkit. Stay tuned!",
-        icon: Rocket,
+        name: "3x3 Matrix Calculator",
+        slug: "matrix-calculator",
+        description: "Calculate determinant, inverse, and trace for 3x3 matrices with real-time validation.",
+        icon: Grid3X3,
+        color: "text-purple-500",
+        bgColor: "bg-purple-500/10",
+    },
+    {
+        name: "Linear Curve Fitter",
+        slug: "curve-fitter",
+        description: "Fit linear models to data points using the least squares method with R-squared analysis.",
+        icon: LineChart,
+        color: "text-blue-500",
+        bgColor: "bg-blue-500/10",
+    },
+    {
+        name: "Unit Circle Explorer",
+        slug: "unit-circle",
+        description: "Interactive visualization of trigonometric functions and unit circle relationships.",
+        icon: Compass,
+        color: "text-cyan-500",
+        bgColor: "bg-cyan-500/10",
+    },
+    {
+        name: "Precision Engineering Calculator",
+        slug: "scientific-calculator",
+        description: "Comprehensive computational engine with support for trigonometric and algebraic functions.",
+        icon: Calculator,
+        color: "text-green-500",
+        bgColor: "bg-green-500/10",
     },
 ]
 
-function ToolSection({ title, tools }: { title: string, tools: Tool[] }) {
+const webTools = [
+    {
+        name: "CSS Unit Converter",
+        slug: "css-unit-converter",
+        description: "Convert px to rem, em, %, and viewport units based on custom base font size.",
+        icon: FileCode,
+        color: "text-sky-500",
+        bgColor: "bg-sky-500/10",
+    },
+    {
+        name: "Color Contrast Checker",
+        slug: "color-contrast-checker",
+        description: "Verify WCAG 2.1 accessibility compliance for foreground and background colors.",
+        icon: Palette,
+        color: "text-fuchsia-500",
+        bgColor: "bg-fuchsia-500/10",
+    },
+    {
+        name: "JSON Structure Validator",
+        slug: "json-formatter",
+        description: "Advanced linting and formatting engine for complex JSON data structures.",
+        icon: Braces,
+        color: "text-yellow-500",
+        bgColor: "bg-yellow-500/10",
+    },
+    {
+        name: "Regex Pattern Architect",
+        slug: "regex-architect",
+        description: "Visual regular expression builder and tester with real-time match highlighting.",
+        icon: Terminal,
+        color: "text-fuchsia-500",
+        bgColor: "bg-fuchsia-500/10",
+    },
+    {
+        name: "Diff Comparison Engine",
+        slug: "diff-checker",
+        description: "Side-by-side code comparison tool with intelligent change highlighting.",
+        icon: Split,
+        color: "text-red-500",
+        bgColor: "bg-red-500/10",
+    },
+]
+
+const coreTools = [
+    {
+        name: "Technical Document Editor",
+        slug: "markdown-editor",
+        description: "High-performance Markdown environment with real-time GitHub-flavored preview.",
+        icon: Edit3,
+        color: "text-blue-500",
+        bgColor: "bg-blue-500/10",
+    },
+    {
+        name: "MathML Integration Engine",
+        slug: "latex-mathml-converter",
+        description: "Transform LaTeX syntax into standards-compliant MathML for web rendering.",
+        icon: Replace,
+        color: "text-purple-500",
+        bgColor: "bg-purple-500/10",
+    },
+    {
+        name: "Security & Syntax Escaper",
+        slug: "html-encoder",
+        description: "HTML entity encoder/decoder for secure code presentation and XSS prevention.",
+        icon: Code2,
+        color: "text-orange-500",
+        bgColor: "bg-orange-500/10",
+    },
+    {
+        name: "Mathematical Formula Architect",
+        slug: "latex-equation-editor",
+        description: "LaTeX authoring environment with dynamic block mathematical rendering.",
+        icon: Sigma,
+        color: "text-pink-500",
+        bgColor: "bg-pink-500/10",
+    },
+    {
+        name: "User Persona Architect",
+        slug: "user-persona-creator",
+        description: "Design and export professional user personas for empathy-driven engineering.",
+        icon: Users,
+        color: "text-indigo-500",
+        bgColor: "bg-indigo-500/10",
+    },
+    {
+        name: "Data Transformation Suite",
+        slug: "data-transform",
+        description: "Comprehensive Base64, Hex, and URL encoding/decoding utilities.",
+        icon: FileCode,
+        color: "text-sky-500",
+        bgColor: "bg-sky-500/10",
+    },
+    {
+        name: "Precision Unit Converter",
+        slug: "unit-converter",
+        description: "Standardized metric and imperial unit conversions for engineering parameters.",
+        icon: Scaling,
+        color: "text-cyan-500",
+        bgColor: "bg-cyan-500/10",
+    },
+]
+
+const discoveryTools = [
+    {
+        name: "Engineering Researches",
+        slug: "../researches",
+        description: "Access and search through millions of scholarly articles on arXiv.",
+        icon: FlaskConical,
+        color: "text-teal-500",
+        bgColor: "bg-teal-500/10",
+    },
+    {
+        name: "Open Books Library",
+        slug: "../open-books",
+        description: "Discover millions of books and digital resources from Open Library.",
+        icon: Library,
+        color: "text-blue-500",
+        bgColor: "bg-blue-500/10",
+    },
+    {
+        name: "External Blog Feeds",
+        slug: "../feeds",
+        description: "Stay updated with the latest engineering logs from external RSS feeds.",
+        icon: Rss,
+        color: "text-orange-500",
+        bgColor: "bg-orange-500/10",
+    },
+    {
+        name: "Game Deal Finder",
+        slug: "../game-deal",
+        description: "Search and compare the best game discounts across digital stores.",
+        icon: Gamepad2,
+        color: "text-rose-500",
+        bgColor: "bg-rose-500/10",
+    },
+]
+
+const sections = [
+    { title: "Electronics", id: "electronics", tools: electronicsTools },
+    { title: "Mechanical", id: "mechanical", tools: mechanicalTools },
+    { title: "Mechatronics", id: "mechatronics", tools: mechatronicsTools },
+    { title: "Math & Data", id: "math", tools: mathTools },
+    { title: "Software & Web", id: "web", tools: webTools },
+    { title: "Content & Core", id: "core", tools: coreTools },
+    { title: "Discovery", id: "discovery", tools: discoveryTools },
+]
+
+function ToolSection({ title, id, tools }: { title: string, id: string, tools: Tool[] }) {
     return (
-        <div className="mt-12">
-            <h2 className="mb-6 text-2xl font-bold mozilla-headline border-b border-border pb-2">{title}</h2>
-            <div className="grid gap-6 md:grid-cols-2">
+        <div className="mt-16 scroll-mt-20" id={id}>
+            <h2 className="mb-6 text-2xl font-bold mozilla-headline border-b border-border pb-2 flex items-center gap-2">
+                {title}
+                <span className="text-xs font-normal text-muted-foreground ml-2 px-2 py-0.5 rounded-full bg-muted">
+                    {tools.length} Tools
+                </span>
+            </h2>
+            <div className="grid gap-4 md:grid-cols-2">
                 {tools.map((tool) => (
                     <Link
                         key={tool.slug}
                         href={`/tools/${tool.slug}`}
-                        className="group block rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5"
+                        className="group block rounded-xl border border-border bg-card/50 p-5 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 hover:bg-card"
                     >
                         <div className="flex items-start gap-4">
                             <div className={`rounded-lg ${tool.bgColor} p-3 ${tool.color} shrink-0`}>
-                                <tool.icon className="h-6 w-6" />
+                                <tool.icon className="h-5 w-5" />
                             </div>
-                            <div className="flex-1">
+                            <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between">
-                                    <h2 className="text-xl font-semibold group-hover:text-primary transition-colors google-sans">
+                                    <h2 className="text-lg font-semibold group-hover:text-primary transition-colors google-sans truncate">
                                         {tool.name}
                                     </h2>
-                                    <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                                    <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary shrink-0" />
                                 </div>
-                                <p className="mt-2 text-sm text-muted-foreground leading-relaxed local-inter">
+                                <p className="mt-1 text-xs text-muted-foreground leading-relaxed local-inter line-clamp-2">
                                     {tool.description}
                                 </p>
                             </div>
@@ -344,50 +429,37 @@ function ToolSection({ title, tools }: { title: string, tools: Tool[] }) {
 export default function ToolsPage() {
     return (
         <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
-            <div className="mx-auto max-w-4xl">
-                <div className="mb-12 text-center lg:text-left">
-                    <h1 className="mb-4 text-4xl font-bold mozilla-headline">Engineering Workspace</h1>
-                    <p className="text-lg text-muted-foreground leading-relaxed">
+            <div className="mx-auto max-w-5xl">
+                <div className="mb-12 text-center">
+                    <h1 className="mb-4 text-4xl font-bold mozilla-headline tracking-tight">Engineering Workspace</h1>
+                    <p className="mx-auto max-w-2xl text-lg text-muted-foreground leading-relaxed">
                         {description}
                     </p>
                 </div>
 
-                <ToolSection title="Electronics Engineering" tools={electronicsTools} />
-                <ToolSection title="Mechanical Engineering" tools={mechanicalTools} />
-                <ToolSection title="Mechatronics & Robotics" tools={mechatronicsTools} />
-                <ToolSection title="Discovery & Research" tools={discoveryTools} />
-                <ToolSection title="Core Utilities" tools={coreTools} />
+                {/* Quick Navigation */}
+                <div className="sticky top-20 z-10 mb-12 flex flex-wrap justify-center gap-2 p-2 rounded-2xl bg-background/50 backdrop-blur-xl border border-border/50 shadow-sm">
+                    {sections.map(s => (
+                        <a
+                            key={s.id}
+                            href={`#${s.id}`}
+                            className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-primary/10 hover:text-primary text-muted-foreground"
+                        >
+                            {s.title}
+                        </a>
+                    ))}
+                </div>
 
-                <div className="mt-20">
-                    <div className="mb-8 border-b border-border pb-4">
-                        <h2 className="text-2xl font-bold mozilla-headline">Pipeline & Upcoming Releases</h2>
-                        <p className="mt-2 text-muted-foreground">
-                            Advanced utilities currently under development for the next workspace iteration.
-                        </p>
-                    </div>
+                {sections.map(s => (
+                    <ToolSection key={s.id} title={s.title} id={s.id} tools={s.tools} />
+                ))}
 
-                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                        {upcomingTools.map((tool) => (
-                            <div
-                                key={tool.name}
-                                className="relative overflow-hidden rounded-xl border border-border/50 bg-card/50 p-6 opacity-80 grayscale-[0.5] transition-all hover:grayscale-0 hover:opacity-100"
-                            >
-                                <div className="mb-4 inline-flex rounded-lg bg-muted p-2 text-muted-foreground">
-                                    <tool.icon className="h-5 w-5" />
-                                </div>
-                                <h3 className="mb-2 font-semibold">{tool.name}</h3>
-                                <p className="text-xs text-muted-foreground leading-relaxed">
-                                    {tool.description}
-                                </p>
-                                <div className="mt-4 flex items-center gap-2">
-                                    <span className="inline-flex h-1.5 w-1.5 rounded-full bg-primary/40 animate-pulse" />
-                                    <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground/70">
-                                        In Development
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                <div className="mt-24 rounded-3xl border border-border/50 bg-card/30 p-8 text-center backdrop-blur-sm">
+                    <Rocket className="mx-auto h-10 w-10 text-primary mb-4" />
+                    <h2 className="text-2xl font-bold mozilla-headline mb-2">Expanding the Toolkit</h2>
+                    <p className="mx-auto max-w-md text-muted-foreground text-sm">
+                        New professional utilities are being added regularly. Have a specific engineering need? Reach out via the feedback portal.
+                    </p>
                 </div>
             </div>
             <AIContentIndicator />
