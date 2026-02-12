@@ -1,0 +1,149 @@
+name: Generate Changelog
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  generate-changelog:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to commit changes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: Generate changelog JSON
+        run: |
+          # Create data directory if it doesn't exist
+          mkdir -p public/data
+
+          # Initialize JSON array
+          echo '[' > public/data/changelog.json
+
+          # Get commits and format as JSON
+          git log --pretty=format:'{"sha":"%H","date":"%ai","author":"%an","message":"%s","body":"%b"},' --reverse | sed '$ s/,$//' >> public/data/changelog.json
+
+          # Close JSON array
+          echo ']' >> public/data/changelog.json
+
+          # Process and transform the data using Node.js
+          cat > process-changelog.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          // Read the raw commit data
+          const rawData = fs.readFileSync('public/data/changelog.json', 'utf8');
+          const commits = JSON.parse(rawData);
+
+          // Group commits by date and create changelog entries
+          const changelogEntries = [];
+          let versionCounter = 0.1;
+
+          // Reverse to get newest first
+          const sortedCommits = commits.reverse();
+
+          // Group commits by day
+          const groupedByDay = {};
+          sortedCommits.forEach(commit => {
+            const date = new Date(commit.date);
+            const dateKey = date.toISOString().split('T')[0];
+            
+            if (!groupedByDay[dateKey]) {
+              groupedByDay[dateKey] = [];
+            }
+            groupedByDay[dateKey].push(commit);
+          });
+
+          // Create changelog entries for each day
+          Object.keys(groupedByDay).forEach(dateKey => {
+            const commits = groupedByDay[dateKey];
+            const date = new Date(dateKey);
+            const formattedDate = date.toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: '2-digit' 
+            });
+
+            // Determine entry type from commit messages
+            let type = 'improvement';
+            const messages = commits.map(c => c.message.toLowerCase()).join(' ');
+            
+            if (messages.includes('feat:') || messages.includes('feature:')) {
+              type = 'feature';
+            } else if (messages.includes('fix:')) {
+              type = 'fix';
+            } else if (messages.includes('initial') || messages.includes('init')) {
+              type = 'start';
+            }
+
+            // Create title from first commit message
+            let title = commits[0].message;
+            // Remove conventional commit prefix if present
+            title = title.replace(/^(feat|fix|docs|style|refactor|test|chore)(\(.+?\))?:\s*/i, '');
+            // Capitalize first letter
+            title = title.charAt(0).toUpperCase() + title.slice(1);
+
+            // Collect all changes
+            const changes = commits.map(commit => {
+              let msg = commit.message;
+              // Remove conventional commit prefix
+              msg = msg.replace(/^(feat|fix|docs|style|refactor|test|chore)(\(.+?\))?:\s*/i, '');
+              // Capitalize first letter
+              msg = msg.charAt(0).toUpperCase() + msg.slice(1);
+              
+              // Add body if present
+              if (commit.body && commit.body.trim()) {
+                const bodyLines = commit.body.trim().split('\n').filter(line => line.trim());
+                if (bodyLines.length > 0) {
+                  return msg + ': ' + bodyLines.join('; ');
+                }
+              }
+              
+              return msg;
+            });
+
+            versionCounter += 0.1;
+            const version = versionCounter.toFixed(1);
+
+            changelogEntries.push({
+              version,
+              date: formattedDate,
+              title,
+              description: '',
+              changes,
+              type,
+              automated: true
+            });
+          });
+
+          // Write the processed changelog
+          fs.writeFileSync(
+            'public/data/changelog.json',
+            JSON.stringify(changelogEntries, null, 2)
+          );
+
+          console.log(`Generated ${changelogEntries.length} changelog entries`);
+          EOF
+
+          node process-changelog.js
+          rm process-changelog.js
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add public/data/changelog.json
+
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update changelog [skip ci]"
+            git push
+          fi

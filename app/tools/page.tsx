@@ -432,7 +432,7 @@ export default function ToolsPage() {
             <div className="mx-auto max-w-5xl">
                 <div className="mb-12 text-center">
                     <h1 className="mb-4 text-4xl font-bold mozilla-headline tracking-tight">Engineering Workspace</h1>
-                    <p className="mx-auto max-w-2xl text-lg text-muted-foreground leading-relaxed">
+                    <p className="mx-auto max-w-2xl text-lg text-muted-foreground leading-relaxed roboto">
                         {description}
                     </p>
                 </div>
@@ -443,7 +443,7 @@ export default function ToolsPage() {
                         <a
                             key={s.id}
                             href={`#${s.id}`}
-                            className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-primary/10 hover:text-primary text-muted-foreground"
+                            className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-primary/10 hover:text-primary text-muted-foreground local-jetbrains-mono"
                         >
                             {s.title}
                         </a>

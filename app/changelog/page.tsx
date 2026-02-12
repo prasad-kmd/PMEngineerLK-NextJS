@@ -1,6 +1,9 @@
 import React from "react";
 import type { Metadata } from "next";
-import { History, GitCommit, Tag, ArrowRight } from "lucide-react";
+import { GitCommit, Tag, ArrowRight } from "lucide-react";
+import { promises as fs } from "fs";
+import path from "path";
+import type { ChangelogEntry } from "@/types/changelog";
 
 const title = "Changelog";
 const description = "A timeline of updates and improvements to this website.";
@@ -15,7 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
-const updates = [
+// Fallback manual entries (will be merged with automated ones)
+const manualUpdates: ChangelogEntry[] = [
   {
     version: "0.1.6",
     date: "October 07, 2025",
@@ -92,7 +96,40 @@ const updates = [
   },
 ];
 
-export default function ChangelogPage() {
+async function getChangelogData(): Promise<ChangelogEntry[]> {
+  try {
+    const filePath = path.join(
+      process.cwd(),
+      "public",
+      "data",
+      "changelog.json",
+    );
+    const fileContents = await fs.readFile(filePath, "utf8");
+    const automatedEntries: ChangelogEntry[] = JSON.parse(fileContents);
+
+    // Merge automated and manual entries, remove duplicates by version
+    const allEntries = [...automatedEntries, ...manualUpdates];
+    const uniqueEntries = allEntries.filter(
+      (entry, index, self) =>
+        index === self.findIndex((e) => e.version === entry.version),
+    );
+
+    // Sort by date (newest first)
+    return uniqueEntries.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateB.getTime() - dateA.getTime();
+    });
+  } catch (error) {
+    console.error("Error reading changelog:", error);
+    // Fallback to manual entries if JSON file doesn't exist
+    return manualUpdates;
+  }
+}
+
+export default async function ChangelogPage() {
+  const updates = await getChangelogData();
+
   return (
     <div className="min-h-screen pb-20 px-6 lg:px-8 pt-12">
       <div className="mx-auto max-w-4xl">
@@ -138,9 +175,11 @@ export default function ChangelogPage() {
               >
                 <div className="pl-12 lg:pl-0">
                   <div className="rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow group-hover:shadow-md">
-                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed googleSans">
-                      {update.description}
-                    </p>
+                    {update.description && (
+                      <p className="text-sm text-muted-foreground mb-4 leading-relaxed googleSans">
+                        {update.description}
+                      </p>
+                    )}
                     <ul className="space-y-2">
                       {update.changes.map((change, i) => (
                         <li

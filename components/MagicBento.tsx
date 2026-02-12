@@ -722,7 +722,7 @@ const MagicBento: React.FC<BentoProps> = ({
                 </div>
                 <div className="card__content flex flex-col relative flex-grow">
                   <h3
-                    className={`card__title text-xl font-semibold mb-1 text-foreground ${textAutoHide ? "text-clamp-1" : ""
+                    className={`card__title text-xl font-semibold mb-1 text-foreground font-google-sans ${textAutoHide ? "text-clamp-1" : ""
                       }`}
                   >
                     {card.title}
@@ -730,7 +730,7 @@ const MagicBento: React.FC<BentoProps> = ({
                   
                   {card.subtitle && (
                     <p
-                      className={`card__subtitle text-xs font-medium text-primary mb-3 uppercase tracking-wider ${textAutoHide ? "text-clamp-1" : ""
+                      className={`card__subtitle text-xs font-medium text-primary mb-3 local-inter uppercase tracking-wider ${textAutoHide ? "text-clamp-1" : ""
                         }`}
                     >
                       {card.subtitle}
@@ -739,14 +739,14 @@ const MagicBento: React.FC<BentoProps> = ({
                   
                   {card.latest && (
                     <div className="mt-2 rounded-lg bg-muted/40 p-3 border border-border/50 backdrop-blur-sm">
-                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1 block">Latest</span>
-                      <h4 className="text-sm font-semibold text-foreground line-clamp-1">{card.latest.title}</h4>
-                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{card.latest.description}</p>
+                      <span className="text-[10px] font-bold text-muted-foreground local-inter uppercase tracking-widest mb-1 block">Latest</span>
+                      <h4 className="text-sm font-semibold text-foreground line-clamp-1 font-google-sans">{card.latest.title}</h4>
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1 font-roboto">{card.latest.description}</p>
                     </div>
                   )}
                   
                   {card.description && (
-                    <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2 mt-auto">
+                    <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2 mt-auto font-roboto">
                       {card.description}
                     </p>
                   )}

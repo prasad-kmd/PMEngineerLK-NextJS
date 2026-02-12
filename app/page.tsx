@@ -78,7 +78,7 @@ export default function HomePage() {
       <section className="px-6 py-20 lg:px-8">
         <div className="mx-auto max-w-6xl text-center">
           <h2 className="mb-4 text-3xl font-bold philosopher lg:text-4xl">Project Documentation</h2>
-          <p className="mx-auto mb-12 max-w-2xl text-muted-foreground">
+          <p className="mx-auto mb-12 max-w-2xl text-muted-foreground local-inter">
             Comprehensive resources documenting our methodology, findings, and technical progress.
           </p>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -96,8 +96,8 @@ export default function HomePage() {
                 <div className="mb-6 inline-flex rounded-xl bg-primary/10 p-4 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
                   <item.icon className="h-7 w-7" />
                 </div>
-                <h3 className="mb-3 text-xl font-bold">{item.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <h3 className="mb-3 text-xl font-bold font-google-sans">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed local-inter">
                   {item.desc}
                 </p>
               </Link>
@@ -112,11 +112,11 @@ export default function HomePage() {
           <div className="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row md:items-end">
             <div className="text-center md:text-left">
               <h2 className="text-3xl font-bold philosopher lg:text-4xl">Engineering Workspace</h2>
-              <p className="mt-2 text-muted-foreground">Professional utilities for technical documentation and advanced calculations.</p>
+              <p className="mt-2 text-muted-foreground local-inter">Professional utilities for technical documentation and advanced calculations.</p>
             </div>
             <Link 
               href="/tools" 
-              className="group inline-flex items-center gap-2 font-semibold text-primary"
+              className="group inline-flex items-center gap-2 font-semibold text-primary font-google-sans"
             >
               All Workspace Tools
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -138,8 +138,8 @@ export default function HomePage() {
                 <div className={`mb-4 inline-flex rounded-xl ${tool.bg} p-3 ${tool.color}`}>
                   <tool.icon className="h-6 w-6" />
                 </div>
-                <h3 className="mb-2 text-lg font-bold group-hover:text-primary transition-colors">{tool.name}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{tool.desc}</p>
+                <h3 className="mb-2 text-lg font-bold group-hover:text-primary transition-colors font-google-sans">{tool.name}</h3>
+                <p className="text-sm text-muted-foreground mb-4 local-inter">{tool.desc}</p>
                 <div className="flex items-center gap-1 text-xs font-bold text-primary opacity-0 transition-opacity group-hover:opacity-100">
                   Open Tool <ArrowRight className="h-3 w-3" />
                 </div>
@@ -154,7 +154,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold philosopher lg:text-4xl">Project Explorer</h2>
-            <p className="mx-auto max-w-2xl text-muted-foreground">
+            <p className="mx-auto max-w-2xl text-muted-foreground local-inter">
               Navigate through our research, articles, and technical documentation using our interactive explorer.
             </p>
           </div>
@@ -176,11 +176,11 @@ export default function HomePage() {
           <div className="flex flex-col items-center justify-between gap-4 mb-12 md:flex-row md:items-end">
             <div className="text-center md:text-left">
               <h2 className="text-3xl font-bold philosopher lg:text-4xl">Latest Updates</h2>
-              <p className="mt-2 text-muted-foreground">Stay informed with our most recent findings and project logs.</p>
+              <p className="mt-2 text-muted-foreground local-inter">Stay informed with our most recent findings and project logs.</p>
             </div>
             <Link 
               href="/blog" 
-              className="group inline-flex items-center gap-2 font-semibold text-primary"
+              className="group inline-flex items-center gap-2 font-semibold text-primary font-google-sans"
             >
               View all updates
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -216,11 +216,11 @@ export default function HomePage() {
                     <Calendar className="h-3 w-3" />
                     {update.item.date || "Recent"}
                   </div>
-                  <h3 className="mb-2 text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors">{update.item.title}</h3>
-                  <p className="text-sm text-muted-foreground line-clamp-3 mb-6 flex-1">
+                  <h3 className="mb-2 text-xl font-bold line-clamp-2 group-hover:text-primary transition-colors font-google-sans">{update.item.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-3 mb-6 flex-1 local-inter">
                     {update.item.description}
                   </p>
-                  <div className="flex items-center gap-2 text-sm font-bold text-primary">
+                  <div className="flex items-center gap-2 text-sm font-bold text-primary font-roboto">
                     Read More
                     <ArrowRight className="h-4 w-4" />
                   </div>
@@ -235,7 +235,7 @@ export default function HomePage() {
       <section className="border-t border-border bg-muted/5 px-6 py-20 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="mb-6 text-3xl font-bold philosopher lg:text-4xl">Our Mission</h2>
-          <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
+          <div className="space-y-6 text-lg text-muted-foreground leading-relaxed font-google-sans">
             <p>
               This webapp serves as a comprehensive documentation platform for our mechanical and mechatronics
               engineering undergraduate group project. Our mission is to identify significant challenges in Sri Lanka
@@ -250,7 +250,7 @@ export default function HomePage() {
           <div className="mt-10">
             <Link
               href="/about"
-              className="inline-flex items-center gap-2 rounded-full border border-primary px-8 py-3 font-semibold text-primary transition-all hover:bg-primary hover:text-primary-foreground"
+              className="inline-flex items-center gap-2 rounded-full border border-primary px-8 py-3 font-semibold text-primary transition-all hover:bg-primary hover:text-primary-foreground font-local-inter"
             >
               Learn more about us
             </Link>

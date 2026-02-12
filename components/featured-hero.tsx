@@ -123,7 +123,7 @@ export default function FeaturedHero({ items }: FeaturedHeroProps) {
         <div className="max-w-3xl text-white">
           <div 
             key={`label-${currentIndex}`}
-            className="mb-4 inline-block rounded-full bg-primary/20 px-4 py-1 text-xs font-bold text-primary backdrop-blur-md border border-primary/30 animate-in fade-in slide-in-from-left-4 duration-700"
+            className="mb-4 inline-block rounded-full bg-primary/20 px-4 py-1 text-xs font-bold text-primary backdrop-blur-md border border-primary/30 animate-in fade-in slide-in-from-left-4 duration-700 local-jetbrains-mono"
           >
             {items[currentIndex].label}
           </div>
@@ -135,7 +135,7 @@ export default function FeaturedHero({ items }: FeaturedHeroProps) {
           </h1>
           <p 
             key={`desc-${currentIndex}`}
-            className="mb-8 max-w-xl text-lg text-gray-200 line-clamp-3 lg:line-clamp-none animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100"
+            className="mb-8 max-w-xl text-lg text-gray-200 line-clamp-3 lg:line-clamp-none animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100 google-sans"
           >
             {items[currentIndex].description}
           </p>
@@ -145,7 +145,7 @@ export default function FeaturedHero({ items }: FeaturedHeroProps) {
           >
             <Link
               href={items[currentIndex].link}
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-4 font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105 shadow-[0_0_20px_rgba(var(--primary),0.3)]"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-4 font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105 shadow-[0_0_20px_rgba(var(--primary),0.3)] noto-sans-display"
             >
               Learn More
               <ArrowRight className="h-5 w-5" />
@@ -185,12 +185,12 @@ export default function FeaturedHero({ items }: FeaturedHeroProps) {
               )}
             >
               <span className={cn(
-                "text-[9px] font-bold uppercase tracking-wider mb-0.5 transition-colors",
+                "text-[9px] font-bold uppercase tracking-wider mb-0.5 transition-colors space-mono",
                 index === currentIndex ? "text-primary" : "text-gray-400 group-hover/item:text-gray-200"
               )}>
                 {item.label}
               </span>
-              <span className="text-xs font-bold text-white line-clamp-1">
+              <span className="text-xs font-bold text-white line-clamp-1 local-inter">
                 {item.title}
               </span>
               
