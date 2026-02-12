@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
-import { Search as SearchIcon, X, Calendar, ArrowRight, Loader2, Home, User, Briefcase, FileText, Settings, Scaling, Calculator, Image as ImageIcon } from "lucide-react"
+import { Search as SearchIcon, X, Calendar, ArrowRight, Loader2, Home, User, Briefcase, FileText, Settings, Scaling, Calculator, Image as ImageIcon, BookOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import {
@@ -101,6 +101,7 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
         { name: "Portfolio", href: "/portfolio", icon: Briefcase },
         { name: "Blog", href: "/blog", icon: FileText },
         { name: "Engineering Tools", href: "/tools", icon: Settings },
+        { name: "Wiki", href: "/wiki", icon: BookOpen },
         { name: "Snippets", href: "/snippets", icon: FileText },
         { name: "Roadmap", href: "/roadmap", icon: Settings },
         { name: "What's Now", href: "/now", icon: User },
@@ -297,7 +298,7 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
                                     <div className="px-3">
                                         <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground/70">Categories</h3>
                                         <div className="mt-2 flex flex-wrap gap-2">
-                                            {["blog", "articles", "projects", "tutorials"].map((tag) => (
+                                            {["blog", "articles", "projects", "tutorials", "wiki"].map((tag) => (
                                                 <button
                                                     key={tag}
                                                     onClick={() => setQuery(tag)}

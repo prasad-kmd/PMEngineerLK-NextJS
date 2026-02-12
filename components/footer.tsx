@@ -60,6 +60,7 @@ export function Footer() {
                 { name: "Blog", href: "/blog" },
                 { name: "Projects", href: "/projects" },
                 { name: "Tools", href: "/tools" },
+                { name: "Wiki", href: "/wiki" },
                 { name: "Tutorials", href: "/tutorials" },
               ].map((link) => (
                 <li key={link.name}>
@@ -88,7 +89,8 @@ export function Footer() {
                 { name: "Roadmap", href: "/roadmap" },
                 { name: "Changelog", href: "/changelog" },
                 { name: "Snippets", href: "/snippets" },
-                { name: "Visual Gallery", href: "/gallery" },
+                { name: "Open Source", href: "/open-source" },
+                { name: "Resources", href: "/resources" },
                 { name: "Site Directory", href: "/pages" },
               ].map((link) => (
                 <li key={link.name}>
@@ -114,6 +116,8 @@ export function Footer() {
                 { name: "Privacy Policy", href: "/privacy-policy" },
                 { name: "Terms of Service", href: "/terms-and-conditions" },
                 { name: "Disclaimer", href: "/disclaimer" },
+                { name: "Accessibility", href: "/accessibility" },
+                { name: "Security", href: "/security" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link 
@@ -140,10 +144,10 @@ export function Footer() {
             </p>
           </div>
           
-          <div className="flex items-center gap-4 px-4 py-2 rounded-full bg-muted/30 border border-border/50 backdrop-blur-sm">
+          <Link href="/status" className="flex items-center gap-4 px-4 py-2 rounded-full bg-muted/30 border border-border/50 backdrop-blur-sm hover:bg-muted/50 transition-colors">
             <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
             <span className="text-[10px] font-medium google-sans uppercase tracking-tighter text-muted-foreground">Systems Operational</span>
-          </div>
+          </Link>
         </div>
       </div>
     </footer>

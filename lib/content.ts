@@ -32,7 +32,7 @@ export interface ContentItem {
   readingTime?: number
   technical?: string
   tags?: string[]
-  type?: "blog" | "articles" | "projects" | "tutorials"
+  type?: "blog" | "articles" | "projects" | "tutorials" | "wiki"
 }
 
 function calculateReadingTime(content: string): number {
@@ -63,7 +63,7 @@ function extractFirstImage(content: string, isMarkdown: boolean): string | undef
 
 const contentDirectory = path.join(process.cwd(), "content")
 
-export function getContentByType(type: "blog" | "articles" | "projects" | "tutorials"): ContentItem[] {
+export function getContentByType(type: "blog" | "articles" | "projects" | "tutorials" | "wiki"): ContentItem[] {
   const typeDirectory = path.join(contentDirectory, type)
 
   // Create directory if it doesn't exist
@@ -130,7 +130,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
   return items
 }
 
-export function getContentItem(type: "blog" | "articles" | "projects" | "tutorials", slug: string): ContentItem | null {
+export function getContentItem(type: "blog" | "articles" | "projects" | "tutorials" | "wiki", slug: string): ContentItem | null {
   const typeDirectory = path.join(contentDirectory, type)
 
   // Try .md first, then .html

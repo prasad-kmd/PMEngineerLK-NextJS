@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   FileText, BookOpen, GitBranch, Newspaper, Home, Menu, X, Mail,
-  ChevronLeft, ChevronRight, PanelLeft, Wrench, UserRound, Info
+  ChevronLeft, ChevronRight, PanelLeft, Wrench, UserRound, Info, Book
 } from "lucide-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
@@ -24,6 +24,7 @@ const primaryNav = [
   { name: "Blog", href: "/blog", icon: FileText },
   { name: "Articles", href: "/articles", icon: BookOpen },
   { name: "Projects", href: "/projects", icon: GitBranch },
+  { name: "Wiki", href: "/wiki", icon: Book },
   { name: "Tutorials", href: "/tutorials", icon: Newspaper },
   { name: "Tools", href: "/tools", icon: Wrench },
 ]

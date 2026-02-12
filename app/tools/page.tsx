@@ -4,7 +4,7 @@ import {
     Edit3, Calculator, Replace, Code2, Sigma, ArrowRight, Scaling, Braces,
     Terminal, FileCode, Split, Users, Zap, Cpu, Timer, Lightbulb, Activity,
     Settings, Waypoints, Settings2, Wrench, MoveUpRight, Battery, LineChart, Ruler,
-    Database, Rocket, Gamepad2, Rss, FlaskConical, Library, Search, Grid3X3, Compass, Palette
+    Database, Rocket, Gamepad2, Rss, FlaskConical,Layout, Library, Search, Grid3X3, Compass, Palette
 } from "lucide-react"
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
@@ -315,6 +315,14 @@ const coreTools = [
         icon: Sigma,
         color: "text-pink-500",
         bgColor: "bg-pink-500/10",
+    },
+    {
+        name: "Resume Architect",
+        slug: "resume-creator",
+        description: "Craft a high-impact, professional resume with real-time preview and precision PDF export.",
+        icon: Layout,
+        color: "text-blue-500",
+        bgColor: "bg-blue-500/10",
     },
     {
         name: "User Persona Architect",

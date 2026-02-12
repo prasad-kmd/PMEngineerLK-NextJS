@@ -4,7 +4,7 @@ import { getContentByType } from "@/lib/content"
 import Image from "next/image"
 
 interface RelatedContentProps {
-  type: "blog" | "articles" | "projects" | "tutorials"
+  type: "blog" | "articles" | "projects" | "tutorials" | "wiki"
   currentSlug: string
 }
 
@@ -23,6 +23,7 @@ export function RelatedContent({ type, currentSlug }: RelatedContentProps) {
     articles: "Related Articles",
     projects: "Other Projects",
     tutorials: "More Tutorials",
+    wiki: "More Wiki Entries",
   }
 
   return (

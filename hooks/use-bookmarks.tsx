@@ -7,7 +7,7 @@ export interface BookmarkedItem {
     slug: string
     title: string
     date?: string
-    type: "blog" | "articles" | "projects" | "tutorials"
+    type: "blog" | "articles" | "projects" | "tutorials" | "wiki"
 }
 
 interface BookmarksContextType {

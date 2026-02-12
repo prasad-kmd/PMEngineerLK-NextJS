@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { getContentByType } from "@/lib/content"
 
 export async function GET() {
-  const types = ["blog", "articles", "projects", "tutorials"] as const
+  const types = ["blog", "articles", "projects", "tutorials", "wiki"] as const
   const allContent = types.flatMap((type) => {
     const items = getContentByType(type)
     return items.map((item) => ({
