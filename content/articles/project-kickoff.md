@@ -3,9 +3,9 @@ title: "Project Kickoff Meeting"
 date: "2025-01-10"
 description: "Initial team meeting to discuss project scope, objectives, and timeline."
 ---
-<p><img
+<!-- <p><img
         src="/api/og?title=Project%20Kickoff%20Meeting&description=Initial%20team%20meeting%20to%20discuss%20project%20scope,%20objectives,%20and%20timeline.&type=diary"/>
-</p>
+</p> -->
 
 ## Meeting Overview
 

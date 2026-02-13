@@ -3,9 +3,9 @@ title: "Welcome to Our Engineering Project"
 date: "2025-01-08"
 description: "Introduction to our undergraduate group project and what we hope to achieve."
 ---
-<p><img
+<!-- <p><img
         src="/api/og?title=Welcome to Our Engineering Project&description=Introduction to our undergraduate group project and what we hope to achieve.&type=default"/>
-</p>
+</p> -->
 
 ## About Our Team
 

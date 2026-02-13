@@ -6,6 +6,7 @@ import javascript from "highlight.js/lib/languages/javascript"
 import python from "highlight.js/lib/languages/python"
 import cpp from "highlight.js/lib/languages/cpp"
 import bash from "highlight.js/lib/languages/bash"
+import matlab from "highlight.js/lib/languages/matlab"
 import "highlight.js/styles/github-dark.css"
 import "katex/dist/katex.min.css"
 
@@ -14,6 +15,7 @@ hljs.registerLanguage("javascript", javascript)
 hljs.registerLanguage("python", python)
 hljs.registerLanguage("cpp", cpp)
 hljs.registerLanguage("bash", bash)
+hljs.registerLanguage("matlab",matlab)
 
 interface ContentRendererProps {
   content: string
