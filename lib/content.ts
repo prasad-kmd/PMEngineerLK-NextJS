@@ -18,7 +18,7 @@ const quizExtension = {
     return src.match(/\[quiz\]/)?.index
   },
   tokenizer(src: string) {
-    const rule = /^\[quiz\]\s*([\s\S]*?)\s*\[\/quiz\]/
+    const rule = /^\[quiz\]\s*([\s\S]*?)\s*\[\/quiz\](?:\n|$)/
     const match = rule.exec(src)
     if (match) {
       return {
@@ -34,6 +34,7 @@ const quizExtension = {
       const encodedJson = token.json.replace(/'/g, "&apos;")
       return `<div class="interactive-quiz-placeholder" data-quiz='${encodedJson}'></div>`
     } catch (e) {
+      console.error("Quiz JSON parse error:", e, token.json);
       return `<div class="bg-red-500/10 border border-red-500 p-4 rounded-lg text-red-500 my-4">
         <strong>Quiz Error:</strong> Invalid JSON format.
       </div>`
@@ -56,17 +57,29 @@ function injectHeadingIds(html: string): string {
 
 function injectQuiz(html: string): string {
   // This is now a fallback for HTML content that doesn't go through marked
-  return html.replace(/\[quiz\]([\s\S]*?)\[\/quiz\]/g, (match, jsonContent) => {
+  // To avoid rendering quizzes inside code blocks, we temporarily protect them
+  const placeholders: string[] = []
+  const protectedHtml = html.replace(/<(pre|code)[\s\S]*?<\/\1>/gi, (match) => {
+    placeholders.push(match)
+    return `__QUIZ_PROTECTED_BLOCK_${placeholders.length - 1}__`
+  })
+
+  const injectedHtml = protectedHtml.replace(/\[quiz\]([\s\S]*?)\[\/quiz\]/g, (match, jsonContent) => {
     try {
       const cleanJson = jsonContent.trim()
       JSON.parse(cleanJson)
       const encodedJson = cleanJson.replace(/'/g, "&apos;")
       return `<div class="interactive-quiz-placeholder" data-quiz='${encodedJson}'></div>`
     } catch (e) {
+      console.error("Quiz HTML inject parse error:", e, jsonContent);
       return `<div class="bg-red-500/10 border border-red-500 p-4 rounded-lg text-red-500 my-4">
         <strong>Quiz Error:</strong> Invalid JSON format.
       </div>`
     }
+  })
+
+  return injectedHtml.replace(/__QUIZ_PROTECTED_BLOCK_(\d+)__/g, (match, index) => {
+    return placeholders[parseInt(index)]
   })
 }
 
@@ -140,7 +153,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           title: data.title || slug,
           date: data.date,
           description: data.description,
-          content: injectQuiz(injectHeadingIds(htmlContent)),
+          content: injectHeadingIds(htmlContent),
           rawContent: content,
           final: data.final || false,
           firstImage,
@@ -212,7 +225,7 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       title: data.title || slug,
       date: data.date,
       description: data.description,
-      content: injectQuiz(injectHeadingIds(htmlContent)),
+      content: injectHeadingIds(htmlContent),
       rawContent: content,
       final: data.final || false,
       firstImage,
