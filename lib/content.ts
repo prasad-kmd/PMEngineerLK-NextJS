@@ -10,13 +10,63 @@ renderer.heading = ({ text, depth }) => {
   return `<h${depth} id="${id}">${text}</h${depth}>`
 }
 
-marked.use({ renderer })
+// Custom quiz extension for marked
+const quizExtension = {
+  name: "quiz",
+  level: "block" as const,
+  start(src: string) {
+    return src.match(/\[quiz\]/)?.index
+  },
+  tokenizer(src: string) {
+    const rule = /^\[quiz\]\s*([\s\S]*?)\s*\[\/quiz\]/
+    const match = rule.exec(src)
+    if (match) {
+      return {
+        type: "quiz",
+        raw: match[0],
+        json: match[1].trim(),
+      }
+    }
+  },
+  renderer(token: any) {
+    try {
+      JSON.parse(token.json)
+      const encodedJson = token.json.replace(/'/g, "&apos;")
+      return `<div class="interactive-quiz-placeholder" data-quiz='${encodedJson}'></div>`
+    } catch (e) {
+      return `<div class="bg-red-500/10 border border-red-500 p-4 rounded-lg text-red-500 my-4">
+        <strong>Quiz Error:</strong> Invalid JSON format.
+      </div>`
+    }
+  },
+}
+
+marked.use({
+  renderer,
+  extensions: [quizExtension as any]
+})
 
 function injectHeadingIds(html: string): string {
   return html.replace(/<h([2-3])([^>]*)>(.*?)<\/h\1>/gi, (match, level, attrs, text) => {
     if (attrs.toLowerCase().includes('id=')) return match
     const id = text.replace(/<[^>]*>/g, "").toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '')
     return `<h${level}${attrs} id="${id}">${text}</h${level}>`
+  })
+}
+
+function injectQuiz(html: string): string {
+  // This is now a fallback for HTML content that doesn't go through marked
+  return html.replace(/\[quiz\]([\s\S]*?)\[\/quiz\]/g, (match, jsonContent) => {
+    try {
+      const cleanJson = jsonContent.trim()
+      JSON.parse(cleanJson)
+      const encodedJson = cleanJson.replace(/'/g, "&apos;")
+      return `<div class="interactive-quiz-placeholder" data-quiz='${encodedJson}'></div>`
+    } catch (e) {
+      return `<div class="bg-red-500/10 border border-red-500 p-4 rounded-lg text-red-500 my-4">
+        <strong>Quiz Error:</strong> Invalid JSON format.
+      </div>`
+    }
   })
 }
 
@@ -90,7 +140,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           title: data.title || slug,
           date: data.date,
           description: data.description,
-          content: injectHeadingIds(htmlContent),
+          content: injectQuiz(injectHeadingIds(htmlContent)),
           rawContent: content,
           final: data.final || false,
           firstImage,
@@ -109,7 +159,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           title: data.title || slug,
           date: data.date,
           description: data.description,
-          content: injectHeadingIds(content),
+          content: injectQuiz(injectHeadingIds(content)),
           rawContent: content,
           final: data.final || false,
           firstImage,
@@ -162,7 +212,7 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       title: data.title || slug,
       date: data.date,
       description: data.description,
-      content: injectHeadingIds(htmlContent),
+      content: injectQuiz(injectHeadingIds(htmlContent)),
       rawContent: content,
       final: data.final || false,
       firstImage,
@@ -180,7 +230,7 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       title: data.title || slug,
       date: data.date,
       description: data.description,
-      content: injectHeadingIds(content),
+      content: injectQuiz(injectHeadingIds(content)),
       rawContent: content,
       final: data.final || false,
       firstImage,
