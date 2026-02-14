@@ -1,147 +1,155 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import hljs from "highlight.js/lib/core"
-import javascript from "highlight.js/lib/languages/javascript"
-import python from "highlight.js/lib/languages/python"
-import cpp from "highlight.js/lib/languages/cpp"
-import bash from "highlight.js/lib/languages/bash"
-import matlab from "highlight.js/lib/languages/matlab"
-import "highlight.js/styles/github-dark.css"
-import "katex/dist/katex.min.css"
+import { useEffect, useRef } from "react";
+import hljs from "highlight.js/lib/core";
+import javascript from "highlight.js/lib/languages/javascript";
+import python from "highlight.js/lib/languages/python";
+import cpp from "highlight.js/lib/languages/cpp";
+import bash from "highlight.js/lib/languages/bash";
+import matlab from "highlight.js/lib/languages/matlab";
+import "highlight.js/styles/github-dark.css";
+import "katex/dist/katex.min.css";
 
 // Register highlight.js languages
-hljs.registerLanguage("javascript", javascript)
-hljs.registerLanguage("python", python)
-hljs.registerLanguage("cpp", cpp)
-hljs.registerLanguage("bash", bash)
-hljs.registerLanguage("matlab",matlab)
+hljs.registerLanguage("javascript", javascript);
+hljs.registerLanguage("python", python);
+hljs.registerLanguage("cpp", cpp);
+hljs.registerLanguage("bash", bash);
+hljs.registerLanguage("matlab", matlab);
 
 interface ContentRendererProps {
-  content: string
+  content: string;
 }
 
 export function ContentRenderer({ content }: ContentRendererProps) {
-  const contentRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!contentRef.current) return
+    if (!contentRef.current) return;
 
     const addCopyButtons = () => {
-      const preBlocks = contentRef.current?.querySelectorAll("pre")
+      const preBlocks = contentRef.current?.querySelectorAll("pre");
       preBlocks?.forEach((pre) => {
-        if (pre.querySelector(".copy-button")) return
+        if (pre.querySelector(".copy-button")) return;
 
-        pre.style.position = "relative"
-        const button = document.createElement("button")
-        button.className = "copy-button absolute right-2 top-2 p-1.5 rounded-md bg-muted/80 text-muted-foreground hover:text-foreground hover:bg-muted transition-all opacity-0 group-hover:opacity-100"
-        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>'
+        pre.style.position = "relative";
+        const button = document.createElement("button");
+        button.className =
+          "copy-button absolute right-2 top-2 p-1.5 rounded-md bg-muted/80 text-muted-foreground hover:text-foreground hover:bg-muted transition-all lg:opacity-0 group-hover:opacity-100 z-10";
+        button.setAttribute("aria-label", "Copy code");
+        button.innerHTML =
+          '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
 
-        pre.classList.add("group")
+        pre.classList.add("group");
 
-        button.onclick = () => {
-          const code = pre.querySelector("code")?.innerText || ""
-          navigator.clipboard.writeText(code).then(() => {
-            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
-            setTimeout(() => {
-              button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>'
-            }, 2000)
-          })
-        }
+        button.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const code =
+            pre.querySelector("code")?.innerText || pre.innerText || "";
+          navigator.clipboard
+            .writeText(code)
+            .then(() => {
+              button.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+              button.classList.add("text-green-500");
+              setTimeout(() => {
+                button.innerHTML =
+                  '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+                button.classList.remove("text-green-500");
+              }, 2000);
+            })
+            .catch((err) => {
+              console.error("Failed to copy text: ", err);
+            });
+        };
 
-        pre.appendChild(button)
-      })
-    }
+        pre.appendChild(button);
+      });
+    };
 
-    // Initialize Highlight.js for code blocks
-    const codeBlocks = contentRef.current.querySelectorAll("pre code")
-    codeBlocks.forEach((block) => {
-      hljs.highlightElement(block as HTMLElement)
-    })
-
-    addCopyButtons()
-
-    // Process external links
     const processExternalLinks = () => {
-        const links = contentRef.current?.querySelectorAll("a")
-        links?.forEach((link) => {
-            const href = link.getAttribute("href")
-            if (href && (href.startsWith("http") || href.startsWith("//"))) {
-                 try {
-                     const url = new URL(href, window.location.href)
-                     if (url.hostname !== window.location.hostname) {
-                         link.setAttribute("href", `/external-link?url=${encodeURIComponent(href)}`)
-                         link.setAttribute("target", "_blank")
-                         link.setAttribute("rel", "noopener noreferrer")
-                         
-                         // Add distinct styling to external links
-                         link.classList.add("text-blue-600", "dark:text-blue-400", "underline-offset-4", "hover:underline", "inline-flex", "items-center", "gap-0.5")
-                         
-                         // Add external link icon if not present
-                         if (!link.querySelector(".external-link-icon")) {
-                             const icon = document.createElement("span")
-                             icon.className = "external-link-icon"
-                             icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`
-                             link.appendChild(icon)
-                         }
-                     }
-                 } catch (e) {
-                     // Ignore invalid URLs
-                 }
+      const links = contentRef.current?.querySelectorAll("a");
+      links?.forEach((link) => {
+        const href = link.getAttribute("href");
+        if (href && (href.startsWith("http") || href.startsWith("//"))) {
+          try {
+            const url = new URL(href, window.location.href);
+            if (url.hostname !== window.location.hostname) {
+              link.setAttribute(
+                "href",
+                `/external-link?url=${encodeURIComponent(href)}`,
+              );
+              link.setAttribute("target", "_blank");
+              link.setAttribute("rel", "noopener noreferrer");
+
+              link.classList.add(
+                "text-blue-600",
+                "dark:text-blue-400",
+                "underline-offset-4",
+                "hover:underline",
+                "inline-flex",
+                "items-center",
+                "gap-0.5",
+              );
+
+              if (!link.querySelector(".external-link-icon")) {
+                const icon = document.createElement("span");
+                icon.className = "external-link-icon";
+                icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
+                link.appendChild(icon);
+              }
             }
-        })
-    }
-
-    processExternalLinks()
-
-    // Initialize KaTeX for math expressions
-    const renderMath = async () => {
-      const katex = (await import("katex")).default
-
-      // Render display math ($$...$$)
-      const displayMathRegex = /\$\$([\s\S]+?)\$\$/g
-      const inlineMathRegex = /\$([^$]+?)\$/g
-
-      let html = contentRef.current!.innerHTML
-
-      // Replace display math
-      html = html.replace(displayMathRegex, (match, math) => {
-        try {
-          return katex.renderToString(math, {
-            displayMode: true,
-            throwOnError: false,
-          })
-        } catch (e) {
-          console.error("KaTeX error:", e)
-          return match
+          } catch (e) {
+            // Ignore invalid URLs
+          }
         }
-      })
+      });
+    };
 
-      // Replace inline math
-      html = html.replace(inlineMathRegex, (match, math) => {
-        try {
-          return katex.renderToString(math, {
-            displayMode: false,
-            throwOnError: false,
-          })
-        } catch (e) {
-          console.error("KaTeX error:", e)
-          return match
-        }
-      })
+    const renderContent = async () => {
+      if (!contentRef.current) return;
 
-      contentRef.current!.innerHTML = html
+      // 1. Render Math using auto-render (safer and skips code blocks)
+      try {
+        // @ts-ignore - auto-render might not have types in some environments
+        const renderMathInElement = (
+          await import("katex/contrib/auto-render")
+        ).default;
+        renderMathInElement(contentRef.current, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false },
+          ],
+          ignoredTags: [
+            "script",
+            "noscript",
+            "style",
+            "textarea",
+            "pre",
+            "code",
+          ],
+          throwOnError: false,
+        });
+      } catch (e) {
+        console.error("KaTeX auto-render error:", e);
+      }
 
-      // Re-highlight code blocks after KaTeX rendering
-      const newCodeBlocks = contentRef.current!.querySelectorAll("pre code")
-      newCodeBlocks.forEach((block) => {
-        hljs.highlightElement(block as HTMLElement)
-      })
-      addCopyButtons()
-    }
+      // 2. Syntax Highlighting
+      const codeBlocks = contentRef.current.querySelectorAll("pre code");
+      codeBlocks.forEach((block) => {
+        hljs.highlightElement(block as HTMLElement);
+      });
 
-    renderMath()
-  }, [content])
+      // 3. Add copy buttons
+      addCopyButtons();
+
+      // 4. Process links
+      processExternalLinks();
+    };
+
+    renderContent();
+  }, [content]);
 
   return (
     <div
@@ -166,5 +174,5 @@ export function ContentRenderer({ content }: ContentRendererProps) {
         prose-li:text-muted-foreground prose-li:my-1"
       dangerouslySetInnerHTML={{ __html: content }}
     />
-  )
+  );
 }
