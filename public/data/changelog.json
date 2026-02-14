@@ -1,10 +1,35 @@
 [
   {
     "version": "0.2",
-    "date": "February 12, 2026",
-    "title": "Fix GitHub Actions workflow for automatic changelog generation.",
+    "date": "February 14, 2026",
+    "title": "Modified the comprehensive content structure with dedicated pages, dynamic routing, and components for articles, projects, blog, wiki, tutorials, tools, and portfolio.",
     "description": "",
     "changes": [
+      "Modified the comprehensive content structure with dedicated pages, dynamic routing, and components for articles, projects, blog, wiki, tutorials, tools, and portfolio."
+    ],
+    "type": "feature",
+    "automated": true
+  },
+  {
+    "version": "0.3",
+    "date": "February 13, 2026",
+    "title": "Modify initial technical content, error and sponsorship pages, and content renderer.",
+    "description": "",
+    "changes": [
+      "Modify initial technical content, error and sponsorship pages, and content renderer."
+    ],
+    "type": "feature",
+    "automated": true
+  },
+  {
+    "version": "0.4",
+    "date": "February 12, 2026",
+    "title": "Implement dedicated Open Source and Contact pages, including GitHub API integration and a contact form.",
+    "description": "",
+    "changes": [
+      "Implement dedicated Open Source and Contact pages, including GitHub API integration and a contact form.",
+      "Add new application pages, an engineering workspace with various tools, content sections, and supporting components.",
+      "Update changelog [skip ci]",
       "Fix GitHub Actions workflow for automatic changelog generation.",
       "Implement a new changelog system with automated generation, introduce a tools page, and enhance the homepage with new UI components.",
       "Merge pull request #4 from prasad-kmd/feature-engineering-workspace-expansion-6380012719988652230 - This substantial update expands the Engineering Workspace with professional-grade utilities. ",
@@ -15,7 +40,7 @@
     "automated": true
   },
   {
-    "version": "0.3",
+    "version": "0.5",
     "date": "February 10, 2026",
     "title": "Customized dynamic Open Graph image generation, modified About and Changelog pages, and PWA configuration with updated favicons.",
     "description": "",
@@ -26,7 +51,7 @@
     "automated": true
   },
   {
-    "version": "0.4",
+    "version": "0.6",
     "date": "February 09, 2026",
     "title": "Introduce custom cursor, click spark, context menu, and featured hero components.",
     "description": "",
@@ -40,7 +65,7 @@
     "automated": true
   },
   {
-    "version": "0.5",
+    "version": "0.7",
     "date": "February 08, 2026",
     "title": "Merge pull request #3 from prasad-kmd/vercel/react-server-components-cve-vu-9bp2vo",
     "description": "",
@@ -56,7 +81,7 @@
     "automated": true
   },
   {
-    "version": "0.6",
+    "version": "0.8",
     "date": "February 07, 2026",
     "title": "Add a collapsible Table of Contents component and a new \"Now\" page detailing current activities.",
     "description": "",
@@ -73,7 +98,7 @@
     "automated": true
   },
   {
-    "version": "0.7",
+    "version": "0.9",
     "date": "February 06, 2026",
     "title": "Introduce interactive MagicBento component and new pages for gallery, team, about, and a roadmap component.",
     "description": "",
@@ -90,7 +115,7 @@
     "automated": true
   },
   {
-    "version": "0.8",
+    "version": "1.0",
     "date": "February 05, 2026",
     "title": "Add new 'Tools' section including scientific calculator, LaTeX editor, HTML encoder, and markdown editor.",
     "description": "",
@@ -106,7 +131,7 @@
     "automated": true
   },
   {
-    "version": "0.9",
+    "version": "1.1",
     "date": "February 04, 2026",
     "title": "Merge pull request #1 from prasad-kmd/imgbot",
     "description": "",
@@ -123,7 +148,7 @@
     "automated": true
   },
   {
-    "version": "1.0",
+    "version": "1.2",
     "date": "January 04, 2026",
     "title": "Cloned from [prasad-kmd/DMX4102-webapp-NEXTJS](https://github.com/prasad-kmd/DMX4102-webapp-NEXTJS) from main and added local fonts to `public/fonts`",
     "description": "",
