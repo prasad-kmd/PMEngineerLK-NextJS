@@ -30,7 +30,8 @@ import {
   Palette,
   Search,
   Hash,
-  Heart
+  Heart,
+  Trophy
 } from "lucide-react"
 
 const title = "Site Directory"
@@ -61,6 +62,7 @@ const categories = [
     description: "Specialized tools and technical knowledge bases.",
     pages: [
       { name: "Engineering Tools", href: "/tools", icon: Wrench, color: "text-yellow-500", bgColor: "bg-yellow-500/10", description: "Precision utilities for technical workflows." },
+      { name: "Quiz Library", href: "/quiz", icon: Trophy, color: "text-amber-500", bgColor: "bg-amber-500/10", description: "Interactive engineering knowledge assessments." },
       { name: "Engineering Wiki", href: "/wiki", icon: Book, color: "text-blue-500", bgColor: "bg-blue-500/10", description: "Searchable collection of engineering concepts." },
       { name: "Engineering Researches", href: "/researches", icon: FlaskConical, color: "text-teal-500", bgColor: "bg-teal-500/10", description: "Search scholarly articles on arXiv." },
       { name: "Open Books", href: "/open-books", icon: Library, color: "text-blue-500", bgColor: "bg-blue-500/10", description: "Digital resources from Open Library." },

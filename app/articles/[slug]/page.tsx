@@ -83,7 +83,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               )}
             </header>
 
-            <ContentRenderer content={entry.content} />
+            <ContentRenderer content={entry.content} id={entry.slug} />
           </article>
           
           <TOC content={entry.content} />

@@ -14,6 +14,7 @@ This platform serves as a comprehensive blogfolio for documenting projects, iden
   - **Articles** (`/articles/`) - Progress logs and reflections
   - **Projects** (`/projects/`) - Methodologies and processes
   - **Tutorials** (`/tutorials/`) - General updates and announcements
+  - **Quizzes** (`/quiz/`) - Interactive engineering knowledge assessments
 - **Dynamic Routing**: Files automatically become accessible at `/{type}/{filename}`
 - **Frontmatter Support**: YAML frontmatter for metadata (title, date, description)
 
@@ -155,6 +156,35 @@ description: "Brief description"
 <h2>Your Content</h2>
 <p>Write your content using HTML.</p>
 ```
+
+### Interactive Quizzes
+
+The site features an interactive quiz system that can be embedded in any content or listed in the Quiz Library.
+
+#### How to embed a quiz
+
+Add a `[quiz]` block in your Markdown or HTML file:
+
+```json
+[quiz]
+{
+  "title": "Quiz Title",
+  "questions": [
+    {
+      "question": "What is 2 + 2?",
+      "options": ["3", "4", "5"],
+      "answer": 1,
+      "explanation": "2 + 2 is 4."
+    }
+  ]
+}
+[/quiz]
+```
+
+#### Quiz Features
+- **Progress Tracking**: Completion status and best scores are saved in the browser's local storage.
+- **Instant Feedback**: Immediate validation of answers with detailed explanations.
+- **Categorized Library**: A dedicated `/quiz` page allows filtering quizzes by category and tracking overall progress.
 
 ### Example: Creating a New Blog Post
 

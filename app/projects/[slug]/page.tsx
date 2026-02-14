@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             )}
           </header>
 
-          <ContentRenderer content={project.content} />
+          <ContentRenderer content={project.content} id={project.slug} />
         </article>
 
         <RelatedContent type="projects" currentSlug={project.slug} />

@@ -20,9 +20,10 @@ hljs.registerLanguage("matlab", matlab);
 
 interface ContentRendererProps {
   content: string;
+  id?: string;
 }
 
-export function ContentRenderer({ content }: ContentRendererProps) {
+export function ContentRenderer({ content, id }: ContentRendererProps) {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -185,7 +186,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
             try {
               const decodedJson = match[1].replace(/&apos;/g, "'");
               const quizData = JSON.parse(decodedJson);
-              return <Quiz key={index} {...quizData} />;
+              return <Quiz key={index} id={id} {...quizData} />;
             } catch (e) {
               console.error("Failed to parse quiz data:", e);
               return <div key={index} className="text-red-500">Error loading quiz</div>;

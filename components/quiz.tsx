@@ -15,11 +15,12 @@ export interface Question {
 }
 
 export interface QuizProps {
+  id?: string
   title?: string
   questions: Question[]
 }
 
-export function Quiz({ title, questions }: QuizProps) {
+export function Quiz({ id, title, questions }: QuizProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [isAnswered, setIsAnswered] = useState(false)
@@ -47,6 +48,17 @@ export function Quiz({ title, questions }: QuizProps) {
       setIsAnswered(false)
     } else {
       setShowResult(true)
+      if (id) {
+        const status = {
+          completed: true,
+          score: score,
+          total: questions.length,
+          date: new Date().toISOString()
+        }
+        localStorage.setItem(`quiz_status_${id}`, JSON.stringify(status))
+        // Dispatch event to notify other components (like the list page)
+        window.dispatchEvent(new Event('quiz_updated'))
+      }
     }
   }
 

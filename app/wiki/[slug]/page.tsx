@@ -96,7 +96,7 @@ export default async function WikiEntryPage({
               </div>
             </header>
 
-            <ContentRenderer content={entry.content} />
+            <ContentRenderer content={entry.content} id={entry.slug} />
           </article>
 
           <TOC content={entry.content} />
