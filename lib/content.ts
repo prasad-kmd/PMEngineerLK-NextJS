@@ -96,8 +96,9 @@ export interface ContentItem {
   firstImage?: string
   readingTime?: number
   technical?: string
+  category?: string
   tags?: string[]
-  type?: "blog" | "articles" | "projects" | "tutorials" | "wiki"
+  type?: "blog" | "articles" | "projects" | "tutorials" | "wiki" | "quizzes"
 }
 
 function calculateReadingTime(content: string): number {
@@ -128,7 +129,7 @@ function extractFirstImage(content: string, isMarkdown: boolean): string | undef
 
 const contentDirectory = path.join(process.cwd(), "content")
 
-export function getContentByType(type: "blog" | "articles" | "projects" | "tutorials" | "wiki"): ContentItem[] {
+export function getContentByType(type: "blog" | "articles" | "projects" | "tutorials" | "wiki" | "quizzes"): ContentItem[] {
   const typeDirectory = path.join(contentDirectory, type)
 
   // Create directory if it doesn't exist
@@ -161,6 +162,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           firstImage,
           readingTime: calculateReadingTime(content),
           technical: data.technical,
+          category: data.category,
           tags: data.tags,
           type: type,
         }
@@ -180,6 +182,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
           firstImage,
           readingTime: calculateReadingTime(content),
           technical: data.technical,
+          category: data.category,
           tags: data.tags,
           type: type,
         }
@@ -195,7 +198,7 @@ export function getContentByType(type: "blog" | "articles" | "projects" | "tutor
   return items
 }
 
-export function getContentItem(type: "blog" | "articles" | "projects" | "tutorials" | "wiki", slug: string): ContentItem | null {
+export function getContentItem(type: "blog" | "articles" | "projects" | "tutorials" | "wiki" | "quizzes", slug: string): ContentItem | null {
   const typeDirectory = path.join(contentDirectory, type)
 
   // Try .md first, then .html
@@ -233,6 +236,7 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       firstImage,
       readingTime: calculateReadingTime(content),
       technical: data.technical,
+      category: data.category,
       tags: data.tags,
       type: type,
     }
@@ -251,6 +255,7 @@ export function getContentItem(type: "blog" | "articles" | "projects" | "tutoria
       firstImage,
       readingTime: calculateReadingTime(content),
       technical: data.technical,
+      category: data.category,
       tags: data.tags,
       type: type,
     }

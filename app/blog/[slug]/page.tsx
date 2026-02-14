@@ -83,7 +83,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               )}
             </header>
 
-            <ContentRenderer content={post.content} />
+            <ContentRenderer content={post.content} id={post.slug} />
           </article>
           
           <TOC content={post.content} />
