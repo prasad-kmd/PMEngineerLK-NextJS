@@ -138,7 +138,7 @@ export function Quiz({ id, title, questions }: QuizProps) {
   const question = questions[currentQuestion]
 
   return (
-    <Card className="my-8 overflow-hidden border-border bg-background/50 backdrop-blur-sm shadow-lg">
+    <Card className="my-8 overflow-hidden border-border bg-background/50 backdrop-blur-sm shadow-lg interactive-quiz-card">
       <CardHeader className="border-b bg-muted/30 py-4">
         <div className="flex items-center justify-between mb-2">
           <Badge variant="secondary" className="font-mono text-[10px] uppercase tracking-wider">

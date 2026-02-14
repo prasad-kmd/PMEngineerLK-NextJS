@@ -10,6 +10,8 @@ import matlab from "highlight.js/lib/languages/matlab";
 import "highlight.js/styles/github-dark.css";
 import "katex/dist/katex.min.css";
 import { Quiz } from "@/components/quiz";
+import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 
 // Register highlight.js languages
 hljs.registerLanguage("javascript", javascript);
@@ -25,6 +27,42 @@ interface ContentRendererProps {
 
 export function ContentRenderer({ content, id }: ContentRendererProps) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const toastShown = useRef(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Reset toast state when content changes
+    toastShown.current = false;
+  }, [content]);
+
+  useEffect(() => {
+    const hasQuiz = content.includes('class="interactive-quiz-placeholder"');
+    const isQuizPage = pathname?.startsWith("/quiz");
+
+    if (hasQuiz && !isQuizPage && !toastShown.current) {
+      toastShown.current = true;
+      toast("Let's take a quiz!", {
+        description: "Check your knowledge on this topic.",
+        action: {
+          label: "Take Quiz",
+          onClick: () => {
+            const quizElement = contentRef.current?.querySelector(
+              ".interactive-quiz-card"
+            );
+            if (quizElement) {
+              quizElement.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+            } else if (id) {
+              window.location.href = `/quiz/${id}`;
+            }
+          },
+        },
+        duration: 5000,
+      });
+    }
+  }, [content, pathname, id]);
 
   useEffect(() => {
     if (!contentRef.current) return;
