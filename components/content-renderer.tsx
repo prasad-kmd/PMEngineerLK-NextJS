@@ -9,6 +9,7 @@ import bash from "highlight.js/lib/languages/bash";
 import matlab from "highlight.js/lib/languages/matlab";
 import "highlight.js/styles/github-dark.css";
 import "katex/dist/katex.min.css";
+import { Quiz } from "@/components/quiz";
 
 // Register highlight.js languages
 hljs.registerLanguage("javascript", javascript);
@@ -151,6 +152,10 @@ export function ContentRenderer({ content }: ContentRendererProps) {
     renderContent();
   }, [content]);
 
+  // Split content into parts to interleave HTML and React components (Quizzes)
+  // Use [\s\S]*? to handle newlines in the data-quiz attribute
+  const parts = content.split(/(<div class="interactive-quiz-placeholder" data-quiz='[\s\S]*?'>\s*<\/div>)/g);
+
   return (
     <div
       ref={contentRef}
@@ -172,7 +177,29 @@ export function ContentRenderer({ content }: ContentRendererProps) {
         prose-ul:list-disc prose-ul:pl-6
         prose-ol:list-decimal prose-ol:pl-6
         prose-li:text-muted-foreground prose-li:my-1"
-      dangerouslySetInnerHTML={{ __html: content }}
-    />
+    >
+      {parts.map((part, index) => {
+        if (part.includes('class="interactive-quiz-placeholder"')) {
+          const match = part.match(/data-quiz='([\s\S]*?)'/);
+          if (match && match[1]) {
+            try {
+              const decodedJson = match[1].replace(/&apos;/g, "'");
+              const quizData = JSON.parse(decodedJson);
+              return <Quiz key={index} {...quizData} />;
+            } catch (e) {
+              console.error("Failed to parse quiz data:", e);
+              return <div key={index} className="text-red-500">Error loading quiz</div>;
+            }
+          }
+        }
+        return (
+          <div
+            key={index}
+            dangerouslySetInnerHTML={{ __html: part }}
+            style={{ display: 'contents' }}
+          />
+        );
+      })}
+    </div>
   );
 }
