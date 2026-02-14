@@ -36,7 +36,7 @@ export default function WikiPage() {
             <Book className="h-10 w-10 text-primary" />
             Engineering Wiki
           </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl">
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl font-local-inter">
             A structured, searchable collection of engineering concepts,
             formulas, and best practices. From PCB design rules to motor
             selection, this is a growing knowledge base for engineers.
@@ -45,7 +45,7 @@ export default function WikiPage() {
 
         {wikiEntries.length === 0 ? (
           <div className="rounded-xl border border-border bg-card p-12 text-center">
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground font-local-inter">
               Knowledge base is being compiled. Check back soon!
             </p>
           </div>
@@ -61,15 +61,15 @@ export default function WikiPage() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <Hash className="h-4 w-4 text-primary/60" />
-                      <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
+                      <span className="text-xs text-muted-foreground uppercase tracking-wider font-local-jetbrains-mono">
                         {entry.technical || "General Engineering"}
                       </span>
                     </div>
-                    <h2 className="mb-2 text-2xl font-semibold group-hover:text-primary transition-colors">
+                    <h2 className="mb-2 text-2xl font-semibold group-hover:text-primary transition-colors font-google-sans">
                       {entry.title}
                     </h2>
                     {entry.description && (
-                      <p className="mb-4 text-sm text-muted-foreground leading-relaxed line-clamp-2">
+                      <p className="mb-4 text-sm text-muted-foreground leading-relaxed line-clamp-2 font-local-inter">
                         {entry.description}
                       </p>
                     )}
@@ -78,7 +78,7 @@ export default function WikiPage() {
                         {entry.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="text-[10px] bg-muted px-2 py-0.5 rounded text-muted-foreground"
+                            className="text-[10px] bg-muted px-2 py-0.5 rounded text-muted-foreground font-local-inter"
                           >
                             #{tag}
                           </span>

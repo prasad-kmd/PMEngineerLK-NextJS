@@ -76,7 +76,7 @@ export default async function TutorialPage({ params }: { params: Promise<{ slug:
       <div className="mx-auto max-w-4xl">
         <Link
           href="/tutorials"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground font-local-inter"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Tutorials
@@ -85,12 +85,12 @@ export default async function TutorialPage({ params }: { params: Promise<{ slug:
         <div className="flex flex-col lg:flex-row gap-12">
           <article className="flex-1 min-w-0">
             <header className="mb-8 border-b border-border pb-8">
-              <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl">{post.title}</h1>
+              <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl font-google-sans">{post.title}</h1>
               {post.date && (
-                <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground">
+                <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground font-local-inter">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
-                    {new Date(post.date).toLocaleDateString("en-US", {
+                    {new Date(post.date).toLocaleDateString("en-UK", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",

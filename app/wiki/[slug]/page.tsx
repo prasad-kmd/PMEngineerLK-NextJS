@@ -52,7 +52,7 @@ export default async function WikiEntryPage({
       <div className="mx-auto max-w-5xl">
         <Link
           href="/wiki"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground font-local-inter"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Wiki
@@ -63,23 +63,23 @@ export default async function WikiEntryPage({
             <header className="mb-8 border-b border-border pb-8">
               <div className="flex items-center gap-2 text-primary mb-4">
                 <BookOpen className="h-5 w-5" />
-                <span className="text-sm font-bold uppercase tracking-widest font-mono">
+                <span className="text-sm font-bold uppercase tracking-widest font-local-inter">
                   Wiki Reference
                 </span>
               </div>
-              <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl mozilla-headline">
+              <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl font-google-sans">
                 {entry.title}
               </h1>
-              <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground">
+              <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground font-local-inter">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <Hash className="h-4 w-4 text-primary/60" />
-                    <span className="text-sm font-medium">
+                    <span className="text-sm font-medium font-local-jetbrains-mono">
                       {entry.technical || "General Engineering"}
                     </span>
                   </div>
                   {entry.readingTime && (
-                    <span className="flex items-center gap-1.5 border-l border-border pl-4">
+                    <span className="flex items-center gap-1.5 border-l border-border pl-4 font-local-inter">
                       <Clock className="h-3.5 w-3.5" />
                       {entry.readingTime} min read
                     </span>

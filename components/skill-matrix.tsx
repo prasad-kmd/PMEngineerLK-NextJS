@@ -70,7 +70,7 @@ export default function SkillMatrix() {
           <div className="space-y-5">
             {category.skills.map((skill) => (
               <div key={skill.name}>
-                <div className="mb-2 flex justify-between text-xs font-medium">
+                <div className="mb-2 flex justify-between text-xs font-medium font-google-sans">
                   <span className="text-muted-foreground">{skill.name}</span>
                   <span className="text-primary">{skill.level}%</span>
                 </div>

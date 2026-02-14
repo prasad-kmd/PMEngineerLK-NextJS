@@ -43,7 +43,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <div className="mx-auto max-w-4xl">
         <Link
           href="/projects"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground font-local-inter"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Projects
@@ -51,12 +51,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         <article>
           <header className="mb-8 border-b border-border pb-8">
-            <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl">{project.title}</h1>
+            <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl font-google-sans">{project.title}</h1>
             {project.date && (
-              <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground font-local-inter">
+                <div className="flex items-center gap-2 font-local-inter">
                   <Calendar className="h-4 w-4" />
-                  {new Date(project.date).toLocaleDateString("en-US", {
+                  {new Date(project.date).toLocaleDateString("en-UK", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",

@@ -38,7 +38,7 @@ export default function ProjectsPage() {
       <div className="mx-auto max-w-4xl">
         <div className="mb-12">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline">Projects</h1>
-          <p className="text-lg text-muted-foreground leading-relaxed">
+          <p className="text-lg text-muted-foreground leading-relaxed font-google-sans">
             Technical documentation, processes, and methodologies guiding our project approach.
           </p>
         </div>
@@ -78,12 +78,12 @@ export default function ProjectsPage() {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <h2 className="mb-2 text-2xl font-semibold group-hover:text-primary">{project.title}</h2>
+                      <h2 className="mb-2 text-2xl font-semibold group-hover:text-primary font-google-sans">{project.title}</h2>
                       {project.description && (
-                        <p className="mb-3 text-muted-foreground leading-relaxed">{project.description}</p>
+                        <p className="mb-3 text-muted-foreground leading-relaxed font-local-inter">{project.description}</p>
                       )}
                       {project.date && (
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground invisible">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground invisible font-local-inter">
                           <Calendar className="h-4 w-4" />
                           {new Date(project.date).toLocaleDateString("en-US", {
                             year: "numeric",

@@ -40,7 +40,7 @@ export default function BlogPage() {
       <div className="mx-auto max-w-4xl">
         <div className="mb-12">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline">Blog</h1>
-          <p className="text-lg text-muted-foreground leading-relaxed">
+          <p className="text-lg text-muted-foreground leading-relaxed font-google-sans">
             Comprehensive engineering ideas and technical insights. Each post explores practical solutions
             combining mechanical and mechatronics expertise.
           </p>
@@ -95,12 +95,12 @@ export default function BlogPage() {
                   )}
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <h2 className="mb-2 text-2xl font-semibold group-hover:text-primary">{post.title}</h2>
+                      <h2 className="mb-2 text-2xl font-semibold group-hover:text-primary font-google-sans">{post.title}</h2>
                       {post.description && (
-                        <p className="mb-3 text-muted-foreground leading-relaxed">{post.description}</p>
+                        <p className="mb-3 text-muted-foreground leading-relaxed font-local-inter">{post.description}</p>
                       )}
                       {post.date && (
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground font-local-inter">
                           <Calendar className="h-4 w-4" />
                           {new Date(post.date).toLocaleDateString("en-US", {
                             year: "numeric",

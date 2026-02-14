@@ -27,7 +27,7 @@ export function RelatedContent({ type, currentSlug }: RelatedContentProps) {
   }
 
   return (
-    <section className="mt-16 border-t border-border pt-16">
+    <section className="mt-16 border-t border-border pt-16 google-sans">
       <h2 className="mb-8 text-2xl font-bold philosopher">{titles[type]}</h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {relatedItems.map((item) => (

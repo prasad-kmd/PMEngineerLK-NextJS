@@ -465,7 +465,7 @@ export default function ToolsPage() {
                 <div className="mt-24 rounded-3xl border border-border/50 bg-card/30 p-8 text-center backdrop-blur-sm">
                     <Rocket className="mx-auto h-10 w-10 text-primary mb-4" />
                     <h2 className="text-2xl font-bold mozilla-headline mb-2">Expanding the Toolkit</h2>
-                    <p className="mx-auto max-w-md text-muted-foreground text-sm">
+                    <p className="mx-auto max-w-md text-muted-foreground text-sm font-local-inter">
                         New professional utilities are being added regularly. Have a specific engineering need? Reach out via the feedback portal.
                     </p>
                 </div>

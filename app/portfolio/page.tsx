@@ -47,7 +47,7 @@ export default function PortfolioPage() {
                             <p className="mt-4 text-xl font-medium text-muted-foreground philosopher">
                                 Mechatronics & Mechanical Engineering Undergraduate
                             </p>
-                            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+                            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground font-google-sans">
                                 Passionate about bridging the gap between hardware and software. I specialize in
                                 developing intelligent systems that solve real-world engineering challenges
                                 through innovative design and robust implementation.
@@ -63,12 +63,12 @@ export default function PortfolioPage() {
                 {/* Advanced Skill Matrix */}
                 <section className="mb-24">
                     <div className="mb-12 flex flex-col items-center text-center">
-                        <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+                        <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary font-local-jetbrains-mono">
                             <Dna className="h-4 w-4" />
                             Competency Framework
                         </div>
                         <h2 className="text-3xl font-bold mozilla-headline sm:text-4xl">Technical Expertise Matrix</h2>
-                        <p className="mt-4 max-w-2xl text-muted-foreground philosopher">
+                        <p className="mt-4 max-w-2xl text-muted-foreground font-google-sans">
                             A comprehensive overview of my engineering competencies across hardware, software, and interdisciplinary domains.
                         </p>
                     </div>
@@ -84,12 +84,12 @@ export default function PortfolioPage() {
                                 <Briefcase className="h-6 w-6 text-primary" />
                                 <h2 className="text-2xl font-bold mozilla-headline">Featured Engineering Projects</h2>
                             </div>
-                            <div className="grid gap-6 sm:grid-cols-2">
+                            <div className="grid gap-6 sm:grid-cols-2 font-google-sans">
                                 {dynamicProjects.map((project) => (
                                     <Card key={project.slug} className="group overflow-hidden border-border/50 transition-all hover:border-primary/30 hover:shadow-lg flex flex-col">
                                         <div className="relative h-48 w-full overflow-hidden bg-muted">
                                             <Image
-                                                src={project.firstImage || `https://placehold.co/600x400/1e293b/14b8a6?text=${encodeURIComponent(project.title)}`}
+                                                src={project.firstImage || `https://placehold.co/1280x720/1e293b/transparent.AVIF?font=playfair-display&text=${encodeURIComponent(project.title)}`}
                                                 alt={project.title}
                                                 fill
                                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -131,7 +131,7 @@ export default function PortfolioPage() {
                                 <Award className="h-6 w-6 text-primary" />
                                 <h2 className="text-2xl font-bold mozilla-headline">Professional Milestones</h2>
                             </div>
-                            <div className="space-y-8">
+                            <div className="space-y-8 font-google-sans">
                                 <div className="relative pl-8 border-l-2 border-primary/20">
                                     <div className="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-primary shadow-[0_0_10px_var(--primary)]" />
                                     <span className="text-sm font-bold text-primary">2023 - Present</span>
@@ -162,9 +162,9 @@ export default function PortfolioPage() {
                         <section className="rounded-2xl border border-border bg-card p-8 shadow-sm">
                             <div className="flex items-center gap-3 mb-6">
                                 <GraduationCap className="h-5 w-5 text-primary" />
-                                <h3 className="text-xl font-bold philosopher">Education</h3>
+                                <h3 className="text-xl font-bold font-mozilla-headline">Education</h3>
                             </div>
-                            <div className="space-y-6 text-sm">
+                            <div className="space-y-6 text-sm font-google-sans">
                                 <div>
                                     <p className="font-bold">BSc (Hons) in Mechatronics Engineering</p>
                                     <p className="text-muted-foreground">The Open University of Sri Lanka</p>
@@ -180,8 +180,8 @@ export default function PortfolioPage() {
 
                         {/* Research Interests */}
                         <section className="rounded-2xl border border-border bg-card p-8 shadow-sm">
-                            <h3 className="text-xl font-bold mb-4 philosopher">Research Interests</h3>
-                            <div className="space-y-3">
+                            <h3 className="text-xl font-bold mb-4 font-mozilla-headline">Research Interests</h3>
+                            <div className="space-y-3 font-google-sans">
                                 {[
                                     "Bio-Inspired Robotics",
                                     "Autonomous Navigation",
@@ -198,8 +198,8 @@ export default function PortfolioPage() {
 
                         {/* Languages */}
                         <section className="rounded-2xl border border-border bg-card p-8 shadow-sm">
-                            <h3 className="text-xl font-bold mb-4 philosopher">Languages</h3>
-                            <div className="flex flex-wrap gap-2 text-xs">
+                            <h3 className="text-xl font-bold mb-4 font-mozilla-headline">Languages</h3>
+                            <div className="flex flex-wrap gap-2 text-xs font-google-sans">
                                 <span className="px-3 py-1 bg-muted rounded-full">English (Professional)</span>
                                 <span className="px-3 py-1 bg-muted rounded-full">Sinhala (Native)</span>
                                 <span className="px-3 py-1 bg-muted rounded-full">German (Basic)</span>
@@ -213,11 +213,11 @@ export default function PortfolioPage() {
             <section className="bg-primary/5 py-16 text-center border-t border-border">
                 <div className="mx-auto max-w-2xl px-6">
                     <h2 className="text-3xl font-bold amoriaregular mb-4">Let&apos;s Build Something Together</h2>
-                    <p className="text-muted-foreground mb-8 leading-relaxed">
+                    <p className="text-muted-foreground font-google-sans mb-8 leading-relaxed">
                         I am always open to discussing new projects, creative ideas or
                         opportunities to be part of your visions.
                     </p>
-                    <Button size="lg" className="rounded-full px-12 transition-transform hover:scale-105">
+                    <Button size="lg" className="font-space-mono rounded-full px-12 transition-transform hover:scale-105">
                         Get In Touch
                     </Button>
                 </div>

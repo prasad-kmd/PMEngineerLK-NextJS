@@ -132,12 +132,12 @@ export default function PagesOverview() {
         </header>
 
         {/* Quick Navigation */}
-        <div className="sticky top-20 z-10 mb-16 flex flex-wrap justify-center lg:justify-start gap-2 p-2 rounded-2xl bg-background/50 backdrop-blur-xl border border-border/50 shadow-sm">
+        <div className="sticky top-20 z-10 mb-12 flex flex-wrap justify-center gap-2 p-2 rounded-2xl bg-background/50 backdrop-blur-xl border border-border/50 shadow-sm">
           {categories.map(c => (
             <a
               key={c.id}
               href={`#${c.id}`}
-              className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-primary/10 hover:text-primary text-muted-foreground local-jetbrains-mono whitespace-nowrap"
+              className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-primary/10 hover:text-primary text-muted-foreground local-jetbrains-mono"
             >
               {c.name.split(' ')[0]}
             </a>

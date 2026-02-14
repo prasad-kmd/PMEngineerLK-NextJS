@@ -95,7 +95,7 @@ export function TOC({ content }: TOCProps) {
       </div>
 
       {!isCollapsed && (
-        <ul className="space-y-1 border-l border-border animate-in fade-in duration-300">
+        <ul className="space-y-1 border-l border-border animate-in fade-in duration-300 font-local-inter">
           {headings.map((heading) => (
             <li key={heading.id}>
               <a
