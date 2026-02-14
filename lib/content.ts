@@ -30,8 +30,9 @@ const quizExtension = {
   },
   renderer(token: any) {
     try {
-      JSON.parse(token.json)
-      const encodedJson = token.json.replace(/'/g, "&apos;")
+      // Minify and validate JSON
+      const minifiedJson = JSON.stringify(JSON.parse(token.json))
+      const encodedJson = minifiedJson.replace(/'/g, "&apos;")
       return `<div class="interactive-quiz-placeholder" data-quiz='${encodedJson}'></div>`
     } catch (e) {
       console.error("Quiz JSON parse error:", e, token.json);
@@ -67,8 +68,9 @@ function injectQuiz(html: string): string {
   const injectedHtml = protectedHtml.replace(/\[quiz\]([\s\S]*?)\[\/quiz\]/g, (match, jsonContent) => {
     try {
       const cleanJson = jsonContent.trim()
-      JSON.parse(cleanJson)
-      const encodedJson = cleanJson.replace(/'/g, "&apos;")
+      // Minify and validate JSON
+      const minifiedJson = JSON.stringify(JSON.parse(cleanJson))
+      const encodedJson = minifiedJson.replace(/'/g, "&apos;")
       return `<div class="interactive-quiz-placeholder" data-quiz='${encodedJson}'></div>`
     } catch (e) {
       console.error("Quiz HTML inject parse error:", e, jsonContent);

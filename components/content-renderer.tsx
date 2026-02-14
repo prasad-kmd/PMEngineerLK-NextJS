@@ -153,7 +153,8 @@ export function ContentRenderer({ content }: ContentRendererProps) {
   }, [content]);
 
   // Split content into parts to interleave HTML and React components (Quizzes)
-  const parts = content.split(/(<div class="interactive-quiz-placeholder" data-quiz='.*?'>\s*<\/div>)/g);
+  // Use [\s\S]*? to handle newlines in the data-quiz attribute
+  const parts = content.split(/(<div class="interactive-quiz-placeholder" data-quiz='[\s\S]*?'>\s*<\/div>)/g);
 
   return (
     <div
@@ -179,7 +180,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
     >
       {parts.map((part, index) => {
         if (part.includes('class="interactive-quiz-placeholder"')) {
-          const match = part.match(/data-quiz='(.*?)'/);
+          const match = part.match(/data-quiz='([\s\S]*?)'/);
           if (match && match[1]) {
             try {
               const decodedJson = match[1].replace(/&apos;/g, "'");
