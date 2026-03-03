@@ -1,41 +1,50 @@
-import type { Metadata } from "next"
-import { notFound } from "next/navigation"
-import { getContentByType, getContentItem } from "@/lib/content"
-import { Calendar, ArrowLeft, Clock } from "lucide-react"
-import Link from "next/link"
-import { ContentRenderer } from "@/components/content-renderer"
-import { BookmarkButton } from "@/components/bookmark-button"
-import { ScrollProgress } from "@/components/scroll-progress"
-import { RelatedContent } from "@/components/related-content"
-import { TOC } from "@/components/toc"
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getContentByType, getContentItem } from "@/lib/content";
+import { Calendar, ArrowLeft, Clock } from "lucide-react";
+import Link from "next/link";
+import { ContentRenderer } from "@/components/content-renderer";
+import { BookmarkButton } from "@/components/bookmark-button";
+import { ScrollProgress } from "@/components/scroll-progress";
+import { RelatedContent } from "@/components/related-content";
+import { TOC } from "@/components/toc";
+import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 export async function generateStaticParams() {
-  const entries = getContentByType("articles")
+  const entries = getContentByType("articles");
   return entries.map((entry) => ({
     slug: entry.slug,
-  }))
+  }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params
-  const entry = getContentItem("articles", slug)
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const entry = getContentItem("articles", slug);
 
   if (!entry) {
-    return {}
+    return {};
   }
 
   return {
     title: entry.title,
     description: entry.description,
-  }
+  };
 }
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const entry = getContentItem("articles", slug)
+export default async function ArticlePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const entry = getContentItem("articles", slug);
 
   if (!entry) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -53,7 +62,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <div className="flex flex-col lg:flex-row gap-12">
           <article className="flex-1 min-w-0">
             <header className="mb-8 border-b border-border pb-8">
-              <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl google-sans">{entry.title}</h1>
+              <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl google-sans">
+                {entry.title}
+              </h1>
               {entry.date && (
                 <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground">
                   <div className="flex items-center gap-2 google-sans">
@@ -76,7 +87,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                       slug: entry.slug,
                       title: entry.title,
                       date: entry.date,
-                      type: "articles"
+                      type: "articles",
                     }}
                   />
                 </div>
@@ -85,12 +96,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
             <ContentRenderer content={entry.content} id={entry.slug} />
           </article>
-          
+
           <TOC content={entry.content} />
         </div>
 
         <RelatedContent type="articles" currentSlug={entry.slug} />
       </div>
+      {entry.aiAssisted && <AIContentIndicator />}
     </div>
-  )
+  );
 }

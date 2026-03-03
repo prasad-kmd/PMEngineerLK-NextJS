@@ -3,7 +3,7 @@ name: Generate Changelog
 on:
   # push:
   #   branches:
-  #     - main  
+  #     - main
   workflow_dispatch: # Manual trigger only
 
 jobs:
@@ -49,14 +49,10 @@ jobs:
 
           // Group commits by date and create changelog entries
           const changelogEntries = [];
-          let versionCounter = 0.1;
 
-          // Reverse to get newest first
-          const sortedCommits = commits.reverse();
-
-          // Group commits by day
+          // Group commits by day (keep original chronological order for versioning)
           const groupedByDay = {};
-          sortedCommits.forEach(commit => {
+          commits.forEach(commit => {
             const date = new Date(commit.date);
             const dateKey = date.toISOString().split('T')[0];
             
@@ -67,7 +63,9 @@ jobs:
           });
 
           // Create changelog entries for each day
-          Object.keys(groupedByDay).forEach(dateKey => {
+          const dayKeys = Object.keys(groupedByDay).sort();
+
+          dayKeys.forEach(dateKey => {
             const commits = groupedByDay[dateKey];
             const date = new Date(dateKey);
             const formattedDate = date.toLocaleDateString('en-US', { 
@@ -114,11 +112,8 @@ jobs:
               return msg;
             });
 
-            versionCounter += 0.1;
-            const version = versionCounter.toFixed(1);
-
             changelogEntries.push({
-              version,
+              version: '0.0', // Recalculated by frontend
               date: formattedDate,
               title,
               description: '',
@@ -128,10 +123,10 @@ jobs:
             });
           });
 
-          // Write the processed changelog
+          // Write the processed changelog (Reverse to get newest first for display)
           fs.writeFileSync(
             'public/data/changelog.json',
-            JSON.stringify(changelogEntries, null, 2)
+            JSON.stringify(changelogEntries.reverse(), null, 2)
           );
 
           console.log(`Generated ${changelogEntries.length} changelog entries`);

@@ -16,7 +16,7 @@ Write your introduction here. This post follows the standard engineering layout.
 Explain the core concepts. Use **bold** for emphasis and `inline code` for technical terms.
 
 > [!NOTE]
-> Use alerts to highlight important information. Supported types: NOTE, TIP, IMPORTANT, WARNING, CAUTION.
+> This is an alert. Supported types: NOTE, TIP, IMPORTANT, WARNING, CAUTION.
 
 ## Section 2: Implementation
 

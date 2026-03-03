@@ -2,6 +2,7 @@
 title: "How to Select a Motor"
 date: "2024-05-20"
 description: "A comprehensive guide on selecting the right motor for your mechatronics project based on torque, speed, and power requirements."
+aiAssisted: true
 technical: "Mechatronics, Robotics"
 tags: ["motors", "actuators", "selection-guide"]
 ---

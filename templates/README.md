@@ -4,15 +4,26 @@ This directory contains Markdown templates for various content types on the site
 
 ## Available Templates
 
-- [blog-post.md](./blog-post.md): For general blog posts.
-- [tutorial.md](./tutorial.md): For step-by-step guides.
-- [wiki-entry.md](./wiki-entry.md): For technical references and wiki entries.
-- [project.md](./project.md): For documenting engineering projects.
+### Markdown (.md)
+
+- [blog-post.md](./blog-post.md)
+- [tutorial.md](./tutorial.md)
+- [wiki-entry.md](./wiki-entry.md)
+- [project.md](./project.md)
+
+### HTML (.html)
+
+- [blog-post.html](./blog-post.html)
+- [tutorial.html](./tutorial.html)
+- [wiki-entry.html](./wiki-entry.html)
+- [project.html](./project.html)
 
 ## How to Use
 
-1. Copy the content of a template file.
-2. Create a new `.md` or `.html` file in the corresponding `content/` subdirectory (e.g., `content/blog/`).
+1. Copy the content of a template file (either Markdown or HTML).
+2. Create a new file in the corresponding `content/` subdirectory (e.g., `content/blog/`).
+   - Use `.md` for Markdown content.
+   - Use `.html` for HTML content.
 3. Fill in the front matter and content.
 
 ## Key Features

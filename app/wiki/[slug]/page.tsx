@@ -8,6 +8,7 @@ import { BookmarkButton } from "@/components/bookmark-button";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { RelatedContent } from "@/components/related-content";
 import { TOC } from "@/components/toc";
+import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 export async function generateStaticParams() {
   const wikiEntries = getContentByType("wiki");
@@ -104,6 +105,7 @@ export default async function WikiEntryPage({
 
         <RelatedContent type="wiki" currentSlug={entry.slug} />
       </div>
+      {entry.aiAssisted && <AIContentIndicator />}
     </div>
   );
 }

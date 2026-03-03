@@ -6,8 +6,6 @@ technical: "Mechatronics"
 tags: ["tutorial", "guide", "intermediate"]
 ---
 
-# Tutorial: [Topic Name]
-
 Objective: By the end of this tutorial, you will be able to [Result].
 
 ## Prerequisites

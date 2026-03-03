@@ -21,78 +21,86 @@ export const metadata: Metadata = {
 // Fallback manual entries (will be merged with automated ones)
 const manualUpdates: ChangelogEntry[] = [
   {
-    version: "0.1.6",
-    date: "October 07, 2025",
-    title: "Refactor Some pages",
+    version: "0.0", // Will be recalculated
+    date: "March 03, 2026",
+    title: "Add workflow to generate and commit changelog",
     description: "",
     changes: [
-      "Refactor About and Contact pages to enhance layout and accessibility; add HeroSlideshow component for dynamic visuals; create sample ideas document for project brainstorming.",
+      "Add workflow to generate and commit changelog - This workflow generates a changelog in JSON format from git commit history and commits it to the repository if there are changes.",
+      "Add GitHub Actions workflow to generate changelog - This workflow generates a changelog in JSON format from git commit history, processes it, and commits the changes if there are updates.",
     ],
     type: "improvement",
   },
   {
-    version: "0.1.5",
-    date: "October 07, 2025",
-    title: "Add placeholder images in various formats",
+    version: "0.0", // Will be recalculated
+    date: "November 06, 2025",
+    title: "Merge pull request #3 from prasad-kmd/pwa-sidebar-updates",
     description: "",
     changes: [
-      "Add placeholder images in various formats (PNG, JPEG, SVG, WebP) to the public folder.",
-      "Update README.md.",
+      "Merge pull request #3 from prasad-kmd/pwa-sidebar-updates - Pwa sidebar updates",
+      'Align sidebar buttons and refactor navigation - - Refactors the sidebar navigation to visually align the "Share" and "Notifications" buttons with the other navigation items.',
+      "Update sidebar share and notification functionality - - Removes the dedicated `/share` and `/notifications` pages.",
+      "Merge pull request #2 from prasad-kmd/pwa-implementation - Pwa implementation",
     ],
     type: "improvement",
   },
   {
-    version: "0.1.4",
-    date: "October 07, 2025",
-    title: "Refactor diary, ideas, posts, and workflow pages",
+    version: "0.0", // Will be recalculated
+    date: "October 11, 2025",
+    title: "Address PWA warnings and update UI",
     description: "",
     changes: [
-      "Refactor diary, ideas, posts, and workflow pages to highlight the first entry with a distinct border color and improve content structure",
-    ],
-    type: "improvement",
-  },
-  {
-    version: "0.1.3",
-    date: "October 07, 2025",
-    title: "Enhance documentation and layout:",
-    description: "",
-    changes: [
-      "Update README.md for improved code block formatting.",
-      "Add About and Contact pages with team information and contact details.",
-      "Update navigation to include About and Contact links.",
-      "Modify layout metadata and icons for better project representation.",
-    ],
-    type: "improvement",
-  },
-  {
-    version: "0.1.2",
-    date: "October 07, 2025",
-    title: "Add introductory post for Engineering Project 02",
-    description: "",
-    changes: [
-      "Created a new markdown file for the project overview",
-      "Included sections on team background, project vision, approach, and how to get involved",
-      "Emphasized the importance of addressing local challenges in Sri Lanka",
-      "Provided a structure for documenting the project's journey and progress",
+      "Address PWA warnings and update UI - - Moved `themeColor` from `metadata` to `viewport` export in `app/layout.tsx` to resolve build warnings.",
+      "Implement PWA features - This change turns the web application into a Progressive Web App (PWA).",
     ],
     type: "feature",
   },
   {
-    version: "0.1.1",
-    date: "October 07, 2025",
-    title: "Add Improvements",
-    description: "Update dependencies and improve font imports in layout",
-    changes: ["Updated dependencies", "Improved font imports in layout"],
-    type: "improvement",
+    version: "0.0", // Will be recalculated
+    date: "October 10, 2025",
+    title: "Add waste management project ideas and workflows for Sri Lanka",
+    description: "",
+    changes: [
+      "Add waste management project ideas and workflows for Sri Lanka - - Created new HTML files for three project ideas focused on waste management and circular economy:",
+      "Merge pull request #1 from prasad-kmd/fix/dynamic-metadata-generation - feat: Add dynamic metadata for diary and idea entries",
+      "Add dynamic metadata for diary and idea entries - This commit introduces dynamic metadata generation for individual diary and idea pages.",
+    ],
+    type: "feature",
   },
   {
-    version: "0.1.0",
+    version: "0.0", // Will be recalculated
+    date: "October 09, 2025",
+    title:
+      "Update font paths for local fonts and apply 'mozilla-headline' class to project title",
+    description: "",
+    changes: [
+      "Update font paths for local fonts and apply 'mozilla-headline' class to project title",
+      "Add ESLint configuration for Next.js with TypeScript support",
+      "Refactor code structure for improved readability and maintainability",
+      "Enhance content handling by adding firstImage extraction for improved visual representation; streamline description formatting across multiple pages.",
+    ],
+    type: "fix",
+  },
+  {
+    version: "0.0", // Will be recalculated
     date: "October 07, 2025",
-    title: "Initialize the foundation",
-    description:
-      "The first version of the PMEngineer portfolio goes on work as MechEngineerLK.",
-    changes: ["Initialized repository for project Engineering project webapp"],
-    type: "Start",
+    title:
+      "Update OG image links and enhance content across multiple files; remove unused welcome2.md",
+    description: "",
+    changes: [
+      "Update OG image links and enhance content across multiple files; remove unused welcome2.md",
+      "Add SpeedInsights component and update package dependencies",
+      "Refactor code structure for improved readability and maintainability",
+      "Refactor scrollbar styles for improved aesthetics; update design methodology for clarity; modify package dependencies and configurations for better compatibility.",
+      "Refactor About and Contact pages to enhance layout and accessibility; add HeroSlideshow component for dynamic visuals; create sample ideas document for project brainstorming.",
+      "Add placeholder images in various formats - - Added a PNG placeholder logo image.",
+      "Refactor diary, ideas, posts, and workflow pages to highlight the first entry with a distinct border color and improve content structure",
+      "Enhance documentation and layout: - Update README.md for improved code block formatting. - Add About and Contact pages with team information and contact details. - Update navigation to include About and Contact links. - Modify layout metadata and icons for better project representation.",
+      "Add introductory post for Engineering Project 02 - - Created a new markdown file for the project overview",
+      "Update dependencies and improve font imports in layout",
+      "Initialized repository for project Engineering project webapp - Co-authored-by: PRASAD MADHURANGA <102537177+prasad-kmd@users.noreply.github.com>",
+    ],
+    type: "start",
   },
 ];
 
@@ -107,23 +115,41 @@ async function getChangelogData(): Promise<ChangelogEntry[]> {
     const fileContents = await fs.readFile(filePath, "utf8");
     const automatedEntries: ChangelogEntry[] = JSON.parse(fileContents);
 
-    // Merge automated and manual entries, remove duplicates by version
+    // Combine all entries
     const allEntries = [...automatedEntries, ...manualUpdates];
+
+    // Deduplicate by date and title (since titles are quite specific)
     const uniqueEntries = allEntries.filter(
       (entry, index, self) =>
-        index === self.findIndex((e) => e.version === entry.version),
+        index ===
+        self.findIndex((e) => e.date === entry.date && e.title === entry.title),
     );
 
-    // Sort by date (newest first)
-    return uniqueEntries.sort((a, b) => {
+    // Sort chronologically (oldest first) to assign versions
+    const chronSorted = uniqueEntries.sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
-      return dateB.getTime() - dateA.getTime();
+      return dateA.getTime() - dateB.getTime();
     });
+
+    // Assign versions dynamically (0.1, 0.2, etc.)
+    const versionedEntries = chronSorted.map((entry, idx) => ({
+      ...entry,
+      version: ((idx + 1) * 0.1).toFixed(1),
+    }));
+
+    // Return reversed (newest first) for display
+    return versionedEntries.reverse();
   } catch (error) {
     console.error("Error reading changelog:", error);
-    // Fallback to manual entries if JSON file doesn't exist
-    return manualUpdates;
+    // Fallback to manual entries if JSON file doesn't exist, also versioned
+    return manualUpdates
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      .map((entry, idx) => ({
+        ...entry,
+        version: ((idx + 1) * 0.1).toFixed(1),
+      }))
+      .reverse();
   }
 }
 

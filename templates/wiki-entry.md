@@ -5,8 +5,6 @@ technical: "Control Systems"
 tags: ["reference", "equations", "wiki"]
 ---
 
-# [Concept Name]
-
 ## Overview
 
 Definition and fundamental principles of the concept.

@@ -1,6 +1,6 @@
 [
   {
-    "version": "0.2",
+    "version": "0.0",
     "date": "March 03, 2026",
     "title": "Custom cursor was removed temporary",
     "description": "",
@@ -13,7 +13,7 @@
     "automated": true
   },
   {
-    "version": "0.3",
+    "version": "0.0",
     "date": "February 14, 2026",
     "title": "Merge pull request #7 from prasad-kmd/update-readme-documentation-15094035176316048249",
     "description": "",
@@ -35,7 +35,7 @@
     "automated": true
   },
   {
-    "version": "0.4",
+    "version": "0.0",
     "date": "February 13, 2026",
     "title": "Modify initial technical content, error and sponsorship pages, and content renderer.",
     "description": "",
@@ -46,7 +46,7 @@
     "automated": true
   },
   {
-    "version": "0.5",
+    "version": "0.0",
     "date": "February 12, 2026",
     "title": "Implement dedicated Open Source and Contact pages, including GitHub API integration and a contact form.",
     "description": "",
@@ -64,7 +64,7 @@
     "automated": true
   },
   {
-    "version": "0.6",
+    "version": "0.0",
     "date": "February 10, 2026",
     "title": "Customized dynamic Open Graph image generation, modified About and Changelog pages, and PWA configuration with updated favicons.",
     "description": "",
@@ -75,7 +75,7 @@
     "automated": true
   },
   {
-    "version": "0.7",
+    "version": "0.0",
     "date": "February 09, 2026",
     "title": "Introduce custom cursor, click spark, context menu, and featured hero components.",
     "description": "",
@@ -89,7 +89,7 @@
     "automated": true
   },
   {
-    "version": "0.8",
+    "version": "0.0",
     "date": "February 08, 2026",
     "title": "Merge pull request #3 from prasad-kmd/vercel/react-server-components-cve-vu-9bp2vo",
     "description": "",
@@ -105,7 +105,7 @@
     "automated": true
   },
   {
-    "version": "0.9",
+    "version": "0.0",
     "date": "February 07, 2026",
     "title": "Add a collapsible Table of Contents component and a new \"Now\" page detailing current activities.",
     "description": "",
@@ -122,7 +122,7 @@
     "automated": true
   },
   {
-    "version": "1.0",
+    "version": "0.0",
     "date": "February 06, 2026",
     "title": "Introduce interactive MagicBento component and new pages for gallery, team, about, and a roadmap component.",
     "description": "",
@@ -139,7 +139,7 @@
     "automated": true
   },
   {
-    "version": "1.1",
+    "version": "0.0",
     "date": "February 05, 2026",
     "title": "Add new 'Tools' section including scientific calculator, LaTeX editor, HTML encoder, and markdown editor.",
     "description": "",
@@ -155,7 +155,7 @@
     "automated": true
   },
   {
-    "version": "1.2",
+    "version": "0.0",
     "date": "February 04, 2026",
     "title": "Merge pull request #1 from prasad-kmd/imgbot",
     "description": "",
@@ -172,7 +172,7 @@
     "automated": true
   },
   {
-    "version": "1.3",
+    "version": "0.0",
     "date": "January 04, 2026",
     "title": "Cloned from [prasad-kmd/DMX4102-webapp-NEXTJS](https://github.com/prasad-kmd/DMX4102-webapp-NEXTJS) from main and added local fonts to `public/fonts`",
     "description": "",

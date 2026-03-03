@@ -6,8 +6,6 @@ technical: "Robotics"
 tags: ["project", "hardware", "software"]
 ---
 
-# Project: [Project Name]
-
 ## Introduction
 
 Overview of the project goal and inspiration.

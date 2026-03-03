@@ -2,6 +2,7 @@
 title: "Precision Engineering: Autonomous Mars Rover Locomotion System"
 date: "2024-03-20"
 description: "A comprehensive deep dive into the mechanical design, control architecture, and thermal management of a next-generation planetary exploration rover."
+aiAssisted: true
 tags: ["Robotics", "Mechanical Engineering", "Control Systems", "Deep Dive"]
 technical: "Advanced"
 ---
@@ -17,12 +18,13 @@ The primary challenge in planetary locomotion is maintaining contact with the gr
 ### The Rocker-Bogie Mechanism
 
 The suspension consists of two main components:
+
 1.  **Rocker**: The larger link that pivots on the main chassis.
 2.  **Bogie**: A smaller link attached to the rocker that carries two wheels.
 
 The pivot point is critical. To maintain stability, the center of mass must remain within the footprint of the wheels. The stability criterion can be expressed as:
 
-$$ \theta_{tip} = \arctan\left(\frac{L_{footprint}}{2 \cdot h_{cm}}\right) $$
+$$ \theta*{tip} = \arctan\left(\frac{L*{footprint}}{2 \cdot h\_{cm}}\right) $$
 
 where $L_{footprint}$ is the longitudinal distance between wheels and $h_{cm}$ is the height of the center of mass.
 
@@ -36,9 +38,10 @@ Each of the six wheels is equipped with an independent brushless DC (BLDC) motor
 
 To climb a $25^\circ$ slope on loose sand, the required torque $T$ per wheel is calculated as:
 
-$$ T = \frac{1}{n} \cdot r \cdot (m \cdot g \cdot \sin(\theta) + F_{rolling}) $$
+$$ T = \frac{1}{n} \cdot r \cdot (m \cdot g \cdot \sin(\theta) + F\_{rolling}) $$
 
 Where:
+
 - $n$: number of driven wheels (6)
 - $r$: wheel radius (0.125m)
 - $m$: total rover mass (150kg)
@@ -55,7 +58,7 @@ def update_motor_torque(target_vel, current_vel, dt):
     error = target_vel - current_vel
     integral += error * dt
     derivative = (error - last_error) / dt
-    
+
     output = (Kp * error) + (Ki * integral) + (Kd * derivative)
     return clamp(output, -MAX_TORQUE, MAX_TORQUE)
 ```
@@ -78,4 +81,4 @@ This locomotion system represents a balance between mechanical simplicity (passi
 
 ---
 
-*This case study is part of the "PrasadM Engineering Deep Dives" series.*
+_This case study is part of the "PrasadM Engineering Deep Dives" series._

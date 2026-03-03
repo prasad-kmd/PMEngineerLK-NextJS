@@ -1,0 +1,88 @@
+---
+title: "Concept Name"
+description: "Technical reference for [Concept]."
+technical: "Control Systems"
+tags: ["reference", "equations", "wiki"]
+---
+
+<h1>[Concept Name]</h1>
+
+<h2>Overview</h2>
+
+<p>Definition and fundamental principles of the concept.</p>
+
+<h2>Mathematical Representation</h2>
+
+<p>The system can be described by the following equations:</p>
+
+<p>
+  $$ \frac{d^2x}{dt^2} + 2\zeta\omega_n \frac{dx}{dt} + \omega_n^2 x = F(t) $$
+</p>
+
+<p>Where:</p>
+<ul>
+  <li>$x$ is the displacement</li>
+  <li>$\zeta$ is the damping ratio</li>
+  <li>$\omega_n$ is the natural frequency</li>
+</ul>
+
+<h2>Key Properties</h2>
+
+<table style="width: 100%; border-collapse: collapse">
+  <thead>
+    <tr>
+      <th
+        style="border: 1px solid var(--border); padding: 8px; text-align: left"
+      >
+        Property
+      </th>
+      <th
+        style="border: 1px solid var(--border); padding: 8px; text-align: left"
+      >
+        Description
+      </th>
+      <th
+        style="border: 1px solid var(--border); padding: 8px; text-align: left"
+      >
+        Units
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid var(--border); padding: 8px">
+        <strong>Natural Frequency</strong>
+      </td>
+      <td style="border: 1px solid var(--border); padding: 8px">
+        The frequency at which the system tends to oscillate in the absence of
+        any driving or damping force.
+      </td>
+      <td style="border: 1px solid var(--border); padding: 8px">rad/s</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid var(--border); padding: 8px">
+        <strong>Damping Ratio</strong>
+      </td>
+      <td style="border: 1px solid var(--border); padding: 8px">
+        A dimensionless measure describing how oscillations in a system decay
+        after a disturbance.
+      </td>
+      <td style="border: 1px solid var(--border); padding: 8px">-</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Design Considerations</h2>
+
+<ol>
+  <li>Ensure the damping ratio is between 0.4 and 0.7 for optimal response.</li>
+  <li>Consider thermal effects on component values.</li>
+</ol>
+
+<blockquote>
+  <p>[!TIP]</p>
+  <p>
+    Use the <a href="/wiki/motor-selection">Motor Selection Guide</a> for
+    practical actuator choices.
+  </p>
+</blockquote>

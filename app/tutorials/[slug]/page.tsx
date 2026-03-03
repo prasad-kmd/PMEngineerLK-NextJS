@@ -1,33 +1,34 @@
-import { notFound } from "next/navigation"
-import type { Metadata } from "next"
-import { getContentByType, getContentItem } from "@/lib/content"
-import { siteConfig } from "@/lib/config"
-import { Calendar, ArrowLeft, Clock } from "lucide-react"
-import Link from "next/link"
-import { ContentRenderer } from "@/components/content-renderer"
-import { BookmarkButton } from "@/components/bookmark-button"
-import { ScrollProgress } from "@/components/scroll-progress"
-import { RelatedContent } from "@/components/related-content"
-import { TOC } from "@/components/toc"
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { getContentByType, getContentItem } from "@/lib/content";
+import { siteConfig } from "@/lib/config";
+import { Calendar, ArrowLeft, Clock } from "lucide-react";
+import Link from "next/link";
+import { ContentRenderer } from "@/components/content-renderer";
+import { BookmarkButton } from "@/components/bookmark-button";
+import { ScrollProgress } from "@/components/scroll-progress";
+import { RelatedContent } from "@/components/related-content";
+import { TOC } from "@/components/toc";
+import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params
-  const post = getContentItem("tutorials", slug)
+  const { slug } = await params;
+  const post = getContentItem("tutorials", slug);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   const description =
-    post.description || post.content.slice(0, 160).replace(/\*/g, "") + "..."
+    post.description || post.content.slice(0, 160).replace(/\*/g, "") + "...";
   const ogImage = `${siteConfig.url}/api/og?title=${encodeURIComponent(
-    post.title
-  )}`
-  const postUrl = `${siteConfig.url}/tutorials/${post.slug}`
+    post.title,
+  )}`;
+  const postUrl = `${siteConfig.url}/tutorials/${post.slug}`;
 
   return {
     title: post.title,
@@ -52,22 +53,26 @@ export async function generateMetadata({
       description,
       images: [ogImage],
     },
-  }
+  };
 }
 
 export async function generateStaticParams() {
-  const posts = getContentByType("tutorials")
+  const posts = getContentByType("tutorials");
   return posts.map((post) => ({
     slug: post.slug,
-  }))
+  }));
 }
 
-export default async function TutorialPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const post = getContentItem("tutorials", slug)
+export default async function TutorialPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const post = getContentItem("tutorials", slug);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -85,7 +90,9 @@ export default async function TutorialPage({ params }: { params: Promise<{ slug:
         <div className="flex flex-col lg:flex-row gap-12">
           <article className="flex-1 min-w-0">
             <header className="mb-8 border-b border-border pb-8">
-              <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl font-google-sans">{post.title}</h1>
+              <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl font-google-sans">
+                {post.title}
+              </h1>
               {post.date && (
                 <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground font-local-inter">
                   <div className="flex items-center gap-2">
@@ -108,7 +115,7 @@ export default async function TutorialPage({ params }: { params: Promise<{ slug:
                       slug: post.slug,
                       title: post.title,
                       date: post.date,
-                      type: "tutorials"
+                      type: "tutorials",
                     }}
                   />
                 </div>
@@ -117,12 +124,13 @@ export default async function TutorialPage({ params }: { params: Promise<{ slug:
 
             <ContentRenderer content={post.content} id={post.slug} />
           </article>
-          
+
           <TOC content={post.content} />
         </div>
 
         <RelatedContent type="tutorials" currentSlug={post.slug} />
       </div>
+      {post.aiAssisted && <AIContentIndicator />}
     </div>
-  )
+  );
 }
