@@ -1,438 +1,177 @@
 # PrasadM | Engineering Blogfolio
 
-A modern, responsive personal blogfolio for documenting a mechatronics and mechanical engineering journey. Built with Next.js, Tailwind CSS, and featuring integrated support for mathematical equations (KaTeX), charts (Chart.js), and code syntax highlighting (Highlight.js).
+A comprehensive, high-performance personal blogfolio and engineering workspace built with Next.js 15, Tailwind CSS 4, and TypeScript. This platform is designed to document an engineering journey, featuring a file-based CMS, interactive tools, and technical documentation.
 
-This platform serves as a comprehensive blogfolio for documenting projects, identifying and solving real-world engineering challenges, and sharing technical expertise.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/PrasadM/pm-blogfolio-webapp)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/PrasadM/pm-blogfolio-webapp)
 
-## Features
+## 🚀 Key Features
 
-### File-Based Content Management System
+### 🛠️ Engineering Workspace
+A suite of over 30+ interactive tools for electronics, mechanical engineering, mechatronics, and data science.
+- **Electronics**: Resistor Solver, Voltage Divider, PCB Trace/Impedance, 555 Timer, LED Resistor, Op-Amp Gain.
+- **Mechanical**: Moment of Inertia, ISO Fits & Tolerances, Beam Deflection, Gear Ratio, Bolt Torque Chart.
+- **Mechatronics**: PID Simulator & Tuner, PWM to Voltage, Stepper Motor, Battery Estimator, Sensor Scaling.
+- **Software & Math**: Matrix Calculator, Curve Fitter, LaTeX/MathML Converter, Regex Architect, JSON Validator.
+- **Productivity**: Markdown Editor, User Persona Creator, Resume Creator, Color Contrast Checker.
 
-- **Automatic Page Generation**: Create `.md` or `.html` files in content directories to automatically generate pages
-- **Four Content Types**:
-  - **Blog** (`/blog/`) - Detailed project proposals and technical analyses
-  - **Articles** (`/articles/`) - Progress logs and reflections
-  - **Projects** (`/projects/`) - Methodologies and processes
-  - **Tutorials** (`/tutorials/`) - General updates and announcements
-  - **Quizzes** (`/quiz/`) - Interactive engineering knowledge assessments
-- **Dynamic Routing**: Files automatically become accessible at `/{type}/{filename}`
-- **Frontmatter Support**: YAML frontmatter for metadata (title, date, description)
+### 📚 Content Management System
+- **File-Based**: Simply add `.md` or `.html` files to the `content/` directory.
+- **Auto-Generation**: Pages for Blog, Articles, Projects, Wiki, and Tutorials are automatically generated based on the file system.
+- **Interactive Quizzes**: Embed assessments directly into content using a custom `[quiz]` syntax.
+- **Technical Support**: Native support for KaTeX (math), Highlight.js (syntax highlighting), and Chart.js (data viz).
 
-### Technical Integrations
+### 🔍 Discovery & Navigation
+- **Command Palette (Cmd+K)**: Site-wide search and navigation powered by a dedicated search index.
+- **Wiki & Glossary**: Structured technical knowledge base and filterable glossary.
+- **Site Directory**: A categorized overview (`/pages`) of every section of the site.
+- **External Aggregators**: Live discovery feeds from arXiv (research), Open Library (books), CheapShark (gaming deals), and Blogger RSS feeds.
 
-- **KaTeX**: Render mathematical equations inline (`$...$`) and display mode (`$$...$$`)
-- **Chart.js**: Interactive data visualizations and charts
-- **Highlight.js**: Syntax highlighting for code blocks (JavaScript, Python, C++, Bash)
-- **Markdown Support**: Full markdown rendering with GitHub-flavored markdown
+### 🌐 Performance & UX
+- **PWA Ready**: Offline support with a manual Service Worker implementation and optimized `manifest.json`.
+- **Responsive Design**: Optimized for all devices with mobile-specific performance tweaks.
+- **Enhanced UI**: Glassmorphism effects, custom cursor, custom context menu, and click-spark effects.
+- **Connectivity Listener**: Real-time online/offline notifications using Sonner toasts.
 
-### Design
-
-- **Dark Theme**: Professional dark color scheme with teal accent
-- **Responsive**: Mobile-first design that works on all devices
-- **Modern & Elegant**: Clean typography, card-based layouts, smooth transitions
-- **Sidebar Navigation**: Persistent navigation with active state indicators
-- **Accessible**: Semantic HTML, proper ARIA labels, keyboard navigation
-
-## Technology Stack
-
-- **Framework**: Next.js 15+ (App Router)
-- **Styling**: Tailwind CSS 4.0
-- **Language**: TypeScript
-- **Math Rendering**: KaTeX
-- **Charts**: Chart.js with react-chartjs-2
-- **Code Highlighting**: Highlight.js
-- **Markdown**: marked + gray-matter
-- **Icons**: Lucide React
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ and npm/yarn/pnpm
-- Git (for version control)
-
-### Installation
-
-1. **Clone or download the repository**
-
-```bash
-git clone <repository-url>
-cd engineering-project-webapp
-```
-
-2. **Install dependencies**
-
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-```
-
-3. **Run the development server**
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-4. **Open your browser**
-
-Navigate to [http://localhost:3000](http://localhost:3000)
-
-### Building for Production
-
-```bash
-npm run build
-npm start
-```
-
-## Content Management
-
-### Creating Content
-
-Content is managed through files in the `content/` directory:
-
-```
-content/
-├── blog/
-├── articles/
-├── projects/
-└── tutorials/
-```
-
-### File Format
-
-#### Markdown Files (`.md`)
-
-```markdown
----
-title: "Your Title Here"
-date: "2025-01-15"
-description: "Brief description of the content"
 ---
 
-## Your Content
+## 🏗️ Architecture & Implementation
 
-Write your content here using markdown syntax.
+### Core Features
+- **Dynamic Content Engine**: Uses `fs` and `gray-matter` in `lib/content.ts` to parse content files. Markdown is converted via `marked` with custom extensions.
+- **Interactive Quiz System**: Quizzes are defined as JSON within `[quiz]` blocks, interleaved with React components via `ContentRenderer`.
+- **Engineering Tools**: Self-contained React components using `Chart.js`, `Temml`, `html2canvas`, and `jsPDF`.
+- **Table of Contents (TOC)**: Automatically generated using a flexible regex parser for all content headings.
 
-### Math Equations
+### Optional Features
+- **Custom Service Worker**: Implements "Network-first" for navigation and "Cache-first" for assets (`public/sw.js`).
+- **SafeLink Redirects**: A security interstitial route (`/external-link`) for all outbound traffic.
+- **Global Theme Management**: Powered by `next-themes` with system-aware transitions.
+- **Custom UI Components**: `CustomCursor` and `CustomContextMenu` provide link-specific actions and visual feedback.
 
-Inline math: $E = mc^2$
-
-Display math:
-
-$$
-F = ma
-$$
-
-### Code Blocks
-
-```python
-def hello_world():
-    print("Hello, World!")
-```
-
-### Tables
-
-| Header 1 | Header 2 |
-|----------|----------|
-| Cell 1   | Cell 2   |
-```
-
-#### HTML Files (`.html`)
-
-```html
----
-title: "Your Title Here"
-date: "2025-01-15"
-description: "Brief description"
 ---
 
-<h2>Your Content</h2>
-<p>Write your content using HTML.</p>
-```
-
-### Interactive Quizzes
-
-The site features an interactive quiz system that can be embedded in any content or listed in the Quiz Library.
-
-#### How to embed a quiz
-
-Add a `[quiz]` block in your Markdown or HTML file:
-
-```json
-[quiz]
-{
-  "title": "Quiz Title",
-  "questions": [
-    {
-      "question": "What is 2 + 2?",
-      "options": ["3", "4", "5"],
-      "answer": 1,
-      "explanation": "2 + 2 is 4."
-    }
-  ]
-}
-[/quiz]
-```
-
-#### Quiz Features
-- **Progress Tracking**: Completion status and best scores are saved in the browser's local storage.
-- **Instant Feedback**: Immediate validation of answers with detailed explanations.
-- **Categorized Library**: A dedicated `/quiz` page allows filtering quizzes by category and tracking overall progress.
-
-### Example: Creating a New Blog Post
-
-1. Create a new file: `content/blog/my-new-post.md`
-2. Add frontmatter and content:
-
-```markdown
----
-title: "My Innovative Engineering Journey"
-date: "2025-01-20"
-description: "A revolutionary approach to solving problem X"
----
-
-## Problem Statement
-
-Describe the problem...
-
-## Proposed Solution
-
-Explain your solution...
-```
-
-3. The page will automatically be available at `/blog/my-new-post`
-
-## Project Structure
-
-```
-engineering-project-webapp/
-├── app/                      # Next.js app directory
-│   ├── page.tsx             # Homepage
-│   ├── layout.tsx           # Root layout with navigation
-│   ├── globals.css          # Global styles and theme
-│   ├── blog/                # Blog section
-│   │   ├── page.tsx         # Blog list page
-│   │   └── [slug]/          # Dynamic blog pages
-│   ├── articles/            # Articles section
-│   ├── projects/            # Projects section
-│   └── tutorials/           # Tutorials section
-├── components/              # React components
-│   ├── navigation.tsx       # Sidebar navigation
-│   ├── content-renderer.tsx # Content display with KaTeX/Highlight.js
-│   └── chart-example.tsx    # Chart.js examples
-├── content/                 # Content files
-│   ├── blog/               # Project blog (.md or .html files)
-│   ├── articles/           # Diary entries
-│   ├── projects/           # Workflow documentation
-│   └── tutorials/          # Blog posts
-├── lib/                     # Utility functions
-│   ├── utils.ts            # Helper functions
-│   └── content.ts          # Content management system
-├── public/                  # Static assets
-├── package.json            # Dependencies
-├── tsconfig.json           # TypeScript configuration
-└── README.md               # This file
-```
-
-## Using Technical Features
+## 🛠️ Using Technical Features
 
 ### Mathematical Equations (KaTeX)
-
-**Inline Math**: Wrap equations in single dollar signs
-
-```markdown
-The formula $E = mc^2$ shows the relationship between energy and mass.
-```
-
-**Display Math**: Wrap equations in double dollar signs
-
+**Inline Math**: Wrap equations in single dollar signs: `The formula $E = mc^2$ is iconic.`
+**Display Math**: Wrap equations in double dollar signs:
 ```markdown
 $$
 F = G \frac{m_1 m_2}{r^2}
 $$
 ```
 
-**Complex Equations**:
-
-```markdown
-$$
-\int_{a}^{b} f(x) \, dx = F(b) - F(a)
-$$
-```
-
 ### Code Syntax Highlighting (Highlight.js)
-
 Use fenced code blocks with language specification:
-
 ```python
-def calculate_force(mass, acceleration):
-    return mass * acceleration
-
-force = calculate_force(10, 9.81)
-print(f"Force: {force} N")
+def hello():
+    print("Hello Engineering!")
 ```
-
-Supported languages: JavaScript, Python, C++, Bash, and more.
 
 ### Charts (Chart.js)
-
-Charts can be added to content pages by creating custom components. See `components/chart-example.tsx` for examples.
-
-To add a chart to your content:
-
-1. Create a chart component in `components/`
-2. Import and use it in your content page
-3. Or embed chart data in markdown using custom syntax (requires additional setup)
-
-## Customization
-
-### Changing Colors
-
-Edit `app/globals.css` to modify the color scheme:
-
-```css
-:root {
-  --background: oklch(0.145 0.01 264);  /* Dark blue-gray */
-  --foreground: oklch(0.95 0.01 264);   /* Light text */
-  --primary: oklch(0.65 0.15 195);      /* Teal accent */
-  /* ... other colors ... */
-}
-```
-
-### Changing Fonts
-
-Edit `app/layout.tsx` to change fonts:
-
-```typescript
-import { Cute_Font as Your_Font } from 'next/font/google'
-
-const yourFont = Your_Font({
-  subsets: ["latin"],
-  variable: "--font-your-font",
-})
-```
-
-Then update `globals.css`:
-
-```css
-@theme inline {
-  --font-sans: var(--font-your-font);
-}
-```
-
-### Adding New Content Types
-
-1. Create a new directory in `content/` (e.g., `content/research/`)
-2. Create list page: `app/research/page.tsx`
-3. Create dynamic page: `app/research/[slug]/page.tsx`
-4. Use `getContentByType()` and `getContentItem()` from `lib/content.ts`
-5. Add navigation link in `components/navigation.tsx`
-
-## Sample Content
-
-The project includes sample content demonstrating:
-
-- **Smart Irrigation System** - IoT-based agricultural solution
-- **Low-Cost Agricultural Machinery** - Affordable equipment for small farmers
-- **Automated Waste Segregation** - AI-powered recycling system
-- **Project Diary** - Progress documentation
-- **Design Methodology** - Engineering workflow
-- **Welcome Post** - Project introduction
-
-These can be modified or deleted as needed.
-
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import project in Vercel
-3. Deploy automatically
-
-### Other Platforms
-
-The app can be deployed to any platform supporting Next.js:
-
-- Netlify
-- AWS Amplify
-- Railway
-- Self-hosted with Node.js
-
-## Development Tips
-
-### Hot Reload
-
-The development server supports hot reload. Changes to code and content files will automatically refresh the browser.
-
-### Adding Dependencies
-
-```bash
-npm install <package-name>
-```
-
-### TypeScript
-
-The project uses TypeScript for type safety. Type definitions are in `*.tsx` and `*.ts` files.
-
-### Linting
-
-```bash
-npm run lint
-```
-
-## Troubleshooting
-
-### Content Not Showing
-
-- Ensure files are in the correct `content/{type}/` directory
-- Check file extension is `.md` or `.html`
-- Verify frontmatter YAML is valid
-- Restart development server
-
-### Math Not Rendering
-
-- Check equation syntax (single `$` for inline, double `$$` for display)
-- Ensure no spaces between `$` and equation
-- Look for unescaped special characters
-
-### Code Not Highlighting
-
-- Specify language in code fence: ```python
-- Check if language is registered in `content-renderer.tsx`
-- Add new languages by importing from `highlight.js/lib/languages/`
-
-### Build Errors
-
-- Clear `.next` directory: `rm -rf .next`
-- Delete `node_modules` and reinstall: `rm -rf node_modules && npm install`
-- Check for TypeScript errors: `npm run build`
-
-## Contributing
-
-This is a personal blogfolio. For questions or suggestions, please reach out via the contact page.
-
-## License
-
-This project is for educational purposes and personal documentation of an engineering journey.
-
-## Acknowledgments
-
-- **The Open University of Sri Lanka**: For providing the academic foundation and resources.
-- **Open Source Community**: For the amazing tools and libraries.
-
-## Contact
-
-For more information about this project, please refer to the contact page on the website.
+Integrate interactive charts directly. Example usage in `components/chart-example.tsx`.
 
 ---
 
-**Built with ❤️ by PrasadM**
+## ✍️ Content Management
 
-**Sri Lanka | 2025**
+### Adding New Content
+1. Add a `.md` or `.html` file to `content/blog/`, `content/projects/`, etc.
+2. Include YAML frontmatter:
+```markdown
+---
+title: "Advanced PID Tuning"
+date: "2025-05-20"
+description: "A deep dive into optimizing PID parameters."
+category: "Mechatronics"
+tags: ["Control Theory", "Robotics"]
+technical: "Intermediate"
+---
+```
+
+### Embedding a Quiz
+```json
+[quiz]
+{
+  "title": "Control Theory Basics",
+  "questions": [
+    {
+      "question": "What does the 'D' in PID stand for?",
+      "options": ["Direct", "Derivative", "Differential", "Digital"],
+      "answer": 1,
+      "explanation": "D stands for Derivative."
+    }
+  ]
+}
+[/quiz]
+```
+
+---
+
+## 📁 Project Structure
+```text
+├── app/                  # Next.js App Router (Routes & Layouts)
+├── components/           # UI Components (Shadcn, Custom, Tools)
+├── content/              # CMS Content (.md, .html)
+├── hooks/                # Custom React Hooks
+├── lib/                  # Utilities and CMS Logic
+├── public/               # Static Assets (Fonts, Icons, SW)
+├── types/                # TypeScript Definitions
+└── README.md             # This documentation
+```
+
+---
+
+## 🔮 Roadmap & Future Implementations
+
+- [ ] **Interactive Roadmap**: A visual version of the engineering journey.
+- [ ] **User Accounts**: Save configurations and track learning progress.
+- [ ] **AI Technical Assistant**: Integrated LLM for technical queries.
+- [ ] **Multi-language Support (i18n)**: Expanding global accessibility.
+- [ ] **Community Forum**: Space for sharing engineering insights.
+- [ ] **Public API**: Expose calculation engines for integrations.
+
+---
+
+## 🔧 Troubleshooting
+
+### Content Not Showing
+- Verify file extension is `.md` or `.html`.
+- Check if the folder exists in `content/`.
+- Ensure valid YAML frontmatter.
+
+### Math Not Rendering
+- Check syntax (`$` for inline, `$$` for block).
+- Ensure `katex` CSS is imported in `layout.tsx`.
+
+### Build Errors
+- Clear cache: `rm -rf .next`
+- Reinstall: `rm -rf node_modules && npm install`
+
+---
+
+## 🚢 Deployment
+
+### Vercel (Recommended)
+1. Push code to GitHub.
+2. Import in Vercel.
+3. Automated deployment.
+
+### Other Platforms
+Supports Netlify, AWS Amplify, Railway, or self-hosting with Node.js.
+
+---
+
+## 📄 License
+This project is for educational purposes and personal documentation. Feel free to use it as a reference for your own engineering blogfolio.
+
+## 🤝 Acknowledgments
+- **The Open University of Sri Lanka** for academic support.
+- **Open Source Community** for libraries like Next.js, Tailwind, and KaTeX.
+
+## 📧 Contact
+For inquiries, reach out via the [Contact Page](/contact) on the website.
+
+---
+**Built with ❤️ by PrasadM | Sri Lanka | 2025**
