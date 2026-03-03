@@ -11,5 +11,6 @@
             "other": "on"
         },
         "editor.minimap.enabled": true
-    }
+    },
+    "chatgpt.commentCodeLensEnabled": false
 }

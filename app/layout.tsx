@@ -202,7 +202,7 @@ export default function RootLayout({
   return (
     // ${inter.variable} ${jetbrainsMono.variable} 
     <html lang="en" className={`${amoriaregular.variable} ${mozillaHeadline.variable} ${philosopher.variable} ${googleSans.variable} ${mozillaText.variable} ${notoSans.variable} ${notoSansDisplay.variable} ${notoSerifSinhala.variable} ${roboto.variable} ${spaceMono.variable} ${localInter.variable} ${localJetBrainsMono.variable}`}>
-      <body className="antialiased">
+      <body className="antialiased selection:bg-brand-200 selection:text-brand-900">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
