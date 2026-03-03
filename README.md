@@ -14,6 +14,7 @@ A suite of over 30+ interactive tools for electronics, mechanical engineering, m
 - **Mechatronics**: PID Simulator & Tuner, PWM to Voltage, Stepper Motor, Battery Estimator, Sensor Scaling.
 - **Software & Math**: Matrix Calculator, Curve Fitter, LaTeX/MathML Converter, Regex Architect, JSON Validator.
 - **Productivity**: Markdown Editor, User Persona Creator, Resume Creator, Color Contrast Checker.
+- **Education**: Engineering Student Navigator (OUSL Guide 2025/26).
 
 ### 📚 Content Management System
 - **File-Based**: Simply add `.md` or `.html` files to the `content/` directory.
