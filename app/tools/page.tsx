@@ -4,7 +4,8 @@ import {
     Edit3, Calculator, Replace, Code2, Sigma, ArrowRight, Scaling, Braces,
     Terminal, FileCode, Split, Users, Zap, Cpu, Timer, Lightbulb, Activity,
     Settings, Waypoints, Settings2, Wrench, MoveUpRight, Battery, LineChart, Ruler,
-    Database, Rocket, Gamepad2, Rss, FlaskConical,Layout, Library, Search, Grid3X3, Compass, Palette
+    Database, Rocket, Gamepad2, Rss, FlaskConical, Layout, Library, Search, Grid3X3, Compass, Palette,
+    GraduationCap
 } from "lucide-react"
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
@@ -15,6 +16,7 @@ interface Tool {
     icon: React.ElementType
     color: string
     bgColor: string
+    isNew?: boolean
 }
 
 const title = "Engineering Workspace"
@@ -348,6 +350,15 @@ const coreTools = [
         color: "text-cyan-500",
         bgColor: "bg-cyan-500/10",
     },
+    {
+        name: "Engineering Student Navigator",
+        slug: "student-guide-navigator",
+        description: "Interactive guide and utility for OUSL Engineering students (2025/26).",
+        icon: GraduationCap,
+        color: "text-emerald-500",
+        bgColor: "bg-emerald-500/10",
+        isNew: true,
+    },
 ]
 
 const discoveryTools = [
@@ -417,9 +428,16 @@ function ToolSection({ title, id, tools }: { title: string, id: string, tools: T
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between">
-                                    <h2 className="text-lg font-semibold group-hover:text-primary transition-colors google-sans truncate">
-                                        {tool.name}
-                                    </h2>
+                                    <div className="flex items-center gap-2 overflow-hidden">
+                                        <h2 className="text-lg font-semibold group-hover:text-primary transition-colors google-sans truncate">
+                                            {tool.name}
+                                        </h2>
+                                        {tool.isNew && (
+                                            <span className="px-1.5 py-0.5 text-[10px] font-bold bg-primary/10 text-primary rounded-md uppercase shrink-0">
+                                                New
+                                            </span>
+                                        )}
+                                    </div>
                                     <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary shrink-0" />
                                 </div>
                                 <p className="mt-1 text-xs text-muted-foreground leading-relaxed local-inter line-clamp-2">
