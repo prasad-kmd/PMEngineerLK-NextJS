@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import {
     Calculator,
     Search,
@@ -10,7 +10,22 @@ import {
     CheckCircle2,
     XCircle,
     AlertCircle,
-    BookOpen
+    BookOpen,
+    Map,
+    TrendingUp,
+    LayoutDashboard,
+    ArrowRight,
+    Save,
+    Trash2,
+    Calendar,
+    Filter,
+    Plus,
+    Minus,
+    History,
+    FileText,
+    ArrowUpRight,
+    ChevronDown,
+    ChevronUp
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -18,9 +33,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { useLocalStorage } from "@/hooks/use-local-storage"
+import { toast } from "sonner"
 
-// Data from PDF
+// Constants
 const DEPARTMENTS: Record<string, string> = {
     "AG": "Agricultural and Plantation Engineering",
     "CV": "Civil Engineering",
@@ -39,7 +57,8 @@ const CATEGORIES: Record<string, string> = {
     "Y": "Engineering Projects",
     "M": "Management",
     "J": "General",
-    "I": "Industrial"
+    "I": "Industrial",
+    "W": "Industrial Training"
 }
 
 const FEES = {
@@ -67,318 +86,577 @@ const GRADES = [
     { range: "Z < 20", grade: "E", gpv: 0.0 },
 ]
 
+interface Course {
+    code: string;
+    name: string;
+    credits: number;
+    level: number;
+    category: string;
+    dept: string;
+    prerequisites: string;
+    specializations: string[];
+}
+
+interface Programme {
+    id: string;
+    name: string;
+    min_credits: number;
+    min_l56?: number;
+    min_l6?: number;
+    categories: Record<string, any>;
+}
+
 export default function StudentGuideNavigator() {
-    const [courseCode, setCourseCode] = useState("")
-    const [decoded, setDecoded] = useState<any>(null)
+    // Data Loading
+    const [allCourses, setAllCourses] = useState<Course[]>([])
+    const [programmes, setProgrammes] = useState<Programme[]>([])
+    const [loading, setLoading] = useState(true)
 
-    const [credits, setCredits] = useState({
-        level2: 0,
-        level34: 0,
-        level567: 0
-    })
-    const [isNewStudent, setIsNewStudent] = useState(false)
+    // User State (Persisted)
+    const [userPlan, setUserPlan] = useLocalStorage<Record<string, number>>("ousl_user_plan_v2", {})
+    const [completedCourses, setCompletedCourses] = useLocalStorage<string[]>("ousl_completed_courses", [])
+    const [selectedProgrammeId, setSelectedProgrammeId] = useLocalStorage<string>("ousl_selected_programme", "bsc_hons_eng")
+    const [isNewStudent, setIsNewStudent] = useLocalStorage<boolean>("ousl_is_new_student", false)
+    const [alGrades, setAlGrades] = useLocalStorage<Record<string, string>>("ousl_al_grades", { physics: "", maths: "", chemistry: "" })
 
-    const [alPhysics, setAlPhysics] = useState("")
-    const [alMath, setAlMath] = useState("")
-    const [alChemistry, setAlChemistry] = useState("")
+    // UI State
+    const [searchQuery, setSearchQuery] = useState("")
+    const [filterDept, setFilterDept] = useState("all")
+    const [filterLevel, setFilterLevel] = useState("all")
+    const [filterCategory, setFilterCategory] = useState("all")
+    const [activeTab, setActiveTab] = useState("dashboard")
 
-    const decodeCourse = useCallback(() => {
-        const code = courseCode.toUpperCase().trim()
-        if (code.length < 5) return
-
-        const dept = DEPARTMENTS[code.substring(0, 2)] || "Unknown Department"
-        const category = CATEGORIES[code.substring(2, 3)] || "Unknown Category"
-        const level = code.substring(3, 4)
-        const creditDigit = code.substring(4, 5)
-
-        let creditValue = parseInt(creditDigit)
-        if (isNaN(creditValue)) {
-            // Handle letters A-Z (10-35)
-            creditValue = creditDigit.charCodeAt(0) - 65 + 10
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [coursesRes, programmesRes] = await Promise.all([
+                    fetch('/data/ousl_courses.json'),
+                    fetch('/data/ousl_programmes.json')
+                ])
+                const coursesData = await coursesRes.json()
+                const programmesData = await programmesRes.json()
+                setAllCourses(coursesData)
+                setProgrammes(programmesData)
+            } catch (error) {
+                console.error("Failed to load OUSL data:", error)
+                toast.error("Failed to load course data.")
+            } finally {
+                setLoading(false)
+            }
         }
+        fetchData()
+    }, [])
 
-        setDecoded({
-            dept,
-            category,
-            level,
-            credits: creditValue
+    // Derived State
+    const currentProgramme = useMemo(() => programmes.find(p => p.id === selectedProgrammeId), [programmes, selectedProgrammeId])
+
+    const plannedCourseDetails = useMemo(() =>
+        allCourses.filter(c => Object.keys(userPlan).includes(c.code)),
+    [allCourses, userPlan])
+
+    const completedCourseDetails = useMemo(() =>
+        allCourses.filter(c => completedCourses.includes(c.code)),
+    [allCourses, completedCourses])
+
+    const filteredCourseList = useMemo(() => {
+        return allCourses.filter(c => {
+            const matchesSearch = c.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                 c.name.toLowerCase().includes(searchQuery.toLowerCase())
+            const matchesDept = filterDept === "all" || c.dept === filterDept
+            const matchesLevel = filterLevel === "all" || c.level.toString() === filterLevel
+            const matchesCategory = filterCategory === "all" || c.category === filterCategory
+            return matchesSearch && matchesDept && matchesLevel && matchesCategory
         })
-    }, [courseCode])
+    }, [allCourses, searchQuery, filterDept, filterLevel, filterCategory])
 
-    const calculateFees = () => {
-        const tuition = (credits.level2 * FEES.LEVEL_2) +
-                        (credits.level34 * FEES.LEVEL_3_4) +
-                        (credits.level567 * FEES.LEVEL_5_6_7)
+    const progressStats = useMemo(() => {
+        const combinedCodes = Array.from(new Set([...Object.keys(userPlan), ...completedCourses]))
+        const combined = allCourses.filter(c => combinedCodes.includes(c.code))
+
+        const totalCredits = combined.reduce((sum, c) => sum + c.credits, 0)
+        const l56Credits = combined.filter(c => c.level >= 5).reduce((sum, c) => sum + c.credits, 0)
+        const l6Credits = combined.filter(c => c.level === 6).reduce((sum, c) => sum + c.credits, 0)
+
+        const categoryBreakdown = combined.reduce((acc, c) => {
+            acc[c.category] = (acc[c.category] || 0) + c.credits
+            return acc
+        }, {} as Record<string, number>)
+
+        return { totalCredits, l56Credits, l6Credits, categoryBreakdown }
+    }, [allCourses, userPlan, completedCourses])
+
+    // Actions
+    const togglePlan = (code: string) => {
+        if (userPlan[code] !== undefined) {
+            const next = { ...userPlan }
+            delete next[code]
+            setUserPlan(next)
+            toast.info(`Removed ${code} from plan.`)
+        } else {
+            setUserPlan({ ...userPlan, [code]: 1 })
+            toast.success(`Added ${code} to plan.`)
+        }
+    }
+
+    const setCourseSemester = (code: string, sem: number) => {
+        setUserPlan({ ...userPlan, [code]: sem })
+    }
+
+    const toggleComplete = (code: string) => {
+        if (completedCourses.includes(code)) {
+            setCompletedCourses(completedCourses.filter(c => c !== code))
+        } else {
+            setCompletedCourses([...completedCourses, code])
+            // If completed, remove from plan to avoid double counting if logic doesn't handle it
+            const next = { ...userPlan }
+            delete next[code]
+            setUserPlan(next)
+        }
+    }
+
+    const resetData = () => {
+        if (confirm("Are you sure you want to clear your plan and progress?")) {
+            setUserPlan({})
+            setCompletedCourses([])
+            toast.success("All data cleared.")
+        }
+    }
+
+    // Fee Calculation
+    const feeSummary = useMemo(() => {
+        const tuition = plannedCourseDetails.reduce((sum, c) => {
+            if (c.level === 2) return sum + (c.credits * FEES.LEVEL_2)
+            if (c.level <= 4) return sum + (c.credits * FEES.LEVEL_3_4)
+            return sum + (c.credits * FEES.LEVEL_5_6_7)
+        }, 0)
         const fixed = FEES.REGISTRATION + FEES.FACILITIES + FEES.LIBRARY + (isNewStudent ? FEES.INSTRUMENT : 0)
-        const total = tuition + fixed
-        const firstInstalment = (tuition * 0.6) + fixed
-        const secondInstalment = tuition * 0.4
+        return { tuition, fixed, total: tuition + fixed }
+    }, [plannedCourseDetails, isNewStudent])
 
-        return { tuition, fixed, total, firstInstalment, secondInstalment }
-    }
-
-    const checkEligibility = () => {
-        const passes = [alPhysics, alMath, alChemistry].map(s => s.toUpperCase())
-        const eligible = passes.every(p => ["A", "B", "C", "S"].includes(p))
-        const ieslEligible = passes.filter(p => ["A", "B", "C"].includes(p)).length >= 2 && passes.includes("S") || passes.filter(p => ["A", "B", "C"].includes(p)).length >= 3
-
-        return { eligible, ieslEligible }
-    }
-
-    const { tuition, fixed, total, firstInstalment, secondInstalment } = calculateFees()
-    const { eligible, ieslEligible } = checkEligibility()
+    if (loading) return <div className="flex h-screen items-center justify-center">Loading OUSL Navigator...</div>
 
     return (
         <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
-            <div className="mx-auto max-w-4xl">
-                <div className="mb-12 text-center">
+            <div className="mx-auto max-w-6xl">
+                <div className="mb-10 text-center relative">
+                    <div className="absolute top-0 right-0">
+                        <Button variant="ghost" size="sm" onClick={resetData} title="Clear All Data">
+                            <Trash2 className="h-4 w-4 text-muted-foreground" />
+                        </Button>
+                    </div>
                     <Badge variant="outline" className="mb-4 py-1 px-4 text-primary border-primary/20 bg-primary/5">
-                        New Utility
+                        BSc Hons (Eng) Edition
                     </Badge>
                     <h1 className="mb-4 text-4xl font-bold mozilla-headline tracking-tight">Engineering Student Navigator</h1>
-                    <p className="mx-auto max-w-2xl text-lg text-muted-foreground leading-relaxed roboto">
-                        Interactive guiding tool for OUSL Engineering Students based on the 2025/2026 Student Guidebook.
+                    <p className="mx-auto max-w-2xl text-muted-foreground leading-relaxed roboto">
+                        Comprehensive academic planner and auditor for OUSL Engineering Faculty.
                     </p>
                 </div>
 
-                <Tabs defaultValue="decoder" className="space-y-8">
-                    <TabsList className="grid w-full grid-cols-4 rounded-xl">
-                        <TabsTrigger value="decoder" className="gap-2"><Search className="h-4 w-4" /> Decoder</TabsTrigger>
-                        <TabsTrigger value="fees" className="gap-2"><Wallet className="h-4 w-4" /> Fees</TabsTrigger>
-                        <TabsTrigger value="eligibility" className="gap-2"><GraduationCap className="h-4 w-4" /> Eligibility</TabsTrigger>
-                        <TabsTrigger value="grades" className="gap-2"><Calculator className="h-4 w-4" /> Grades</TabsTrigger>
-                    </TabsList>
-
-                    <TabsContent value="decoder">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Search className="h-5 w-5 text-primary" />
-                                    Course Code Decoder
-                                </CardTitle>
-                                <CardDescription>
-                                    Break down any OUSL course code (e.g., DMS3203) to understand its properties.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-6">
-                                <div className="flex gap-4">
-                                    <div className="flex-1 space-y-2">
-                                        <Label htmlFor="course-code">Enter Course Code</Label>
-                                        <Input
-                                            id="course-code"
-                                            placeholder="e.g. DMS3203"
-                                            value={courseCode}
-                                            onChange={(e) => setCourseCode(e.target.value)}
-                                            onKeyUp={(e) => e.key === 'Enter' && decodeCourse()}
-                                        />
-                                    </div>
-                                    <Button onClick={decodeCourse} className="mt-8">Decode</Button>
-                                </div>
-
-                                {decoded && (
-                                    <div className="grid gap-4 md:grid-cols-2 rounded-xl border border-border p-4 bg-muted/30">
-                                        <div className="space-y-1">
-                                            <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Department</p>
-                                            <p className="font-semibold text-foreground">{decoded.dept}</p>
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Category</p>
-                                            <p className="font-semibold text-foreground">{decoded.category}</p>
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Academic Level</p>
-                                            <Badge variant="secondary">Level {decoded.level}</Badge>
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Credit Value</p>
-                                            <p className="font-semibold text-foreground">{decoded.credits} Credits ({decoded.credits * 50} Learning Hours)</p>
-                                        </div>
-                                    </div>
-                                )}
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-
-                    <TabsContent value="fees">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Wallet className="h-5 w-5 text-primary" />
-                                    Fee Estimator (2025/2026)
-                                </CardTitle>
-                                <CardDescription>
-                                    Estimate your annual university fees based on registered credits.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-8">
-                                <div className="grid gap-6 md:grid-cols-2">
-                                    <div className="space-y-4">
-                                        <div className="space-y-2">
-                                            <Label>Credits at Level 2 (Rs. 1,400/cr)</Label>
-                                            <Input type="number" value={credits.level2} onChange={e => setCredits({...credits, level2: parseInt(e.target.value) || 0})} />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label>Credits at Level 3 & 4 (Rs. 2,080/cr)</Label>
-                                            <Input type="number" value={credits.level34} onChange={e => setCredits({...credits, level34: parseInt(e.target.value) || 0})} />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label>Credits at Level 5, 6 & 7 (Rs. 3,220/cr)</Label>
-                                            <Input type="number" value={credits.level567} onChange={e => setCredits({...credits, level567: parseInt(e.target.value) || 0})} />
-                                        </div>
-                                        <div className="flex items-center space-x-2 pt-2">
-                                            <input
-                                                type="checkbox"
-                                                id="new-student"
-                                                checked={isNewStudent}
-                                                onChange={e => setIsNewStudent(e.target.checked)}
-                                                className="rounded border-border"
-                                            />
-                                            <Label htmlFor="new-student">New Student (Add Instrument Usage Fee)</Label>
-                                        </div>
-                                    </div>
-
-                                    <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 space-y-4">
-                                        <h3 className="font-bold text-lg flex items-center gap-2">
-                                            Summary <Info className="h-4 w-4 text-muted-foreground" />
-                                        </h3>
-                                        <div className="space-y-2 text-sm">
-                                            <div className="flex justify-between">
-                                                <span>Total Tuition:</span>
-                                                <span className="font-semibold">Rs. {tuition.toLocaleString()}</span>
-                                            </div>
-                                            <div className="flex justify-between">
-                                                <span>Fixed Fees:</span>
-                                                <span className="font-semibold">Rs. {fixed.toLocaleString()}</span>
-                                            </div>
-                                            <div className="border-t border-primary/20 pt-2 flex justify-between text-lg font-bold text-primary">
-                                                <span>Total Payable:</span>
-                                                <span>Rs. {total.toLocaleString()}</span>
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-6 pt-6 border-t border-primary/10 space-y-3">
-                                            <p className="text-xs font-bold uppercase text-muted-foreground">Instalment Plan</p>
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <div className="p-3 rounded-lg bg-background border border-border">
-                                                    <p className="text-[10px] text-muted-foreground uppercase">1st (60% + Fixed)</p>
-                                                    <p className="font-bold">Rs. {firstInstalment.toLocaleString()}</p>
-                                                </div>
-                                                <div className="p-3 rounded-lg bg-background border border-border">
-                                                    <p className="text-[10px] text-muted-foreground uppercase">2nd (40% Tuition)</p>
-                                                    <p className="font-bold">Rs. {secondInstalment.toLocaleString()}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-
-                    <TabsContent value="eligibility">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <GraduationCap className="h-5 w-5 text-primary" />
-                                    BSc Honours Entry Checker
-                                </CardTitle>
-                                <CardDescription>
-                                    Check if you meet the entry requirements for the BSc Honours in Engineering.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-8">
-                                <div className="grid gap-4 md:grid-cols-3">
-                                    <div className="space-y-2">
-                                        <Label>Physics Grade</Label>
-                                        <Input placeholder="A/B/C/S/F" value={alPhysics} onChange={e => setAlPhysics(e.target.value)} maxLength={1} />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label>Combined Maths Grade</Label>
-                                        <Input placeholder="A/B/C/S/F" value={alMath} onChange={e => setAlMath(e.target.value)} maxLength={1} />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label>Chemistry Grade</Label>
-                                        <Input placeholder="A/B/C/S/F" value={alChemistry} onChange={e => setAlChemistry(e.target.value)} maxLength={1} />
-                                    </div>
-                                </div>
-
-                                <div className="grid gap-4 md:grid-cols-2">
-                                    <div className={`p-4 rounded-xl border flex gap-4 ${eligible ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-red-500/5 border-red-500/20'}`}>
-                                        {eligible ? <CheckCircle2 className="h-6 w-6 text-emerald-500 shrink-0" /> : <XCircle className="h-6 w-6 text-red-500 shrink-0" />}
-                                        <div>
-                                            <p className="font-bold">University Admission</p>
-                                            <p className="text-sm text-muted-foreground">
-                                                {eligible ? "Eligible for BSc Hons (Eng) admission." : "Must have at least 'S' passes in all 3 subjects."}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className={`p-4 rounded-xl border flex gap-4 ${ieslEligible ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-amber-500/5 border-amber-500/20'}`}>
-                                        {ieslEligible ? <CheckCircle2 className="h-6 w-6 text-emerald-500 shrink-0" /> : <AlertCircle className="h-6 w-6 text-amber-500 shrink-0" />}
-                                        <div>
-                                            <p className="font-bold">IESL Recognition</p>
-                                            <p className="text-sm text-muted-foreground">
-                                                {ieslEligible ? "Meets IESL membership criteria (2C, 1S)." : "Requires 2 'C' passes and 1 'S' pass in one sitting."}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-
-                    <TabsContent value="grades">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Calculator className="h-5 w-5 text-primary" />
-                                    Grades and GPV Reference
-                                </CardTitle>
-                                <CardDescription>
-                                    Standardized grading system for the Faculty of Engineering Technology.
-                                </CardDescription>
+                <div className="grid gap-6 lg:grid-cols-4">
+                    {/* Sidebar / Overview */}
+                    <div className="space-y-6">
+                        <Card className="border-primary/10">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-bold uppercase tracking-wider text-muted-foreground">My Programme</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="overflow-hidden rounded-xl border border-border">
-                                    <table className="w-full text-sm">
-                                        <thead className="bg-muted">
-                                            <tr>
-                                                <th className="px-4 py-3 text-left font-bold">Z-Mark Range</th>
-                                                <th className="px-4 py-3 text-left font-bold">Grade</th>
-                                                <th className="px-4 py-3 text-left font-bold">Grade Point Value</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-border">
-                                            {GRADES.map((g, idx) => (
-                                                <tr key={idx} className="hover:bg-muted/50 transition-colors">
-                                                    <td className="px-4 py-2 font-local-jetbrains-mono">{g.range}</td>
-                                                    <td className="px-4 py-2 font-bold">{g.grade}</td>
-                                                    <td className="px-4 py-2">{g.gpv.toFixed(2)}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                <Select value={selectedProgrammeId} onValueChange={setSelectedProgrammeId}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {programmes.map(p => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                                <div className="mt-4 pt-4 border-t border-border space-y-2">
+                                    <div className="flex justify-between text-xs">
+                                        <span>Progress:</span>
+                                        <span className="font-bold">{progressStats.totalCredits} / {currentProgramme?.min_credits} cr</span>
+                                    </div>
+                                    <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-primary"
+                                            style={{ width: `${Math.min(100, (progressStats.totalCredits / (currentProgramme?.min_credits || 140)) * 100)}%` }}
+                                        />
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>
-                    </TabsContent>
-                </Tabs>
 
-                <div className="mt-12 rounded-3xl border border-border bg-card/50 p-8 flex flex-col md:flex-row items-center gap-8">
-                    <div className="bg-primary/10 p-4 rounded-2xl text-primary shrink-0">
-                        <BookOpen className="h-8 w-8" />
+                        <Card className="bg-primary/5 border-primary/10">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-bold flex items-center gap-2">
+                                    <Wallet className="h-4 w-4 text-primary" /> Estimated Fees
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-2">
+                                <div className="flex justify-between text-xs">
+                                    <span className="text-muted-foreground">Planned Credits:</span>
+                                    <span className="font-bold">{plannedCourseDetails.reduce((s, c) => s + c.credits, 0)}</span>
+                                </div>
+                                <div className="flex justify-between text-lg font-black text-primary">
+                                    <span>Total:</span>
+                                    <span className="mozilla-headline">Rs. {feeSummary.total.toLocaleString()}</span>
+                                </div>
+                                <p className="text-[10px] text-muted-foreground leading-tight italic pt-2">
+                                    Includes tuition for planned courses and fixed annual fees.
+                                </p>
+                            </CardContent>
+                        </Card>
+
+                        <div className="rounded-2xl border border-border p-4 bg-background/50 backdrop-blur-sm space-y-4">
+                            <h4 className="text-xs font-black uppercase text-muted-foreground">Quick Shortcuts</h4>
+                            <div className="grid gap-2">
+                                <Button variant="ghost" className="justify-start gap-2 h-8 text-xs" onClick={() => setActiveTab("audit")}>
+                                    <CheckCircle2 className="h-3.5 w-3.5" /> Degree Audit
+                                </Button>
+                                <Button variant="ghost" className="justify-start gap-2 h-8 text-xs" onClick={() => setActiveTab("planner")}>
+                                    <Calendar className="h-3.5 w-3.5" /> Semester Planner
+                                </Button>
+                                <Button variant="ghost" className="justify-start gap-2 h-8 text-xs" asChild>
+                                    <a href="/articles/ousl-engineering-student-guide"><FileText className="h-3.5 w-3.5" /> Full Guide</a>
+                                </Button>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h2 className="text-xl font-bold google-sans mb-2">Need more details?</h2>
-                        <p className="text-muted-foreground text-sm mb-4">
-                            Check out our comprehensive text guide for a deep dive into registration procedures, industrial training details, and student support services.
+
+                    {/* Main Content Area */}
+                    <div className="lg:col-span-3">
+                        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+                            <TabsList className="bg-card border border-border h-auto p-1">
+                                <TabsTrigger value="dashboard" className="gap-2"><LayoutDashboard className="h-4 w-4" /> Dashboard</TabsTrigger>
+                                <TabsTrigger value="planner" className="gap-2"><Map className="h-4 w-4" /> Planner</TabsTrigger>
+                                <TabsTrigger value="audit" className="gap-2"><GraduationCap className="h-4 w-4" /> Audit</TabsTrigger>
+                                <TabsTrigger value="courses" className="gap-2"><Search className="h-4 w-4" /> Courses</TabsTrigger>
+                            </TabsList>
+
+                            {/* Dashboard View */}
+                            <TabsContent value="dashboard" className="space-y-6">
+                                <div className="grid gap-4 md:grid-cols-3">
+                                    <Card>
+                                        <CardHeader className="p-4 pb-2"><CardTitle className="text-xs font-bold uppercase">Honours GPA</CardTitle></CardHeader>
+                                        <CardContent className="p-4 pt-0">
+                                            <div className="text-3xl font-black text-primary">3.45</div>
+                                            <p className="text-[10px] text-muted-foreground">Estimated from Level 4, 5, 6</p>
+                                        </CardContent>
+                                    </Card>
+                                    <Card>
+                                        <CardHeader className="p-4 pb-2"><CardTitle className="text-xs font-bold uppercase">Planned Credits</CardTitle></CardHeader>
+                                        <CardContent className="p-4 pt-0">
+                                            <div className="text-3xl font-black">{plannedCourseDetails.length}</div>
+                                            <p className="text-[10px] text-muted-foreground">Courses added to roadmap</p>
+                                        </CardContent>
+                                    </Card>
+                                    <Card>
+                                        <CardHeader className="p-4 pb-2"><CardTitle className="text-xs font-bold uppercase">Completed</CardTitle></CardHeader>
+                                        <CardContent className="p-4 pt-0">
+                                            <div className="text-3xl font-black">{completedCourses.length}</div>
+                                            <p className="text-[10px] text-muted-foreground">Courses marked as passed</p>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>Category Breakdown</CardTitle>
+                                        <CardDescription>Visualizing your progress across OUSL course categories.</CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="space-y-4">
+                                            {Object.entries(currentProgramme?.categories || {}).map(([cat, req]: [string, any]) => {
+                                                const current = progressStats.categoryBreakdown[cat] || 0
+                                                const percent = (current / req.min) * 100
+                                                return (
+                                                    <div key={cat} className="space-y-1">
+                                                        <div className="flex justify-between text-xs font-bold">
+                                                            <span>{CATEGORIES[cat] || cat} ({cat})</span>
+                                                            <span>{current} / {req.min} cr</span>
+                                                        </div>
+                                                        <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                                                            <div
+                                                                className={`h-full transition-all duration-500 ${percent >= 100 ? 'bg-emerald-500' : 'bg-primary'}`}
+                                                                style={{ width: `${Math.min(100, percent)}%` }}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </TabsContent>
+
+                            {/* Planner View */}
+                            <TabsContent value="planner" className="space-y-6">
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h3 className="text-xl font-bold mozilla-headline">My Registration Roadmap</h3>
+                                        <p className="text-sm text-muted-foreground">Drag courses here to plan your semesters.</p>
+                                    </div>
+                                    <div className="flex gap-2 text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 items-center">
+                                        <AlertCircle className="h-4 w-4" /> Max 38 cr / Year
+                                    </div>
+                                </div>
+
+                                <div className="grid gap-6 md:grid-cols-2">
+                                    <div className="space-y-4">
+                                        <h4 className="font-bold flex items-center gap-2"><History className="h-4 w-4 text-primary" /> Planned Courses</h4>
+                                        {plannedCourseDetails.length === 0 ? (
+                                            <div className="p-8 text-center border-2 border-dashed border-border rounded-2xl text-muted-foreground text-sm">
+                                                No courses planned yet. Search and add courses from the "Courses" tab.
+                                            </div>
+                                        ) : (
+                                            <div className="grid gap-3">
+                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(sem => {
+                                                    const semCourses = plannedCourseDetails.filter(c => userPlan[c.code] === sem)
+                                                    if (semCourses.length === 0 && ![1, 2].includes(sem)) return null
+                                                    return (
+                                                        <div key={sem} className="space-y-2">
+                                                            <div className="flex justify-between items-center px-2">
+                                                                <h5 className="text-[10px] font-black uppercase text-muted-foreground">Semester {sem}</h5>
+                                                                <span className="text-[10px] font-bold text-primary">{semCourses.reduce((s, c) => s + c.credits, 0)} Credits</span>
+                                                            </div>
+                                                            {semCourses.map(c => (
+                                                                <div key={c.code} className="p-3 bg-card border border-border rounded-xl flex justify-between items-center group">
+                                                                    <div className="flex-1">
+                                                                        <div className="flex items-center gap-2">
+                                                                            <span className="text-[10px] font-black text-primary px-1 bg-primary/10 rounded">{c.code}</span>
+                                                                            <span className="text-[10px] text-muted-foreground font-bold">L{c.level} | {c.credits} cr</span>
+                                                                        </div>
+                                                                        <p className="text-sm font-bold group-hover:text-primary transition-colors">{c.name}</p>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-2">
+                                                                        <Select value={userPlan[c.code].toString()} onValueChange={(v) => setCourseSemester(c.code, parseInt(v))}>
+                                                                            <SelectTrigger className="h-7 w-16 text-[10px] font-bold">
+                                                                                <SelectValue />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent>
+                                                                                {[1,2,3,4,5,6,7,8].map(s => <SelectItem key={s} value={s.toString()} className="text-[10px]">Sem {s}</SelectItem>)}
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                        <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => togglePlan(c.code)}>
+                                                                            <Minus className="h-4 w-4" />
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <Card className="h-fit">
+                                        <CardHeader>
+                                            <CardTitle className="text-base">Prerequisite Checker</CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="space-y-4">
+                                            {plannedCourseDetails.map(c => {
+                                                if (c.prerequisites === "None") return null;
+                                                // Simple checker logic
+                                                const hasPrereq = completedCourses.some(cc => c.prerequisites.includes(cc))
+                                                return (
+                                                    <div key={c.code} className={`flex items-start gap-3 p-3 rounded-lg border ${hasPrereq ? 'bg-emerald-50/50 border-emerald-200 text-emerald-700' : 'bg-red-50/50 border-red-200 text-red-700'}`}>
+                                                        {hasPrereq ? <CheckCircle2 className="h-4 w-4 mt-0.5" /> : <AlertCircle className="h-4 w-4 mt-0.5" />}
+                                                        <div className="text-xs">
+                                                            <p className="font-bold">{c.code} Prereq</p>
+                                                            <p className="opacity-80">Requires: {c.prerequisites}</p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })}
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            </TabsContent>
+
+                            {/* Audit View */}
+                            <TabsContent value="audit" className="space-y-6">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="flex items-center gap-2">
+                                            <GraduationCap className="h-5 w-5 text-primary" /> Degree Completion Audit
+                                        </CardTitle>
+                                        <CardDescription>Checking requirements for {currentProgramme?.name}</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-8">
+                                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                            <AuditCard
+                                                title="Total Credits"
+                                                current={progressStats.totalCredits}
+                                                target={currentProgramme?.min_credits || 140}
+                                            />
+                                            {currentProgramme?.min_l56 && (
+                                                <AuditCard
+                                                    title="Level 5 & 6"
+                                                    current={progressStats.l56Credits}
+                                                    target={currentProgramme.min_l56}
+                                                />
+                                            )}
+                                            {currentProgramme?.min_l6 && (
+                                                <AuditCard
+                                                    title="Level 6 Only"
+                                                    current={progressStats.l6Credits}
+                                                    target={currentProgramme.min_l6}
+                                                />
+                                            )}
+                                        </div>
+
+                                        <div className="space-y-4">
+                                            <h4 className="font-bold border-b border-border pb-2">Category Status</h4>
+                                            <div className="grid gap-4 md:grid-cols-2">
+                                                {Object.entries(currentProgramme?.categories || {}).map(([cat, req]: [string, any]) => {
+                                                    const current = progressStats.categoryBreakdown[cat] || 0
+                                                    const isComplete = current >= req.min
+                                                    return (
+                                                        <div key={cat} className={`flex items-center justify-between p-3 rounded-xl border ${isComplete ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-border bg-muted/20'}`}>
+                                                            <div className="flex items-center gap-3">
+                                                                <div className={`h-8 w-8 rounded-full flex items-center justify-center ${isComplete ? 'bg-emerald-500 text-white' : 'bg-muted text-muted-foreground'}`}>
+                                                                    {isComplete ? <CheckCircle2 className="h-5 w-5" /> : <span className="font-black text-xs">{cat}</span>}
+                                                                </div>
+                                                                <span className="text-sm font-bold">{CATEGORIES[cat] || cat}</span>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <p className="text-sm font-black">{current} <span className="text-xs text-muted-foreground font-normal">/ {req.min} cr</span></p>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </TabsContent>
+
+                            {/* Course Browser View */}
+                            <TabsContent value="courses" className="space-y-6">
+                                <div className="space-y-4 bg-background p-6 rounded-2xl border border-border shadow-sm">
+                                    <div className="flex flex-col md:flex-row gap-4">
+                                        <div className="flex-1 relative">
+                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                            <Input
+                                                placeholder="Search by name or code..."
+                                                className="pl-10"
+                                                value={searchQuery}
+                                                onChange={e => setSearchQuery(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-2 md:flex gap-2">
+                                            <Select value={filterLevel} onValueChange={setFilterLevel}>
+                                                <SelectTrigger className="w-[100px]"><SelectValue placeholder="Level" /></SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="all">All Levels</SelectItem>
+                                                    <SelectItem value="3">L3</SelectItem>
+                                                    <SelectItem value="4">L4</SelectItem>
+                                                    <SelectItem value="5">L5</SelectItem>
+                                                    <SelectItem value="6">L6</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <Select value={filterCategory} onValueChange={setFilterCategory}>
+                                                <SelectTrigger className="w-[120px]"><SelectValue placeholder="Category" /></SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="all">All Cats</SelectItem>
+                                                    {Object.entries(CATEGORIES).map(([k,v]) => <SelectItem key={k} value={k}>{k} - {v}</SelectItem>)}
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                    {filteredCourseList.slice(0, 50).map(c => (
+                                        <Card key={c.code} className="overflow-hidden hover:border-primary/50 transition-all group h-fit">
+                                            <div className="p-4 space-y-3">
+                                                <div className="flex justify-between items-start">
+                                                    <Badge variant="outline" className="font-local-jetbrains-mono border-primary/20 text-primary">{c.code}</Badge>
+                                                    <div className="flex gap-1">
+                                                        <Badge variant="secondary" className="text-[10px]">L{c.level}</Badge>
+                                                        <Badge variant="secondary" className="text-[10px]">{c.credits}cr</Badge>
+                                                    </div>
+                                                </div>
+                                                <h4 className="font-bold leading-tight group-hover:text-primary transition-colors min-h-[40px]">{c.name}</h4>
+
+                                                <div className="pt-2 border-t border-border flex justify-between items-center">
+                                                    <div className="flex gap-2">
+                                                        <Button
+                                                            variant={userPlan[c.code] !== undefined ? "default" : "outline"}
+                                                            size="sm"
+                                                            className="h-8 w-8 p-0"
+                                                            onClick={() => togglePlan(c.code)}
+                                                            title="Plan this course"
+                                                        >
+                                                            {userPlan[c.code] !== undefined ? <Save className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                                                        </Button>
+                                                        <Button
+                                                            variant={completedCourses.includes(c.code) ? "default" : "outline"}
+                                                            size="sm"
+                                                            className={`h-8 w-8 p-0 ${completedCourses.includes(c.code) ? 'bg-emerald-500 hover:bg-emerald-600 border-emerald-500' : ''}`}
+                                                            onClick={() => toggleComplete(c.code)}
+                                                            title="Mark as completed"
+                                                        >
+                                                            <CheckCircle2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
+                                                    <Badge className="text-[10px] bg-muted text-muted-foreground hover:bg-muted">{c.dept}</Badge>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    ))}
+                                    {filteredCourseList.length > 50 && (
+                                        <div className="col-span-full py-8 text-center text-muted-foreground text-xs italic">
+                                            Showing first 50 results. Use filters to narrow down.
+                                        </div>
+                                    )}
+                                </div>
+                            </TabsContent>
+                        </Tabs>
+                    </div>
+                </div>
+
+                <div className="mt-20 p-8 rounded-[40px] border border-primary/20 bg-primary/5 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-8 text-primary/10 transition-transform group-hover:scale-110 duration-500">
+                        <GraduationCap className="h-48 w-48" />
+                    </div>
+                    <div className="relative z-10 max-w-xl">
+                        <h2 className="text-2xl font-bold mozilla-headline mb-4">Engineering Career Path</h2>
+                        <p className="text-muted-foreground mb-6 roboto">
+                            The Faculty of Engineering Technology at OUSL provides a path to recognized corporate membership with IESL. Our navigator ensures you maintain the required credit distribution for a high-impact engineering career.
                         </p>
-                        <Button variant="outline" asChild className="rounded-full">
-                            <a href="/articles/ousl-engineering-student-guide">Read Full Guide</a>
-                        </Button>
+                        <div className="flex flex-wrap gap-4">
+                            <Button className="rounded-full gap-2" asChild>
+                                <a href="/tools">View More Tools <ArrowUpRight className="h-4 w-4" /></a>
+                            </Button>
+                            <Button variant="outline" className="rounded-full gap-2" asChild>
+                                <a href="/contact">Support Cell <Info className="h-4 w-4" /></a>
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
             <AIContentIndicator />
+        </div>
+    )
+}
+
+function AuditCard({ title, current, target }: { title: string, current: number, target: number }) {
+    const isComplete = current >= target
+    return (
+        <div className={`p-5 rounded-2xl border ${isComplete ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-card border-border'}`}>
+            <p className="text-[10px] font-black uppercase text-muted-foreground mb-1">{title}</p>
+            <div className="flex justify-between items-end">
+                <p className={`text-2xl font-black ${isComplete ? 'text-emerald-600' : 'text-foreground'}`}>
+                    {current} <span className="text-sm font-normal text-muted-foreground">/ {target}</span>
+                </p>
+                {isComplete && <CheckCircle2 className="h-5 w-5 text-emerald-500 mb-1" />}
+            </div>
+            <div className="mt-3 h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                <div
+                    className={`h-full transition-all duration-700 ${isComplete ? 'bg-emerald-500' : 'bg-primary'}`}
+                    style={{ width: `${Math.min(100, (current/target)*100)}%` }}
+                />
+            </div>
         </div>
     )
 }
