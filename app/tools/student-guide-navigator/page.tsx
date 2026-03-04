@@ -18,6 +18,9 @@ import {
     Save,
     Trash2,
     Calendar,
+    Download,
+    Upload,
+    Handshake,
     Filter,
     Plus,
     Minus,
@@ -37,6 +40,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AIContentIndicator } from "@/components/ai-content-indicator"
 import { useLocalStorage } from "@/hooks/use-local-storage"
 import { toast } from "sonner"
+import Loading from "@/app/loading"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // Constants
 const DEPARTMENTS: Record<string, string> = {
@@ -113,7 +118,7 @@ export default function StudentGuideNavigator() {
     const [loading, setLoading] = useState(true)
 
     // User State (Persisted)
-    const [userPlan, setUserPlan] = useLocalStorage<Record<string, number>>("ousl_user_plan_v2", {})
+    const [userPlan, setUserPlan] = useLocalStorage<Record<string, number>>("ousl_user_plan_v3", {})
     const [completedCourses, setCompletedCourses] = useLocalStorage<string[]>("ousl_completed_courses", [])
     const [selectedProgrammeId, setSelectedProgrammeId] = useLocalStorage<string>("ousl_selected_programme", "bsc_hons_eng")
     const [isNewStudent, setIsNewStudent] = useLocalStorage<boolean>("ousl_is_new_student", false)
@@ -122,9 +127,12 @@ export default function StudentGuideNavigator() {
     // UI State
     const [searchQuery, setSearchQuery] = useState("")
     const [filterDept, setFilterDept] = useState("all")
+    const [filterSpec, setFilterSpec] = useState("all")
     const [filterLevel, setFilterLevel] = useState("all")
     const [filterCategory, setFilterCategory] = useState("all")
     const [activeTab, setActiveTab] = useState("dashboard")
+    const [exemptionResults, setExemptionResults] = useState<string[]>([])
+    const [targetGPA, setTargetGPA] = useState("3.70")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -163,11 +171,36 @@ export default function StudentGuideNavigator() {
             const matchesSearch = c.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                  c.name.toLowerCase().includes(searchQuery.toLowerCase())
             const matchesDept = filterDept === "all" || c.dept === filterDept
+            const matchesSpec = filterSpec === "all" || c.specializations.includes(filterSpec)
             const matchesLevel = filterLevel === "all" || c.level.toString() === filterLevel
             const matchesCategory = filterCategory === "all" || c.category === filterCategory
-            return matchesSearch && matchesDept && matchesLevel && matchesCategory
+            return matchesSearch && matchesDept && matchesSpec && matchesLevel && matchesCategory
         })
-    }, [allCourses, searchQuery, filterDept, filterLevel, filterCategory])
+    }, [allCourses, searchQuery, filterDept, filterSpec, filterLevel, filterCategory])
+
+    const gpaSimulation = useMemo(() => {
+        const completedGPA = completedCourseDetails
+            .filter(c => c.level >= 4) // Only L4, 5, 6 count for GPA
+            .slice(0, 80) // Simple slice for estimation
+
+        const totalCredits = completedGPA.reduce((s, c) => s + c.credits, 0)
+        // For simulation, assume all completed have B (3.0) if not specified
+        const currentGPV = completedGPA.length * 3.0
+
+        const remainingCredits = Math.max(0, 80 - totalCredits)
+        const targetValue = parseFloat(targetGPA)
+
+        // (currentGPV + requiredGPV) / 80 = targetValue
+        // requiredGPV = (targetValue * 80) - currentGPV
+        const requiredGPVTotal = (targetValue * 80) - currentGPV
+        const requiredAvgGPV = remainingCredits > 0 ? requiredGPVTotal / remainingCredits : 0
+
+        return {
+            currentCredits: totalCredits,
+            remainingCredits,
+            requiredAvgGPV: requiredAvgGPV.toFixed(2)
+        }
+    }, [completedCourseDetails, targetGPA])
 
     const progressStats = useMemo(() => {
         const combinedCodes = Array.from(new Set([...Object.keys(userPlan), ...completedCourses]))
@@ -218,8 +251,64 @@ export default function StudentGuideNavigator() {
         if (confirm("Are you sure you want to clear your plan and progress?")) {
             setUserPlan({})
             setCompletedCourses([])
+            setAlGrades({ physics: "", maths: "", chemistry: "" })
             toast.success("All data cleared.")
         }
+    }
+
+    const runExemptionChecker = () => {
+        const results: string[] = []
+        const physics = alGrades.physics.toUpperCase()
+        const maths = alGrades.maths.toUpperCase()
+
+        // Rules from Annex 1
+        if (["A", "B", "C", "S"].includes(physics) || ["A", "B", "C", "S"].includes(maths)) {
+            results.push("TAZ2587 - Mathematics and Science for Textile Technology (Based on A/L Physics/Maths)")
+        }
+
+        setExemptionResults(results)
+        if (results.length > 0) toast.success(`${results.length} possible exemptions found!`)
+        else toast.info("No automatic exemptions found based on current input.")
+    }
+
+    const backupData = () => {
+        const data = {
+            userPlan,
+            completedCourses,
+            selectedProgrammeId,
+            isNewStudent,
+            alGrades,
+            version: "2.0",
+            exportedAt: new Date().toISOString()
+        }
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = `ousl_navigator_backup_${new Date().toISOString().split('T')[0]}.json`
+        a.click()
+        toast.success("Backup downloaded successfully.")
+    }
+
+    const restoreData = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        const reader = new FileReader()
+        reader.onload = (event) => {
+            try {
+                const data = JSON.parse(event.target?.result as string)
+                if (data.userPlan) setUserPlan(data.userPlan)
+                if (data.completedCourses) setCompletedCourses(data.completedCourses)
+                if (data.selectedProgrammeId) setSelectedProgrammeId(data.selectedProgrammeId)
+                if (data.isNewStudent !== undefined) setIsNewStudent(data.isNewStudent)
+                if (data.alGrades) setAlGrades(data.alGrades)
+                toast.success("Data restored successfully.")
+            } catch (err) {
+                toast.error("Invalid backup file.")
+            }
+        }
+        reader.readAsText(file)
     }
 
     // Fee Calculation
@@ -233,16 +322,47 @@ export default function StudentGuideNavigator() {
         return { tuition, fixed, total: tuition + fixed }
     }, [plannedCourseDetails, isNewStudent])
 
-    if (loading) return <div className="flex h-screen items-center justify-center">Loading OUSL Navigator...</div>
+    if (loading) return <Loading />
 
     return (
         <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
             <div className="mx-auto max-w-6xl">
                 <div className="mb-10 text-center relative">
-                    <div className="absolute top-0 right-0">
-                        <Button variant="ghost" size="sm" onClick={resetData} title="Clear All Data">
-                            <Trash2 className="h-4 w-4 text-muted-foreground" />
-                        </Button>
+                                    <div className="flex justify-center gap-2 mt-4">
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                                    <Button variant="outline" size="sm" className="h-8 gap-2 rounded-full" onClick={backupData}>
+                                                        <Download className="h-3.5 w-3.5" /> Backup
+                                    </Button>
+                                </TooltipTrigger>
+                                                <TooltipContent>Download JSON backup of your plan</TooltipContent>
+                            </Tooltip>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <div className="relative">
+                                                        <Button variant="outline" size="sm" className="h-8 gap-2 rounded-full relative">
+                                                            <Upload className="h-3.5 w-3.5" /> Restore
+                                            <input
+                                                type="file"
+                                                className="absolute inset-0 opacity-0 cursor-pointer"
+                                                onChange={restoreData}
+                                                accept=".json"
+                                            />
+                                        </Button>
+                                    </div>
+                                </TooltipTrigger>
+                                                <TooltipContent>Upload a previous backup file</TooltipContent>
+                            </Tooltip>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                                    <Button variant="outline" size="sm" className="h-8 gap-2 rounded-full border-red-500/20 text-red-500 hover:bg-red-500/10" onClick={resetData}>
+                                                        <Trash2 className="h-3.5 w-3.5" /> Reset
+                                    </Button>
+                                </TooltipTrigger>
+                                                <TooltipContent>Delete all local progress</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     </div>
                     <Badge variant="outline" className="mb-4 py-1 px-4 text-primary border-primary/20 bg-primary/5">
                         BSc Hons (Eng) Edition
@@ -329,6 +449,8 @@ export default function StudentGuideNavigator() {
                                 <TabsTrigger value="planner" className="gap-2"><Map className="h-4 w-4" /> Planner</TabsTrigger>
                                 <TabsTrigger value="audit" className="gap-2"><GraduationCap className="h-4 w-4" /> Audit</TabsTrigger>
                                 <TabsTrigger value="courses" className="gap-2"><Search className="h-4 w-4" /> Courses</TabsTrigger>
+                                <TabsTrigger value="gpa" className="gap-2"><TrendingUp className="h-4 w-4" /> Target GPA</TabsTrigger>
+                                <TabsTrigger value="exemption" className="gap-2"><Handshake className="h-4 w-4" /> Exemptions</TabsTrigger>
                             </TabsList>
 
                             {/* Dashboard View */}
@@ -530,6 +652,117 @@ export default function StudentGuideNavigator() {
                                 </Card>
                             </TabsContent>
 
+                            {/* Exemption Assistant View */}
+                            <TabsContent value="exemption" className="space-y-6">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="flex items-center gap-2">
+                                            <Handshake className="h-5 w-5 text-primary" /> Exemption & RPL Assistant
+                                        </CardTitle>
+                                        <CardDescription>Check for course exemptions based on your prior qualifications (Annex 1).</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-6">
+                                        <div className="grid gap-6 md:grid-cols-2">
+                                            <div className="space-y-4">
+                                                <h4 className="text-sm font-bold">Input Qualifications</h4>
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="space-y-2">
+                                                        <Label>Physics Grade</Label>
+                                                        <Input
+                                                            value={alGrades.physics}
+                                                            onChange={e => setAlGrades({...alGrades, physics: e.target.value.toUpperCase()})}
+                                                            placeholder="e.g. C"
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <Label>Combined Maths</Label>
+                                                        <Input
+                                                            value={alGrades.maths}
+                                                            onChange={e => setAlGrades({...alGrades, maths: e.target.value.toUpperCase()})}
+                                                            placeholder="e.g. B"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <Button className="w-full" onClick={runExemptionChecker}>Check Exemptions</Button>
+                                            </div>
+
+                                            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6">
+                                                <h4 className="text-sm font-bold mb-4">Possible Exemptions</h4>
+                                                {exemptionResults.length === 0 ? (
+                                                    <p className="text-xs text-muted-foreground italic">No exemptions detected. Enter your grades and click check.</p>
+                                                ) : (
+                                                    <div className="space-y-3">
+                                                        {exemptionResults.map((r, i) => (
+                                                            <div key={i} className="flex gap-2 text-xs items-start">
+                                                                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 mt-0.5" />
+                                                                <span>{r}</span>
+                                                            </div>
+                                                        ))}
+                                                        <p className="text-[10px] text-muted-foreground mt-4 pt-4 border-t border-primary/10 italic">
+                                                            * Official exemptions must be approved by the Faculty Board during registration.
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </TabsContent>
+
+                            {/* Target GPA Simulator View */}
+                            <TabsContent value="gpa" className="space-y-6">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="flex items-center gap-2">
+                                            <TrendingUp className="h-5 w-5 text-primary" /> Target GPA Simulator
+                                        </CardTitle>
+                                        <CardDescription>Calculate what grades you need to achieve your desired Honours class.</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-8">
+                                        <div className="grid gap-8 md:grid-cols-2">
+                                            <div className="space-y-4">
+                                                <div className="space-y-2">
+                                                    <Label>Desired GPA (e.g. 3.70 for 1st Class)</Label>
+                                                    <div className="flex gap-4 items-center">
+                                                        <Input
+                                                            type="number"
+                                                            step="0.01"
+                                                            value={targetGPA}
+                                                            onChange={e => setTargetGPA(e.target.value)}
+                                                            className="text-2xl font-black text-primary"
+                                                        />
+                                                        <div className="flex gap-2">
+                                                            <Button size="sm" variant="outline" onClick={() => setTargetGPA("3.70")}>3.70</Button>
+                                                            <Button size="sm" variant="outline" onClick={() => setTargetGPA("3.30")}>3.30</Button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="p-4 rounded-xl bg-muted/30 border border-border text-xs space-y-2">
+                                                    <p className="font-bold flex items-center gap-1"><Info className="h-3 w-3" /> Quick Reference</p>
+                                                    <ul className="list-disc pl-4 space-y-1 text-muted-foreground">
+                                                        <li><strong>3.70+:</strong> First Class Honours</li>
+                                                        <li><strong>3.30 - 3.69:</strong> Second Class Upper</li>
+                                                        <li><strong>3.00 - 3.29:</strong> Second Class Lower</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-8 flex flex-col items-center justify-center text-center space-y-4">
+                                                <p className="text-sm font-bold uppercase text-muted-foreground">Required Average Grade</p>
+                                                <div className="text-6xl font-black text-primary mozilla-headline">
+                                                    {parseFloat(gpaSimulation.requiredAvgGPV) > 4.0 ? "Impossible" :
+                                                     parseFloat(gpaSimulation.requiredAvgGPV) <= 0 ? "Achieved" :
+                                                     gpaSimulation.requiredAvgGPV}
+                                                </div>
+                                                <p className="text-xs text-muted-foreground max-w-[200px]">
+                                                    Average GPV needed across your remaining <strong>{gpaSimulation.remainingCredits} credits</strong> (L4-6).
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </TabsContent>
+
                             {/* Course Browser View */}
                             <TabsContent value="courses" className="space-y-6">
                                 <div className="space-y-4 bg-background p-6 rounded-2xl border border-border shadow-sm">
@@ -544,6 +777,15 @@ export default function StudentGuideNavigator() {
                                             />
                                         </div>
                                         <div className="grid grid-cols-2 md:flex gap-2">
+                                            <Select value={filterSpec} onValueChange={setFilterSpec}>
+                                                <SelectTrigger className="w-[140px]"><SelectValue placeholder="Specialization" /></SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="all">All Specializations</SelectItem>
+                                                    {Array.from(new Set(allCourses.flatMap(c => c.specializations))).sort().map(s => (
+                                                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
                                             <Select value={filterLevel} onValueChange={setFilterLevel}>
                                                 <SelectTrigger className="w-[100px]"><SelectValue placeholder="Level" /></SelectTrigger>
                                                 <SelectContent>
@@ -552,6 +794,15 @@ export default function StudentGuideNavigator() {
                                                     <SelectItem value="4">L4</SelectItem>
                                                     <SelectItem value="5">L5</SelectItem>
                                                     <SelectItem value="6">L6</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <Select value={filterDept} onValueChange={setFilterDept}>
+                                                <SelectTrigger className="w-[120px]"><SelectValue placeholder="Dept" /></SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="all">All Depts</SelectItem>
+                                                    {Object.entries(DEPARTMENTS).map(([k, v]) => (
+                                                        <SelectItem key={k} value={k}>{k} - {v.split(' ')[0]}</SelectItem>
+                                                    ))}
                                                 </SelectContent>
                                             </Select>
                                             <Select value={filterCategory} onValueChange={setFilterCategory}>
