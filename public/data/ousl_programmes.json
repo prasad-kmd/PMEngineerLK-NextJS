@@ -44,47 +44,6 @@
     }
   },
   {
-    "id": "bis_hons",
-    "name": "Bachelor of Industrial Studies Honours",
-    "min_credits": 140,
-    "min_l56": 63,
-    "min_l6": 30,
-    "categories": {
-      "Z": {
-        "min": 6,
-        "max": 12
-      },
-      "B": {
-        "min": 4,
-        "max": 10
-      },
-      "K": {
-        "min": 2,
-        "max": 2
-      },
-      "S": {
-        "min": 63,
-        "max": 71
-      },
-      "Y": {
-        "min": 11,
-        "max": 15
-      },
-      "M": {
-        "min": 19,
-        "max": 19
-      },
-      "J": {
-        "min": 6,
-        "max": 10
-      },
-      "W": {
-        "min": 6,
-        "max": 6
-      }
-    }
-  },
-  {
     "id": "hd_eng",
     "name": "Higher Diploma in Engineering",
     "min_credits": 65,

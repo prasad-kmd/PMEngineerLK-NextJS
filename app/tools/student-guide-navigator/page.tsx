@@ -2,33 +2,25 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react"
 import {
-    Calculator,
     Search,
     GraduationCap,
     Wallet,
     Info,
     CheckCircle2,
-    XCircle,
     AlertCircle,
-    BookOpen,
     Map,
     TrendingUp,
     LayoutDashboard,
-    ArrowRight,
     Save,
     Trash2,
     Calendar,
     Download,
     Upload,
-    Handshake,
-    Filter,
     Plus,
     Minus,
     History,
     FileText,
-    ArrowUpRight,
-    ChevronDown,
-    ChevronUp
+    ArrowUpRight
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -118,21 +110,19 @@ export default function StudentGuideNavigator() {
     const [loading, setLoading] = useState(true)
 
     // User State (Persisted)
-    const [userPlan, setUserPlan] = useLocalStorage<Record<string, number>>("ousl_user_plan_v3", {})
-    const [completedCourses, setCompletedCourses] = useLocalStorage<string[]>("ousl_completed_courses", [])
+    // User State (Persisted)
+    const [userPlan, setUserPlan] = useLocalStorage<Record<string, number>>("ousl_user_plan_v4", {})
+    const [completedCourses, setCompletedCourses] = useLocalStorage<Record<string, number>>("ousl_completed_v2", {})
+    const [selectedSpec, setSelectedSpec] = useLocalStorage<string>("ousl_selected_spec", "Civil Engineering")
     const [selectedProgrammeId, setSelectedProgrammeId] = useLocalStorage<string>("ousl_selected_programme", "bsc_hons_eng")
     const [isNewStudent, setIsNewStudent] = useLocalStorage<boolean>("ousl_is_new_student", false)
-    const [alGrades, setAlGrades] = useLocalStorage<Record<string, string>>("ousl_al_grades", { physics: "", maths: "", chemistry: "" })
 
     // UI State
     const [searchQuery, setSearchQuery] = useState("")
     const [filterDept, setFilterDept] = useState("all")
-    const [filterSpec, setFilterSpec] = useState("all")
     const [filterLevel, setFilterLevel] = useState("all")
     const [filterCategory, setFilterCategory] = useState("all")
     const [activeTab, setActiveTab] = useState("dashboard")
-    const [exemptionResults, setExemptionResults] = useState<string[]>([])
-    const [targetGPA, setTargetGPA] = useState("3.70")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -159,51 +149,69 @@ export default function StudentGuideNavigator() {
     const currentProgramme = useMemo(() => programmes.find(p => p.id === selectedProgrammeId), [programmes, selectedProgrammeId])
 
     const plannedCourseDetails = useMemo(() =>
-        allCourses.filter(c => Object.keys(userPlan).includes(c.code)),
-    [allCourses, userPlan])
+        allCourses.filter(c =>
+            Object.keys(userPlan).includes(c.code) &&
+            (c.specializations.includes(selectedSpec) || c.specializations.length > 5)
+        ),
+    [allCourses, userPlan, selectedSpec])
 
     const completedCourseDetails = useMemo(() =>
-        allCourses.filter(c => completedCourses.includes(c.code)),
-    [allCourses, completedCourses])
+        allCourses.filter(c =>
+            Object.keys(completedCourses).includes(c.code) &&
+            (c.specializations.includes(selectedSpec) || c.specializations.length > 5)
+        ),
+    [allCourses, completedCourses, selectedSpec])
 
     const filteredCourseList = useMemo(() => {
         return allCourses.filter(c => {
+            const isRelevant = c.specializations.includes(selectedSpec) || c.specializations.length > 5 // Common
+            if (!isRelevant) return false
+
             const matchesSearch = c.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                  c.name.toLowerCase().includes(searchQuery.toLowerCase())
             const matchesDept = filterDept === "all" || c.dept === filterDept
-            const matchesSpec = filterSpec === "all" || c.specializations.includes(filterSpec)
             const matchesLevel = filterLevel === "all" || c.level.toString() === filterLevel
             const matchesCategory = filterCategory === "all" || c.category === filterCategory
-            return matchesSearch && matchesDept && matchesSpec && matchesLevel && matchesCategory
+            return matchesSearch && matchesDept && matchesLevel && matchesCategory
         })
-    }, [allCourses, searchQuery, filterDept, filterSpec, filterLevel, filterCategory])
+    }, [allCourses, searchQuery, filterDept, filterLevel, filterCategory, selectedSpec])
 
-    const gpaSimulation = useMemo(() => {
-        const completedGPA = completedCourseDetails
-            .filter(c => c.level >= 4) // Only L4, 5, 6 count for GPA
-            .slice(0, 80) // Simple slice for estimation
+    const gpaCalculation = useMemo(() => {
+        // OUSL Honours GPA Rules:
+        // Consider best 80 credits from Level 4, 5, 6.
+        // Priority: (i) Compulsory L5/6, (ii) Elective L5/6, (iii) Compulsory L4
 
-        const totalCredits = completedGPA.reduce((s, c) => s + c.credits, 0)
-        // For simulation, assume all completed have B (3.0) if not specified
-        const currentGPV = completedGPA.length * 3.0
+        const gpaCourses = completedCourseDetails
+            .filter(c => c.level >= 4)
+            .map(c => ({
+                ...c,
+                gpv: completedCourses[c.code] || 0
+            }))
+            .sort((a, b) => {
+                // First by Level (higher first for simplicity/priority)
+                if (b.level !== a.level) return b.level - a.level
+                // Then by GPV (best grades first)
+                return b.gpv - a.gpv
+            })
 
-        const remainingCredits = Math.max(0, 80 - totalCredits)
-        const targetValue = parseFloat(targetGPA)
+        let totalCredits = 0
+        let weightedSum = 0
+        const limit = 80
 
-        // (currentGPV + requiredGPV) / 80 = targetValue
-        // requiredGPV = (targetValue * 80) - currentGPV
-        const requiredGPVTotal = (targetValue * 80) - currentGPV
-        const requiredAvgGPV = remainingCredits > 0 ? requiredGPVTotal / remainingCredits : 0
+        for (const c of gpaCourses) {
+            const remaining = limit - totalCredits
+            if (remaining <= 0) break
 
-        return {
-            currentCredits: totalCredits,
-            remainingCredits,
-            requiredAvgGPV: requiredAvgGPV.toFixed(2)
+            const used = Math.min(c.credits, remaining)
+            weightedSum += used * c.gpv
+            totalCredits += used
         }
-    }, [completedCourseDetails, targetGPA])
+
+        return totalCredits > 0 ? (weightedSum / totalCredits).toFixed(2) : "0.00"
+    }, [completedCourseDetails, completedCourses])
 
     const progressStats = useMemo(() => {
-        const combinedCodes = Array.from(new Set([...Object.keys(userPlan), ...completedCourses]))
+        const combinedCodes = Array.from(new Set([...Object.keys(userPlan), ...Object.keys(completedCourses)]))
         const combined = allCourses.filter(c => combinedCodes.includes(c.code))
 
         const totalCredits = combined.reduce((sum, c) => sum + c.credits, 0)
@@ -219,13 +227,24 @@ export default function StudentGuideNavigator() {
     }, [allCourses, userPlan, completedCourses])
 
     // Actions
+    const isCourseInSpec = useCallback((course: Course) => {
+        return course.specializations.includes(selectedSpec) || course.specializations.length > 5
+    }, [selectedSpec])
+
     const togglePlan = (code: string) => {
+        const course = allCourses.find(c => c.code === code)
+        if (!course) return
+
         if (userPlan[code] !== undefined) {
             const next = { ...userPlan }
             delete next[code]
             setUserPlan(next)
             toast.info(`Removed ${code} from plan.`)
         } else {
+            if (!isCourseInSpec(course)) {
+                toast.error(`Course ${code} is not part of ${selectedSpec}.`)
+                return
+            }
             setUserPlan({ ...userPlan, [code]: 1 })
             toast.success(`Added ${code} to plan.`)
         }
@@ -235,49 +254,46 @@ export default function StudentGuideNavigator() {
         setUserPlan({ ...userPlan, [code]: sem })
     }
 
-    const toggleComplete = (code: string) => {
-        if (completedCourses.includes(code)) {
-            setCompletedCourses(completedCourses.filter(c => c !== code))
-        } else {
-            setCompletedCourses([...completedCourses, code])
-            // If completed, remove from plan to avoid double counting if logic doesn't handle it
-            const next = { ...userPlan }
+    const toggleComplete = (code: string, gpv: number = 3.0) => {
+        const course = allCourses.find(c => c.code === code)
+        if (!course) return
+
+        if (completedCourses[code] !== undefined) {
+            const next = { ...completedCourses }
             delete next[code]
-            setUserPlan(next)
+            setCompletedCourses(next)
+        } else {
+            if (!isCourseInSpec(course)) {
+                toast.error(`Course ${code} is not part of ${selectedSpec}.`)
+                return
+            }
+            setCompletedCourses({ ...completedCourses, [code]: gpv })
+            // If completed, remove from plan
+            const nextPlan = { ...userPlan }
+            delete nextPlan[code]
+            setUserPlan(nextPlan)
         }
+    }
+
+    const updateGrade = (code: string, gpv: number) => {
+        setCompletedCourses({ ...completedCourses, [code]: gpv })
     }
 
     const resetData = () => {
         if (confirm("Are you sure you want to clear your plan and progress?")) {
             setUserPlan({})
-            setCompletedCourses([])
-            setAlGrades({ physics: "", maths: "", chemistry: "" })
+            setCompletedCourses({})
             toast.success("All data cleared.")
         }
-    }
-
-    const runExemptionChecker = () => {
-        const results: string[] = []
-        const physics = alGrades.physics.toUpperCase()
-        const maths = alGrades.maths.toUpperCase()
-
-        // Rules from Annex 1
-        if (["A", "B", "C", "S"].includes(physics) || ["A", "B", "C", "S"].includes(maths)) {
-            results.push("TAZ2587 - Mathematics and Science for Textile Technology (Based on A/L Physics/Maths)")
-        }
-
-        setExemptionResults(results)
-        if (results.length > 0) toast.success(`${results.length} possible exemptions found!`)
-        else toast.info("No automatic exemptions found based on current input.")
     }
 
     const backupData = () => {
         const data = {
             userPlan,
             completedCourses,
+            selectedSpec,
             selectedProgrammeId,
             isNewStudent,
-            alGrades,
             version: "2.0",
             exportedAt: new Date().toISOString()
         }
@@ -300,9 +316,9 @@ export default function StudentGuideNavigator() {
                 const data = JSON.parse(event.target?.result as string)
                 if (data.userPlan) setUserPlan(data.userPlan)
                 if (data.completedCourses) setCompletedCourses(data.completedCourses)
+                if (data.selectedSpec) setSelectedSpec(data.selectedSpec)
                 if (data.selectedProgrammeId) setSelectedProgrammeId(data.selectedProgrammeId)
                 if (data.isNewStudent !== undefined) setIsNewStudent(data.isNewStudent)
-                if (data.alGrades) setAlGrades(data.alGrades)
                 toast.success("Data restored successfully.")
             } catch (err) {
                 toast.error("Invalid backup file.")
@@ -328,49 +344,69 @@ export default function StudentGuideNavigator() {
         <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
             <div className="mx-auto max-w-6xl">
                 <div className="mb-10 text-center relative">
-                                    <div className="flex justify-center gap-2 mt-4">
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                                    <Button variant="outline" size="sm" className="h-8 gap-2 rounded-full" onClick={backupData}>
-                                                        <Download className="h-3.5 w-3.5" /> Backup
-                                    </Button>
-                                </TooltipTrigger>
-                                                <TooltipContent>Download JSON backup of your plan</TooltipContent>
-                            </Tooltip>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <div className="relative">
-                                                        <Button variant="outline" size="sm" className="h-8 gap-2 rounded-full relative">
-                                                            <Upload className="h-3.5 w-3.5" /> Restore
-                                            <input
-                                                type="file"
-                                                className="absolute inset-0 opacity-0 cursor-pointer"
-                                                onChange={restoreData}
-                                                accept=".json"
-                                            />
-                                        </Button>
-                                    </div>
-                                </TooltipTrigger>
-                                                <TooltipContent>Upload a previous backup file</TooltipContent>
-                            </Tooltip>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                                    <Button variant="outline" size="sm" className="h-8 gap-2 rounded-full border-red-500/20 text-red-500 hover:bg-red-500/10" onClick={resetData}>
-                                                        <Trash2 className="h-3.5 w-3.5" /> Reset
-                                    </Button>
-                                </TooltipTrigger>
-                                                <TooltipContent>Delete all local progress</TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    </div>
                     <Badge variant="outline" className="mb-4 py-1 px-4 text-primary border-primary/20 bg-primary/5">
                         BSc Hons (Eng) Edition
                     </Badge>
                     <h1 className="mb-4 text-4xl font-bold mozilla-headline tracking-tight">Engineering Student Navigator</h1>
-                    <p className="mx-auto max-w-2xl text-muted-foreground leading-relaxed roboto">
-                        Comprehensive academic planner and auditor for OUSL Engineering Faculty.
-                    </p>
+
+                    <div className="flex flex-col items-center justify-center gap-6 mt-8">
+                        <div className="flex flex-col md:flex-row items-center gap-4">
+                            <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">Field of Study:</Label>
+                            <Select value={selectedSpec} onValueChange={setSelectedSpec}>
+                                <SelectTrigger className="w-full md:w-[320px] h-12 text-base font-bold bg-card/50 backdrop-blur-md border-primary/20 rounded-2xl shadow-sm">
+                                    <SelectValue placeholder="Select Your Specialization" />
+                                </SelectTrigger>
+                                <SelectContent className="rounded-2xl border-primary/10">
+                                    {Array.from(new Set(allCourses.flatMap(c => c.specializations))).sort().map(s => (
+                                        <SelectItem key={s} value={s} className="rounded-lg">{s}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="flex flex-wrap justify-center gap-2 p-1 bg-card/30 backdrop-blur-sm border border-primary/10 rounded-full shadow-inner">
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button variant="ghost" size="sm" className="h-9 px-4 gap-2 rounded-full text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all" onClick={backupData}>
+                                            <Download className="h-3.5 w-3.5" /> Export Data
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="bottom">Download JSON backup of your plan</TooltipContent>
+                                </Tooltip>
+
+                                <div className="w-[1px] h-4 bg-primary/10 self-center mx-1" />
+
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <div className="relative">
+                                            <Button variant="ghost" size="sm" className="h-9 px-4 gap-2 rounded-full text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all relative">
+                                                <Upload className="h-3.5 w-3.5" /> Import Data
+                                                <input
+                                                    type="file"
+                                                    className="absolute inset-0 opacity-0 cursor-pointer"
+                                                    onChange={restoreData}
+                                                    accept=".json"
+                                                />
+                                            </Button>
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="bottom">Upload a previous backup file</TooltipContent>
+                                </Tooltip>
+
+                                <div className="w-[1px] h-4 bg-primary/10 self-center mx-1" />
+
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button variant="ghost" size="sm" className="h-9 px-4 gap-2 rounded-full text-xs font-bold text-red-500/70 hover:bg-red-500/10 hover:text-red-600 transition-all" onClick={resetData}>
+                                            <Trash2 className="h-3.5 w-3.5" /> Clear All
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="bottom">Permanently delete your local progress</TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="grid gap-6 lg:grid-cols-4">
@@ -449,18 +485,17 @@ export default function StudentGuideNavigator() {
                                 <TabsTrigger value="planner" className="gap-2"><Map className="h-4 w-4" /> Planner</TabsTrigger>
                                 <TabsTrigger value="audit" className="gap-2"><GraduationCap className="h-4 w-4" /> Audit</TabsTrigger>
                                 <TabsTrigger value="courses" className="gap-2"><Search className="h-4 w-4" /> Courses</TabsTrigger>
-                                <TabsTrigger value="gpa" className="gap-2"><TrendingUp className="h-4 w-4" /> Target GPA</TabsTrigger>
-                                <TabsTrigger value="exemption" className="gap-2"><Handshake className="h-4 w-4" /> Exemptions</TabsTrigger>
+                                <TabsTrigger value="gpa" className="gap-2"><TrendingUp className="h-4 w-4" /> GPA Calc</TabsTrigger>
                             </TabsList>
 
                             {/* Dashboard View */}
                             <TabsContent value="dashboard" className="space-y-6">
                                 <div className="grid gap-4 md:grid-cols-3">
                                     <Card>
-                                        <CardHeader className="p-4 pb-2"><CardTitle className="text-xs font-bold uppercase">Honours GPA</CardTitle></CardHeader>
+                                        <CardHeader className="p-4 pb-2"><CardTitle className="text-xs font-bold uppercase">Actual GPA</CardTitle></CardHeader>
                                         <CardContent className="p-4 pt-0">
-                                            <div className="text-3xl font-black text-primary">3.45</div>
-                                            <p className="text-[10px] text-muted-foreground">Estimated from Level 4, 5, 6</p>
+                                            <div className="text-3xl font-black text-primary">{gpaCalculation}</div>
+                                            <p className="text-[10px] text-muted-foreground">Based on completed L4-6</p>
                                         </CardContent>
                                     </Card>
                                     <Card>
@@ -473,7 +508,7 @@ export default function StudentGuideNavigator() {
                                     <Card>
                                         <CardHeader className="p-4 pb-2"><CardTitle className="text-xs font-bold uppercase">Completed</CardTitle></CardHeader>
                                         <CardContent className="p-4 pt-0">
-                                            <div className="text-3xl font-black">{completedCourses.length}</div>
+                                            <div className="text-3xl font-black">{Object.keys(completedCourses).length}</div>
                                             <p className="text-[10px] text-muted-foreground">Courses marked as passed</p>
                                         </CardContent>
                                     </Card>
@@ -578,7 +613,7 @@ export default function StudentGuideNavigator() {
                                             {plannedCourseDetails.map(c => {
                                                 if (c.prerequisites === "None") return null;
                                                 // Simple checker logic
-                                                const hasPrereq = completedCourses.some(cc => c.prerequisites.includes(cc))
+                                                const hasPrereq = Object.keys(completedCourses).some(cc => c.prerequisites.includes(cc))
                                                 return (
                                                     <div key={c.code} className={`flex items-start gap-3 p-3 rounded-lg border ${hasPrereq ? 'bg-emerald-50/50 border-emerald-200 text-emerald-700' : 'bg-red-50/50 border-red-200 text-red-700'}`}>
                                                         {hasPrereq ? <CheckCircle2 className="h-4 w-4 mt-0.5" /> : <AlertCircle className="h-4 w-4 mt-0.5" />}
@@ -652,116 +687,69 @@ export default function StudentGuideNavigator() {
                                 </Card>
                             </TabsContent>
 
-                            {/* Exemption Assistant View */}
-                            <TabsContent value="exemption" className="space-y-6">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle className="flex items-center gap-2">
-                                            <Handshake className="h-5 w-5 text-primary" /> Exemption & RPL Assistant
-                                        </CardTitle>
-                                        <CardDescription>Check for course exemptions based on your prior qualifications (Annex 1).</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="space-y-6">
-                                        <div className="grid gap-6 md:grid-cols-2">
-                                            <div className="space-y-4">
-                                                <h4 className="text-sm font-bold">Input Qualifications</h4>
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <div className="space-y-2">
-                                                        <Label>Physics Grade</Label>
-                                                        <Input
-                                                            value={alGrades.physics}
-                                                            onChange={e => setAlGrades({...alGrades, physics: e.target.value.toUpperCase()})}
-                                                            placeholder="e.g. C"
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <Label>Combined Maths</Label>
-                                                        <Input
-                                                            value={alGrades.maths}
-                                                            onChange={e => setAlGrades({...alGrades, maths: e.target.value.toUpperCase()})}
-                                                            placeholder="e.g. B"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <Button className="w-full" onClick={runExemptionChecker}>Check Exemptions</Button>
-                                            </div>
-
-                                            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6">
-                                                <h4 className="text-sm font-bold mb-4">Possible Exemptions</h4>
-                                                {exemptionResults.length === 0 ? (
-                                                    <p className="text-xs text-muted-foreground italic">No exemptions detected. Enter your grades and click check.</p>
-                                                ) : (
-                                                    <div className="space-y-3">
-                                                        {exemptionResults.map((r, i) => (
-                                                            <div key={i} className="flex gap-2 text-xs items-start">
-                                                                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 mt-0.5" />
-                                                                <span>{r}</span>
-                                                            </div>
-                                                        ))}
-                                                        <p className="text-[10px] text-muted-foreground mt-4 pt-4 border-t border-primary/10 italic">
-                                                            * Official exemptions must be approved by the Faculty Board during registration.
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-
                             {/* Target GPA Simulator View */}
                             <TabsContent value="gpa" className="space-y-6">
                                 <Card>
                                     <CardHeader>
                                         <CardTitle className="flex items-center gap-2">
-                                            <TrendingUp className="h-5 w-5 text-primary" /> Target GPA Simulator
+                                            <TrendingUp className="h-5 w-5 text-primary" /> Honours GPA Calculator
                                         </CardTitle>
-                                        <CardDescription>Calculate what grades you need to achieve your desired Honours class.</CardDescription>
+                                        <CardDescription>GPA is calculated based on your completed L4, L5, and L6 courses (best 80 credits).</CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-8">
                                         <div className="grid gap-8 md:grid-cols-2">
                                             <div className="space-y-4">
-                                                <div className="space-y-2">
-                                                    <Label>Desired GPA (e.g. 3.70 for 1st Class)</Label>
-                                                    <div className="flex gap-4 items-center">
-                                                        <Input
-                                                            type="number"
-                                                            step="0.01"
-                                                            value={targetGPA}
-                                                            onChange={e => setTargetGPA(e.target.value)}
-                                                            className="text-2xl font-black text-primary"
-                                                        />
-                                                        <div className="flex gap-2">
-                                                            <Button size="sm" variant="outline" onClick={() => setTargetGPA("3.70")}>3.70</Button>
-                                                            <Button size="sm" variant="outline" onClick={() => setTargetGPA("3.30")}>3.30</Button>
-                                                        </div>
+                                                <h4 className="text-sm font-bold border-b pb-2">Completed L4-6 Grades</h4>
+                                                {completedCourseDetails.filter(c => c.level >= 4).length === 0 ? (
+                                                    <p className="text-xs text-muted-foreground italic">No L4-6 courses marked as completed yet.</p>
+                                                ) : (
+                                                    <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
+                                                        {completedCourseDetails.filter(c => c.level >= 4).map(c => (
+                                                            <div key={c.code} className="flex justify-between items-center p-2 rounded bg-muted/30 border border-border">
+                                                                <div>
+                                                                    <p className="text-[10px] font-bold text-primary">{c.code}</p>
+                                                                    <p className="text-xs font-medium truncate max-w-[150px]">{c.name}</p>
+                                                                </div>
+                                                                <Select
+                                                                    value={completedCourses[c.code].toFixed(1)}
+                                                                    onValueChange={(v) => updateGrade(c.code, parseFloat(v))}
+                                                                >
+                                                                    <SelectTrigger className="h-8 w-24">
+                                                                        <SelectValue />
+                                                                    </SelectTrigger>
+                                                                    <SelectContent>
+                                                                        {GRADES.map(g => (
+                                                                            <SelectItem key={g.grade} value={g.gpv.toFixed(1)}>{g.grade} ({g.gpv.toFixed(1)})</SelectItem>
+                                                                        ))}
+                                                                    </SelectContent>
+                                                                </Select>
+                                                            </div>
+                                                        ))}
                                                     </div>
-                                                </div>
-                                                <div className="p-4 rounded-xl bg-muted/30 border border-border text-xs space-y-2">
-                                                    <p className="font-bold flex items-center gap-1"><Info className="h-3 w-3" /> Quick Reference</p>
-                                                    <ul className="list-disc pl-4 space-y-1 text-muted-foreground">
-                                                        <li><strong>3.70+:</strong> First Class Honours</li>
-                                                        <li><strong>3.30 - 3.69:</strong> Second Class Upper</li>
-                                                        <li><strong>3.00 - 3.29:</strong> Second Class Lower</li>
-                                                    </ul>
-                                                </div>
+                                                )}
                                             </div>
 
                                             <div className="rounded-2xl border border-primary/20 bg-primary/5 p-8 flex flex-col items-center justify-center text-center space-y-4">
-                                                <p className="text-sm font-bold uppercase text-muted-foreground">Required Average Grade</p>
+                                                <p className="text-sm font-bold uppercase text-muted-foreground">Current Honours GPA</p>
                                                 <div className="text-6xl font-black text-primary mozilla-headline">
-                                                    {parseFloat(gpaSimulation.requiredAvgGPV) > 4.0 ? "Impossible" :
-                                                     parseFloat(gpaSimulation.requiredAvgGPV) <= 0 ? "Achieved" :
-                                                     gpaSimulation.requiredAvgGPV}
+                                                    {gpaCalculation}
                                                 </div>
-                                                <p className="text-xs text-muted-foreground max-w-[200px]">
-                                                    Average GPV needed across your remaining <strong>{gpaSimulation.remainingCredits} credits</strong> (L4-6).
-                                                </p>
+                                                <div className="space-y-1">
+                                                    <p className="text-xs font-bold text-emerald-600">
+                                                        {parseFloat(gpaCalculation) >= 3.7 ? "First Class Eligibility" :
+                                                         parseFloat(gpaCalculation) >= 3.3 ? "Second Upper Eligibility" :
+                                                         parseFloat(gpaCalculation) >= 3.0 ? "Second Lower Eligibility" : "Pass"}
+                                                    </p>
+                                                    <p className="text-[10px] text-muted-foreground">
+                                                        Considering {completedCourseDetails.filter(c => c.level >= 4).reduce((s,c) => s+c.credits, 0)} credits.
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </CardContent>
                                 </Card>
                             </TabsContent>
+
 
                             {/* Course Browser View */}
                             <TabsContent value="courses" className="space-y-6">
@@ -777,15 +765,6 @@ export default function StudentGuideNavigator() {
                                             />
                                         </div>
                                         <div className="grid grid-cols-2 md:flex gap-2">
-                                            <Select value={filterSpec} onValueChange={setFilterSpec}>
-                                                <SelectTrigger className="w-[140px]"><SelectValue placeholder="Specialization" /></SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="all">All Specializations</SelectItem>
-                                                    {Array.from(new Set(allCourses.flatMap(c => c.specializations))).sort().map(s => (
-                                                        <SelectItem key={s} value={s}>{s}</SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
                                             <Select value={filterLevel} onValueChange={setFilterLevel}>
                                                 <SelectTrigger className="w-[100px]"><SelectValue placeholder="Level" /></SelectTrigger>
                                                 <SelectContent>
@@ -817,7 +796,7 @@ export default function StudentGuideNavigator() {
                                 </div>
 
                                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                                    {filteredCourseList.slice(0, 50).map(c => (
+                                    {filteredCourseList.map(c => (
                                         <Card key={c.code} className="overflow-hidden hover:border-primary/50 transition-all group h-fit">
                                             <div className="p-4 space-y-3">
                                                 <div className="flex justify-between items-start">
@@ -831,35 +810,42 @@ export default function StudentGuideNavigator() {
 
                                                 <div className="pt-2 border-t border-border flex justify-between items-center">
                                                     <div className="flex gap-2">
-                                                        <Button
-                                                            variant={userPlan[c.code] !== undefined ? "default" : "outline"}
-                                                            size="sm"
-                                                            className="h-8 w-8 p-0"
-                                                            onClick={() => togglePlan(c.code)}
-                                                            title="Plan this course"
-                                                        >
-                                                            {userPlan[c.code] !== undefined ? <Save className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-                                                        </Button>
-                                                        <Button
-                                                            variant={completedCourses.includes(c.code) ? "default" : "outline"}
-                                                            size="sm"
-                                                            className={`h-8 w-8 p-0 ${completedCourses.includes(c.code) ? 'bg-emerald-500 hover:bg-emerald-600 border-emerald-500' : ''}`}
-                                                            onClick={() => toggleComplete(c.code)}
-                                                            title="Mark as completed"
-                                                        >
-                                                            <CheckCircle2 className="h-4 w-4" />
-                                                        </Button>
+                                                        <TooltipProvider>
+                                                            <Tooltip>
+                                                                <TooltipTrigger asChild>
+                                                                    <Button
+                                                                        variant={userPlan[c.code] !== undefined ? "default" : "outline"}
+                                                                        size="sm"
+                                                                        className="h-8 w-8 p-0"
+                                                                        onClick={() => togglePlan(c.code)}
+                                                                        aria-label="Plan this course"
+                                                                    >
+                                                                        {userPlan[c.code] !== undefined ? <Save className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                                                                    </Button>
+                                                                </TooltipTrigger>
+                                                                <TooltipContent side="top">Plan this course</TooltipContent>
+                                                            </Tooltip>
+                                                            <Tooltip>
+                                                                <TooltipTrigger asChild>
+                                                                    <Button
+                                                                        variant={completedCourses[c.code] !== undefined ? "default" : "outline"}
+                                                                        size="sm"
+                                                                        className={`h-8 w-8 p-0 ${completedCourses[c.code] !== undefined ? 'bg-emerald-500 hover:bg-emerald-600 border-emerald-500' : ''}`}
+                                                                        onClick={() => toggleComplete(c.code)}
+                                                                        aria-label="Mark as completed"
+                                                                    >
+                                                                        <CheckCircle2 className="h-4 w-4" />
+                                                                    </Button>
+                                                                </TooltipTrigger>
+                                                                <TooltipContent side="top">Mark as completed</TooltipContent>
+                                                            </Tooltip>
+                                                        </TooltipProvider>
                                                     </div>
                                                     <Badge className="text-[10px] bg-muted text-muted-foreground hover:bg-muted">{c.dept}</Badge>
                                                 </div>
                                             </div>
                                         </Card>
                                     ))}
-                                    {filteredCourseList.length > 50 && (
-                                        <div className="col-span-full py-8 text-center text-muted-foreground text-xs italic">
-                                            Showing first 50 results. Use filters to narrow down.
-                                        </div>
-                                    )}
                                 </div>
                             </TabsContent>
                         </Tabs>

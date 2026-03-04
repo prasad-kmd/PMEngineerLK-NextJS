@@ -202,12 +202,12 @@
   },
   {
     "code": "EEK3218",
-    "name": "Software Development for Engineers EEK3217",
+    "name": "Software Development for Engineers",
     "credits": 2,
     "level": 3,
     "category": "K",
     "dept": "EE",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) EEK3217",
     "specializations": [
       "Agricultural Engineering",
       "Civil Engineering",
@@ -221,12 +221,12 @@
   },
   {
     "code": "MHZ3311",
-    "name": "Differential Equations MHZ3310",
+    "name": "Differential Equations",
     "credits": 3,
     "level": 3,
     "category": "Z",
     "dept": "MH",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) MHZ3310",
     "specializations": [
       "Agricultural Engineering",
       "Civil Engineering",
@@ -271,12 +271,12 @@
   },
   {
     "code": "CVS4240",
-    "name": "Engineering Hydrology CVS3340",
+    "name": "Engineering Hydrology",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) CVS3340",
     "specializations": [
       "Agricultural Engineering",
       "Civil Engineering"
@@ -284,12 +284,12 @@
   },
   {
     "code": "CVS4242",
-    "name": "Surveying I DMS3205",
+    "name": "Surveying I",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS3205",
     "specializations": [
       "Agricultural Engineering",
       "Civil Engineering"
@@ -297,12 +297,12 @@
   },
   {
     "code": "DMS4205",
-    "name": "Strength of Materials I DMS3204",
+    "name": "Strength of Materials I",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS3204",
     "specializations": [
       "Agricultural Engineering",
       "Mechanical Engineering",
@@ -311,12 +311,12 @@
   },
   {
     "code": "MHZ4313",
-    "name": "Calculus II MHZ3310",
+    "name": "Calculus II",
     "credits": 3,
     "level": 4,
     "category": "Z",
     "dept": "MH",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) MHZ3310",
     "specializations": [
       "Agricultural Engineering",
       "Civil Engineering",
@@ -329,12 +329,12 @@
   },
   {
     "code": "MHZ4214",
-    "name": "Probability and Statistics MHZ3310",
+    "name": "Probability and Statistics",
     "credits": 2,
     "level": 4,
     "category": "Z",
     "dept": "MH",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) MHZ3310",
     "specializations": [
       "Agricultural Engineering",
       "Civil Engineering",
@@ -396,12 +396,12 @@
   },
   {
     "code": "CVM4401",
-    "name": "Accounting for Engineers AGM3203",
+    "name": "Accounting for Engineers",
     "credits": 4,
     "level": 4,
     "category": "M",
     "dept": "CV",
-    "prerequisites": "(CA), AGM4307(CR)",
+    "prerequisites": "(CA), AGM4307(CR), AGM3203",
     "specializations": [
       "Agricultural Engineering",
       "Civil Engineering",
@@ -414,12 +414,12 @@
   },
   {
     "code": "AGS5310",
-    "name": "Soil Management Tillage and Traction AGS4356",
+    "name": "Soil Management Tillage and Traction",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) AGS4356",
     "specializations": [
       "Agricultural Engineering"
     ]
@@ -438,12 +438,12 @@
   },
   {
     "code": "AGS5213",
-    "name": "Design and Management of Irrigation AGS4356",
+    "name": "Design and Management of Irrigation",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(P)",
+    "prerequisites": "(P) AGS4356",
     "specializations": [
       "Agricultural Engineering"
     ]
@@ -504,24 +504,24 @@
   },
   {
     "code": "AGS5316",
-    "name": "Farm Power and Mechanization  AGS5212",
+    "name": "Farm Power and Mechanization",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) AGS5212",
     "specializations": [
       "Agricultural Engineering"
     ]
   },
   {
     "code": "AGS5217",
-    "name": "Design and Management of Drainage  AGS4356",
+    "name": "Design and Management of Drainage",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) AGS4356",
     "specializations": [
       "Agricultural Engineering"
     ]
@@ -576,36 +576,36 @@
   },
   {
     "code": "AGS5367",
-    "name": "Soil Plant Water Management AGS4356",
+    "name": "Soil Plant Water Management",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) AGS4356",
     "specializations": [
       "Agricultural Engineering"
     ]
   },
   {
     "code": "AGS6278",
-    "name": "Agricultural Hydrology  AGS4356",
+    "name": "Agricultural Hydrology",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(P)",
+    "prerequisites": "(P) AGS4356",
     "specializations": [
       "Agricultural Engineering"
     ]
   },
   {
     "code": "AGS6283",
-    "name": "Groundwater Resources Management AGS4356",
+    "name": "Groundwater Resources Management",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(P)",
+    "prerequisites": "(P) AGS4356",
     "specializations": [
       "Agricultural Engineering"
     ]
@@ -624,24 +624,24 @@
   },
   {
     "code": "AGS6289",
-    "name": "Soil Erosion  AGS4356",
+    "name": "Soil Erosion",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(P)",
+    "prerequisites": "(P) AGS4356",
     "specializations": [
       "Agricultural Engineering"
     ]
   },
   {
     "code": "DMM6301",
-    "name": "Management for Engineers I AGM4307",
+    "name": "Management for Engineers I",
     "credits": 3,
     "level": 6,
     "category": "M",
     "dept": "DM",
-    "prerequisites": "(P), CVM4401 (P)",
+    "prerequisites": "(P), CVM4401 (P), AGM4307",
     "specializations": [
       "Agricultural Engineering",
       "Civil Engineering",
@@ -654,36 +654,36 @@
   },
   {
     "code": "AGS6285",
-    "name": "Well hydraulics and Design AGS4356",
+    "name": "Well hydraulics and Design",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(P), AGS6278 (CR)",
+    "prerequisites": "(P), AGS6278 (CR), AGS4356",
     "specializations": [
       "Agricultural Engineering"
     ]
   },
   {
     "code": "AGS6290",
-    "name": "Soil and Water Conservation  AGS4356",
+    "name": "Soil and Water Conservation",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(P), AGS6289 (CR)",
+    "prerequisites": "(P), AGS6289 (CR), AGS4356",
     "specializations": [
       "Agricultural Engineering"
     ]
   },
   {
     "code": "DMM6302",
-    "name": "Management for Engineers II  DMM6301",
+    "name": "Management for Engineers II",
     "credits": 3,
     "level": 6,
     "category": "M",
     "dept": "DM",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) DMM6301",
     "specializations": [
       "Agricultural Engineering",
       "Civil Engineering",
@@ -696,12 +696,12 @@
   },
   {
     "code": "AGS6230",
-    "name": "Food Engineering AGS5214",
+    "name": "Food Engineering",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(P)",
+    "prerequisites": "(P) AGS5214",
     "specializations": [
       "Agricultural Engineering"
     ]
@@ -720,24 +720,24 @@
   },
   {
     "code": "AGS6292",
-    "name": "Commercial Horticulture AGS6291",
+    "name": "Commercial Horticulture",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "AG",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) AGS6291",
     "specializations": [
       "Agricultural Engineering"
     ]
   },
   {
     "code": "CVS3340",
-    "name": "Fundamentals of Hydrology and Hydraulics  DMB3301",
+    "name": "Fundamentals of Hydrology and Hydraulics",
     "credits": 3,
     "level": 3,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) DMB3301",
     "specializations": [
       "Civil Engineering"
     ]
@@ -771,24 +771,24 @@
   },
   {
     "code": "CVS4241",
-    "name": "Structural Analysis I  CVS3242",
+    "name": "Structural Analysis I",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) CVS3242",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS4243",
-    "name": "Soil Mechanics  CVS3340",
+    "name": "Soil Mechanics",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA), CVS3242(CA)",
+    "prerequisites": "(CA), CVS3242(CA), CVS3340",
     "specializations": [
       "Civil Engineering"
     ]
@@ -807,24 +807,24 @@
   },
   {
     "code": "CVS4250",
-    "name": "Quantity Surveying * CVS4242",
+    "name": "Quantity Surveying *",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CR), CVS4246(CR)",
+    "prerequisites": "(CR), CVS4246(CR), CVS4242",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "MHZ4215",
-    "name": "Numerical Methods MHZ3310",
+    "name": "Numerical Methods",
     "credits": 2,
     "level": 4,
     "category": "Z",
     "dept": "MH",
-    "prerequisites": "(CA), MHZ3311(CA)",
+    "prerequisites": "(CA), MHZ3311(CA), MHZ3310",
     "specializations": [
       "Civil Engineering",
       "Electrical Engineering",
@@ -846,12 +846,12 @@
   },
   {
     "code": "CVS4245",
-    "name": "Structural Analysis II CVS3242",
+    "name": "Structural Analysis II",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) CVS3242",
     "specializations": [
       "Civil Engineering"
     ]
@@ -870,12 +870,12 @@
   },
   {
     "code": "CVS4249",
-    "name": "Building Service Engineering * DMB3301",
+    "name": "Building Service Engineering *",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA), EEB3210(CA)",
+    "prerequisites": "(CA), EEB3210(CA), DMB3301",
     "specializations": [
       "Civil Engineering"
     ]
@@ -894,108 +894,108 @@
   },
   {
     "code": "CVS5240",
-    "name": "Surveying II DMS3205",
+    "name": "Surveying II",
     "credits": 1,
     "level": 5,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(P), CVS4242(CA), 25 Credits (P)",
+    "prerequisites": "(P), CVS4242(CA), 25 Credits (P), DMS3205",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS5241",
-    "name": "Hydraulics CVS3340",
+    "name": "Hydraulics",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(P), CVS4240(CA)",
+    "prerequisites": "(P), CVS4240(CA), CVS3340",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS5242",
-    "name": "Design of Timber and Masonry Structures  CVS3242",
+    "name": "Design of Timber and Masonry Structures",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(P), CVS4245(CA)",
+    "prerequisites": "(P), CVS4245(CA), CVS3242",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS5343",
-    "name": "Advanced Structural Analysis  CVS4245",
+    "name": "Advanced Structural Analysis",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) CVS4245",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS5245",
-    "name": "Design of Concrete Structures  CVS3242",
+    "name": "Design of Concrete Structures",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(P), CVS4245(CA)",
+    "prerequisites": "(P), CVS4245(CA), CVS3242",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS5246",
-    "name": "Highway and Traffic Engineering  CVS4242",
+    "name": "Highway and Traffic Engineering",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) CVS4242",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS5344",
-    "name": "Geotechnical Engineering CVS4243",
+    "name": "Geotechnical Engineering",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) CVS4243",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS5247",
-    "name": "Hydraulic Engineering and Design  CVS3340",
+    "name": "Hydraulic Engineering and Design",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(P), CVS4240(CA),",
+    "prerequisites": "(P), CVS4240(CA),, CVS3340",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS5180",
-    "name": "Research Methodology LTE34TI",
-    "credits": 25,
+    "name": "Research Methodology",
+    "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CR), 30 Credits (P) at Level 3,",
+    "prerequisites": "(CR), 30 Credits (P) at Level 3,, LTE34TI",
     "specializations": [
       "Civil Engineering"
     ]
@@ -1014,24 +1014,24 @@
   },
   {
     "code": "CVS6240",
-    "name": "Design of Steel Structures CVS5343",
+    "name": "Design of Steel Structures",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) CVS5343",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS6245",
-    "name": "Environmental Engineering  CVS5241",
+    "name": "Environmental Engineering",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA), CVS5247(CA)",
+    "prerequisites": "(CA), CVS5247(CA), CVS5241",
     "specializations": [
       "Civil Engineering"
     ]
@@ -1051,7 +1051,7 @@
   {
     "code": "CVY6385",
     "name": "Comprehensive Design Project",
-    "credits": 65,
+    "credits": 6,
     "level": 6,
     "category": "Y",
     "dept": "CV",
@@ -1122,24 +1122,24 @@
   },
   {
     "code": "CVS6241",
-    "name": "Environmental Engineering Design  CVS52419CA), CVS5247",
+    "name": "Environmental Engineering Design  CVS52419CA),",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) CVS5247",
     "specializations": [
       "Civil Engineering"
     ]
   },
   {
     "code": "CVS6342",
-    "name": "Geotechnical Engineering Design  CVS5344",
+    "name": "Geotechnical Engineering Design",
     "credits": 3,
     "level": 6,
     "category": "S",
     "dept": "CV",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) CVS5344",
     "specializations": [
       "Civil Engineering"
     ]
@@ -1194,24 +1194,24 @@
   },
   {
     "code": "EES4331",
-    "name": "Circuit Theory and Design EES3330",
+    "name": "Circuit Theory and Design",
     "credits": 3,
     "level": 4,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), 8 Credits (CA) at Level 3",
+    "prerequisites": "(CA), 8 Credits (CA) at Level 3, EES3330",
     "specializations": [
       "Computer Engineering"
     ]
   },
   {
     "code": "EES4230",
-    "name": "Analog Electronics EES3330",
+    "name": "Analog Electronics",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), 8 Credits (CA) at Level 3",
+    "prerequisites": "(CA), 8 Credits (CA) at Level 3, EES3330",
     "specializations": [
       "Computer Engineering",
       "Electrical Engineering",
@@ -1220,12 +1220,12 @@
   },
   {
     "code": "EES5326",
-    "name": "Digital Electronic Design EES4436",
+    "name": "Digital Electronic Design",
     "credits": 15,
     "level": 5,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), 24 Credits(P) at Level 3,",
+    "prerequisites": "(CA), 24 Credits(P) at Level 3,, EES4436",
     "specializations": [
       "Computer Engineering",
       "Electrical Engineering",
@@ -1246,12 +1246,12 @@
   },
   {
     "code": "EES5334",
-    "name": "Data Communications and Networks EES3236",
+    "name": "Data Communications and Networks",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(P), 30 Credits (P)",
+    "prerequisites": "(P), 30 Credits (P), EES3236",
     "specializations": [
       "Computer Engineering",
       "Electronics and Communication Engineering"
@@ -1275,36 +1275,36 @@
   },
   {
     "code": "EEY6401",
-    "name": "System Design in Groups LTE34TI",
-    "credits": 60,
+    "name": "System Design in Groups",
+    "credits": 6,
     "level": 6,
     "category": "Y",
     "dept": "EE",
-    "prerequisites": "(P), EES4230(P), EES5317(P),",
+    "prerequisites": "(P), EES4230(P), EES5317(P),, LTE34TI",
     "specializations": [
       "Computer Engineering"
     ]
   },
   {
     "code": "EES6121",
-    "name": "Emerging Technologies AGM3203",
-    "credits": 45,
+    "name": "Emerging Technologies",
+    "credits": 3,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(P), EEK3217(P), EEK3218(P),",
+    "prerequisites": "(P), EEK3217(P), EEK3218(P),, AGM3203",
     "specializations": [
       "Computer Engineering"
     ]
   },
   {
     "code": "EES5230",
-    "name": "Advanced Electronics  EES4230",
+    "name": "Advanced Electronics",
     "credits": 3,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), 24 Credits (P)",
+    "prerequisites": "(CA), 24 Credits (P), EES4230",
     "specializations": [
       "Computer Engineering",
       "Electronics and Communication Engineering"
@@ -1312,12 +1312,12 @@
   },
   {
     "code": "EES6209",
-    "name": "Cloud Computing  EEK3218",
-    "credits": 45,
+    "name": "Cloud Computing",
+    "credits": 3,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(P), EES3236(P), EES4235(P),",
+    "prerequisites": "(P), EES3236(P), EES4235(P),, EEK3218",
     "specializations": [
       "Computer Engineering",
       "Electronics and Communication Engineering"
@@ -1325,12 +1325,12 @@
   },
   {
     "code": "EES6219",
-    "name": "Creative Design AGM3203",
-    "credits": 45,
+    "name": "Creative Design",
+    "credits": 3,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(P), EEK3217(P), EEK3218(P),",
+    "prerequisites": "(P), EEK3217(P), EEK3218(P),, AGM3203",
     "specializations": [
       "Computer Engineering"
     ]
@@ -1349,12 +1349,12 @@
   },
   {
     "code": "EES4222",
-    "name": "Power Systems and Electrical Machines EES3330",
+    "name": "Power Systems and Electrical Machines",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA); MHZ3310(CA)",
+    "prerequisites": "(CA); MHZ3310(CA), EES3330",
     "specializations": [
       "Electrical Engineering",
       "Electronics and Communication Engineering"
@@ -1375,12 +1375,12 @@
   },
   {
     "code": "MHZ4216",
-    "name": "Fourier Analysis MHZ3311",
+    "name": "Fourier Analysis",
     "credits": 2,
     "level": 4,
     "category": "Z",
     "dept": "MH",
-    "prerequisites": "(CA), MHZ3212(CA).",
+    "prerequisites": "(CA), MHZ3212(CA)., MHZ3311",
     "specializations": [
       "Electrical Engineering",
       "Electronics and Communication Engineering",
@@ -1389,12 +1389,12 @@
   },
   {
     "code": "EES5310",
-    "name": "Electrical Installation Design  EEB3210",
+    "name": "Electrical Installation Design",
     "credits": 3,
     "level": 4,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(P), EES3330(CA)",
+    "prerequisites": "(P), EES3330(CA), EEB3210",
     "specializations": [
       "Electrical Engineering",
       "Electronics and Communication Engineering"
@@ -1402,12 +1402,12 @@
   },
   {
     "code": "EES5316",
-    "name": "Power Electronics  EES4230",
+    "name": "Power Electronics",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), EES 4331(CA)",
+    "prerequisites": "(CA), EES 4331(CA), EES4230",
     "specializations": [
       "Electrical Engineering",
       "Electronics and Communication Engineering"
@@ -1415,24 +1415,24 @@
   },
   {
     "code": "EES5222",
-    "name": "Protection of Power Systems EES5232",
+    "name": "Protection of Power Systems",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CR), EES4332(CA), MHZ3212(P)",
+    "prerequisites": "(CR), EES4332(CA), MHZ3212(P), EES5232",
     "specializations": [
       "Electrical Engineering"
     ]
   },
   {
     "code": "EES6211",
-    "name": "Electromagnetism and Wave Propagation MHZ4313",
+    "name": "Electromagnetism and Wave Propagation",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), EEB3210(P)",
+    "prerequisites": "(CA), EEB3210(P), MHZ4313",
     "specializations": [
       "Electrical Engineering",
       "Electronics and Communication Engineering"
@@ -1440,12 +1440,12 @@
   },
   {
     "code": "DMS5210",
-    "name": "Design of Classical Control Systems DMS5209",
+    "name": "Design of Classical Control Systems",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) DMS5209",
     "specializations": [
       "Electrical Engineering",
       "Mechanical Engineering",
@@ -1454,48 +1454,48 @@
   },
   {
     "code": "EES5328",
-    "name": "Electrical Machines and Drives EES4328",
+    "name": "Electrical Machines and Drives",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), EES4230(CA), EES5316(CR)",
+    "prerequisites": "(CA), EES4230(CA), EES5316(CR), EES4328",
     "specializations": [
       "Electrical Engineering"
     ]
   },
   {
     "code": "EES5338",
-    "name": "High Voltage Engineering EES4332",
+    "name": "High Voltage Engineering",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), EES4328(CA), MHZ3311(P)",
+    "prerequisites": "(CA), EES4328(CA), MHZ3311(P), EES4332",
     "specializations": [
       "Electrical Engineering"
     ]
   },
   {
     "code": "EES6222",
-    "name": "Modern Power Systems EES4332",
+    "name": "Modern Power Systems",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(P), MHZ5219(CA), EES5232(CA)",
+    "prerequisites": "(P), MHZ5219(CA), EES5232(CA), EES4332",
     "specializations": [
       "Electrical Engineering"
     ]
   },
   {
     "code": "DMS6205",
-    "name": "Factory Automation EES4436",
+    "name": "Factory Automation",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA), 70 Credits (P)",
+    "prerequisites": "(CA), 70 Credits (P), EES4436",
     "specializations": [
       "Electrical Engineering",
       "Mechanical Engineering",
@@ -1504,12 +1504,12 @@
   },
   {
     "code": "DMS6207",
-    "name": "Modern Control Systems DMS5210",
+    "name": "Modern Control Systems",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS5210",
     "specializations": [
       "Electrical Engineering",
       "Mechatronics Engineering"
@@ -1517,36 +1517,36 @@
   },
   {
     "code": "EES6210",
-    "name": "Nuclear Energy EES4332",
+    "name": "Nuclear Energy",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(P), EES5232(CA)",
+    "prerequisites": "(P), EES5232(CA), EES4332",
     "specializations": [
       "Electrical Engineering"
     ]
   },
   {
     "code": "EES6216",
-    "name": "Power Electronics Applications EES5316",
+    "name": "Power Electronics Applications",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), EES4230(P), EES5328(CA)",
+    "prerequisites": "(CA), EES4230(P), EES5328(CA), EES5316",
     "specializations": [
       "Electrical Engineering"
     ]
   },
   {
     "code": "EES6228",
-    "name": "Image Processing EEK3218",
-    "credits": 45,
+    "name": "Image Processing",
+    "credits": 3,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(P), MHZ4215(P), MHZ4216(P),",
+    "prerequisites": "(P), MHZ4215(P), MHZ4216(P),, EEK3218",
     "specializations": [
       "Electrical Engineering",
       "Electronics and Communication Engineering"
@@ -1554,12 +1554,12 @@
   },
   {
     "code": "EES6231",
-    "name": "Network Theory EES4331",
+    "name": "Network Theory",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(P), MHZ4216(P), MHZ3311(P)",
+    "prerequisites": "(P), MHZ4216(P), MHZ3311(P), EES4331",
     "specializations": [
       "Electrical Engineering"
     ]
@@ -1578,36 +1578,36 @@
   },
   {
     "code": "EES4333",
-    "name": "Communications EES3236",
+    "name": "Communications",
     "credits": 3,
     "level": 4,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) EES3236",
     "specializations": [
       "Electronics and Communication Engineering"
     ]
   },
   {
     "code": "EES5333",
-    "name": "Communication Theory and Systems EES4333",
+    "name": "Communication Theory and Systems",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), MHZ4313(CA)",
+    "prerequisites": "(CA), MHZ4313(CA), EES4333",
     "specializations": [
       "Electronics and Communication Engineering"
     ]
   },
   {
     "code": "DMS5202",
-    "name": "Design of Classical Control Systems  DMS5210",
+    "name": "Design of Classical Control Systems",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) DMS5210",
     "specializations": [
       "Electronics and Communication Engineering",
       "Mechanical Engineering"
@@ -1615,96 +1615,96 @@
   },
   {
     "code": "EES6213",
-    "name": "Microwave Engineering EES6211",
+    "name": "Microwave Engineering",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) EES6211",
     "specializations": [
       "Electronics and Communication Engineering"
     ]
   },
   {
     "code": "EES6333",
-    "name": "Wireless Communications EES5333",
+    "name": "Wireless Communications",
     "credits": 3,
     "level": 5,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CR), EES4333(P)",
+    "prerequisites": "(CR), EES4333(P), EES5333",
     "specializations": [
       "Electronics and Communication Engineering"
     ]
   },
   {
     "code": "EEY6403",
-    "name": "Comprehensive Electronics Design EES5230",
-    "credits": 60,
+    "name": "Comprehensive Electronics Design",
+    "credits": 6,
     "level": 5,
     "category": "Y",
     "dept": "EE",
-    "prerequisites": "(CR), EES4230(P), LTE34TI(P),",
+    "prerequisites": "(CR), EES4230(P), LTE34TI(P),, EES5230",
     "specializations": [
       "Electronics and Communication Engineering"
     ]
   },
   {
     "code": "EES6214",
-    "name": "Antenna Design EES6211",
+    "name": "Antenna Design",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), EES6213(CR)",
+    "prerequisites": "(CA), EES6213(CR), EES6211",
     "specializations": [
       "Electronics and Communication Engineering"
     ]
   },
   {
     "code": "EES6230",
-    "name": "Electronics Circuit Design EES5230",
+    "name": "Electronics Circuit Design",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), EES5326(CA)",
+    "prerequisites": "(CA), EES5326(CA), EES5230",
     "specializations": [
       "Electronics and Communication Engineering"
     ]
   },
   {
     "code": "EES5235",
-    "name": "Advanced Data Structures and Algorithms EEK3217",
-    "credits": 24,
+    "name": "Advanced Data Structures and Algorithms",
+    "credits": 3,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(P), EEK3218(P), EES4235(CA),",
+    "prerequisites": "(P), EEK3218(P), EES4235(CA),, EEK3217",
     "specializations": [
       "Electronics and Communication Engineering"
     ]
   },
   {
     "code": "EES6215",
-    "name": "Physical and Opto Electronics EES5230",
+    "name": "Physical and Opto Electronics",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "EE",
-    "prerequisites": "(CA), EES4230(P)",
+    "prerequisites": "(CA), EES4230(P), EES5230",
     "specializations": [
       "Electronics and Communication Engineering"
     ]
   },
   {
     "code": "DMS3204",
-    "name": "Engineering Mechanics I CVB3310",
+    "name": "Engineering Mechanics I",
     "credits": 2,
     "level": 3,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) CVB3310",
     "specializations": [
       "Mechanical Engineering",
       "Mechatronics Engineering"
@@ -1712,12 +1712,12 @@
   },
   {
     "code": "DMS3206",
-    "name": "Manufacturing Technology I CVB3310",
+    "name": "Manufacturing Technology I",
     "credits": 2,
     "level": 3,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR), DMS3203(CR)",
+    "prerequisites": "(CR), DMS3203(CR), CVB3310",
     "specializations": [
       "Mechanical Engineering",
       "Mechatronics Engineering"
@@ -1725,12 +1725,12 @@
   },
   {
     "code": "DMS3207",
-    "name": "Analog and Digital Electronics  EEB3210",
+    "name": "Analog and Digital Electronics",
     "credits": 2,
     "level": 3,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) EEB3210",
     "specializations": [
       "Mechanical Engineering",
       "Mechatronics Engineering"
@@ -1738,12 +1738,12 @@
   },
   {
     "code": "DMS4201",
-    "name": "Applied Thermodynamics I DMB3301",
+    "name": "Applied Thermodynamics I",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMB3301",
     "specializations": [
       "Mechanical Engineering",
       "Mechatronics Engineering"
@@ -1751,12 +1751,12 @@
   },
   {
     "code": "DMS4202",
-    "name": "Applied Fluid Dynamics I DMB3301",
+    "name": "Applied Fluid Dynamics I",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMB3301",
     "specializations": [
       "Mechanical Engineering",
       "Mechatronics Engineering"
@@ -1764,36 +1764,36 @@
   },
   {
     "code": "DMS4203",
-    "name": "Mechatronics systems   DMB3202",
+    "name": "Mechatronics systems",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA), DMS3207(CA)",
+    "prerequisites": "(CA), DMS3207(CA), DMB3202",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS4204",
-    "name": "Advanced Engineering Graphics DMS3205",
+    "name": "Advanced Engineering Graphics",
     "credits": 1,
     "level": 4,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS3205",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS4207",
-    "name": "Automobile Technology  DMS4201",
+    "name": "Automobile Technology",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) DMS4201",
     "specializations": [
       "Mechanical Engineering"
     ]
@@ -1812,24 +1812,24 @@
   },
   {
     "code": "DMY4306",
-    "name": "Mechanical Engineering Challenge  LTE34TE",
+    "name": "Mechanical Engineering Challenge",
     "credits": 3,
     "level": 4,
     "category": "Y",
     "dept": "DM",
-    "prerequisites": "(CR), Credits 24(CA)",
+    "prerequisites": "(CR), Credits 24(CA), LTE34TE",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS5201",
-    "name": "Engineering Mechanics II DMS3204",
+    "name": "Engineering Mechanics II",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(P), MHZ3311(P)",
+    "prerequisites": "(P), MHZ3311(P), DMS3204",
     "specializations": [
       "Mechanical Engineering",
       "Mechatronics Engineering"
@@ -1837,36 +1837,36 @@
   },
   {
     "code": "DMS5203",
-    "name": "Applied Thermodynamics II DMB3301",
+    "name": "Applied Thermodynamics II",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(P), DMS4201(CA)",
+    "prerequisites": "(P), DMS4201(CA), DMB3301",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS5204",
-    "name": "Strength of Materials II  DMS4205",
+    "name": "Strength of Materials II",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS4205",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS5406",
-    "name": "Design of Machine Elements  DMS3204",
+    "name": "Design of Machine Elements",
     "credits": 4,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(P), DMS4205(CA)",
+    "prerequisites": "(P), DMS4205(CA), DMS3204",
     "specializations": [
       "Mechanical Engineering",
       "Mechatronics Engineering"
@@ -1874,24 +1874,24 @@
   },
   {
     "code": "DMS5205",
-    "name": "Materials Engineering CVB3310",
+    "name": "Materials Engineering",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(P)",
+    "prerequisites": "(P) CVB3310",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS5207",
-    "name": "Electrical and Fluid Machinery DMS3207",
+    "name": "Electrical and Fluid Machinery",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(P)",
+    "prerequisites": "(P) DMS3207",
     "specializations": [
       "Mechanical Engineering",
       "Mechatronics Engineering"
@@ -1899,36 +1899,36 @@
   },
   {
     "code": "DMS5208",
-    "name": "Manufacturing Technology II DMS3206",
+    "name": "Manufacturing Technology II",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(P)",
+    "prerequisites": "(P) DMS3206",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS5411",
-    "name": "Mechanical Engineering Design  DMS5406",
+    "name": "Mechanical Engineering Design",
     "credits": 4,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR), DMS4204(CA)",
+    "prerequisites": "(CR), DMS4204(CA), DMS5406",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS5112",
-    "name": "Introduction to Engineering Research LTE34TI",
+    "name": "Introduction to Engineering Research",
     "credits": 1,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR), 45 Credits (P)",
+    "prerequisites": "(CR), 45 Credits (P), LTE34TI",
     "specializations": [
       "Mechanical Engineering",
       "Mechatronics Engineering"
@@ -1948,144 +1948,144 @@
   },
   {
     "code": "DMS6204",
-    "name": "Design for Manufacturing and Assembly DMS5208",
+    "name": "Design for Manufacturing and Assembly",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS5208",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS6206",
-    "name": "AI Techniques   DMS5210",
+    "name": "AI Techniques",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS5210",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS6211",
-    "name": "Thermal Power Technologies DMS5203",
+    "name": "Thermal Power Technologies",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS5203",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS6212",
-    "name": "Renewable Energy Technologies DMS5203",
+    "name": "Renewable Energy Technologies",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS5203",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS6219",
-    "name": "Automobile Engineering DMS4207",
+    "name": "Automobile Engineering",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(P)",
+    "prerequisites": "(P) DMS4207",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS6221",
-    "name": "Manufacturing Engineering DMS5208",
+    "name": "Manufacturing Engineering",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS5208",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS6222",
-    "name": "Manufacturing Systems DMS5208",
+    "name": "Manufacturing Systems",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS5208",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS6223",
-    "name": "Digital Design for Manufacturing DMS4204",
+    "name": "Digital Design for Manufacturing",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(P)",
+    "prerequisites": "(P) DMS4204",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS6224",
-    "name": "Design of Energy Systems DMS6212",
-    "credits": 70,
+    "name": "Design of Energy Systems",
+    "credits": 3,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR),",
+    "prerequisites": "(CR),, DMS6212",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS6233",
-    "name": "Design of Manufacturing Systems DMS6222",
-    "credits": 70,
+    "name": "Design of Manufacturing Systems",
+    "credits": 3,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR),",
+    "prerequisites": "(CR),, DMS6222",
     "specializations": [
       "Mechanical Engineering"
     ]
   },
   {
     "code": "DMS4210",
-    "name": "Sensors and Instrumentation DMS3207",
+    "name": "Sensors and Instrumentation",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA), MHZ3311(CA)",
+    "prerequisites": "(CA), MHZ3311(CA), DMS3207",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS4211",
-    "name": "Image Processing MHZ3212",
+    "name": "Image Processing",
     "credits": 2,
     "level": 4,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA), MHZ4216(CR)",
+    "prerequisites": "(CA), MHZ4216(CR), MHZ3212",
     "specializations": [
       "Mechatronics Engineering"
     ]
@@ -2104,72 +2104,72 @@
   },
   {
     "code": "DMY4312",
-    "name": "Mechatronics Engineering Challenge  LTE34TE",
+    "name": "Mechatronics Engineering Challenge",
     "credits": 3,
     "level": 4,
     "category": "Y",
     "dept": "DM",
-    "prerequisites": "(CR), Credits 24(CA)",
+    "prerequisites": "(CR), Credits 24(CA), LTE34TE",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS5216",
-    "name": "Signal Processing MHZ4313",
+    "name": "Signal Processing",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA), MHZ4216(CA)",
+    "prerequisites": "(CA), MHZ4216(CA), MHZ4313",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS5217",
-    "name": "Mechatronics Product Design I DMS3207",
+    "name": "Mechatronics Product Design I",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA), DMS4210(CA)",
+    "prerequisites": "(CA), DMS4210(CA), DMS3207",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS5218",
-    "name": "Mechatronics Product Design II DMS5217",
+    "name": "Mechatronics Product Design II",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) DMS5217",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS5219",
-    "name": "Artificial Intelligence DMS5210",
+    "name": "Artificial Intelligence",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR), 24 Credits(P) at Level 3",
+    "prerequisites": "(CR), 24 Credits(P) at Level 3, DMS5210",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS5220",
-    "name": "Power Electronics and Motor Drives DMS4210",
+    "name": "Power Electronics and Motor Drives",
     "credits": 2,
     "level": 5,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA), DMS5207(CR)",
+    "prerequisites": "(CA), DMS5207(CR), DMS4210",
     "specializations": [
       "Mechatronics Engineering"
     ]
@@ -2188,48 +2188,48 @@
   },
   {
     "code": "DMS6203",
-    "name": "Robot Manipulation and Control DMS5201",
+    "name": "Robot Manipulation and Control",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA)",
+    "prerequisites": "(CA) DMS5201",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS6208",
-    "name": "Machine Vision DMS4211",
+    "name": "Machine Vision",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(P), DMS4210(P)",
+    "prerequisites": "(P), DMS4210(P), DMS4211",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS6237",
-    "name": "Cognitive Computing DMS5219",
+    "name": "Cognitive Computing",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA), 70 Credits (P))",
+    "prerequisites": "(CA), 70 Credits (P)), DMS5219",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS6238",
-    "name": "Machine Learning for Control Systems DMS5219",
+    "name": "Machine Learning for Control Systems",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CA), 70 Credits (P)",
+    "prerequisites": "(CA), 70 Credits (P), DMS5219",
     "specializations": [
       "Mechatronics Engineering"
     ]
@@ -2248,36 +2248,36 @@
   },
   {
     "code": "DMS6210",
-    "name": "Design of Intelligent Control Systems DMS6207",
+    "name": "Design of Intelligent Control Systems",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR), DMS5219(CA)",
+    "prerequisites": "(CR), DMS5219(CA), DMS6207",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS6246",
-    "name": "Building Management Systems DMS6210",
+    "name": "Building Management Systems",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR), 70 Credits (P)",
+    "prerequisites": "(CR), 70 Credits (P), DMS6210",
     "specializations": [
       "Mechatronics Engineering"
     ]
   },
   {
     "code": "DMS6248",
-    "name": "Digital Twin Technology DMS6210",
+    "name": "Digital Twin Technology",
     "credits": 2,
     "level": 6,
     "category": "S",
     "dept": "DM",
-    "prerequisites": "(CR), 70 Credits (P)",
+    "prerequisites": "(CR), 70 Credits (P), DMS6210",
     "specializations": [
       "Mechatronics Engineering"
     ]
@@ -2332,72 +2332,72 @@
   },
   {
     "code": "MHZ4217",
-    "name": "Statistical Methods MHZ4214",
+    "name": "Statistical Methods",
     "credits": 2,
     "level": 4,
     "category": "Z",
     "dept": "MH",
-    "prerequisites": "(CR)",
+    "prerequisites": "(CR) MHZ4214",
     "specializations": [
       "Textile and Clothing Engineering"
     ]
   },
   {
     "code": "TAS4413",
-    "name": "Garment Manufacture TAS3317",
+    "name": "Garment Manufacture",
     "credits": 4,
     "level": 4,
     "category": "S",
     "dept": "TA",
-    "prerequisites": "(CA), 5 credits (CA) at Level 3",
+    "prerequisites": "(CA), 5 credits (CA) at Level 3, TAS3317",
     "specializations": [
       "Textile and Clothing Engineering"
     ]
   },
   {
     "code": "TAS5214",
-    "name": "Basic Weave Designs and Calculations TAS4311",
+    "name": "Basic Weave Designs and Calculations",
     "credits": 12,
     "level": 5,
     "category": "S",
     "dept": "TA",
-    "prerequisites": "(CA), 24 credits (P) at Level 3,",
+    "prerequisites": "(CA), 24 credits (P) at Level 3,, TAS4311",
     "specializations": [
       "Textile and Clothing Engineering"
     ]
   },
   {
     "code": "TAS5211",
-    "name": "Textile Printing and Finishing TAS5210",
+    "name": "Textile Printing and Finishing",
     "credits": 15,
     "level": 5,
     "category": "S",
     "dept": "TA",
-    "prerequisites": "(CR), 24 credits (P) at Level 3,",
+    "prerequisites": "(CR), 24 credits (P) at Level 3,, TAS5210",
     "specializations": [
       "Textile and Clothing Engineering"
     ]
   },
   {
     "code": "TAS5213",
-    "name": "Quality Assurance for Textile & Clothing II TAS5212",
+    "name": "Quality Assurance for Textile & Clothing II",
     "credits": 15,
     "level": 5,
     "category": "S",
     "dept": "TA",
-    "prerequisites": "(CR), 24 credits (P) at Level 3,",
+    "prerequisites": "(CR), 24 credits (P) at Level 3,, TAS5212",
     "specializations": [
       "Textile and Clothing Engineering"
     ]
   },
   {
     "code": "TAS6218",
-    "name": "Plant Utilities II TAS5218",
+    "name": "Plant Utilities II",
     "credits": 3,
     "level": 6,
     "category": "S",
     "dept": "TA",
-    "prerequisites": "(CA), 45 credits (P) at Levels",
+    "prerequisites": "(CA), 45 credits (P) at Levels, TAS5218",
     "specializations": [
       "Textile and Clothing Engineering"
     ]
