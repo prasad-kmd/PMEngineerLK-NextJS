@@ -24,7 +24,10 @@ import {
   History,
   FileText,
   ArrowUpRight,
+  Printer,
 } from "lucide-react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import {
   Card,
   CardContent,
@@ -150,9 +153,15 @@ export default function StudentGuideNavigator() {
     "ousl_is_new_student",
     false,
   );
+  const [studentName, setStudentName] = useLocalStorage<string>(
+    "ousl_student_name",
+    "",
+  );
 
   // UI State
   const [searchQuery, setSearchQuery] = useState("");
+  const [isExporting, setIsExporting] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
   const [filterDept, setFilterDept] = useState("all");
   const [filterLevel, setFilterLevel] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
@@ -394,12 +403,61 @@ export default function StudentGuideNavigator() {
         if (data.selectedProgrammeId)
           setSelectedProgrammeId(data.selectedProgrammeId);
         if (data.isNewStudent !== undefined) setIsNewStudent(data.isNewStudent);
+        if (data.studentName) setStudentName(data.studentName);
         toast.success("Data restored successfully.");
       } catch (err) {
         toast.error("Invalid backup file.");
       }
     };
     reader.readAsText(file);
+  };
+
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    const toastId = toast.loading("Preparing academic report...");
+
+    // Wait for DOM to update with the report
+    setTimeout(async () => {
+      try {
+        const element = reportRef.current;
+        if (!element) throw new Error("Report element not found");
+
+        const canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: "#ffffff",
+        });
+
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        let heightLeft = pdfHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+          position = heightLeft - pdfHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save(
+          `OUSL_Academic_Report_${studentName.replace(/\s+/g, "_") || "Navigator"}.pdf`,
+        );
+        toast.success("Report exported successfully!", { id: toastId });
+      } catch (error) {
+        console.error("Export error:", error);
+        toast.error("Failed to generate PDF report.", { id: toastId });
+      } finally {
+        setIsExporting(false);
+      }
+    }, 500);
   };
 
   // Fee Calculation
@@ -446,8 +504,19 @@ export default function StudentGuideNavigator() {
                 with precision.
               </p>
 
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="space-y-1.5 flex-1 min-w-[280px]">
+              <div className="flex flex-wrap items-center gap-4 mb-6">
+                <div className="space-y-1.5 flex-1 min-w-[240px]">
+                  <Label className="text-xs font-black uppercase tracking-[0.2em] text-primary/70 ml-1">
+                    Student Name
+                  </Label>
+                  <Input
+                    placeholder="Enter your name"
+                    value={studentName}
+                    onChange={(e) => setStudentName(e.target.value)}
+                    className="h-12 bg-background/50 border-primary/20 rounded-xl font-bold"
+                  />
+                </div>
+                <div className="space-y-1.5 flex-1 min-w-[240px]">
                   <Label className="text-xs font-black uppercase tracking-[0.2em] text-primary/70 ml-1">
                     Current Specialization
                   </Label>
@@ -468,8 +537,19 @@ export default function StudentGuideNavigator() {
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
 
-                <div className="flex items-end gap-2 h-full pt-6">
+              <div className="flex flex-wrap items-center gap-4">
+                <Button
+                  onClick={handleExportPDF}
+                  disabled={isExporting}
+                  className="rounded-xl h-11 px-6 font-black uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  {isExporting ? "Preparing Report..." : "Export Academic Report"}
+                </Button>
+
+                <div className="flex items-center gap-2">
                   <TooltipProvider>
                     <div className="flex gap-1.5 p-1 bg-background/40 backdrop-blur-md border border-primary/10 rounded-xl">
                       <Tooltip>
@@ -484,7 +564,7 @@ export default function StudentGuideNavigator() {
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent className="rounded-lg font-bold text-xs">
-                          Export Backup
+                          Export Backup (.json)
                         </TooltipContent>
                       </Tooltip>
 
@@ -505,7 +585,7 @@ export default function StudentGuideNavigator() {
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent className="rounded-lg font-bold text-xs">
-                          Import Backup
+                          Import Backup (.json)
                         </TooltipContent>
                       </Tooltip>
 
@@ -1331,6 +1411,221 @@ export default function StudentGuideNavigator() {
           <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
         </div>
         <AIContentIndicator />
+      </div>
+
+      {/* Hidden Report Template for PDF Generation */}
+      <div className="fixed left-[-9999px] top-0">
+        <div
+          ref={reportRef}
+          className="w-[800px] p-12 bg-white text-slate-950 font-sans"
+        >
+          <div className="flex justify-between items-start border-b-4 border-primary pb-8 mb-8">
+            <div>
+              <h1 className="text-4xl font-black tracking-tighter text-slate-900 mb-1">
+                ACADEMIC PROGRESS REPORT
+              </h1>
+              <p className="text-primary font-bold text-sm tracking-[0.2em] uppercase">
+                Faculty of Engineering Technology · OUSL
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">
+                Generated On
+              </p>
+              <p className="font-bold text-slate-700">
+                {new Date().toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-12 mb-10">
+            <div className="space-y-4">
+              <div>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">
+                  Student Name
+                </p>
+                <p className="text-xl font-bold text-slate-900">
+                  {studentName || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">
+                  Specialization
+                </p>
+                <p className="text-lg font-bold text-slate-700">
+                  {selectedSpec}
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">
+                  Programme
+                </p>
+                <p className="text-slate-600 font-medium">
+                  {currentProgramme?.name}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                  Honours GPA
+                </p>
+                <p className="text-4xl font-black text-primary">
+                  {gpaCalculation}
+                </p>
+              </div>
+              <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                  Total Credits
+                </p>
+                <p className="text-4xl font-black text-slate-900">
+                  {progressStats.totalCredits}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-10">
+            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-slate-900 mb-6 flex items-center gap-2">
+              <div className="w-8 h-1 bg-primary rounded-full" /> Credit
+              Distribution
+            </h2>
+            <div className="grid grid-cols-2 gap-x-12 gap-y-4">
+              {Object.entries(currentProgramme?.categories || {}).map(
+                ([cat, req]: [string, any]) => {
+                  const current = progressStats.categoryBreakdown[cat] || 0;
+                  const percent = Math.min(100, (current / req.min) * 100);
+                  return (
+                    <div key={cat} className="space-y-1.5">
+                      <div className="flex justify-between text-[10px] font-bold">
+                        <span className="text-slate-600 uppercase">
+                          {CATEGORIES[cat] || cat}
+                        </span>
+                        <span className="text-slate-900">
+                          {current} / {req.min} CR
+                        </span>
+                      </div>
+                      <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-primary"
+                          style={{ width: `${percent}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                },
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-12">
+            <div>
+              <h2 className="text-sm font-black uppercase tracking-[0.2em] text-slate-900 mb-6 flex items-center gap-2">
+                <div className="w-8 h-1 bg-emerald-500 rounded-full" /> Completed
+                Courses
+              </h2>
+              <div className="space-y-2">
+                {completedCourseDetails.length === 0 ? (
+                  <p className="text-xs italic text-slate-400">
+                    No courses completed.
+                  </p>
+                ) : (
+                  completedCourseDetails.map((c) => (
+                    <div
+                      key={c.code}
+                      className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100"
+                    >
+                      <div>
+                        <p className="text-[9px] font-black text-primary uppercase">
+                          {c.code}
+                        </p>
+                        <p className="text-[11px] font-bold text-slate-900 leading-tight">
+                          {c.name}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[10px] font-black text-slate-900">
+                          {c.credits} CR
+                        </p>
+                        <p className="text-[9px] font-bold text-slate-400">
+                          GPV: {completedCourses[c.code].toFixed(1)}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-sm font-black uppercase tracking-[0.2em] text-slate-900 mb-6 flex items-center gap-2">
+                <div className="w-8 h-1 bg-blue-500 rounded-full" /> Academic
+                Timeline
+              </h2>
+              <div className="space-y-6">
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => {
+                  const semCourses = plannedCourseDetails.filter(
+                    (c) => userPlan[c.code] === sem,
+                  );
+                  if (semCourses.length === 0) return null;
+                  return (
+                    <div key={sem} className="relative pl-6 border-l-2 border-slate-100">
+                      <div className="absolute left-[-5px] top-0 w-[8px] h-[8px] rounded-full bg-slate-200" />
+                      <h3 className="text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">
+                        Semester {sem}
+                      </h3>
+                      <div className="space-y-2">
+                        {semCourses.map((c) => (
+                          <div key={c.code} className="flex justify-between items-center">
+                            <span className="text-[11px] font-bold text-slate-700">
+                              {c.code} - {c.name}
+                            </span>
+                            <span className="text-[11px] font-black text-slate-400">
+                              {c.credits} CR
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+                {plannedCourseDetails.length === 0 && (
+                  <p className="text-xs italic text-slate-400">
+                    No courses planned.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 pt-8 border-t border-slate-100 flex justify-between items-end">
+            <div>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
+                Estimated Tuition Fees
+              </p>
+              <p className="text-2xl font-black text-slate-900">
+                Rs. {feeSummary.total.toLocaleString()}
+              </p>
+              <p className="text-[9px] text-slate-400 mt-1 max-w-[300px]">
+                Fees are estimated based on planned courses and may vary based
+                on actual university regulations.
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-[9px] font-bold text-slate-400 mb-1">
+                Official Student Navigator Document
+              </p>
+              <p className="text-[10px] font-black text-primary">
+                pm-blogfolio.vercel.app
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
