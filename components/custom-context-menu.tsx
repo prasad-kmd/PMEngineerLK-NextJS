@@ -69,9 +69,8 @@ export const CustomContextMenu = () => {
   }, []);
 
   useEffect(() => {
-    // Disable on touch devices or small screens
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isTouchDevice || window.innerWidth < 1024) return;
+    // Disable on small screens, but allow on desktops with touch (e.g. laptops)
+    if (window.innerWidth < 1024) return;
 
     window.addEventListener("contextmenu", handleContextMenu);
     window.addEventListener("click", handleClick);

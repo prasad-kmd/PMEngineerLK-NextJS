@@ -209,9 +209,9 @@ const mechatronicsTools = [
 
 const mathTools = [
     {
-        name: "3x3 Matrix Calculator",
+        name: "Matrix Calculator",
         slug: "matrix-calculator",
-        description: "Calculate determinant, inverse, and trace for 3x3 matrices with real-time validation.",
+        description: "Calculate determinant, inverse, and trace for matrices with real-time validation.",
         icon: Grid3X3,
         color: "text-purple-500",
         bgColor: "bg-purple-500/10",

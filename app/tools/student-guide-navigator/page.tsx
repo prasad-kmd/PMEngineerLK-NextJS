@@ -25,6 +25,8 @@ import {
   FileText,
   ArrowUpRight,
 } from "lucide-react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import {
   Card,
   CardContent,
@@ -150,9 +152,15 @@ export default function StudentGuideNavigator() {
     "ousl_is_new_student",
     false,
   );
+  const [studentName, setStudentName] = useLocalStorage<string>(
+    "ousl_student_name",
+    "",
+  );
 
   // UI State
   const [searchQuery, setSearchQuery] = useState("");
+  const [isExporting, setIsExporting] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
   const [filterDept, setFilterDept] = useState("all");
   const [filterLevel, setFilterLevel] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
@@ -394,12 +402,61 @@ export default function StudentGuideNavigator() {
         if (data.selectedProgrammeId)
           setSelectedProgrammeId(data.selectedProgrammeId);
         if (data.isNewStudent !== undefined) setIsNewStudent(data.isNewStudent);
+        if (data.studentName) setStudentName(data.studentName);
         toast.success("Data restored successfully.");
       } catch (err) {
         toast.error("Invalid backup file.");
       }
     };
     reader.readAsText(file);
+  };
+
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    const toastId = toast.loading("Preparing academic report...");
+
+    // Wait for DOM to update with the report
+    setTimeout(async () => {
+      try {
+        const element = reportRef.current;
+        if (!element) throw new Error("Report element not found");
+
+        const canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: "#ffffff",
+        });
+
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        let heightLeft = pdfHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+          position = heightLeft - pdfHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save(
+          `OUSL_Academic_Report_${studentName.trim().replace(/\s+/g, "_") || "Navigator"}.pdf`,
+        );
+        toast.success("Report exported successfully!", { id: toastId });
+      } catch (error) {
+        console.error("Export error:", error);
+        toast.error("Failed to generate PDF report.", { id: toastId });
+      } finally {
+        setIsExporting(false);
+      }
+    }, 500);
   };
 
   // Fee Calculation
@@ -433,7 +490,7 @@ export default function StudentGuideNavigator() {
                 variant="outline"
                 className="py-1 px-4 text-primary border-primary/20 bg-primary/5 rounded-full font-bold"
               >
-                BSc Hons (Eng) Edition
+                BSc (Hons)
               </Badge>
             </div>
 
@@ -446,8 +503,19 @@ export default function StudentGuideNavigator() {
                 with precision.
               </p>
 
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="space-y-1.5 flex-1 min-w-[280px]">
+              <div className="flex flex-wrap items-center gap-4 mb-6">
+                <div className="space-y-1.5 flex-1 min-w-[240px]">
+                  <Label className="text-xs font-black uppercase tracking-[0.2em] text-primary/70 ml-1">
+                    Student Name
+                  </Label>
+                  <Input
+                    placeholder="Enter your name"
+                    value={studentName}
+                    onChange={(e) => setStudentName(e.target.value)}
+                    className="h-12 bg-background/50 border-primary/20 rounded-xl font-bold"
+                  />
+                </div>
+                <div className="space-y-1.5 flex-1 min-w-[240px]">
                   <Label className="text-xs font-black uppercase tracking-[0.2em] text-primary/70 ml-1">
                     Current Specialization
                   </Label>
@@ -468,8 +536,19 @@ export default function StudentGuideNavigator() {
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
 
-                <div className="flex items-end gap-2 h-full pt-6">
+              <div className="flex flex-wrap items-center gap-4">
+                <Button
+                  onClick={handleExportPDF}
+                  disabled={isExporting}
+                  className="rounded-xl h-11 px-6 font-black uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  {isExporting ? "Preparing Report..." : "Export Academic Report"}
+                </Button>
+
+                <div className="flex items-center gap-2">
                   <TooltipProvider>
                     <div className="flex gap-1.5 p-1 bg-background/40 backdrop-blur-md border border-primary/10 rounded-xl">
                       <Tooltip>
@@ -484,7 +563,7 @@ export default function StudentGuideNavigator() {
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent className="rounded-lg font-bold text-xs">
-                          Export Backup
+                          Export Backup (.json)
                         </TooltipContent>
                       </Tooltip>
 
@@ -505,7 +584,7 @@ export default function StudentGuideNavigator() {
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent className="rounded-lg font-bold text-xs">
-                          Import Backup
+                          Import Backup (.json)
                         </TooltipContent>
                       </Tooltip>
 
@@ -648,8 +727,8 @@ export default function StudentGuideNavigator() {
               onValueChange={setActiveTab}
               className="space-y-6"
             >
-              <div className="sticky top-20 z-50 mb-12 flex flex-wrap justify-center gap-2 p-2 rounded-2xl bg-background/50 backdrop-blur-xl border border-border/50 shadow-sm">
-                <TabsList className="flex flex-wrap justify-center w-full bg-transparent gap-2 h-auto">
+              <div className="sticky top-[72px] lg:top-20 z-50 mb-8 lg:mb-12 p-1.5 lg:p-2 rounded-xl lg:rounded-2xl bg-background/50 backdrop-blur-xl border border-border/50 shadow-sm overflow-hidden">
+                <TabsList className="flex flex-row justify-start lg:justify-center w-full bg-transparent gap-1.5 lg:gap-2 h-auto overflow-x-auto custom-scrollbar-hide px-1">
                   {[
                     {
                       id: "dashboard",
@@ -668,9 +747,9 @@ export default function StudentGuideNavigator() {
                     <TabsTrigger
                       key={item.id}
                       value={item.id}
-                      className="px-4 py-2 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-primary/10 hover:text-primary text-muted-foreground local-jetbrains-mono data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none"
+                      className="whitespace-nowrap px-3 lg:px-4 py-2 text-[9px] md:text-xs font-black uppercase tracking-widest rounded-lg transition-all hover:bg-primary/5 hover:text-primary text-muted-foreground local-jetbrains-mono data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-none border border-transparent data-[state=active]:border-primary/10"
                     >
-                      <item.icon className="h-3.5 w-3.5 mr-2" />
+                      <item.icon className="h-3 w-3 lg:h-3.5 lg:w-3.5 mr-1.5 lg:mr-2 shrink-0" />
                       {item.label}
                     </TabsTrigger>
                   ))}
@@ -1331,6 +1410,220 @@ export default function StudentGuideNavigator() {
           <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
         </div>
         <AIContentIndicator />
+      </div>
+
+      {/* Hidden Report Template for PDF Generation */}
+      <div className="fixed left-[-9999px] top-0">
+        <div
+          ref={reportRef}
+          style={{ backgroundColor: '#ffffff', color: '#0f172a', padding: '48px', width: '800px' }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '4px solid #08784b', paddingBottom: '32px', marginBottom: '32px' }}>
+            <div>
+              <h1 style={{ fontSize: '36px', fontWeight: '900', letterSpacing: '-0.05em', color: '#0f172a', margin: '0 0 4px 0' }}>
+                ACADEMIC PROGRESS REPORT
+              </h1>
+              <p style={{ color: '#08784b', fontWeight: 'bold', fontSize: '14px', letterSpacing: '0.2em', textTransform: 'uppercase', margin: 0 }}>
+                Faculty of Engineering Technology · OUSL
+              </p>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px 0' }}>
+                Generated On
+              </p>
+              <p style={{ fontWeight: 'bold', color: '#334155', margin: 0 }}>
+                {new Date().toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', marginBottom: '40px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em', margin: '0 0 4px 0' }}>
+                  Student Name
+                </p>
+                <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#0f172a', margin: 0 }}>
+                  {studentName || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em', margin: '0 0 4px 0' }}>
+                  Specialization
+                </p>
+                <p style={{ fontSize: '18px', fontWeight: 'bold', color: '#334155', margin: 0 }}>
+                  {selectedSpec}
+                </p>
+              </div>
+              <div>
+                <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em', margin: '0 0 4px 0' }}>
+                  Programme
+                </p>
+                <p style={{ color: '#475569', fontWeight: '500', margin: 0 }}>
+                  {currentProgramme?.name}
+                </p>
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div style={{ padding: '24px', backgroundColor: '#f8fafc', borderRadius: '16px', border: '1px solid #f1f5f9', textAlign: 'center' }}>
+                <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px 0' }}>
+                  Honours GPA
+                </p>
+                <p style={{ fontSize: '36px', fontWeight: '900', color: '#08784b', margin: 0 }}>
+                  {gpaCalculation}
+                </p>
+              </div>
+              <div style={{ padding: '24px', backgroundColor: '#f8fafc', borderRadius: '16px', border: '1px solid #f1f5f9', textAlign: 'center' }}>
+                <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px 0' }}>
+                  Total Credits
+                </p>
+                <p style={{ fontSize: '36px', fontWeight: '900', color: '#0f172a', margin: 0 }}>
+                  {progressStats.totalCredits}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ fontSize: '14px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#0f172a', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '32px', height: '4px', backgroundColor: '#08784b', borderRadius: '9999px' }} /> Credit
+              Distribution
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: '48px', rowGap: '16px' }}>
+              {Object.entries(currentProgramme?.categories || {}).map(
+                ([cat, req]: [string, any]) => {
+                  const current = progressStats.categoryBreakdown[cat] || 0;
+                  const percent = Math.min(100, (current / req.min) * 100);
+                  return (
+                    <div key={cat} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', fontWeight: 'bold' }}>
+                        <span style={{ color: '#475569', textTransform: 'uppercase' }}>
+                          {CATEGORIES[cat] || cat}
+                        </span>
+                        <span style={{ color: '#0f172a' }}>
+                          {current} / {req.min} CR
+                        </span>
+                      </div>
+                      <div style={{ height: '8px', backgroundColor: '#f1f5f9', borderRadius: '9999px', overflow: 'hidden' }}>
+                        <div
+                          style={{ height: '100%', backgroundColor: '#08784b', width: `${percent}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                },
+              )}
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px' }}>
+            <div>
+              <h2 style={{ fontSize: '14px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#0f172a', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '32px', height: '4px', backgroundColor: '#10b981', borderRadius: '9999px' }} /> Completed
+                Courses
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {completedCourseDetails.length === 0 ? (
+                  <p style={{ fontSize: '12px', fontStyle: 'italic', color: '#94a3b8' }}>
+                    No courses completed.
+                  </p>
+                ) : (
+                  completedCourseDetails.map((c) => (
+                    <div
+                      key={c.code}
+                      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #f1f5f9' }}
+                    >
+                      <div>
+                        <p style={{ fontSize: '9px', fontWeight: '900', color: '#08784b', textTransform: 'uppercase', margin: 0 }}>
+                          {c.code}
+                        </p>
+                        <p style={{ fontSize: '11px', fontWeight: 'bold', color: '#0f172a', lineHeight: '1.2', margin: 0 }}>
+                          {c.name}
+                        </p>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <p style={{ fontSize: '10px', fontWeight: '900', color: '#0f172a', margin: 0 }}>
+                          {c.credits} CR
+                        </p>
+                        <p style={{ fontSize: '9px', fontWeight: 'bold', color: '#94a3b8', margin: 0 }}>
+                          GPV: {completedCourses[c.code].toFixed(1)}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div>
+              <h2 style={{ fontSize: '14px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#0f172a', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '32px', height: '4px', backgroundColor: '#3b82f6', borderRadius: '9999px' }} /> Academic
+                Timeline
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => {
+                  const semCourses = plannedCourseDetails.filter(
+                    (c) => userPlan[c.code] === sem,
+                  );
+                  if (semCourses.length === 0) return null;
+                  return (
+                    <div key={sem} style={{ position: 'relative', paddingLeft: '24px', borderLeft: '2px solid #f1f5f9' }}>
+                      <div style={{ position: 'absolute', left: '-5px', top: 0, width: '8px', height: '8px', borderRadius: '9999px', backgroundColor: '#e2e8f0' }} />
+                      <h3 style={{ fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '12px', letterSpacing: '0.1em' }}>
+                        Semester {sem}
+                      </h3>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {semCourses.map((c) => (
+                          <div key={c.code} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#334155' }}>
+                              {c.code} - {c.name}
+                            </span>
+                            <span style={{ fontSize: '11px', fontWeight: '900', color: '#94a3b8' }}>
+                              {c.credits} CR
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+                {plannedCourseDetails.length === 0 && (
+                  <p style={{ fontSize: '12px', fontStyle: 'italic', color: '#94a3b8' }}>
+                    No courses planned.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: '48px', paddingTop: '32px', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div>
+              <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>
+                Estimated Tuition Fees
+              </p>
+              <p style={{ fontSize: '24px', fontWeight: '900', color: '#0f172a', margin: 0 }}>
+                Rs. {feeSummary.total.toLocaleString()}
+              </p>
+              <p style={{ fontSize: '9px', color: '#94a3b8', marginTop: '4px', maxWidth: '300px', margin: '4px 0 0 0' }}>
+                Fees are estimated based on planned courses and may vary based
+                on actual university regulations.
+              </p>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <p style={{ fontSize: '9px', fontWeight: 'bold', color: '#94a3b8', marginBottom: '4px', margin: 0 }}>
+                Official Student Navigator Document
+              </p>
+              <p style={{ fontSize: '10px', fontWeight: '900', color: '#08784b', margin: 0 }}>
+                pm-blogfolio.vercel.app
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
