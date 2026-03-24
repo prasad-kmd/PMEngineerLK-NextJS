@@ -39,7 +39,7 @@ export function VideoPlayer({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-[#201f1f] border border-white/5 shadow-2xl group">
+      <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-muted border border-border/5 shadow-2xl group">
         <iframe
           src={embedUrl}
           className="w-full h-full"
@@ -51,7 +51,7 @@ export function VideoPlayer({
         <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={switchServer}
-            className="bg-black/60 backdrop-blur-md p-2 rounded-full text-[#4fdbc8] hover:bg-[#4fdbc8] hover:text-[#003731] transition-all"
+            className="bg-background/60 backdrop-blur-md p-2 rounded-full text-primary hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer"
             title="Switch Server"
           >
             <RefreshCw className="h-4 w-4" />
@@ -59,16 +59,16 @@ export function VideoPlayer({
         </div>
       </div>
 
-      <div className="flex items-center justify-between text-xs text-[#bbcac6]">
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
         <div className="flex items-center gap-2">
-          <span className="bg-[#4fdbc8]/10 text-[#4fdbc8] px-2 py-1 rounded font-bold uppercase tracking-wider">
+          <span className="bg-primary/10 text-primary px-2 py-1 rounded font-bold uppercase tracking-wider">
             Server: {domain}
           </span>
           <span>If player doesn't load, try switching server.</span>
         </div>
         <button
           onClick={switchServer}
-          className="text-[#4fdbc8] font-bold hover:underline"
+          className="text-primary font-bold hover:underline cursor-pointer"
         >
           Switch Server
         </button>

@@ -31,7 +31,7 @@ export function TVControls({ show }: TVControlsProps) {
       {/* Season & Episode Selection */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-4">
-          <label className="text-xs font-bold text-[#bbcac6] uppercase tracking-widest">
+          <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
             Select Season
           </label>
           <div className="flex flex-wrap gap-2">
@@ -42,10 +42,10 @@ export function TVControls({ show }: TVControlsProps) {
                   setSelectedSeason(season.season_number);
                   setSelectedEpisode(1);
                 }}
-                className={`px-4 py-2 rounded-lg border transition-all text-sm font-bold ${
+                className={`px-4 py-2 rounded-lg border transition-all text-sm font-bold cursor-pointer ${
                   selectedSeason === season.season_number
-                    ? "bg-[#4fdbc8] border-[#4fdbc8] text-[#003731]"
-                    : "border-[#3c4947]/30 text-[#bbcac6] hover:border-[#4fdbc8]"
+                    ? "bg-primary border-primary text-primary-foreground"
+                    : "border-border/30 text-muted-foreground hover:border-primary"
                 }`}
               >
                 S{season.season_number}
@@ -55,19 +55,19 @@ export function TVControls({ show }: TVControlsProps) {
         </div>
 
         <div className="space-y-4">
-          <label className="text-xs font-bold text-[#bbcac6] uppercase tracking-widest">
+          <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
             Select Episode
           </label>
-          <div className="flex flex-wrap gap-2 max-h-[200px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-[#3c4947] scrollbar-track-transparent">
+          <div className="flex flex-wrap gap-2 max-h-[200px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent">
             {Array.from({ length: totalEpisodes }, (_, i) => i + 1).map(
               (episode) => (
                 <button
                   key={episode}
                   onClick={() => setSelectedEpisode(episode)}
-                  className={`w-10 h-10 flex items-center justify-center rounded-lg border transition-all text-sm font-bold ${
+                  className={`w-10 h-10 flex items-center justify-center rounded-lg border transition-all text-sm font-bold cursor-pointer ${
                     selectedEpisode === episode
-                      ? "bg-[#4fdbc8] border-[#4fdbc8] text-[#003731]"
-                      : "border-[#3c4947]/30 text-[#bbcac6] hover:border-[#4fdbc8]"
+                      ? "bg-primary border-primary text-primary-foreground"
+                      : "border-border/30 text-muted-foreground hover:border-primary"
                   }`}
                 >
                   {episode}

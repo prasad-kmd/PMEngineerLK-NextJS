@@ -41,7 +41,6 @@ const primaryNav = [
   { name: "Wiki", href: "/wiki", icon: Book },
   { name: "Tutorials", href: "/tutorials", icon: Newspaper },
   { name: "Tools", href: "/tools", icon: Wrench },
-  { name: "Entertainment", href: "/entertainment", icon: Clapperboard },
 ];
 
 const secondaryNav = [

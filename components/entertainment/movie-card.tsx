@@ -35,21 +35,21 @@ export function MovieCard({ item, type }: MovieCardProps) {
             No Poster
           </div>
         )}
-        <div className="absolute inset-0 bg-linear-to-t from-[#0e0e0e] to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
-          <button className="w-full py-2 bg-[#4fdbc8] text-[#003731] rounded text-xs font-bold mb-2">
+        <div className="absolute inset-0 bg-linear-to-t from-background to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+          <button className="w-full py-2 bg-primary text-primary-foreground rounded text-xs font-bold mb-2 cursor-pointer">
             Details
           </button>
         </div>
-        <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-[#4fdbc8]">
+        <div className="absolute top-2 right-2 bg-background/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-primary">
           {item.vote_average.toFixed(1)}
         </div>
       </div>
-      <h4 className="text-[#e5e2e1] font-semibold text-sm truncate mb-1">
+      <h4 className="text-foreground font-semibold text-sm truncate mb-1">
         {title}
       </h4>
       <div className="flex items-center justify-between">
-        <span className="text-[#bbcac6] text-xs">{year}</span>
-        <div className="flex items-center text-[#4fdbc8] text-[10px] gap-0.5 font-bold">
+        <span className="text-muted-foreground text-xs">{year}</span>
+        <div className="flex items-center text-primary text-[10px] gap-0.5 font-bold">
           <Star className="h-3 w-3 fill-current" />
           {item.vote_average.toFixed(1)}
         </div>
