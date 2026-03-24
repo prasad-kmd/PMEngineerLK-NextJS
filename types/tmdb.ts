@@ -43,6 +43,7 @@ export interface MovieDetails extends Movie {
   status: string;
   budget: number;
   revenue: number;
+  imdb_id: string | null;
   production_companies: {
     id: number;
     logo_path: string | null;
@@ -55,6 +56,11 @@ export interface TVShowDetails extends TVShow {
   genres: Genre[];
   number_of_episodes: number;
   number_of_seasons: number;
+  created_by: {
+    id: number;
+    name: string;
+    profile_path: string | null;
+  }[];
   seasons: {
     air_date: string;
     episode_count: number;

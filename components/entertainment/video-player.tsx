@@ -59,9 +59,9 @@ export function VideoPlayer({
         </div>
       </div>
 
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
+      <div className="flex items-center justify-between text-xs text-muted-foreground google-sans">
         <div className="flex items-center gap-2">
-          <span className="bg-primary/10 text-primary px-2 py-1 rounded font-bold uppercase tracking-wider">
+          <span className="bg-primary/10 text-primary px-2 py-1 rounded font-bold uppercase tracking-wider space-mono">
             Server: {domain}
           </span>
           <span>If player doesn't load, try switching server.</span>

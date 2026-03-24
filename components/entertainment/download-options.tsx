@@ -16,7 +16,7 @@ export async function DownloadOptions({ imdbId, title }: DownloadOptionsProps) {
   return (
     <div className="space-y-8 bg-card border border-border/10 p-8 rounded-2xl shadow-xl">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold tracking-tight flex items-center gap-3">
+        <h2 className="text-2xl font-bold tracking-tight flex items-center gap-3 amoriaregular uppercase">
           <Download className="h-6 w-6 text-primary" />
           Download Options
         </h2>
@@ -33,14 +33,14 @@ export async function DownloadOptions({ imdbId, title }: DownloadOptionsProps) {
           >
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-xl font-black text-foreground group-hover:text-primary transition-colors">
+                <span className="text-xl font-black text-foreground group-hover:text-primary transition-colors google-sans uppercase">
                   {torrent.quality}
                 </span>
-                <span className="ml-2 text-xs text-muted-foreground uppercase font-medium">
+                <span className="ml-2 text-xs text-muted-foreground uppercase font-medium google-sans">
                   {torrent.type}
                 </span>
               </div>
-              <span className="text-sm font-bold text-muted-foreground">
+              <span className="text-sm font-bold text-muted-foreground space-mono">
                 {torrent.size}
               </span>
             </div>
@@ -48,7 +48,7 @@ export async function DownloadOptions({ imdbId, title }: DownloadOptionsProps) {
             <div className="flex gap-2">
               <a
                 href={getMagnetLink(torrent.hash, title)}
-                className="flex-1 bg-primary text-primary-foreground py-2 rounded-lg text-center text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                className="flex-1 bg-primary text-primary-foreground py-2 rounded-lg text-center text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 google-sans uppercase"
               >
                 Magnet Link
               </a>
@@ -66,12 +66,15 @@ export async function DownloadOptions({ imdbId, title }: DownloadOptionsProps) {
         ))}
       </div>
 
-      <div className="flex gap-4 p-4 rounded-xl bg-yellow-500/5 border border-yellow-500/10 text-xs text-yellow-500/80 leading-relaxed italic">
+      <div className="flex gap-4 p-4 rounded-xl bg-yellow-500/5 border border-yellow-500/10 text-xs text-yellow-500/80 leading-relaxed italic space-mono">
         <AlertTriangle className="h-5 w-5 shrink-0" />
         <p>
-          <strong>Disclaimer:</strong> YTS provides torrents for movies. We do
-          not host any files. Downloading copyrighted content may be illegal in
-          your jurisdiction. Use at your own risk.
+          <strong className="google-sans uppercase not-italic">
+            Disclaimer:
+          </strong>{" "}
+          YTS provides torrents for movies. We do not host any files.
+          Downloading copyrighted content may be illegal in your jurisdiction.
+          Use at your own risk.
         </p>
       </div>
     </div>

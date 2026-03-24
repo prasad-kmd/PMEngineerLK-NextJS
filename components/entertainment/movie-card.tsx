@@ -52,7 +52,7 @@ export function MovieCard({ item, type }: MovieCardProps) {
         </div>
 
         {/* Rating Badge */}
-        <div className="absolute top-3 left-3 bg-background/80 backdrop-blur-md px-2 py-1 rounded-lg text-[10px] font-black text-primary border border-primary/20 flex items-center gap-1 shadow-lg">
+        <div className="absolute top-3 left-3 bg-background/80 backdrop-blur-md px-2 py-1 rounded-lg text-[10px] font-black text-primary border border-primary/20 flex items-center gap-1 shadow-lg space-mono">
           <Star className="h-3 w-3 fill-current" />
           {item.vote_average.toFixed(1)}
         </div>
@@ -66,14 +66,14 @@ export function MovieCard({ item, type }: MovieCardProps) {
       </div>
 
       <div className="px-1 space-y-1">
-        <h4 className="text-foreground font-bold text-sm truncate group-hover:text-primary transition-colors">
+        <h4 className="text-foreground font-bold text-sm truncate group-hover:text-primary transition-colors google-sans uppercase">
           {title}
         </h4>
         <div className="flex items-center justify-between">
-          <span className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest opacity-70">
+          <span className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest opacity-70 space-mono">
             {year}
           </span>
-          <span className="text-[10px] font-black uppercase tracking-widest text-primary/80 group-hover:text-primary transition-colors">
+          <span className="text-[10px] font-black uppercase tracking-widest text-primary/80 group-hover:text-primary transition-colors google-sans">
             {type}
           </span>
         </div>

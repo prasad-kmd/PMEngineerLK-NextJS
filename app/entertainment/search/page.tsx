@@ -17,10 +17,10 @@ export default async function SearchPage({
         <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mb-8 rotate-3">
           <Search className="h-10 w-10 text-primary" />
         </div>
-        <h1 className="text-4xl md:text-6xl font-black mb-6 text-foreground tracking-tighter text-center uppercase">
+        <h1 className="text-4xl md:text-6xl font-black mb-6 text-foreground tracking-tighter text-center uppercase amoriaregular">
           Universe <span className="text-primary">Search</span>
         </h1>
-        <p className="text-xl text-muted-foreground mb-12 text-center max-w-2xl font-light leading-relaxed">
+        <p className="text-xl text-muted-foreground mb-12 text-center max-w-2xl font-light leading-relaxed local-inter">
           Discover millions of movies, TV shows and people. Explore now.
         </p>
         <SearchInput className="w-full max-w-2xl px-4" />
@@ -28,22 +28,28 @@ export default async function SearchPage({
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl">
           <div className="bg-card/50 border border-border/10 p-8 rounded-3xl hover:bg-card transition-colors group">
             <Film className="h-8 w-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-lg mb-2">Movies</h3>
-            <p className="text-sm text-muted-foreground font-light">
+            <h3 className="font-bold text-lg mb-2 amoriaregular uppercase tracking-wider">
+              Movies
+            </h3>
+            <p className="text-sm text-muted-foreground font-light local-inter">
               Thousands of cinematic masterpieces at your fingertips.
             </p>
           </div>
           <div className="bg-card/50 border border-border/10 p-8 rounded-3xl hover:bg-card transition-colors group">
             <Tv className="h-8 w-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-lg mb-2">TV Shows</h3>
-            <p className="text-sm text-muted-foreground font-light">
+            <h3 className="font-bold text-lg mb-2 amoriaregular uppercase tracking-wider">
+              TV Shows
+            </h3>
+            <p className="text-sm text-muted-foreground font-light local-inter">
               From classic series to modern binge-worthy hits.
             </p>
           </div>
           <div className="bg-card/50 border border-border/10 p-8 rounded-3xl hover:bg-card transition-colors group">
             <Info className="h-8 w-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-lg mb-2">Metadata</h3>
-            <p className="text-sm text-muted-foreground font-light">
+            <h3 className="font-bold text-lg mb-2 amoriaregular uppercase tracking-wider">
+              Metadata
+            </h3>
+            <p className="text-sm text-muted-foreground font-light local-inter">
               Comprehensive details including cast, crew and ratings.
             </p>
           </div>
@@ -69,12 +75,12 @@ export default async function SearchPage({
             <h4 className="text-primary font-bold text-xs uppercase tracking-[0.3em] mb-3">
               Search Results
             </h4>
-            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase">
+            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase amoriaregular">
               "{query}"
             </h2>
-            <p className="text-muted-foreground mt-4 text-lg">
+            <p className="text-muted-foreground mt-4 text-lg local-inter">
               We found{" "}
-              <span className="text-foreground font-bold">
+              <span className="text-foreground font-bold google-sans">
                 {results.total_results}
               </span>{" "}
               matching titles for you.
@@ -90,7 +96,7 @@ export default async function SearchPage({
         {movies.length > 0 && (
           <section className="space-y-10">
             <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-bold tracking-tight flex items-center gap-4 uppercase">
+              <h3 className="text-2xl font-bold tracking-tight flex items-center gap-4 uppercase amoriaregular">
                 <span className="w-2 h-8 bg-primary rounded-full"></span>
                 Movies
               </h3>
@@ -109,7 +115,7 @@ export default async function SearchPage({
         {tvShows.length > 0 && (
           <section className="space-y-10">
             <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-bold tracking-tight flex items-center gap-4 uppercase">
+              <h3 className="text-2xl font-bold tracking-tight flex items-center gap-4 uppercase amoriaregular">
                 <span className="w-2 h-8 bg-primary rounded-full"></span>
                 TV Shows
               </h3>

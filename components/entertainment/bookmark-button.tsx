@@ -37,9 +37,9 @@ export function BookmarkButton({
     <button
       onClick={handleToggle}
       className={cn(
-        "flex items-center gap-2 font-bold transition-all cursor-pointer",
+        "flex items-center gap-2 font-bold transition-all cursor-pointer google-sans",
         variant === "default" &&
-          "bg-muted border border-border/30 backdrop-blur-md px-10 py-4 rounded-lg text-foreground hover:bg-muted/80",
+          "bg-muted border border-border/30 backdrop-blur-md px-6 py-4 rounded-lg text-foreground hover:bg-muted/80",
         variant === "outline" &&
           "border border-primary/50 text-primary px-4 py-2 rounded-lg hover:bg-primary/10",
         variant === "ghost" && "text-muted-foreground hover:text-primary p-2",

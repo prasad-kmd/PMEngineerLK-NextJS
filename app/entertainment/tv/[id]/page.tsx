@@ -78,12 +78,12 @@ export default async function TVDetailsPage({
                   ))}
                 </div>
 
-                <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-6 uppercase text-foreground leading-none">
+                <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-6 uppercase text-foreground leading-none amoriaregular">
                   {show.name}
                 </h1>
 
                 {show.tagline && (
-                  <p className="text-xl md:text-3xl text-muted-foreground italic mb-8 max-w-3xl font-light tracking-tight leading-relaxed">
+                  <p className="text-xl md:text-3xl text-muted-foreground italic mb-8 max-w-3xl font-light tracking-tight leading-relaxed local-inter">
                     "{show.tagline}"
                   </p>
                 )}
@@ -160,7 +160,7 @@ export default async function TVDetailsPage({
                 <span className="w-1.5 h-10 bg-primary rounded-full"></span>
                 The Synopsis
               </h2>
-              <p className="text-xl text-muted-foreground leading-relaxed max-w-4xl font-light">
+              <p className="text-xl text-muted-foreground leading-relaxed max-w-4xl font-light local-inter">
                 {show.overview}
               </p>
             </div>
@@ -201,13 +201,18 @@ export default async function TVDetailsPage({
           </div>
 
           {/* Sidebar Area: Production Info */}
-          <div className="lg:col-span-4 space-y-10">
-            <div className="bg-card border border-border/10 p-10 rounded-3xl shadow-2xl space-y-8 sticky top-24">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-primary">
+          <div className="lg:col-span-4 space-y-8">
+            <div className="bg-card border border-border/10 p-6 rounded-2xl shadow-2xl space-y-6 sticky top-24">
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-primary google-sans">
                 Series Details
               </h3>
               <div className="space-y-6">
                 {[
+                  {
+                    label: "Creators",
+                    value:
+                      show.created_by.map((c) => c.name).join(", ") || "N/A",
+                  },
                   { label: "Status", value: show.status },
                   { label: "Episodes", value: show.number_of_episodes },
                   { label: "Seasons", value: show.number_of_seasons },
@@ -215,16 +220,29 @@ export default async function TVDetailsPage({
                     label: "Language",
                     value: show.original_language.toUpperCase(),
                   },
-                  { label: "Network", value: show.networks[0]?.name || "N/A" },
+                  {
+                    label: "Network",
+                    value: show.networks.map((n) => n.name).join(", ") || "N/A",
+                  },
+                  {
+                    label: "Studios",
+                    value:
+                      show.production_companies
+                        .map((c) => c.name)
+                        .slice(0, 2)
+                        .join(", ") || "N/A",
+                  },
                 ].map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex justify-between items-center py-4 border-b border-border/5 last:border-0 group"
+                    className="flex justify-between items-start border-b border-border/5 last:border-0 group"
                   >
-                    <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                    <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors mt-1 google-sans">
                       {item.label}
                     </span>
-                    <span className="text-sm font-bold">{item.value}</span>
+                    <span className="text-sm font-bold text-right max-w-[180px] local-inter">
+                      {item.value}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -249,6 +267,21 @@ export default async function TVDetailsPage({
                   </div>
                 </div>
               )}
+
+              <div className="pt-8 border-t border-border/10 space-y-4">
+                <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                  Data provided by TMDB and OMDb. This site does not host any
+                  files.
+                </p>
+                <div className="flex gap-4 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
+                  <div className="text-[10px] font-black tracking-widest border border-foreground/50 px-1.5 py-0.5 rounded">
+                    TMDB
+                  </div>
+                  <div className="text-[10px] font-black tracking-widest border border-foreground/50 px-1.5 py-0.5 rounded">
+                    OMDB
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>

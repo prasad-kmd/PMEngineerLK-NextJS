@@ -18,10 +18,10 @@ export function MyList() {
             <Heart className="h-6 w-6 text-primary fill-primary" />
           </div>
           <div>
-            <h2 className="text-3xl font-black tracking-tighter uppercase text-foreground">
+            <h2 className="text-3xl font-black tracking-tighter uppercase text-foreground amoriaregular">
               My <span className="text-primary">List</span>
             </h2>
-            <p className="text-muted-foreground text-sm font-medium">
+            <p className="text-muted-foreground text-sm font-medium google-sans">
               Your personal collection
             </p>
           </div>

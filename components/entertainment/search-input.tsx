@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, Loader2, X } from "lucide-react";
-import { useDebounce } from "@/hooks/use-debounce";
 
 export function SearchInput({
   placeholder = "Search movies, TV shows...",
@@ -17,22 +16,23 @@ export function SearchInput({
   const initialQuery = searchParams.get("q") || "";
 
   const [query, setQuery] = useState(initialQuery);
-  const debouncedQuery = useDebounce(query, 500);
   const [isPending, startTransition] = useTransition();
 
-  useEffect(() => {
-    if (debouncedQuery !== initialQuery) {
-      startTransition(() => {
-        if (debouncedQuery) {
-          router.push(
-            `/entertainment/search?q=${encodeURIComponent(debouncedQuery)}`,
-          );
-        } else {
-          router.push(`/entertainment/search`);
-        }
-      });
+  const handleSearch = (searchQuery: string) => {
+    if (!searchQuery.trim()) return;
+
+    startTransition(() => {
+      router.push(
+        `/entertainment/search?q=${encodeURIComponent(searchQuery.trim())}`,
+      );
+    });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch(query);
     }
-  }, [debouncedQuery, initialQuery, router]);
+  };
 
   return (
     <div className={`relative group ${className}`}>
@@ -40,15 +40,19 @@ export function SearchInput({
         {isPending ? (
           <Loader2 className="h-5 w-5 animate-spin" />
         ) : (
-          <Search className="h-5 w-5" />
+          <Search
+            className="h-5 w-5 cursor-pointer hover:text-primary transition-colors"
+            onClick={() => handleSearch(query)}
+          />
         )}
       </div>
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="w-full bg-muted/50 border border-border/10 rounded-2xl pl-12 pr-12 py-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all text-lg backdrop-blur-md"
+        className="w-full bg-muted/50 border border-border/10 rounded-2xl pl-12 pr-12 py-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all text-lg backdrop-blur-md local-inter"
       />
       {query && (
         <button

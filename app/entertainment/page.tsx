@@ -13,10 +13,10 @@ export default async function EntertainmentPage() {
       tmdb.getTrendingTV(),
     ]);
 
-  // Combine trending movies and TV for the carousel
+  // Combine trending movies and TV for the carousel (Exactly 5 items)
   const carouselItems = [
-    ...trendingMovies.results.slice(0, 5),
-    ...trendingTV.results.slice(0, 5),
+    ...trendingMovies.results.slice(0, 3),
+    ...trendingTV.results.slice(0, 2),
   ].sort(() => Math.random() - 0.5);
 
   return (
@@ -31,10 +31,10 @@ export default async function EntertainmentPage() {
       <section className="px-6 md:px-12">
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground mb-1">
+            <h3 className="text-3xl font-bold tracking-tight text-foreground mb-1 amoriaregular uppercase">
               Trending Movies
             </h3>
-            <div className="h-1 w-12 bg-primary rounded-full"></div>
+            <div className="h-1.5 w-16 bg-primary rounded-full"></div>
           </div>
           <button className="text-primary text-sm font-bold flex items-center gap-1 hover:underline cursor-pointer">
             Explore all <ChevronRight className="h-4 w-4" />
@@ -51,10 +51,10 @@ export default async function EntertainmentPage() {
       <section className="px-6 md:px-12">
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground mb-1">
+            <h3 className="text-3xl font-bold tracking-tight text-foreground mb-1 amoriaregular uppercase">
               Popular Movies
             </h3>
-            <div className="h-1 w-12 bg-primary rounded-full"></div>
+            <div className="h-1.5 w-16 bg-primary rounded-full"></div>
           </div>
           <button className="text-primary text-sm font-bold flex items-center gap-1 hover:underline cursor-pointer">
             Explore all <ChevronRight className="h-4 w-4" />
@@ -71,10 +71,10 @@ export default async function EntertainmentPage() {
       <section className="px-6 md:px-12">
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground mb-1">
+            <h3 className="text-3xl font-bold tracking-tight text-foreground mb-1 amoriaregular uppercase">
               Top Rated
             </h3>
-            <div className="h-1 w-12 bg-primary rounded-full"></div>
+            <div className="h-1.5 w-16 bg-primary rounded-full"></div>
           </div>
           <button className="text-primary text-sm font-bold flex items-center gap-1 hover:underline cursor-pointer">
             Explore all <ChevronRight className="h-4 w-4" />
@@ -91,10 +91,10 @@ export default async function EntertainmentPage() {
       <section className="px-6 md:px-12">
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h3 className="text-2xl font-bold tracking-tight text-foreground mb-1">
+            <h3 className="text-3xl font-bold tracking-tight text-foreground mb-1 amoriaregular uppercase">
               Trending TV Shows
             </h3>
-            <div className="h-1 w-12 bg-primary rounded-full"></div>
+            <div className="h-1.5 w-16 bg-primary rounded-full"></div>
           </div>
           <button className="text-primary text-sm font-bold flex items-center gap-1 hover:underline cursor-pointer">
             Explore all <ChevronRight className="h-4 w-4" />
@@ -108,14 +108,14 @@ export default async function EntertainmentPage() {
       </section>
 
       {/* API Attribution Footer */}
-      <footer className="mt-12 px-6 md:px-12 py-12 border-t border-border/10">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
-          <div className="space-y-4 max-w-2xl">
-            <h4 className="text-lg font-bold flex items-center gap-2 justify-center md:justify-start">
-              <Info className="h-5 w-5 text-primary" />
+      <footer className="mt-24 px-6 md:px-12 py-16 border-t border-border/10 bg-muted/5">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-12 text-center md:text-left">
+          <div className="space-y-6 max-w-3xl">
+            <h4 className="text-xl font-bold flex items-center gap-3 justify-center md:justify-start amoriaregular uppercase tracking-wider">
+              <Info className="h-6 w-6 text-primary" />
               Data Sources & Legal
             </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed google-sans">
               This product uses the <strong>TMDB API</strong> but is not
               endorsed or certified by TMDB. Movie ratings and additional
               details are powered by the <strong>OMDb API</strong>. Streaming
@@ -124,19 +124,19 @@ export default async function EntertainmentPage() {
               video files or torrents on our servers.
             </p>
           </div>
-          <div className="flex items-center gap-6 opacity-50 grayscale hover:grayscale-0 transition-all">
-            <div className="text-xl font-black italic tracking-tighter">
+          <div className="flex items-center gap-8 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+            <div className="text-2xl font-black italic tracking-tighter hover:text-primary transition-colors">
               TMDB
             </div>
-            <div className="text-xl font-black italic tracking-tighter">
+            <div className="text-2xl font-black italic tracking-tighter hover:text-primary transition-colors">
               OMDb
             </div>
-            <div className="text-xl font-black italic tracking-tighter">
+            <div className="text-2xl font-black italic tracking-tighter hover:text-primary transition-colors">
               YTS
             </div>
           </div>
         </div>
-        <div className="mt-12 pt-8 border-t border-border/5 text-center text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+        <div className="mt-16 pt-8 border-t border-border/5 text-center text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black space-mono">
           © {new Date().getFullYear()} GSC Movie Hub • Premium Entertainment
           Experience
         </div>
