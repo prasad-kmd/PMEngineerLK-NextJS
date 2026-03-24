@@ -1,8 +1,8 @@
 import { tmdb } from "@/lib/tmdb";
 import { MovieCard } from "@/components/entertainment/movie-card";
-import { Star, Play, Plus, ChevronRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { HeroCarousel } from "@/components/entertainment/hero-carousel";
+import { MyList } from "@/components/entertainment/my-list";
+import { ChevronRight, Info } from "lucide-react";
 
 export default async function EntertainmentPage() {
   const [trendingMovies, popularMovies, topRatedMovies, trendingTV] =
@@ -13,71 +13,19 @@ export default async function EntertainmentPage() {
       tmdb.getTrendingTV(),
     ]);
 
-  const heroMovie = trendingMovies.results[0];
+  // Combine trending movies and TV for the carousel
+  const carouselItems = [
+    ...trendingMovies.results.slice(0, 5),
+    ...trendingTV.results.slice(0, 5),
+  ].sort(() => Math.random() - 0.5);
 
   return (
     <div className="flex flex-col gap-12 pb-24">
-      {/* Hero Section */}
-      <section className="relative h-[calc(100vh-4rem)] w-full overflow-hidden">
-        <div className="absolute inset-0">
-          {heroMovie.backdrop_path && (
-            <Image
-              src={tmdb.getImageUrl(heroMovie.backdrop_path, "original")!}
-              alt={heroMovie.title}
-              fill
-              className="object-cover"
-              priority
-            />
-          )}
-          <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-transparent"></div>
-          <div className="absolute inset-0 bg-linear-to-r from-background via-background/60 to-transparent"></div>
-        </div>
+      {/* Hero Carousel Section */}
+      <HeroCarousel items={carouselItems} />
 
-        <div className="relative h-full flex flex-col justify-end px-6 md:px-12 pb-24 max-w-4xl">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="bg-primary/20 text-primary px-3 py-1 rounded text-[10px] font-bold tracking-widest uppercase">
-              Trending Now
-            </span>
-            <span className="text-muted-foreground text-sm font-medium">
-              {new Date(heroMovie.release_date).getFullYear()} • Movie
-            </span>
-          </div>
-
-          <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-foreground mb-6 leading-none uppercase">
-            {heroMovie.title}
-          </h2>
-
-          <div className="flex items-center gap-4 mb-6">
-            <div className="flex items-center text-yellow-400 gap-1">
-              <Star className="h-5 w-5 fill-current" />
-              <span className="font-bold">
-                {heroMovie.vote_average.toFixed(1)}
-              </span>
-            </div>
-            <span className="text-muted-foreground font-medium">
-              TMDB Choice
-            </span>
-          </div>
-
-          <p className="text-lg text-muted-foreground mb-10 max-w-2xl leading-relaxed line-clamp-3">
-            {heroMovie.overview}
-          </p>
-
-          <div className="flex items-center gap-4">
-            <Link
-              href={`/entertainment/movie/${heroMovie.id}`}
-              className="bg-primary text-primary-foreground px-10 py-4 rounded-lg font-bold flex items-center gap-2 hover:opacity-90 transition-opacity cursor-pointer"
-            >
-              <Play className="h-5 w-5 fill-current" />
-              Watch Now
-            </Link>
-            <button className="bg-muted border border-border/30 backdrop-blur-md px-10 py-4 rounded-lg font-bold text-foreground flex items-center gap-2 hover:bg-muted/80 transition-all cursor-pointer">
-              <Plus className="h-5 w-5" />
-              My List
-            </button>
-          </div>
-        </div>
-      </section>
+      {/* My List Section */}
+      <MyList />
 
       {/* Trending Movies */}
       <section className="px-6 md:px-12">
@@ -158,6 +106,41 @@ export default async function EntertainmentPage() {
           ))}
         </div>
       </section>
+
+      {/* API Attribution Footer */}
+      <footer className="mt-12 px-6 md:px-12 py-12 border-t border-border/10">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+          <div className="space-y-4 max-w-2xl">
+            <h4 className="text-lg font-bold flex items-center gap-2 justify-center md:justify-start">
+              <Info className="h-5 w-5 text-primary" />
+              Data Sources & Legal
+            </h4>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              This product uses the <strong>TMDB API</strong> but is not
+              endorsed or certified by TMDB. Movie ratings and additional
+              details are powered by the <strong>OMDb API</strong>. Streaming
+              links are provided by third-party services. Torrent links are
+              sourced from the <strong>YTS API</strong>. We do not host any
+              video files or torrents on our servers.
+            </p>
+          </div>
+          <div className="flex items-center gap-6 opacity-50 grayscale hover:grayscale-0 transition-all">
+            <div className="text-xl font-black italic tracking-tighter">
+              TMDB
+            </div>
+            <div className="text-xl font-black italic tracking-tighter">
+              OMDb
+            </div>
+            <div className="text-xl font-black italic tracking-tighter">
+              YTS
+            </div>
+          </div>
+        </div>
+        <div className="mt-12 pt-8 border-t border-border/5 text-center text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+          © {new Date().getFullYear()} GSC Movie Hub • Premium Entertainment
+          Experience
+        </div>
+      </footer>
     </div>
   );
 }

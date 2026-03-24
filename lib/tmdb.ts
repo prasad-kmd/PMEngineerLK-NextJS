@@ -51,6 +51,8 @@ export const tmdb = {
   getTVDetails: (id: string | number) => fetchTMDB<TVShowDetails>(`/tv/${id}`),
   getTVCredits: (id: string | number) =>
     fetchTMDB<Credits>(`/tv/${id}/credits`),
+  getTVExternalIds: (id: string | number) =>
+    fetchTMDB<{ imdb_id: string }>(`/tv/${id}/external_ids`),
 
   // Search
   searchMovies: (query: string) =>

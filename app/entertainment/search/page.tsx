@@ -1,6 +1,8 @@
 import { tmdb } from "@/lib/tmdb";
 import { MovieCard } from "@/components/entertainment/movie-card";
+import { SearchInput } from "@/components/entertainment/search-input";
 import { Movie, TVShow, SearchResult } from "@/types/tmdb";
+import { Search, Film, Tv, Info } from "lucide-react";
 
 export default async function SearchPage({
   searchParams,
@@ -11,32 +13,41 @@ export default async function SearchPage({
 
   if (!query) {
     return (
-      <div className="container mx-auto px-6 md:px-12 py-24 text-center max-w-2xl">
-        <h2 className="text-3xl font-bold mb-4 text-foreground">
-          Search GSC Movie Hub
-        </h2>
-        <p className="text-muted-foreground mb-8">
-          Enter a title to search for movies and TV shows from around the world.
+      <div className="container mx-auto px-6 md:px-12 py-24 flex flex-col items-center max-w-4xl">
+        <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mb-8 rotate-3">
+          <Search className="h-10 w-10 text-primary" />
+        </div>
+        <h1 className="text-4xl md:text-6xl font-black mb-6 text-foreground tracking-tighter text-center uppercase">
+          Universe <span className="text-primary">Search</span>
+        </h1>
+        <p className="text-xl text-muted-foreground mb-12 text-center max-w-2xl font-light leading-relaxed">
+          Discover millions of movies, TV shows and people. Explore now.
         </p>
-        <form
-          action="/entertainment/search"
-          method="GET"
-          className="relative group"
-        >
-          <input
-            type="text"
-            name="q"
-            placeholder="Search movies, TV shows..."
-            className="w-full bg-muted border border-border rounded-2xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all text-lg"
-            autoFocus
-          />
-          <button
-            type="submit"
-            className="absolute right-3 top-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-6 py-2 rounded-xl font-bold hover:scale-105 transition-all cursor-pointer"
-          >
-            Search
-          </button>
-        </form>
+        <SearchInput className="w-full max-w-2xl px-4" />
+
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl">
+          <div className="bg-card/50 border border-border/10 p-8 rounded-3xl hover:bg-card transition-colors group">
+            <Film className="h-8 w-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
+            <h3 className="font-bold text-lg mb-2">Movies</h3>
+            <p className="text-sm text-muted-foreground font-light">
+              Thousands of cinematic masterpieces at your fingertips.
+            </p>
+          </div>
+          <div className="bg-card/50 border border-border/10 p-8 rounded-3xl hover:bg-card transition-colors group">
+            <Tv className="h-8 w-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
+            <h3 className="font-bold text-lg mb-2">TV Shows</h3>
+            <p className="text-sm text-muted-foreground font-light">
+              From classic series to modern binge-worthy hits.
+            </p>
+          </div>
+          <div className="bg-card/50 border border-border/10 p-8 rounded-3xl hover:bg-card transition-colors group">
+            <Info className="h-8 w-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
+            <h3 className="font-bold text-lg mb-2">Metadata</h3>
+            <p className="text-sm text-muted-foreground font-light">
+              Comprehensive details including cast, crew and ratings.
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
@@ -51,72 +62,84 @@ export default async function SearchPage({
   ) as unknown as TVShow[];
 
   return (
-    <div className="container mx-auto px-6 md:px-12 py-12 flex flex-col gap-12">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-8">
-        <div>
-          <h2 className="text-3xl font-bold mb-2 text-foreground">
-            Search Results for "{query}"
-          </h2>
-          <p className="text-muted-foreground">
-            {results.total_results} results found.
-          </p>
+    <div className="container mx-auto px-6 md:px-12 py-12 flex flex-col gap-16 min-h-[70vh]">
+      <div className="flex flex-col gap-10 border-b border-border/10 pb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div>
+            <h4 className="text-primary font-bold text-xs uppercase tracking-[0.3em] mb-3">
+              Search Results
+            </h4>
+            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter uppercase">
+              "{query}"
+            </h2>
+            <p className="text-muted-foreground mt-4 text-lg">
+              We found{" "}
+              <span className="text-foreground font-bold">
+                {results.total_results}
+              </span>{" "}
+              matching titles for you.
+            </p>
+          </div>
+          <div className="w-full md:w-1/2 lg:w-1/3">
+            <SearchInput />
+          </div>
         </div>
-        <form
-          action="/entertainment/search"
-          method="GET"
-          className="relative w-full md:w-96"
-        >
-          <input
-            type="text"
-            name="q"
-            defaultValue={query}
-            placeholder="Search again..."
-            className="w-full bg-muted border border-border rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
-          />
-          <button
-            type="submit"
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-primary font-bold hover:scale-110 transition-all cursor-pointer text-xs"
-          >
-            Search
-          </button>
-        </form>
       </div>
 
-      {movies.length > 0 && (
-        <section>
-          <h3 className="text-xl font-bold mb-6 flex items-center gap-3 text-foreground">
-            <span className="w-1 h-6 bg-primary rounded-full"></span>
-            Movies
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            {movies.map((movie) => (
-              <MovieCard key={movie.id} item={movie} type="movie" />
-            ))}
-          </div>
-        </section>
-      )}
+      <div className="space-y-20">
+        {movies.length > 0 && (
+          <section className="space-y-10">
+            <div className="flex items-center justify-between">
+              <h3 className="text-2xl font-bold tracking-tight flex items-center gap-4 uppercase">
+                <span className="w-2 h-8 bg-primary rounded-full"></span>
+                Movies
+              </h3>
+              <span className="text-xs text-muted-foreground font-bold tracking-widest">
+                {movies.length} Results
+              </span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-10">
+              {movies.map((movie) => (
+                <MovieCard key={movie.id} item={movie} type="movie" />
+              ))}
+            </div>
+          </section>
+        )}
 
-      {tvShows.length > 0 && (
-        <section>
-          <h3 className="text-xl font-bold mb-6 flex items-center gap-3 text-foreground">
-            <span className="w-1 h-6 bg-primary rounded-full"></span>
-            TV Shows
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-            {tvShows.map((tv) => (
-              <MovieCard key={tv.id} item={tv} type="tv" />
-            ))}
-          </div>
-        </section>
-      )}
+        {tvShows.length > 0 && (
+          <section className="space-y-10">
+            <div className="flex items-center justify-between">
+              <h3 className="text-2xl font-bold tracking-tight flex items-center gap-4 uppercase">
+                <span className="w-2 h-8 bg-primary rounded-full"></span>
+                TV Shows
+              </h3>
+              <span className="text-xs text-muted-foreground font-bold tracking-widest">
+                {tvShows.length} Results
+              </span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-10">
+              {tvShows.map((tv) => (
+                <MovieCard key={tv.id} item={tv} type="tv" />
+              ))}
+            </div>
+          </section>
+        )}
 
-      {movies.length === 0 && tvShows.length === 0 && (
-        <div className="text-center py-24">
-          <p className="text-xl text-muted-foreground">
-            No results found for "{query}".
-          </p>
-        </div>
-      )}
+        {movies.length === 0 && tvShows.length === 0 && (
+          <div className="text-center py-32 flex flex-col items-center">
+            <div className="w-24 h-24 bg-muted/50 rounded-full flex items-center justify-center mb-8">
+              <Info className="h-10 w-10 text-muted-foreground" />
+            </div>
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              No results found
+            </h2>
+            <p className="text-muted-foreground max-w-md mx-auto text-lg font-light leading-relaxed">
+              We couldn't find any movies or TV shows matching "{query}". Try
+              checking for typos or using different keywords.
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

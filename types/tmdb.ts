@@ -66,6 +66,18 @@ export interface TVShowDetails extends TVShow {
   }[];
   tagline: string | null;
   status: string;
+  networks: {
+    id: number;
+    name: string;
+    logo_path: string | null;
+    origin_country: string;
+  }[];
+  production_companies: {
+    id: number;
+    logo_path: string | null;
+    name: string;
+    origin_country: string;
+  }[];
 }
 
 export interface TMDBResponse<T> {
