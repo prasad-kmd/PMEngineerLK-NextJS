@@ -1616,10 +1616,10 @@ export default function StudentGuideNavigator() {
             </div>
             <div style={{ textAlign: 'right' }}>
               <p style={{ fontSize: '9px', fontWeight: 'bold', color: '#94a3b8', marginBottom: '4px', margin: 0 }}>
-                Official Student Navigator Document
+                Student Navigator Document
               </p>
-              <p style={{ fontSize: '10px', fontWeight: '900', color: '#08784b', margin: 0 }}>
-                pm-blogfolio.vercel.app
+              <p style={{ fontSize: '10px', fontFamily: 'Google Sans', fontWeight: '900', color: '#08784b', margin: 0 }}>
+                prasadm.vercel.app
               </p>
             </div>
           </div>

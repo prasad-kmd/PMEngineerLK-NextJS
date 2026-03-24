@@ -74,15 +74,25 @@ function injectQuiz(html: string): string {
         let cleanJson = jsonContent.replace(/<[^>]*>/g, "").trim();
         // 2. Replace literal newlines and tabs with spaces
         cleanJson = cleanJson.replace(/[\r\n\t]+/g, " ");
-        // 3. Remove escaped newlines if they exist
-        cleanJson = cleanJson.replace(/\\n/g, " ");
+        // 3. Escape backslashes that are not part of a valid JSON escape sequence.
+        // We must consume valid escapes to prevent their second characters (like in \\)
+        // from being processed as lone backslashes.
+        cleanJson = cleanJson.replace(
+          /\\(["\\\/bfnrt]|u[0-9a-fA-F]{4})|\\/g,
+          (match: string, p1: string) => (p1 ? match : "\\\\"),
+        );
 
         // Minify and validate JSON
         const minifiedJson = JSON.stringify(JSON.parse(cleanJson));
         const encodedJson = minifiedJson.replace(/'/g, "&apos;");
         return `<div class="interactive-quiz-placeholder" data-quiz='${encodedJson}'></div>`;
       } catch (e) {
-        console.error("Quiz HTML inject parse error:", e, jsonContent);
+        console.error(
+          "Quiz HTML inject parse error:",
+          e,
+          "\nContent:",
+          jsonContent,
+        );
         return `<div class="bg-red-500/10 border border-red-500 p-4 rounded-lg text-red-500 my-4">
         <p><strong>Quiz Error:</strong> Invalid JSON format.</p>
         <pre class="text-[10px] mt-2 overflow-auto">${jsonContent.substring(0, 100)}...</pre>

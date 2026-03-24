@@ -19,7 +19,7 @@ interface Tool {
     isNew?: boolean
 }
 
-const title = "Engineering Workspace"
+const title = "Tools | Engineering Workspace"
 const description = "Professional-grade utilities for technical documentation, advanced calculations, and structured content development."
 
 export const metadata: Metadata = {

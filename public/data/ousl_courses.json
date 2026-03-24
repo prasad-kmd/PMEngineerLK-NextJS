@@ -202,12 +202,12 @@
   },
   {
     "code": "EEK3218",
-    "name": "Software Development for Engineers EEK3217",
+    "name": "Software Development for Engineers",
     "credits": 2,
     "level": 3,
     "category": "K",
     "dept": "EE",
-    "prerequisites": "(CR)",
+    "prerequisites": "EEK3217(CR)",
     "specializations": [
       "Agricultural Engineering",
       "Civil Engineering",
