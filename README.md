@@ -1,6 +1,6 @@
 # PrasadM | Engineering Blogfolio
 
-A comprehensive, high-performance personal blogfolio and engineering workspace built with Next.js 15, Tailwind CSS 4, and TypeScript. This platform is designed to document an engineering journey, featuring a file-based CMS, interactive tools, and technical documentation.
+A comprehensive, high-performance personal blogfolio and engineering workspace built with Next.js 16.2.1, Tailwind CSS 4, and TypeScript. This platform is designed to document an engineering journey, featuring a file-based CMS, interactive tools, and technical documentation.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/PrasadM/pm-blogfolio-webapp)
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/PrasadM/pm-blogfolio-webapp)
@@ -31,6 +31,7 @@ A suite of over 30+ interactive tools for electronics, mechanical engineering, m
 - **PWA Ready**: Offline support with a manual Service Worker implementation and optimized `manifest.json`.
 - **Responsive Design**: Optimized for all devices with mobile-specific performance tweaks.
 - **Enhanced UI**: Glassmorphism effects, custom cursor, custom context menu, and click-spark effects.
+- **Dynamic OG Images**: Specialized social sharing templates for the Entertainment hub (Movies, TV, Search).
 - **Connectivity Listener**: Real-time online/offline notifications using Sonner toasts.
 
 ---
@@ -174,4 +175,4 @@ This project is for educational purposes and personal documentation. Feel free t
 For inquiries, reach out via the [Contact Page](/contact) on the website.
 
 ---
-**Built with ❤️ by PrasadM | Sri Lanka | 2025**
+**Built with ❤️ by PrasadM | Sri Lanka | 2026**

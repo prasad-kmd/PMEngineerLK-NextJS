@@ -46,3 +46,5 @@ export function useBookmarks() {
 
   return { bookmarks, toggleBookmark, isBookmarked };
 }
+
+export const useEntertainmentBookmarks = useBookmarks;

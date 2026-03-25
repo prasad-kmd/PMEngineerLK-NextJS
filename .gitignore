@@ -31,3 +31,4 @@ package-lock.json
 /dump
 npm_dev.log
 tmp/test_url_logic.js
+pnpm-lock.yaml

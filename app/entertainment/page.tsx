@@ -4,6 +4,8 @@ import { HeroCarousel } from "@/components/entertainment/hero-carousel";
 import { MyList } from "@/components/entertainment/my-list";
 import { ChevronRight, Info } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function EntertainmentPage() {
   const [trendingMovies, popularMovies, topRatedMovies, trendingTV] =
     await Promise.all([

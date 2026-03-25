@@ -3,6 +3,36 @@ import { MovieCard } from "@/components/entertainment/movie-card";
 import { SearchInput } from "@/components/entertainment/search-input";
 import { Movie, TVShow, SearchResult } from "@/types/tmdb";
 import { Search, Film, Tv, Info } from "lucide-react";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: { q?: string };
+}): Promise<Metadata> {
+  const query = searchParams.q || "";
+  const title = query ? `Search results for "${query}" | GSC Movie Hub` : "Universe Search | GSC Movie Hub";
+  const description = query
+    ? `Discover movies and TV shows matching "${query}" on GSC Movie Hub.`
+    : "Discover millions of movies, TV shows and people. Explore now.";
+  const ogUrl = `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&type=entertainment`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [{ url: ogUrl, width: 1280, height: 720, alt: title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogUrl],
+    },
+  };
+}
 
 export default async function SearchPage({
   searchParams,

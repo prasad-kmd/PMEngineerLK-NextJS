@@ -7,6 +7,42 @@ import { BookmarkButton } from "@/components/entertainment/bookmark-button";
 import { Star, Clock, Calendar, Play } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const { id } = params;
+  try {
+    const movie = await tmdb.getMovieDetails(id);
+    if (!movie) return {};
+
+    const title = `${movie.title} | GSC Movie Hub`;
+    const description = movie.overview;
+    const ogUrl = `/api/og?title=${encodeURIComponent(movie.title)}&description=${encodeURIComponent(description)}&type=entertainment`;
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        type: "video.movie",
+        images: [{ url: ogUrl, width: 1280, height: 720, alt: movie.title }],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [ogUrl],
+      },
+    };
+  } catch (error) {
+    return {};
+  }
+}
 
 export default async function MovieDetailsPage({
   params,
@@ -50,223 +86,137 @@ export default async function MovieDetailsPage({
             <div className="absolute inset-0 bg-linear-to-r from-background via-background/20 to-transparent"></div>
           </div>
 
-          <div className="relative z-10 container mx-auto px-6 md:px-12 h-full flex items-end pb-24">
-            <div className="flex flex-col md:flex-row items-end gap-10 w-full">
-              {/* Poster */}
-              <div className="hidden md:block w-72 shrink-0 shadow-2xl rounded-2xl overflow-hidden border border-border/10 transform -rotate-1 hover:rotate-0 transition-transform duration-500">
-                {posterUrl && (
-                  <Image
-                    src={posterUrl}
-                    alt={movie.title}
-                    width={288}
-                    height={432}
-                    className="w-full aspect-2/3 object-cover"
-                  />
-                )}
-              </div>
-
-              {/* Details */}
-              <div className="grow pb-4">
-                <div className="flex flex-wrap items-center gap-3 mb-6">
-                  {movie.genres.map((genre) => (
-                    <span
-                      key={genre.id}
-                      className="bg-primary/20 text-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border border-primary/10"
-                    >
-                      {genre.name}
-                    </span>
-                  ))}
-                </div>
-
-                <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-6 uppercase text-foreground leading-none amoriaregular">
-                  {movie.title}
-                </h1>
-
-                {movie.tagline && (
-                  <p className="text-xl md:text-3xl text-muted-foreground italic mb-8 max-w-3xl font-light tracking-tight leading-relaxed local-inter">
-                    "{movie.tagline}"
-                  </p>
-                )}
-
-                <div className="flex flex-wrap items-center gap-8 mb-10">
-                  <div className="flex items-center gap-4">
-                    <a
-                      href="#player"
-                      className="bg-primary text-primary-foreground px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-primary/20"
-                    >
-                      <Play className="h-5 w-5 fill-current" />
-                      Watch Now
-                    </a>
-                    <BookmarkButton
-                      item={{
-                        id: movie.id,
-                        type: "movie",
-                        title: movie.title,
-                        poster_path: movie.poster_path!,
-                        vote_average: movie.vote_average,
-                        release_date: movie.release_date,
-                      }}
+          <div className="container relative z-10 mx-auto px-6 md:px-12 h-full flex items-end pb-12">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end w-full">
+              {/* Poster Card */}
+              <div className="hidden lg:block lg:col-span-3">
+                <div className="relative aspect-[2/3] w-full rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
+                  {posterUrl && (
+                    <Image
+                      src={posterUrl}
+                      alt={movie.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
                     />
+                  )}
+                  <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center scale-90 group-hover:scale-100 transition-transform">
+                      <Play className="h-8 w-8 text-white fill-current ml-1" />
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="flex flex-wrap items-center gap-8 text-sm text-muted-foreground font-medium">
-                  <div className="flex items-center gap-2 group">
-                    <div className="bg-yellow-400 text-black px-1.5 py-0.5 rounded font-black text-[10px]">
-                      TMDB
-                    </div>
-                    <span className="font-bold text-foreground text-lg">
+              {/* Main Info */}
+              <div className="lg:col-span-9 space-y-8">
+                <div className="space-y-4">
+                  <div className="flex flex-wrap items-center gap-4 text-xs font-black uppercase tracking-widest text-primary/80">
+                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-full border border-primary/20">
+                      {year}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="h-3.5 w-3.5" /> {runtime}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-amber-400">
+                      <Star className="h-3.5 w-3.5 fill-current" />{" "}
                       {movie.vote_average.toFixed(1)}
                     </span>
                   </div>
+                  <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter amoriaregular leading-tight">
+                    {movie.title}
+                  </h1>
+                  <p className="text-xl text-white/70 max-w-3xl font-light leading-relaxed local-inter">
+                    {movie.overview}
+                  </p>
+                </div>
 
-                  {omdbData?.imdbRating && (
-                    <div className="flex items-center gap-2">
-                      <div className="bg-[#f5c518] text-black px-1.5 py-0.5 rounded font-black text-[10px]">
-                        IMDb
-                      </div>
-                      <span className="font-bold text-foreground text-lg">
-                        {omdbData.imdbRating}
-                      </span>
-                    </div>
-                  )}
-
-                  {omdbData?.Metascore && omdbData.Metascore !== "N/A" && (
-                    <div className="flex items-center gap-2">
-                      <div className="bg-[#66cc33] text-white px-1.5 py-0.5 rounded font-black text-[10px]">
-                        META
-                      </div>
-                      <span className="font-bold text-foreground text-lg">
-                        {omdbData.Metascore}
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    <span>{runtime}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4" />
-                    <span>{year}</span>
-                  </div>
+                <div className="flex flex-wrap items-center gap-4">
+                  <a
+                    href="#player"
+                    className="h-14 px-8 bg-white text-black hover:bg-white/90 rounded-2xl font-bold flex items-center gap-3 transition-all active:scale-95 amoriaregular uppercase tracking-widest"
+                  >
+                    <Play className="h-5 w-5 fill-current" /> Watch Trailer
+                  </a>
+                  <BookmarkButton item={movie} type="movie" />
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Player & Info Section */}
-        <section
-          id="player"
-          className="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 scroll-mt-24"
-        >
-          <div className="lg:col-span-8 space-y-16">
-            {/* Player */}
-            <VideoPlayer tmdbId={movie.id} type="movie" />
+        {/* Player Section */}
+        <section id="player" className="container mx-auto px-6 md:px-12 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2 space-y-10">
+              <div className="flex items-center gap-4">
+                <div className="h-10 w-1 bg-primary rounded-full"></div>
+                <h2 className="text-3xl font-bold amoriaregular uppercase tracking-widest">
+                  Main Player
+                </h2>
+              </div>
+              <VideoPlayer tmdbId={movie.id} imdbId={movie.imdb_id || ""} />
+              <DownloadOptions imdbId={movie.imdb_id || ""} />
 
-            {/* Plot */}
-            <div className="space-y-6">
-              <h2 className="text-3xl font-bold tracking-tight flex items-center gap-4">
-                <span className="w-1.5 h-10 bg-primary rounded-full"></span>
-                The Synopsis
-              </h2>
-              <p className="text-xl text-muted-foreground leading-relaxed max-w-4xl font-light local-inter">
-                {movie.overview}
-              </p>
-            </div>
-
-            {/* Cast */}
-            <div className="space-y-8">
-              <h2 className="text-3xl font-bold tracking-tight">Cast & Crew</h2>
-              <div className="flex gap-8 overflow-x-auto pb-6 scrollbar-hide -mx-4 px-4">
-                {credits.cast.slice(0, 12).map((person) => (
-                  <div
-                    key={person.id}
-                    className="flex flex-col items-center shrink-0 group text-center w-28"
-                  >
-                    <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-transparent group-hover:border-primary group-hover:scale-105 transition-all mb-4 shadow-xl relative">
-                      {person.profile_path ? (
-                        <Image
-                          src={tmdb.getImageUrl(person.profile_path, "w500")!}
-                          alt={person.name}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-muted flex items-center justify-center text-[10px] p-4 font-bold uppercase tracking-widest text-muted-foreground">
-                          No Photo
-                        </div>
-                      )}
+              {/* Cast */}
+              <div className="pt-12 space-y-10">
+                <h2 className="text-2xl font-bold amoriaregular uppercase tracking-wider">
+                  Top Cast
+                </h2>
+                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-6">
+                  {credits.cast.slice(0, 10).map((person) => (
+                    <div key={person.id} className="group text-center">
+                      <div className="relative aspect-square w-full rounded-2xl overflow-hidden mb-4 border border-border/10 grayscale group-hover:grayscale-0 transition-all duration-500">
+                        {person.profile_path ? (
+                          <Image
+                            src={tmdb.getImageUrl(person.profile_path, "w185")!}
+                            alt={person.name}
+                            fill
+                            className="object-cover group-hover:scale-110 transition-transform duration-700"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-muted flex items-center justify-center">
+                            <span className="text-xs text-muted-foreground font-black">
+                              N/A
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <h4 className="text-sm font-bold truncate">
+                        {person.name}
+                      </h4>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest truncate mt-1">
+                        {person.character}
+                      </p>
                     </div>
-                    <span className="text-sm font-bold text-foreground truncate w-full">
-                      {person.name}
-                    </span>
-                    <span className="text-xs text-muted-foreground truncate w-full italic">
-                      {person.character}
-                    </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Download Options (YTS) */}
-            {movie.imdb_id && (
-              <DownloadOptions imdbId={movie.imdb_id} title={movie.title} />
-            )}
-          </div>
-
-          {/* Sidebar Area: Production Info */}
-          <div className="lg:col-span-4 space-y-8">
-            <div className="bg-card border border-border/10 p-6 rounded-2xl shadow-2xl space-y-6 sticky top-24">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-primary google-sans">
-                Production Details
-              </h3>
+            <div className="space-y-10 bg-muted/30 p-8 rounded-[40px] border border-border/5 h-fit lg:sticky lg:top-24">
+              <h2 className="text-xl font-bold amoriaregular uppercase tracking-widest border-b border-border/10 pb-6">
+                Information
+              </h2>
               <div className="space-y-6">
                 {[
-                  {
-                    label: "Director",
-                    value:
-                      credits.crew.find((c) => c.job === "Director")?.name ||
-                      "N/A",
-                  },
-                  {
-                    label: "Producer",
-                    value:
-                      credits.crew.find((c) => c.job === "Producer")?.name ||
-                      "N/A",
-                  },
                   { label: "Status", value: movie.status },
-                  {
-                    label: "Language",
-                    value: movie.original_language.toUpperCase(),
-                  },
+                  { label: "Release Date", value: movie.release_date },
                   {
                     label: "Budget",
-                    value:
-                      movie.budget > 0
-                        ? `$${(movie.budget / 1000000).toFixed(1)}M`
-                        : "N/A",
+                    value: `$${movie.budget.toLocaleString()}`,
                   },
                   {
                     label: "Revenue",
-                    value:
-                      movie.revenue > 0
-                        ? `$${(movie.revenue / 1000000).toFixed(1)}M`
-                        : "N/A",
+                    value: `$${movie.revenue.toLocaleString()}`,
                   },
                   {
-                    label: "Studios",
-                    value:
-                      movie.production_companies
-                        .map((c) => c.name)
-                        .slice(0, 2)
-                        .join(", ") || "N/A",
+                    label: "Original Language",
+                    value: movie.original_language.toUpperCase(),
                   },
-                ].map((item, idx) => (
+                ].map((item) => (
                   <div
-                    key={idx}
-                    className="flex justify-between items-start border-b border-border/5 last:border-0 group"
+                    key={item.label}
+                    className="flex justify-between items-start py-2 border-b border-border/5 last:border-0 group"
                   >
                     <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors mt-1 google-sans">
                       {item.label}

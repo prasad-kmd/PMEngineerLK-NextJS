@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
     projects: "Projects",
     tools: "Tools",
     pages: "Site Page",
+    entertainment: "Entertainment",
     default: "Welcome Back"
   }
 
@@ -27,6 +28,7 @@ export async function GET(req: NextRequest) {
     projects: "#8b5cf6", // Violet
     tools: "#c3e42fff",
     pages: "#0ea6ccff",
+    entertainment: "#e11d48", // Rose/Cinematic Red
     default: "#6366f1"   // Indigo
   }
 
