@@ -16,10 +16,11 @@ A suite of over 30+ interactive tools for electronics, mechanical engineering, m
 - **Productivity**: Markdown Editor, User Persona Creator, Resume Creator, Color Contrast Checker.
 
 ### 📚 Content Management System
-- **File-Based**: Simply add `.md` or `.html` files to the `content/` directory.
-- **Auto-Generation**: Pages for Blog, Articles, Projects, Wiki, and Tutorials are automatically generated based on the file system.
-- **Interactive Quizzes**: Embed assessments directly into content using a custom `[quiz]` syntax.
-- **Technical Support**: Native support for KaTeX (math), Highlight.js (syntax highlighting), and Chart.js (data viz).
+- **Notion CMS**: Use Notion as a powerful, real-time CMS for your blog, articles, and more.
+- **File-Based (Fallback)**: Simply add `.md` or `.html` files to the `content/` directory.
+- **Auto-Generation**: Pages for Blog, Articles, Projects, Wiki, and Tutorials are automatically generated based on Notion and/or the file system.
+- **Interactive Quizzes**: Embed assessments directly into content using a custom `[quiz]` syntax (Git-CMS) or Notion's native features.
+- **Technical Support**: Native support for KaTeX (math), Highlight.js (syntax highlighting), and Chart.js (data viz), plus full Notion block rendering.
 
 ### 🔍 Discovery & Navigation
 - **Command Palette (Cmd+K)**: Site-wide search and navigation powered by a dedicated search index.
@@ -76,7 +77,25 @@ Integrate interactive charts directly. Example usage in `components/chart-exampl
 
 ## ✍️ Content Management
 
-### Adding New Content
+### 📓 Using Notion as CMS
+You can now use Notion as your primary CMS. This allows for real-time updates and a rich editing experience.
+
+#### Setup Instructions:
+1. **Get your Notion Root Page ID**:
+   - Make your Notion page public.
+   - Copy the ID from the URL (the 32-character string at the end).
+2. **Configure Environment Variables**:
+   - Add `NOTION_ROOT_PAGE_ID` to your environment (e.g., in Vercel or a `.env.local` file).
+   - (Optional) Add `NOTION_BLOG_ID`, `NOTION_PROJECTS_ID`, etc., if you want to use specific databases for different content types.
+3. **Customize Configuration**:
+   - Update `lib/config.ts` if you want to change default settings like `isPreviewImageSupportEnabled`.
+
+#### Benefits:
+- **Rich Media**: Support for images, videos, callouts, and more.
+- **Real-time**: Changes in Notion reflect on your site immediately (or after a revalidation).
+- **Collaboration**: Multiple people can edit content simultaneously in Notion.
+
+### 📝 Adding File-Based Content (Fallback)
 1. Add a `.md` or `.html` file to `content/blog/`, `content/projects/`, etc.
 2. Include YAML frontmatter:
 ```markdown

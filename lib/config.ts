@@ -14,6 +14,12 @@ export const siteConfig = {
     linkedin: "https://linkedin.com/in/prasad-madhuranga",
     email: "mailto:contact@prasadm.vercel.app",
   },
+  notion: {
+    rootPageId: process.env.NOTION_ROOT_PAGE_ID || "78fc5a4b88d74b0e824e29407e9f1ec1",
+    isPreviewImageSupportEnabled: true,
+    isRedisEnabled: false,
+    isSearchEnabled: true,
+  },
 };
 
 export const ogConfig = {

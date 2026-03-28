@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getContentByType, getContentItem } from "@/lib/content";
+import { getNotionContentItem } from "@/lib/notion";
 import { Calendar, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ContentRenderer } from "@/components/content-renderer";
+import { NotionPage } from "@/components/notion-renderer";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { RelatedContent } from "@/components/related-content";
@@ -15,6 +17,16 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+
+  // Try Notion first
+  const notionProject = await getNotionContentItem(slug);
+  if (notionProject) {
+    return {
+      title: notionProject.title,
+      description: notionProject.description,
+    };
+  }
+
   const project = getContentItem("projects", slug);
 
   if (!project) {
@@ -40,6 +52,34 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
+  // Try Notion CMS
+  const notionProject = await getNotionContentItem(slug);
+  if (notionProject) {
+    return (
+      <div className="min-h-screen px-6 py-12 lg:px-8 projects_item img_grad_pm">
+        <ScrollProgress />
+        <div className="mx-auto max-w-4xl">
+          <Link
+            href="/projects"
+            className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground font-local-inter"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Projects
+          </Link>
+
+          <header className="mb-8 border-b border-border pb-8">
+            <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl font-google-sans">
+              {notionProject.title}
+            </h1>
+          </header>
+
+          <NotionPage recordMap={notionProject.recordMap} />
+        </div>
+      </div>
+    );
+  }
+
   const project = getContentItem("projects", slug);
 
   if (!project) {

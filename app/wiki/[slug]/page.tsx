@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getContentByType, getContentItem } from "@/lib/content";
+import { getNotionContentItem } from "@/lib/notion";
 import { ArrowLeft, Clock, BookOpen, Hash } from "lucide-react";
 import Link from "next/link";
 import { ContentRenderer } from "@/components/content-renderer";
+import { NotionPage } from "@/components/notion-renderer";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { RelatedContent } from "@/components/related-content";
@@ -23,6 +25,16 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+
+  // Try Notion first
+  const notionEntry = await getNotionContentItem(slug);
+  if (notionEntry) {
+    return {
+      title: `${notionEntry.title} | Engineering Wiki`,
+      description: notionEntry.description,
+    };
+  }
+
   const entry = getContentItem("wiki", slug);
 
   if (!entry) {
@@ -41,6 +53,40 @@ export default async function WikiEntryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
+  // Try Notion CMS
+  const notionEntry = await getNotionContentItem(slug);
+  if (notionEntry) {
+    return (
+      <div className="min-h-screen px-6 py-12 lg:px-8 wiki_item img_grad_pm">
+        <ScrollProgress />
+        <div className="mx-auto max-w-5xl">
+          <Link
+            href="/wiki"
+            className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground font-local-inter"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Wiki
+          </Link>
+
+          <header className="mb-8 border-b border-border pb-8">
+            <div className="flex items-center gap-2 text-primary mb-4">
+              <BookOpen className="h-5 w-5" />
+              <span className="text-sm font-bold uppercase tracking-widest font-local-inter">
+                Wiki Reference
+              </span>
+            </div>
+            <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl font-google-sans">
+              {notionEntry.title}
+            </h1>
+          </header>
+
+          <NotionPage recordMap={notionEntry.recordMap} />
+        </div>
+      </div>
+    );
+  }
+
   const entry = getContentItem("wiki", slug);
 
   if (!entry) {

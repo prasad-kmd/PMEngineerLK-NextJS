@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getContentByType, getContentItem } from "@/lib/content";
+import { getNotionContentItem } from "@/lib/notion";
 import { Calendar, ArrowLeft, Clock } from "lucide-react";
 import Link from "next/link";
 import { ContentRenderer } from "@/components/content-renderer";
+import { NotionPage } from "@/components/notion-renderer";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { RelatedContent } from "@/components/related-content";
@@ -23,8 +25,18 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getContentItem("blog", slug);
 
+  // Try Notion first
+  const notionPost = await getNotionContentItem(slug);
+  if (notionPost) {
+    return {
+      title: notionPost.title,
+      description: notionPost.description,
+    };
+  }
+
+  // Fallback to Git-based CMS
+  const post = getContentItem("blog", slug);
   if (!post) {
     return {};
   }
@@ -41,6 +53,35 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
+  // Try Notion CMS
+  const notionPost = await getNotionContentItem(slug);
+  if (notionPost) {
+    return (
+      <div className="min-h-screen px-6 py-12 lg:px-8 blog_item img_grad_pm">
+        <ScrollProgress />
+        <div className="mx-auto max-w-4xl">
+          <Link
+            href="/blog"
+            className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground font-local-inter"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Blog
+          </Link>
+
+          <header className="mb-8 border-b border-border pb-8">
+            <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl font-google-sans">
+              {notionPost.title}
+            </h1>
+          </header>
+
+          <NotionPage recordMap={notionPost.recordMap} />
+        </div>
+      </div>
+    );
+  }
+
+  // Fallback to Git CMS
   const post = getContentItem("blog", slug);
 
   if (!post) {

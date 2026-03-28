@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getContentByType } from "@/lib/content";
-import { Book, ArrowRight, Search, Hash } from "lucide-react";
+import { getNotionContentByType } from "@/lib/notion";
+import { Book, ArrowRight, Hash } from "lucide-react";
 
 const title = "Engineering Wiki";
 const description =
@@ -25,8 +26,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function WikiPage() {
-  const wikiEntries = getContentByType("wiki");
+export default async function WikiPage() {
+  const fileEntries = getContentByType("wiki");
+  const notionEntries = await getNotionContentByType("wiki");
+
+  const wikiEntries = [
+    ...fileEntries,
+    ...notionEntries.map(entry => ({
+      slug: entry.slug,
+      title: entry.title,
+      description: entry.description,
+      technical: entry.technical,
+      tags: entry.tags,
+      type: 'wiki' as const,
+      content: '',
+      rawContent: ''
+    }))
+  ];
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getContentByType, getContentItem } from "@/lib/content";
+import { getNotionContentItem } from "@/lib/notion";
 import { Calendar, ArrowLeft, Clock } from "lucide-react";
 import Link from "next/link";
 import { ContentRenderer } from "@/components/content-renderer";
+import { NotionPage } from "@/components/notion-renderer";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { RelatedContent } from "@/components/related-content";
@@ -23,6 +25,16 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+
+  // Try Notion first
+  const notionEntry = await getNotionContentItem(slug);
+  if (notionEntry) {
+    return {
+      title: notionEntry.title,
+      description: notionEntry.description,
+    };
+  }
+
   const entry = getContentItem("articles", slug);
 
   if (!entry) {
@@ -41,6 +53,34 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
+  // Try Notion CMS
+  const notionEntry = await getNotionContentItem(slug);
+  if (notionEntry) {
+    return (
+      <div className="min-h-screen px-6 py-12 lg:px-8 articles_item img_grad_pm">
+        <ScrollProgress />
+        <div className="mx-auto max-w-4xl">
+          <Link
+            href="/articles"
+            className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground local-inter"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Articles
+          </Link>
+
+          <header className="mb-8 border-b border-border pb-8">
+            <h1 className="mb-4 text-4xl font-bold text-balance lg:text-5xl google-sans">
+              {notionEntry.title}
+            </h1>
+          </header>
+
+          <NotionPage recordMap={notionEntry.recordMap} />
+        </div>
+      </div>
+    );
+  }
+
   const entry = getContentItem("articles", slug);
 
   if (!entry) {

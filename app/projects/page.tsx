@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getContentByType } from "@/lib/content"
+import { getNotionContentByType } from "@/lib/notion"
 import { Calendar, ArrowRight } from "lucide-react"
 
 const title = "Projects"
@@ -30,8 +31,28 @@ export const metadata: Metadata = {
   },
 }
 
-export default function ProjectsPage() {
-  const projects = getContentByType("projects")
+export default async function ProjectsPage() {
+  const fileProjects = getContentByType("projects")
+  const notionProjects = await getNotionContentByType("projects")
+
+  const projects = [
+    ...fileProjects,
+    ...notionProjects.map(project => ({
+      slug: project.slug,
+      title: project.title,
+      description: project.description,
+      date: project.date,
+      type: 'projects' as const,
+      content: '',
+      rawContent: '',
+      firstImage: project.firstImage
+    }))
+  ].sort((a, b) => {
+    if (a.date && b.date) {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    }
+    return 0;
+  });
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 projects_page img_grad_pm">
@@ -49,7 +70,7 @@ export default function ProjectsPage() {
               No project documents yet. Create a{" "}
               <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.md</code> or{" "}
               <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.html</code> file in the{" "}
-              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">content/projects/</code> directory.
+              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">content/projects/</code> directory or configure Notion.
             </p>
           </div>
         ) : (

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getContentByType } from "@/lib/content"
+import { getNotionContentByType } from "@/lib/notion"
 import { Calendar, ArrowRight } from "lucide-react"
 
 const title = "Articles"
@@ -30,8 +31,28 @@ export const metadata: Metadata = {
   },
 }
 
-export default function ArticlesPage() {
-  const entries = getContentByType("articles")
+export default async function ArticlesPage() {
+  const fileEntries = getContentByType("articles")
+  const notionEntries = await getNotionContentByType("articles")
+
+  const entries = [
+    ...fileEntries,
+    ...notionEntries.map(entry => ({
+      slug: entry.slug,
+      title: entry.title,
+      description: entry.description,
+      date: entry.date,
+      type: 'articles' as const,
+      content: '',
+      rawContent: '',
+      firstImage: entry.firstImage
+    }))
+  ].sort((a, b) => {
+    if (a.date && b.date) {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    }
+    return 0;
+  });
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 articles_page img_grad_pm">
@@ -48,7 +69,7 @@ export default function ArticlesPage() {
             <p className="text-muted-foreground">
               No articles yet. Create a <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.md</code>{" "}
               or <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.html</code> file in the{" "}
-              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">content/articles/</code> directory.
+              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">content/articles/</code> directory or configure Notion.
             </p>
           </div>
         ) : (
