@@ -12,7 +12,7 @@ export interface Bookmark {
   first_air_date?: string;
 }
 
-export function useBookmarks() {
+export function useEntertainmentBookmarks() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
 
   useEffect(() => {
@@ -40,9 +40,15 @@ export function useBookmarks() {
     localStorage.setItem("gsc_bookmarks", JSON.stringify(newBookmarks));
   };
 
+  const removeBookmark = (id: number) => {
+    const newBookmarks = bookmarks.filter((b) => b.id !== id);
+    setBookmarks(newBookmarks);
+    localStorage.setItem("gsc_bookmarks", JSON.stringify(newBookmarks));
+  };
+
   const isBookmarked = (id: number) => {
     return bookmarks.some((b) => b.id === id);
   };
 
-  return { bookmarks, toggleBookmark, isBookmarked };
+  return { bookmarks, toggleBookmark, removeBookmark, isBookmarked };
 }

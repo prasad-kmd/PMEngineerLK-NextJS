@@ -7,9 +7,9 @@ import { Search, Film, Tv, Info } from "lucide-react";
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { q?: string };
+  searchParams: Promise<{ q?: string }>;
 }) {
-  const query = searchParams.q || "";
+  const { q: query = "" } = await searchParams;
 
   if (!query) {
     return (

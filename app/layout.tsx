@@ -115,9 +115,9 @@ import ServiceWorkerRegistrar from "@/components/service-worker-registrar";
 import { ConnectivityListener } from "@/components/connectivity-listener";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { BookmarksProvider } from "@/hooks/use-bookmarks";
-import { CustomCursor } from "@/components/custom-cursor";
 import { CustomContextMenu } from "@/components/custom-context-menu";
 import { Footer } from "@/components/footer";
+import { ViewTransitions } from "@/components/view-transitions";
 import ClickSpark from "@/components/ClickSpark";
 
 export const metadata: Metadata = {
@@ -248,7 +248,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // ${inter.variable} ${jetbrainsMono.variable}
     <html
       lang="en"
       className={`${amoriaregular.variable} ${mozillaHeadline.variable} ${philosopher.variable} ${googleSans.variable} ${mozillaText.variable} ${notoSans.variable} ${notoSansDisplay.variable} ${notoSerifSinhala.variable} ${roboto.variable} ${spaceMono.variable} ${localInter.variable} ${localJetBrainsMono.variable}`}
@@ -263,30 +262,30 @@ export default function RootLayout({
           <TooltipProvider>
             <SidebarProvider>
               <BookmarksProvider>
-                <ClickSpark
-                  sparkColor="#ffffff"
-                  sparkSize={10}
-                  sparkRadius={15}
-                  sparkCount={8}
-                  duration={400}
-                  easing="linear"
-                  extraScale={1.5}
-                  // className="min-h-screen flex flex-col"
-                >
-                  {/* <CustomCursor /> */}
-                  <CustomContextMenu />
-                  <FloatingNavbar className="hidden lg:flex" />
-                  <Navigation />
-                  <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
-                    {children}
-                    <Footer />
-                  </main>
-                  <ScrollToTop />
-                  <Toaster position="bottom-right" richColors />
-                  <ConnectivityListener />
-                  <SpeedInsights />
-                  <ServiceWorkerRegistrar />
-                </ClickSpark>
+                <ViewTransitions>
+                  <ClickSpark
+                    sparkColor="#ffffff"
+                    sparkSize={10}
+                    sparkRadius={15}
+                    sparkCount={8}
+                    duration={400}
+                    easing="linear"
+                    extraScale={1.5}
+                  >
+                    <CustomContextMenu />
+                    <FloatingNavbar className="hidden lg:flex" />
+                    <Navigation />
+                    <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
+                      {children}
+                      <Footer />
+                    </main>
+                    <ScrollToTop />
+                    <Toaster position="bottom-right" richColors />
+                    <ConnectivityListener />
+                    <SpeedInsights />
+                    <ServiceWorkerRegistrar />
+                  </ClickSpark>
+                </ViewTransitions>
               </BookmarksProvider>
             </SidebarProvider>
           </TooltipProvider>

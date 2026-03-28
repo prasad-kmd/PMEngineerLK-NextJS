@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "lk.prasadkmd.engineerlk.prasadm.webapp",
+        "sha256_cert_fingerprints": ["8E:2C:FC:61:48:57:24:7B:22:80:CA:46:1D:3A:79:6D:BD:0E:67:7E:B1:66:DE:FA:B9:D3:48:13:CA:F0:C2:33"]
+      }
+    }]

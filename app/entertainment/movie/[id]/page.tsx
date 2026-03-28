@@ -11,9 +11,9 @@ import { notFound } from "next/navigation";
 export default async function MovieDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const [movie, credits, recommendations] = await Promise.all([

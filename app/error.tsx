@@ -184,7 +184,9 @@ export default function Error({
         {/* Action Buttons */}
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button
-            onClick={() => reset()}
+            onClick={() =>
+              typeof reset === "function" ? reset() : window.location.reload()
+            }
             size="lg"
             className="rounded-full px-8 transition-all hover:scale-105"
           >

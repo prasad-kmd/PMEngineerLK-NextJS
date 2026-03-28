@@ -1,12 +1,12 @@
 "use client";
 
-import { useBookmarks } from "@/hooks/use-entertainment-bookmarks";
+import { useEntertainmentBookmarks } from "@/hooks/use-entertainment-bookmarks";
 import { MovieCard } from "./movie-card";
 import { Bookmark, Heart, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export function MyList() {
-  const { bookmarks } = useBookmarks();
+  const { bookmarks } = useEntertainmentBookmarks();
 
   if (bookmarks.length === 0) return null;
 

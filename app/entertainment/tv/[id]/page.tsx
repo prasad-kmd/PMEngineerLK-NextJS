@@ -10,9 +10,9 @@ import { notFound } from "next/navigation";
 export default async function TVDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const [show, credits, externalIds] = await Promise.all([

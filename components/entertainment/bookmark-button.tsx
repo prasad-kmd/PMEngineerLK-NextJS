@@ -1,7 +1,10 @@
 "use client";
 
 import { Plus, Check } from "lucide-react";
-import { useBookmarks, Bookmark } from "@/hooks/use-entertainment-bookmarks";
+import {
+  useEntertainmentBookmarks,
+  Bookmark,
+} from "@/hooks/use-entertainment-bookmarks";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -18,7 +21,7 @@ export function BookmarkButton({
   className,
   showText = true,
 }: BookmarkButtonProps) {
-  const { isBookmarked, toggleBookmark } = useBookmarks();
+  const { isBookmarked, toggleBookmark } = useEntertainmentBookmarks();
   const bookmarked = isBookmarked(item.id);
 
   const handleToggle = (e: React.MouseEvent) => {

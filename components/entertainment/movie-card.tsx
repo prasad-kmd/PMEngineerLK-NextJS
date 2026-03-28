@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Star, Heart } from "lucide-react";
 import { tmdb } from "@/lib/tmdb";
 import { Movie, TVShow } from "@/types/tmdb";
-import { useBookmarks } from "@/hooks/use-entertainment-bookmarks";
+import { useEntertainmentBookmarks } from "@/hooks/use-entertainment-bookmarks";
 
 interface MovieCardProps {
   item: Movie | TVShow;
@@ -13,7 +13,7 @@ interface MovieCardProps {
 }
 
 export function MovieCard({ item, type }: MovieCardProps) {
-  const { isBookmarked } = useBookmarks();
+  const { isBookmarked } = useEntertainmentBookmarks();
   const bookmarked = isBookmarked(item.id);
 
   const title = (item as Movie).title || (item as TVShow).name;

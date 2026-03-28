@@ -5,7 +5,7 @@ import {
     Terminal, FileCode, Split, Users, Zap, Cpu, Timer, Lightbulb, Activity,
     Settings, Waypoints, Settings2, Wrench, MoveUpRight, Battery, LineChart, Ruler,
     Database, Rocket, Gamepad2, Rss, FlaskConical, Layout, Library, Search, Grid3X3, Compass, Palette,
-    GraduationCap
+    GraduationCap, FileArchive
 } from "lucide-react"
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
@@ -243,6 +243,15 @@ const mathTools = [
 ]
 
 const webTools = [
+    {
+        name: "Stream Compressor",
+        slug: "compressor",
+        description: "High-performance browser-native file compression using Compression Streams API.",
+        icon: FileArchive,
+        color: "text-emerald-500",
+        bgColor: "bg-emerald-500/10",
+        isNew: true,
+    },
     {
         name: "CSS Unit Converter",
         slug: "css-unit-converter",
