@@ -392,3 +392,43 @@ code.hljs {
 .local-jetbrains-mono {
   font-family: var(--font-local-jetbrains-mono);
 }
+
+/* View Transitions [Scale] */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both scale-out;
+}
+
+::view-transition-new(root) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both scale-in;
+}
+
+@keyframes scale-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(1.05);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Fallback for browsers that don't support View Transitions */
+@supports not (view-transition-name: root) {
+  /* You could add a standard CSS transition here if needed */
+}

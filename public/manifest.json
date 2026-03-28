@@ -1,5 +1,6 @@
 {
-  "name": "PrasadM | Engineer's' Blogfolio",
+  "id": "prasadm-blogfolio",
+  "name": "PrasadM | Engineer's Blogfolio",
   "short_name": "PrasadM",
   "description": "Personal blogfolio documenting my engineering projects and technical insights.",
   "start_url": "/",
@@ -7,6 +8,38 @@
   "background_color": "#000000",
   "theme_color": "#000000",
   "orientation": "portrait",
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "iarc_rating_id": null,
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  },
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "scope_extensions": [
+    {
+      "origin": "*.vercel.app"
+    }
+  ],
+  "share_target": {
+    "action": "/search",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "display_override": [
+    "window-controls-overlay",
+    "minimal-ui",
+    "standalone"
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "widgets": [],
   "icons": [
     {
       "src": "/img/favicon/icons8_working_with_a_laptop_16.png",
@@ -48,27 +81,51 @@
       "type": "image/png"
     }
   ],
-  "categories": ["education", "productivity", "utilities"],
+  "categories": [
+    "education",
+    "productivity",
+    "utilities"
+  ],
   "shortcuts": [
     {
       "name": "Portfolio",
       "url": "/portfolio",
-      "icons": [{ "src": "/img/favicon/portfolio_48px.png", "sizes": "48x48" }]
+      "icons": [
+        {
+          "src": "/img/favicon/portfolio_48px.png",
+          "sizes": "48x48"
+        }
+      ]
     },
     {
       "name": "Blog",
       "url": "/blog",
-      "icons": [{ "src": "/img/favicon/blog_48px.png", "sizes": "48x48" }]
+      "icons": [
+        {
+          "src": "/img/favicon/blog_48px.png",
+          "sizes": "48x48"
+        }
+      ]
     },
     {
       "name": "Projects",
       "url": "/projects",
-      "icons": [{ "src": "/img/favicon/projects_48px.png", "sizes": "48x48" }]
+      "icons": [
+        {
+          "src": "/img/favicon/projects_48px.png",
+          "sizes": "48x48"
+        }
+      ]
     },
     {
       "name": "Site Directory",
       "url": "/pages",
-      "icons": [{ "src": "/img/favicon/pages_48px.png", "sizes": "48x48" }]
+      "icons": [
+        {
+          "src": "/img/favicon/pages_48px.png",
+          "sizes": "48x48"
+        }
+      ]
     }
   ]
 }

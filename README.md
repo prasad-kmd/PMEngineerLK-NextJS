@@ -12,7 +12,7 @@ A suite of over 30+ interactive tools for electronics, mechanical engineering, m
 - **Electronics**: Resistor Solver, Voltage Divider, PCB Trace/Impedance, 555 Timer, LED Resistor, Op-Amp Gain.
 - **Mechanical**: Moment of Inertia, ISO Fits & Tolerances, Beam Deflection, Gear Ratio, Bolt Torque Chart.
 - **Mechatronics**: PID Simulator & Tuner, PWM to Voltage, Stepper Motor, Battery Estimator, Sensor Scaling.
-- **Software & Math**: Matrix Calculator, Curve Fitter, LaTeX/MathML Converter, Regex Architect, JSON Validator.
+- **Software & Math**: Matrix Calculator, Curve Fitter, LaTeX/MathML Converter, Regex Architect, JSON Validator, Stream Compressor.
 - **Productivity**: Markdown Editor, User Persona Creator, Resume Creator, Color Contrast Checker.
 
 ### 📚 Content Management System
@@ -28,7 +28,7 @@ A suite of over 30+ interactive tools for electronics, mechanical engineering, m
 - **External Aggregators**: Live discovery feeds from arXiv (research), Open Library (books), CheapShark (gaming deals), and Blogger RSS feeds.
 
 ### 🌐 Performance & UX
-- **PWA Ready**: Offline support with a manual Service Worker implementation and optimized `manifest.json`.
+- **PWA Ready**: Offline support with a robust Service Worker implementation, cross-document View Transitions (Scale effect), and an advanced `manifest.json` with launch handlers and share targets.
 - **Responsive Design**: Optimized for all devices with mobile-specific performance tweaks.
 - **Enhanced UI**: Glassmorphism effects, custom cursor, custom context menu, and click-spark effects.
 - **Connectivity Listener**: Real-time online/offline notifications using Sonner toasts.
