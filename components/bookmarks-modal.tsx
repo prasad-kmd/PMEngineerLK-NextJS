@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { X, Calendar, ArrowRight, Trash2, Bookmark } from "lucide-react";
+import { X, Calendar, ArrowRight, Trash2, Bookmark, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useBookmarks } from "@/hooks/use-bookmarks";
 import { useEntertainmentBookmarks } from "@/hooks/use-entertainment-bookmarks";
@@ -132,7 +132,7 @@ function EntertainmentWatchlistSection({
 }: {
   onItemClick: () => void;
 }) {
-  const { bookmarks, removeBookmark } = useEntertainmentBookmarks();
+  const { bookmarks, toggleBookmark: removeBookmark } = useEntertainmentBookmarks();
   const router = useRouter();
 
   const handleItemClick = (type: string, id: number) => {
@@ -179,7 +179,7 @@ function EntertainmentWatchlistSection({
 
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => removeBookmark(item.id)}
+                  onClick={() => removeBookmark(item)}
                   className="p-2 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
                 >
                   <Trash2 className="h-4 w-4" />

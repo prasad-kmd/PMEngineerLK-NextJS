@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus, Check } from "lucide-react";
-import { useBookmarks, Bookmark } from "@/hooks/use-entertainment-bookmarks";
+import { useEntertainmentBookmarks as useBookmarks, Bookmark } from "@/hooks/use-entertainment-bookmarks";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 

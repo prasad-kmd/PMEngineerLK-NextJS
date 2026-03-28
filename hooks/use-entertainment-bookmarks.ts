@@ -12,7 +12,7 @@ export interface Bookmark {
   first_air_date?: string;
 }
 
-export function useBookmarks() {
+export function useEntertainmentBookmarks() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useBookmarks } from "@/hooks/use-entertainment-bookmarks";
+import { useEntertainmentBookmarks as useBookmarks } from "@/hooks/use-entertainment-bookmarks";
 import { MovieCard } from "./movie-card";
 import { Bookmark, Heart, ArrowRight } from "lucide-react";
 import Link from "next/link";

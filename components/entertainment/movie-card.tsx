@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Star, Heart } from "lucide-react";
 import { tmdb } from "@/lib/tmdb";
 import { Movie, TVShow } from "@/types/tmdb";
-import { useBookmarks } from "@/hooks/use-entertainment-bookmarks";
+import { useEntertainmentBookmarks as useBookmarks } from "@/hooks/use-entertainment-bookmarks";
 
 interface MovieCardProps {
   item: Movie | TVShow;
