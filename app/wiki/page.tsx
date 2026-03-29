@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function WikiPage() {
-  const wikiEntries = getContentByType("wiki");
+export default async function WikiPage() {
+  const wikiEntries = await getContentByType("wiki");
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">

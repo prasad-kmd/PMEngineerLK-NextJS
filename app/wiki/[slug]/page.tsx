@@ -11,7 +11,7 @@ import { TOC } from "@/components/toc";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 export async function generateStaticParams() {
-  const wikiEntries = getContentByType("wiki");
+  const wikiEntries = await getContentByType("wiki");
   return wikiEntries.map((entry) => ({
     slug: entry.slug,
   }));
@@ -23,7 +23,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const entry = getContentItem("wiki", slug);
+  const entry = await getContentItem("wiki", slug);
 
   if (!entry) {
     return {};
@@ -41,7 +41,7 @@ export default async function WikiEntryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const entry = getContentItem("wiki", slug);
+  const entry = await getContentItem("wiki", slug);
 
   if (!entry) {
     notFound();

@@ -5,15 +5,22 @@ export async function GET() {
   const baseUrl = siteConfig.url.endsWith("/")
     ? siteConfig.url.slice(0, -1)
     : siteConfig.url;
+
+  const [blogs, articles, tutorials] = await Promise.all([
+    getContentByType("blog"),
+    getContentByType("articles"),
+    getContentByType("tutorials"),
+  ]);
+
   const allContent = [
-    ...getContentByType("blog").map((item) => ({ ...item, type: "blog" })),
-    ...getContentByType("articles").map((item) => ({
+    ...blogs.map((item) => ({ ...item, type: "blog" as const })),
+    ...articles.map((item) => ({
       ...item,
-      type: "articles",
+      type: "articles" as const,
     })),
-    ...getContentByType("tutorials").map((item) => ({
+    ...tutorials.map((item) => ({
       ...item,
-      type: "tutorials",
+      type: "tutorials" as const,
     })),
   ].sort((a, b) => {
     if (a.date && b.date) {

@@ -17,7 +17,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getContentItem("tutorials", slug);
+  const post = await getContentItem("tutorials", slug);
 
   if (!post) {
     notFound();
@@ -57,7 +57,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const posts = getContentByType("tutorials");
+  const posts = await getContentByType("tutorials");
   return posts.map((post) => ({
     slug: post.slug,
   }));
@@ -69,7 +69,7 @@ export default async function TutorialPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getContentItem("tutorials", slug);
+  const post = await getContentItem("tutorials", slug);
 
   if (!post) {
     notFound();

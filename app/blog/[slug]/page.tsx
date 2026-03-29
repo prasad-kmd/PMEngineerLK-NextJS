@@ -11,7 +11,7 @@ import { TOC } from "@/components/toc";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 export async function generateStaticParams() {
-  const blogPosts = getContentByType("blog");
+  const blogPosts = await getContentByType("blog");
   return blogPosts.map((post) => ({
     slug: post.slug,
   }));
@@ -23,7 +23,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getContentItem("blog", slug);
+  const post = await getContentItem("blog", slug);
 
   if (!post) {
     return {};
@@ -41,7 +41,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getContentItem("blog", slug);
+  const post = await getContentItem("blog", slug);
 
   if (!post) {
     notFound();

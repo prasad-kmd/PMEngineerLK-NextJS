@@ -31,8 +31,8 @@ export const metadata: Metadata = {
   },
 }
 
-export default function BlogPage() {
-  const blogPosts = getContentByType("blog")
+export default async function BlogPage() {
+  const blogPosts = await getContentByType("blog")
   const hasFinalPost = blogPosts.some((post) => post.final)
 
   return (

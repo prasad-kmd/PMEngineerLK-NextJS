@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { marked } from "marked";
+import { getDatabaseEntries, getPageBySlug, getPageContent } from "./notion";
 
 // Custom renderer to add IDs to headings for TOC
 const renderer = new marked.Renderer();
@@ -196,9 +197,45 @@ function extractFirstImage(
 
 const contentDirectory = path.join(process.cwd(), "content");
 
-export function getContentByType(
+const notionDatabaseIds: Record<string, string | undefined> = {
+  blog: process.env.NOTION_BLOG_ID,
+  articles: process.env.NOTION_ARTICLES_ID,
+  projects: process.env.NOTION_PROJECTS_ID,
+  tutorials: process.env.NOTION_TUTORIALS_ID,
+  wiki: process.env.NOTION_WIKI_ID,
+};
+
+export async function getContentByType(
   type: "blog" | "articles" | "projects" | "tutorials" | "wiki" | "quizzes",
-): ContentItem[] {
+): Promise<ContentItem[]> {
+  const databaseId = notionDatabaseIds[type];
+
+  // If we have a Notion database ID, fetch from Notion
+  if (databaseId) {
+    try {
+      const entries = await getDatabaseEntries(databaseId);
+      return entries.map((entry) => ({
+        slug: entry.slug,
+        title: entry.title,
+        date: entry.date,
+        description: entry.description,
+        content: "", // Content will be fetched individually
+        rawContent: "",
+        final: entry.final,
+        firstImage: undefined, // First image will be extracted from content
+        readingTime: 0,
+        technical: entry.technical,
+        category: entry.category,
+        tags: entry.tags,
+        aiAssisted: entry.aiAssisted,
+        type: type,
+      }));
+    } catch (error) {
+      console.error(`Error fetching ${type} from Notion:`, error);
+      // Fallback to Git-based CMS if Notion fails
+    }
+  }
+
   const typeDirectory = path.join(contentDirectory, type);
 
   // Create directory if it doesn't exist
@@ -279,10 +316,51 @@ export function getContentByType(
   return items;
 }
 
-export function getContentItem(
+export async function getContentItem(
   type: "blog" | "articles" | "projects" | "tutorials" | "wiki" | "quizzes",
   slug: string,
-): ContentItem | null {
+): Promise<ContentItem | null> {
+  const databaseId = notionDatabaseIds[type];
+
+  if (databaseId) {
+    try {
+      const entry = await getPageBySlug(databaseId, slug);
+      if (entry) {
+        const content = await getPageContent(entry.id);
+
+        // Protect display math
+        const protectedContent = content.replace(
+          /\$\$\s*([\s\S]*?)\s*\$\$/g,
+          (match, math) => {
+            return `\n\n<div class="math-display">$$${math.trim()}$$</div>\n\n`;
+          },
+        );
+
+        const htmlContent = marked(protectedContent) as string;
+        const firstImage = extractFirstImage(content, true);
+
+        return {
+          slug: entry.slug,
+          title: entry.title,
+          date: entry.date,
+          description: entry.description,
+          content: injectQuiz(injectAlerts(injectHeadingIds(htmlContent))),
+          rawContent: content,
+          final: entry.final,
+          firstImage,
+          readingTime: calculateReadingTime(content),
+          technical: entry.technical,
+          category: entry.category,
+          tags: entry.tags,
+          aiAssisted: entry.aiAssisted,
+          type: type,
+        };
+      }
+    } catch (error) {
+      console.error(`Error fetching ${type} page by slug from Notion:`, error);
+    }
+  }
+
   const typeDirectory = path.join(contentDirectory, type);
 
   // Try .md first, then .html

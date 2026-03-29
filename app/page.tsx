@@ -6,11 +6,13 @@ import { getContentByType } from "@/lib/content"
 import { Calendar, ArrowRight, Calculator, Sigma, Edit3, Code2 } from "lucide-react"
 import Image from "next/image"
 
-export default function HomePage() {
-  const blogs = getContentByType("blog")
-  const articles = getContentByType("articles")
-  const projects = getContentByType("projects")
-  const tutorials = getContentByType("tutorials")
+export default async function HomePage() {
+  const [blogs, articles, projects, tutorials] = await Promise.all([
+    getContentByType("blog"),
+    getContentByType("articles"),
+    getContentByType("projects"),
+    getContentByType("tutorials"),
+  ])
 
   const blogCount = blogs.length
   const articlesCount = articles.length

@@ -30,8 +30,8 @@ export const metadata: Metadata = {
   },
 }
 
-export default function TutorialsPage() {
-  const tutorials = getContentByType("tutorials")
+export default async function TutorialsPage() {
+  const tutorials = await getContentByType("tutorials")
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 tutorials_page img_grad_pm">
