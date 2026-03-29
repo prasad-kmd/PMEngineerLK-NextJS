@@ -102,3 +102,23 @@ If you encounter issues and need to revert to the Git-based system:
 - **Images:** Use Notion's "Image" block. The converter will handle them.
 - **Math:** Use Notion's inline or block equations. They are compatible with the site's rendering engine.
 - **Quizzes:** You can still embed quizzes by adding the `[quiz] { JSON } [/quiz]` block directly in the Notion page as a text block.
+
+---
+
+## **6. Troubleshooting**
+
+### **"Could not find property with name or id: Status"**
+This error occurs if your Notion database is missing a property called exactly **"Status"**.
+- Ensure the property name is **"Status"** (case-sensitive).
+- Ensure the property type is **Status**.
+- The site now handles missing properties gracefully, but without the "Status" property, all entries in the database will be fetched (no "Published" filtering).
+
+### **"Could not find sort property with name or id: Date"**
+Similar to the Status error, ensure you have a property named **"Date"** of type **Date**.
+- If missing, the site will fetch entries without specific sorting.
+
+### **Content not appearing**
+1. Check if the entry is set to **"Published"** in the Status property.
+2. Verify that you have **shared the database** with the integration (see Section 1B).
+3. Ensure the **Database ID** in your environment variables is correct.
+4. If you have just updated Notion, there might be a short delay, or the build cache (if using `p-memoize`) might need to be cleared by a fresh deployment.

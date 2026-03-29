@@ -16,8 +16,9 @@ A suite of over 30+ interactive tools for electronics, mechanical engineering, m
 - **Productivity**: Markdown Editor, User Persona Creator, Resume Creator, Color Contrast Checker.
 
 ### 📚 Content Management System
-- **File-Based**: Simply add `.md` or `.html` files to the `content/` directory.
-- **Auto-Generation**: Pages for Blog, Articles, Projects, Wiki, and Tutorials are automatically generated based on the file system.
+- **Hybrid CMS**: Supports both **Notion-based** content (via official API) and **File-based** content (Markdown/HTML).
+- **Notion Integration**: Fetch and render content directly from Notion databases with auto-markdown conversion.
+- **Auto-Generation**: Pages for Blog, Articles, Projects, Wiki, and Tutorials are automatically generated from either source.
 - **Interactive Quizzes**: Embed assessments directly into content using a custom `[quiz]` syntax.
 - **Technical Support**: Native support for KaTeX (math), Highlight.js (syntax highlighting), and Chart.js (data viz).
 
@@ -137,9 +138,11 @@ technical: "Intermediate"
 ## 🔧 Troubleshooting
 
 ### Content Not Showing
-- Verify file extension is `.md` or `.html`.
+- Verify file extension is `.md` or `.html` (if using file-based CMS).
 - Check if the folder exists in `content/`.
 - Ensure valid YAML frontmatter.
+- If using **Notion CMS**, verify `NOTION_AUTH_TOKEN` and Database IDs are set in environment variables.
+- Ensure the Notion page status is set to **"Published"**.
 
 ### Math Not Rendering
 - Check syntax (`$` for inline, `$$` for block).
