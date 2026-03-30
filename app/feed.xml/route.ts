@@ -1,4 +1,4 @@
-export const revalidate = 60;
+export const revalidate = 3600; // Optimized for Vercel Hobby plan ISR limits
 import { getContentByType } from "@/lib/content";
 import { siteConfig } from "@/lib/config";
 

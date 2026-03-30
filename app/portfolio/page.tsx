@@ -1,4 +1,4 @@
-export const revalidate = 60;
+export const revalidate = 3600; // Optimized for Vercel Hobby plan ISR limits
 import type { Metadata } from "next"
 import Image from "next/image"
 import {

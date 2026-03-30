@@ -43,7 +43,10 @@ const getDatabaseProperties = (databaseId: string) =>
   unstable_cache(
     () => getDatabasePropertiesInternal(databaseId),
     [`db-props-${databaseId}`],
-    { revalidate: 3600, tags: ['notion-schema'] }
+    {
+      revalidate: 3600, // 1 hour - Optimized for Vercel Hobby plan ISR limits
+      tags: ['notion-schema']
+    }
   )();
 
 async function getDatabaseEntriesInternal(databaseId: string): Promise<NotionPageMetadata[]> {
@@ -212,19 +215,28 @@ export const getDatabaseEntries = (databaseId: string) =>
   unstable_cache(
     () => getDatabaseEntriesInternal(databaseId),
     [`entries-${databaseId}`],
-    { revalidate: 60, tags: ['notion-content'] }
+    {
+      revalidate: 3600, // 1 hour - Optimized for Vercel Hobby plan ISR limits
+      tags: ['notion-content']
+    }
   )();
 
 export const getPageContent = (pageId: string) =>
   unstable_cache(
     () => getPageContentInternal(pageId),
     [`content-${pageId}`],
-    { revalidate: 60, tags: ['notion-content'] }
+    {
+      revalidate: 3600, // 1 hour - Optimized for Vercel Hobby plan ISR limits
+      tags: ['notion-content']
+    }
   )();
 
 export const getPageBySlug = (databaseId: string, slug: string) =>
   unstable_cache(
     () => getPageBySlugInternal(databaseId, slug),
     [`page-${databaseId}-${slug}`],
-    { revalidate: 60, tags: ['notion-content'] }
+    {
+      revalidate: 3600, // 1 hour - Optimized for Vercel Hobby plan ISR limits
+      tags: ['notion-content']
+    }
   )();

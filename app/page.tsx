@@ -1,4 +1,4 @@
-export const revalidate = 60;
+export const revalidate = 3600; // Optimized for Vercel Hobby plan ISR limits
 import Link from "next/link"
 import { FileText, BookOpen, GitBranch, Newspaper } from "lucide-react"
 import FeaturedHero, { type HeroItem } from "@/components/featured-hero"

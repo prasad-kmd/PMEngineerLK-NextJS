@@ -64,13 +64,14 @@ NOTION_WIKI_ID=your_wiki_database_id
 
 - **Data Fetching:** The site now uses `@notionhq/client` to fetch content.
 - **Markdown Conversion:** We use `notion-to-md` to convert Notion blocks into Markdown, which is then rendered using the existing `marked` setup.
-- **Caching & ISR:**
-    - **Server Cache:** Notion API responses are cached for 60 seconds using Next.js `unstable_cache`.
-    - **ISR:** All content pages are configured with **Incremental Static Regeneration (ISR)** set to 60 seconds (`export const revalidate = 60`).
+- **Caching & ISR (Optimized for Vercel Hobby Plan):**
+    - **Server Cache:** Notion API responses are cached for **1 hour (3600s)** using Next.js `unstable_cache`.
+    - **ISR:** All content pages are configured with **Incremental Static Regeneration (ISR)** set to **1 hour** (`export const revalidate = 3600`). This is done to stay within the ISR Read/Write limits of the Vercel Hobby plan.
     - **On-Demand Rendering:** The site is configured with `dynamicParams = true`, meaning new pages added to Notion will be generated on-the-fly when first visited.
     - **What this means:**
-        - **Updates:** When you update content in Notion, the changes will appear on the live site within approximately **one minute**.
-        - **New Pages:** When you add a new page to Notion, it becomes available immediately via its URL, and will appear in the listing pages (like `/blog`) after the 60-second cache expires and the page revalidates.
+        - **Updates:** When you update content in Notion, the changes will appear on the live site within approximately **1 hour** (after the next visitor triggers a revalidation).
+        - **New Pages:** When you add a new page to Notion, it becomes available immediately via its URL, and will appear in the listing pages (like `/blog`) after the 1-hour cache expires and the page revalidates.
+        - **Immediate Update:** If you need an update to appear immediately, you can trigger a manual redeployment in the Vercel dashboard.
 - **Fallback:** If a Notion Database ID is missing or the API call fails, the system is designed to gracefully fall back to reading files from the `content/` directory.
 
 ---
