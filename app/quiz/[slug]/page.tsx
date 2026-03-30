@@ -1,4 +1,5 @@
 export const revalidate = 60;
+export const dynamicParams = true;
 import { notFound } from "next/navigation";
 import { getContentByType, getContentItem } from "@/lib/content";
 import { ArrowLeft, Clock, Tag } from "lucide-react";

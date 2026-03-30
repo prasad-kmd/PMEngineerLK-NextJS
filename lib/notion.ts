@@ -1,6 +1,6 @@
 import { Client } from "@notionhq/client";
 import { NotionToMarkdown } from "notion-to-md";
-import pMemoize from "p-memoize";
+import { unstable_cache } from "next/cache";
 
 const getNotionClient = () => {
   return new Client({
@@ -27,7 +27,7 @@ export interface NotionPageMetadata {
 }
 
 // Helper to check if a database has certain properties
-const getDatabaseProperties = pMemoize(async (databaseId: string) => {
+const getDatabasePropertiesInternal = async (databaseId: string) => {
   if (!databaseId || !process.env.NOTION_AUTH_TOKEN) return {};
   try {
     const notion = getNotionClient();
@@ -37,9 +37,14 @@ const getDatabaseProperties = pMemoize(async (databaseId: string) => {
     console.error(`Error retrieving database ${databaseId} properties:`, error);
     return {};
   }
-}, {
-  maxAge: 300000, // 5 minutes for schema info
-});
+};
+
+const getDatabaseProperties = (databaseId: string) =>
+  unstable_cache(
+    () => getDatabasePropertiesInternal(databaseId),
+    [`db-props-${databaseId}`],
+    { revalidate: 3600, tags: ['notion-schema'] }
+  )();
 
 async function getDatabaseEntriesInternal(databaseId: string): Promise<NotionPageMetadata[]> {
   if (!databaseId || !process.env.NOTION_AUTH_TOKEN) return [];
@@ -203,13 +208,23 @@ async function getPageBySlugInternal(databaseId: string, slug: string): Promise<
   }
 }
 
-export const getDatabaseEntries = pMemoize(getDatabaseEntriesInternal, {
-  maxAge: 60000, // 1 minute
-});
-export const getPageContent = pMemoize(getPageContentInternal, {
-  maxAge: 60000, // 1 minute
-});
-export const getPageBySlug = pMemoize(getPageBySlugInternal, {
-  cacheKey: ([databaseId, slug]) => `${databaseId}-${slug}`,
-  maxAge: 60000, // 1 minute
-});
+export const getDatabaseEntries = (databaseId: string) =>
+  unstable_cache(
+    () => getDatabaseEntriesInternal(databaseId),
+    [`entries-${databaseId}`],
+    { revalidate: 60, tags: ['notion-content'] }
+  )();
+
+export const getPageContent = (pageId: string) =>
+  unstable_cache(
+    () => getPageContentInternal(pageId),
+    [`content-${pageId}`],
+    { revalidate: 60, tags: ['notion-content'] }
+  )();
+
+export const getPageBySlug = (databaseId: string, slug: string) =>
+  unstable_cache(
+    () => getPageBySlugInternal(databaseId, slug),
+    [`page-${databaseId}-${slug}`],
+    { revalidate: 60, tags: ['notion-content'] }
+  )();
