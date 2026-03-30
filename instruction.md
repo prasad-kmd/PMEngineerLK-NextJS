@@ -64,7 +64,10 @@ NOTION_WIKI_ID=your_wiki_database_id
 
 - **Data Fetching:** The site now uses `@notionhq/client` to fetch content.
 - **Markdown Conversion:** We use `notion-to-md` to convert Notion blocks into Markdown, which is then rendered using the existing `marked` setup.
-- **Caching:** In-memory caching is implemented using `p-memoize` to reduce API calls during a single build process or server session.
+- **Caching & ISR:**
+    - **In-memory cache:** Notion API responses are cached for 60 seconds using `p-memoize`.
+    - **ISR:** All content pages are configured with **Incremental Static Regeneration (ISR)** set to 60 seconds (`export const revalidate = 60`).
+    - **What this means:** When you update content in Notion, the changes will appear on the live site within approximately **one minute** after the next visitor arrives, without needing a manual redeployment.
 - **Fallback:** If a Notion Database ID is missing or the API call fails, the system is designed to gracefully fall back to reading files from the `content/` directory.
 
 ---

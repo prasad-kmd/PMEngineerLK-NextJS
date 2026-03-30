@@ -1,3 +1,4 @@
+export const revalidate = 60;
 import { getContentByType } from "@/lib/content"
 import { QuizList } from "@/components/quiz-library/quiz-list"
 

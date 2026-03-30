@@ -37,6 +37,8 @@ const getDatabaseProperties = pMemoize(async (databaseId: string) => {
     console.error(`Error retrieving database ${databaseId} properties:`, error);
     return {};
   }
+}, {
+  maxAge: 300000, // 5 minutes for schema info
 });
 
 async function getDatabaseEntriesInternal(databaseId: string): Promise<NotionPageMetadata[]> {
@@ -141,7 +143,6 @@ async function getPageBySlugInternal(databaseId: string, slug: string): Promise<
 
   if (!("Slug" in dbProps)) {
     console.warn(`Database ${databaseId} is missing "Slug" property.`);
-    // We can't query by slug if the property is missing
     return null;
   }
 
@@ -202,8 +203,13 @@ async function getPageBySlugInternal(databaseId: string, slug: string): Promise<
   }
 }
 
-export const getDatabaseEntries = pMemoize(getDatabaseEntriesInternal);
-export const getPageContent = pMemoize(getPageContentInternal);
+export const getDatabaseEntries = pMemoize(getDatabaseEntriesInternal, {
+  maxAge: 60000, // 1 minute
+});
+export const getPageContent = pMemoize(getPageContentInternal, {
+  maxAge: 60000, // 1 minute
+});
 export const getPageBySlug = pMemoize(getPageBySlugInternal, {
   cacheKey: ([databaseId, slug]) => `${databaseId}-${slug}`,
+  maxAge: 60000, // 1 minute
 });

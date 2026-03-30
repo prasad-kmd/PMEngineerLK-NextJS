@@ -1,3 +1,4 @@
+export const revalidate = 60;
 import { notFound } from "next/navigation";
 import { getContentByType, getContentItem } from "@/lib/content";
 import { ArrowLeft, Clock, Tag } from "lucide-react";

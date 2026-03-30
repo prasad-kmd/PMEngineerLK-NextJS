@@ -1,3 +1,4 @@
+export const revalidate = 60;
 import Link from "next/link"
 import { FileText, BookOpen, GitBranch, Newspaper } from "lucide-react"
 import FeaturedHero, { type HeroItem } from "@/components/featured-hero"
