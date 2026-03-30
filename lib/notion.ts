@@ -32,7 +32,7 @@ const getDatabaseProperties = pMemoize(async (databaseId: string) => {
   try {
     const notion = getNotionClient();
     const db = await notion.databases.retrieve({ database_id: databaseId });
-    return db.properties || {};
+    return (db as any).properties || {};
   } catch (error) {
     console.error(`Error retrieving database ${databaseId} properties:`, error);
     return {};
@@ -47,6 +47,9 @@ async function getDatabaseEntriesInternal(databaseId: string): Promise<NotionPag
 
   const hasStatus = "Status" in dbProps;
   const hasDate = "Date" in dbProps;
+
+  // Find the property name for the title from database schema
+  const titlePropName = Object.keys(dbProps).find(key => dbProps[key].type === "title") || "Title";
 
   const queryParams: any = {
     database_id: databaseId,
@@ -80,8 +83,8 @@ async function getDatabaseEntriesInternal(databaseId: string): Promise<NotionPag
       const getProp = (name: string, type: string) => {
         const prop = props[name];
         if (!prop) return undefined;
-        if (type === "title") return prop.title?.[0]?.plain_text || "";
-        if (type === "rich_text") return prop.rich_text?.[0]?.plain_text || "";
+        if (type === "title") return prop.title?.map((t: any) => t.plain_text).join("") || "";
+        if (type === "rich_text") return prop.rich_text?.map((t: any) => t.plain_text).join("") || "";
         if (type === "date") return prop.date?.start;
         if (type === "status") return prop.status?.name;
         if (type === "multi_select") return prop.multi_select?.map((opt: any) => opt.name);
@@ -90,10 +93,17 @@ async function getDatabaseEntriesInternal(databaseId: string): Promise<NotionPag
         return undefined;
       };
 
+      // Try to find the title property name if the one from dbProps didn't work
+      let actualTitlePropName = titlePropName;
+      if (!props[actualTitlePropName] || props[actualTitlePropName].type !== "title") {
+        const found = Object.keys(props).find(key => props[key].type === "title");
+        if (found) actualTitlePropName = found;
+      }
+
       return {
         id: page.id,
         slug: getProp("Slug", "rich_text") || page.id,
-        title: getProp("Title", "title") || "Untitled",
+        title: getProp(actualTitlePropName, "title") || "Untitled",
         date: getProp("Date", "date"),
         description: getProp("Description", "rich_text"),
         status: getProp("Status", "status"),
@@ -131,8 +141,11 @@ async function getPageBySlugInternal(databaseId: string, slug: string): Promise<
 
   if (!("Slug" in dbProps)) {
     console.warn(`Database ${databaseId} is missing "Slug" property.`);
+    // We can't query by slug if the property is missing
     return null;
   }
+
+  const titlePropName = Object.keys(dbProps).find(key => dbProps[key].type === "title") || "Title";
 
   try {
     const response = await notion.databases.query({
@@ -153,8 +166,8 @@ async function getPageBySlugInternal(databaseId: string, slug: string): Promise<
     const getProp = (name: string, type: string) => {
       const prop = props[name];
       if (!prop) return undefined;
-      if (type === "title") return prop.title?.[0]?.plain_text || "";
-      if (type === "rich_text") return prop.rich_text?.[0]?.plain_text || "";
+      if (type === "title") return prop.title?.map((t: any) => t.plain_text).join("") || "";
+      if (type === "rich_text") return prop.rich_text?.map((t: any) => t.plain_text).join("") || "";
       if (type === "date") return prop.date?.start;
       if (type === "status") return prop.status?.name;
       if (type === "multi_select") return prop.multi_select?.map((opt: any) => opt.name);
@@ -163,10 +176,17 @@ async function getPageBySlugInternal(databaseId: string, slug: string): Promise<
       return undefined;
     };
 
+    // Try to find the title property name if the one from dbProps didn't work
+    let actualTitlePropName = titlePropName;
+    if (!props[actualTitlePropName] || props[actualTitlePropName].type !== "title") {
+      const found = Object.keys(props).find(key => props[key].type === "title");
+      if (found) actualTitlePropName = found;
+    }
+
     return {
       id: page.id,
       slug: getProp("Slug", "rich_text") || page.id,
-      title: getProp("Title", "title") || "Untitled",
+      title: getProp(actualTitlePropName, "title") || "Untitled",
       date: getProp("Date", "date"),
       description: getProp("Description", "rich_text"),
       status: getProp("Status", "status"),

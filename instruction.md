@@ -20,7 +20,7 @@ Each database should have the following properties:
 
 | Property Name | Property Type | Description |
 | :--- | :--- | :--- |
-| **Title** | Title | The display name of the content item. |
+| **Name** (or **Title**) | Title | The display name of the content item (automatically detected). |
 | **Slug** | Text | The URL slug (e.g., `my-awesome-post`). |
 | **Date** | Date | Publication date. |
 | **Status** | Status | Set to `Published` for the item to appear on the site. |
