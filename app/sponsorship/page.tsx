@@ -62,6 +62,8 @@ const tiers = [
   },
 ];
 
+import { siteConfig } from "@/lib/config";
+
 export default function SponsorshipPage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
@@ -128,8 +130,15 @@ export default function SponsorshipPage() {
                 <Button
                   className="w-full h-11 text-base font-semibold"
                   variant={tier.highlight ? "default" : "outline"}
+                  asChild
                 >
-                  Sponsor via GitHub
+                  <a
+                    href={siteConfig.socialLinks.sponsorship}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Sponsor via GitHub
+                  </a>
                 </Button>
               </CardFooter>
             </Card>

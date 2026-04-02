@@ -2,20 +2,24 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Currently, the following versions of the PrasadM Engineering Blogfolio are supported with security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| 1.0.x   | :white_check_mark: |
+| < 1.0   | :x:                |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+If you discover a security vulnerability within this project, please report it privately.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+**How to report:**
+Please send an email to the project maintainer via the [Contact Page](https://prasadm.vercel.app/contact) or open a private security advisory on GitHub if applicable.
+
+**What to expect:**
+
+- **Response time**: You can expect a response within 48 hours.
+- **Updates**: We will provide periodic updates until the vulnerability is resolved.
+- **Disclosure**: Vulnerabilities will be publicly disclosed only after a patch is available and sufficient time has passed for users to update.
+
+Thank you for helping keep this project secure!

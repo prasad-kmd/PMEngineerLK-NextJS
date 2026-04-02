@@ -33,11 +33,14 @@ export const metadata: Metadata = {
   description,
 };
 
+import { siteConfig } from "@/lib/config";
+import { SimpleRepo, SimpleUser } from "@/types/github";
+
 export default async function OpenSourcePage() {
   // Fetch GitHub data
-  let user = null;
-  let repos = [];
-  let error = null;
+  let user: SimpleUser | null = null;
+  let repos: SimpleRepo[] = [];
+  let error: string | null = null;
 
   try {
     [user, repos] = await Promise.all([
@@ -265,9 +268,7 @@ export default async function OpenSourcePage() {
             projects. Check out the contribution guides in each repository.
           </p>
           <Button variant="default" asChild>
-            <SafeLink
-              href={user?.profileUrl || "https://github.com/prasad-kmd"}
-            >
+            <SafeLink href={user?.profileUrl || siteConfig.socialLinks.github}>
               Follow me on GitHub
             </SafeLink>
           </Button>

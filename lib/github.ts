@@ -5,8 +5,10 @@ import type {
   SimpleRepo,
 } from "@/types/github";
 
+import { siteConfig } from "./config";
+
 const GITHUB_API_BASE = "https://api.github.com";
-const GITHUB_USERNAME = "prasad-kmd";
+const GITHUB_USERNAME = siteConfig.githubUsername;
 
 // Get GitHub token from environment variable (optional, increases rate limit)
 const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
