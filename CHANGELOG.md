@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0] - 2025-06-05
+
+### Fixed
+- **System Monitor Performance**: Resolved Vercel runtime timeouts by offloading health checks to the client-side and implementing robust timeout protection for Notion, Supabase, and PostHog API calls.
+- **Cloudflare Turnstile Integration**: Fixed the "Function not implemented" error in the contact form and properly integrated verification token handling to prevent bot submissions.
+
 ## [1.7.0] - 2025-05-29
 
 ### Added

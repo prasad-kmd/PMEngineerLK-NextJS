@@ -70,8 +70,24 @@ if (!parsed.success) {
   );
   // In development, we might want to continue even if some are missing
   if (process.env.NODE_ENV === "production") {
-    // Only throw if critical vars are missing and we are in production
-    // For now, let's just log to avoid breaking build in CI environments without secrets
+    const criticalVars = [
+      "NEXT_PUBLIC_TURNSTILE_SITE_KEY",
+      "TURNSTILE_SECRET_KEY",
+      "DATABASE_URL",
+      "BETTER_AUTH_SECRET",
+    ];
+
+    const missingCritical = criticalVars.filter(
+      (v) => !process.env[v] || process.env[v] === "",
+    );
+
+    if (missingCritical.length > 0) {
+      console.error(
+        `❌ Missing critical environment variables for production: ${missingCritical.join(", ")}`,
+      );
+      // In production, we should probably fail fast if these are missing
+      // But we will just log for now to avoid breaking deployments if they are set via dashboard
+    }
   }
 }
 

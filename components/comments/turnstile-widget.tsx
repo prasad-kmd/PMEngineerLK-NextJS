@@ -28,8 +28,30 @@ export const TurnstileWidget = forwardRef<
     },
   }));
 
-  const siteKey =
-    env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA";
+  const siteKey = env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  if (!siteKey) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn("Cloudflare Turnstile Site Key is missing. Using test key.");
+      return (
+        <div className="flex justify-start my-2 min-h-[65px]">
+          <Turnstile
+            ref={turnstileRef}
+            siteKey="1x00000000000000000000AA"
+            injectScript={true}
+            options={{
+              theme: (resolvedTheme as "light" | "dark") || "auto",
+              size: "normal",
+            }}
+            onSuccess={onVerify}
+            onError={onError}
+            onExpire={onExpire}
+          />
+        </div>
+      );
+    }
+    return null;
+  }
 
   return (
     <div className="flex justify-start my-2 min-h-[65px]">

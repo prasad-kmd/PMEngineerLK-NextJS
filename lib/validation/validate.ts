@@ -20,8 +20,16 @@ const contactSchema = z.object({
 });
 
 export async function verifyTurnstile(token: string): Promise<boolean> {
-  const secretKey =
-    env.TURNSTILE_SECRET_KEY || "1x0000000000000000000000000000000AA";
+  let secretKey = env.TURNSTILE_SECRET_KEY;
+
+  if (!secretKey) {
+    if (process.env.NODE_ENV === "development") {
+      secretKey = "1x0000000000000000000000000000000AA";
+    } else {
+      console.error("Cloudflare Turnstile Secret Key is missing in production");
+      return false;
+    }
+  }
 
   try {
     const verifyRes = await fetch(
