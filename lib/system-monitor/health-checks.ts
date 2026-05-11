@@ -4,13 +4,31 @@ import { user } from "../db/schema";
 import { sql } from "drizzle-orm";
 import { determineStatus, SystemStatus } from "./status-utils";
 
+async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  errorMessage: string,
+): Promise<T> {
+  let timeoutId: NodeJS.Timeout;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error(errorMessage)), timeoutMs);
+  });
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    if (timeoutId) clearTimeout(timeoutId);
+  });
+}
+
 export async function checkNotionHealth() {
   const start = performance.now();
   try {
     // Lightweight call: fetch a single database metadata
-    await notion.databases.retrieve({
-      database_id: DATABASE_IDS.blog,
-    });
+    await withTimeout(
+      notion.databases.retrieve({
+        database_id: DATABASE_IDS.blog,
+      }),
+      5000,
+      "Notion API timeout",
+    );
 
     const latency = performance.now() - start;
 
@@ -42,9 +60,11 @@ export async function checkSupabaseHealth() {
   const start = performance.now();
   try {
     // Simple query to check DB connectivity
-    const userCountResult = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(user);
+    const userCountResult = await withTimeout(
+      db.select({ count: sql<number>`count(*)` }).from(user),
+      5000,
+      "Supabase query timeout",
+    );
     const totalUsers = Number(userCountResult[0]?.count || 0);
 
     const latency = performance.now() - start;
@@ -52,8 +72,10 @@ export async function checkSupabaseHealth() {
     // Attempt to get DB size - might fail on some permissions
     let dbSize = null;
     try {
-      const sizeResult = await db.execute(
-        sql`SELECT pg_database_size(current_database())`,
+      const sizeResult = await withTimeout(
+        db.execute(sql`SELECT pg_database_size(current_database())`),
+        3000,
+        "DB size fetch timeout",
       );
       dbSize = Number(
         (sizeResult as unknown as Array<{ pg_database_size: number }>)[0]
@@ -66,8 +88,10 @@ export async function checkSupabaseHealth() {
     // Active connections
     let activeConnections = null;
     try {
-      const connResult = await db.execute(
-        sql`SELECT count(*) as count FROM pg_stat_activity`,
+      const connResult = await withTimeout(
+        db.execute(sql`SELECT count(*) as count FROM pg_stat_activity`),
+        3000,
+        "Active connections fetch timeout",
       );
       activeConnections = Number(
         (connResult as unknown as Array<{ count: number }>)[0]?.count || 0,
@@ -116,12 +140,16 @@ export async function checkPostHogHealth() {
   }
 
   try {
-    const response = await fetch(`${host}/api/projects/${projectId}/`, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-      next: { revalidate: 0 },
-    });
+    const response = await withTimeout(
+      fetch(`${host}/api/projects/${projectId}/`, {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+        next: { revalidate: 0 },
+      }),
+      5000,
+      "PostHog API timeout",
+    );
 
     if (!response.ok) {
       throw new Error(`PostHog API returned ${response.status}`);

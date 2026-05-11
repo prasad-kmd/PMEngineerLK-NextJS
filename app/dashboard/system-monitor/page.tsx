@@ -16,18 +16,15 @@ import { TechnicalBackground } from "@/components/technical-background";
 export default async function SystemMonitorPage() {
   await requireAdmin();
 
-  // Perform initial server-side data fetch
-  const [notion, supabase, posthog, logs] = await Promise.all([
-    checkNotionHealth(),
-    checkSupabaseHealth(),
-    checkPostHogHealth(),
-    db.select().from(systemLogs).orderBy(desc(systemLogs.createdAt)).limit(15),
-  ]);
+  // Fetch only logs on server side to speed up initial load
+  // Health checks will be handled by the client-side component or loaded progressively
+  const logs = await db
+    .select()
+    .from(systemLogs)
+    .orderBy(desc(systemLogs.createdAt))
+    .limit(15);
 
   const initialStatus = {
-    notion,
-    supabase,
-    posthog,
     timestamp: new Date().toISOString(),
   };
 

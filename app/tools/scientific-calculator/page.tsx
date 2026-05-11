@@ -100,7 +100,7 @@ export default function ScientificCalculator() {
                 throw new Error("Invalid characters");
             }
 
-            // eslint-disable-next-line no-eval
+             
             const res = eval(sanitized);
             const resStr = Number.isFinite(res) ? res.toString() : "Error";
 

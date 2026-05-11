@@ -92,11 +92,12 @@ export function SystemMonitorManager({
   );
 
   useEffect(() => {
-    // Only fetch if filter changes, initial data is already provided
-    if (logFilter !== "all") {
+    // Fetch data on mount if status is incomplete, or when filter changes
+    const isIncomplete = !status.notion || !status.supabase || !status.posthog;
+    if (isIncomplete || logFilter !== "all") {
       fetchData();
     }
-  }, [logFilter, fetchData]);
+  }, [logFilter, fetchData, status.notion, status.supabase, status.posthog]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;

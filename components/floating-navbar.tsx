@@ -133,7 +133,7 @@ export function FloatingNavbar({
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <Link
-                  href="/entertainment"
+                  href="https://gsc-m-hub.vercel.app/entertainment"
                   className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors relative group font-sans"
                   aria-label="Entertainment"
                 >

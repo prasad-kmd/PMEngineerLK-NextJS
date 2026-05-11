@@ -34,6 +34,7 @@ export default function ContactForm() {
   );
   const [file, setFile] = useState<File | null>(null);
   const [blockedWords, setBlockedWords] = useState<BlockedWord[]>([]);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const turnstileRef = useRef<TurnstileWidgetRef>(null);
@@ -46,6 +47,7 @@ export default function ContactForm() {
       startTransition(() => {
         setBlockedWords([]);
         setFile(null);
+        setTurnstileToken(null);
       });
     } else if (state?.success === false) {
       if (state.validationError) {
@@ -251,8 +253,11 @@ export default function ContactForm() {
         <div className="flex justify-center py-2">
           <TurnstileWidget
             ref={turnstileRef}
-            onVerify={function (): void {
-              throw new Error("Function not implemented.");
+            onVerify={(token) => setTurnstileToken(token)}
+            onExpire={() => setTurnstileToken(null)}
+            onError={() => {
+              setTurnstileToken(null);
+              toast.error("Security verification failed. Please try again.");
             }}
           />
         </div>
@@ -260,7 +265,7 @@ export default function ContactForm() {
         <Button
           type="submit"
           className="relative h-12 w-full overflow-hidden bg-primary font-semibold text-primary-foreground shadow-lg transition-all hover:shadow-primary/20 active:scale-[0.98]"
-          disabled={isPending}
+          disabled={isPending || !turnstileToken}
         >
           {isPending ? (
             <div className="flex items-center justify-center gap-2">
