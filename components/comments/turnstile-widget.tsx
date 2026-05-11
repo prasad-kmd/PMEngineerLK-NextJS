@@ -50,7 +50,15 @@ export const TurnstileWidget = forwardRef<
         </div>
       );
     }
-    return null;
+    return (
+      <div className="flex flex-col items-center justify-center p-4 my-2 min-h-[65px] rounded-xl border border-destructive/20 bg-destructive/5 text-destructive">
+        <p className="text-xs font-bold">Configuration Error</p>
+        <p className="text-[10px] opacity-70">
+          Turnstile Site Key is missing. Please check your environment
+          variables.
+        </p>
+      </div>
+    );
   }
 
   return (

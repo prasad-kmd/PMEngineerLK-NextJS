@@ -91,4 +91,13 @@ if (!parsed.success) {
   }
 }
 
-export const env = parsed.data || ({} as z.infer<typeof envSchema>);
+export const env = {
+  ...(parsed.data || ({} as z.infer<typeof envSchema>)),
+  // Explicitly map NEXT_PUBLIC variables to ensure they are available on the client
+  // as Next.js replaces these at build time.
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+  NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+  NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+  NEXT_PUBLIC_GITHUB_TOKEN: process.env.NEXT_PUBLIC_GITHUB_TOKEN,
+  NEXT_PUBLIC_GITHUB_USERNAME: process.env.NEXT_PUBLIC_GITHUB_USERNAME,
+};
