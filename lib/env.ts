@@ -1,0 +1,78 @@
+import { z } from "zod";
+
+const envSchema = z.object({
+  // Notion
+  NOTION_AUTH_TOKEN: z.string().optional(),
+  NOTION_BLOG_ID: z.string().optional(),
+  NOTION_ARTICLES_ID: z.string().optional(),
+  NOTION_PROJECTS_ID: z.string().optional(),
+  NOTION_TUTORIALS_ID: z.string().optional(),
+  NOTION_WIKI_ID: z.string().optional(),
+  NOTION_AUTHORS_ID: z.string().optional(),
+
+  // Telegram
+  TELEGRAM_TOKEN: z.string().optional(),
+  TELEGRAM_CHAT_ID: z.string().optional(),
+
+  // GitHub
+  NEXT_PUBLIC_GITHUB_TOKEN: z.string().optional(),
+  NEXT_PUBLIC_GITHUB_USERNAME: z.string().optional(),
+
+  // Site
+  SITE_URL: z.string().url().optional(),
+
+  // Database
+  DATABASE_URL: z.string().optional(),
+
+  // Better Auth
+  BETTER_AUTH_SECRET: z.string().optional(),
+  BETTER_AUTH_URL: z.string().url().optional(),
+
+  // OAuth Providers
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  GITHUB_CLIENT_ID: z.string().optional(),
+  GITHUB_CLIENT_SECRET: z.string().optional(),
+  FACEBOOK_CLIENT_ID: z.string().optional(),
+  FACEBOOK_CLIENT_SECRET: z.string().optional(),
+  NOTION_CLIENT_ID: z.string().optional(),
+  NOTION_CLIENT_SECRET: z.string().optional(),
+  TWITTER_CLIENT_ID: z.string().optional(),
+  TWITTER_CLIENT_SECRET: z.string().optional(),
+  VERCEL_CLIENT_ID: z.string().optional(),
+  VERCEL_CLIENT_SECRET: z.string().optional(),
+  REDDIT_CLIENT_ID: z.string().optional(),
+  REDDIT_CLIENT_SECRET: z.string().optional(),
+
+  // Cloudflare Turnstile
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
+  TURNSTILE_SECRET_KEY: z.string().optional(),
+
+  // PostHog
+  NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
+  NEXT_PUBLIC_POSTHOG_HOST: z.string().optional(),
+  POSTHOG_PERSONAL_API_KEY: z.string().optional(),
+  POSTHOG_PROJECT_ID: z.string().optional(),
+  POSTHOG_API_HOST: z.string().optional(),
+
+  // Node Env
+  NODE_ENV: z
+    .enum(["development", "test", "production"])
+    .default("development"),
+});
+
+const parsed = envSchema.safeParse(process.env);
+
+if (!parsed.success) {
+  console.error(
+    "❌ Invalid environment variables:",
+    JSON.stringify(parsed.error.format(), null, 2),
+  );
+  // In development, we might want to continue even if some are missing
+  if (process.env.NODE_ENV === "production") {
+    // Only throw if critical vars are missing and we are in production
+    // For now, let's just log to avoid breaking build in CI environments without secrets
+  }
+}
+
+export const env = parsed.data || ({} as z.infer<typeof envSchema>);

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getContentByType, getContentItem } from "@/lib/content";
-import { ArrowLeft, Clock, Tag } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ContentRenderer } from "@/components/content-renderer";
 import { ScrollProgress } from "@/components/scroll-progress";
@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 export async function generateStaticParams() {
-  const quizzes = getContentByType("quizzes");
+  const quizzes = await getContentByType("quizzes");
   return quizzes.map((quiz) => ({
     slug: quiz.slug,
   }));
@@ -20,7 +20,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const quiz = getContentItem("quizzes", slug);
+  const quiz = await getContentItem("quizzes", slug);
 
   if (!quiz) {
     return {};
@@ -38,7 +38,7 @@ export default async function QuizPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const quiz = getContentItem("quizzes", slug);
+  const quiz = await getContentItem("quizzes", slug);
 
   if (!quiz) {
     notFound();

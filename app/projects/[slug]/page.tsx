@@ -1,13 +1,19 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getContentByType, getContentItem } from "@/lib/content";
-import { Calendar, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { Calendar } from "lucide-react";
+// import Link from "next/link";
 import { ContentRenderer } from "@/components/content-renderer";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { RelatedContent } from "@/components/related-content";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { CommentsSection } from "@/components/comments/comments-section";
+import { CommentScrollButton } from "@/components/comment-scroll-button";
+import { PageViewTracker } from "@/components/analytics/PageViewTracker";
+import { ViewCounter } from "@/components/content/ViewCounter";
+import { ContentArea } from "@/components/accessibility/ContentArea";
 
 export async function generateMetadata({
   params,
@@ -15,7 +21,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = getContentItem("projects", slug);
+  const project = await getContentItem("projects", slug);
 
   if (!project) {
     return {};
@@ -28,9 +34,9 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const projects = getContentByType("projects");
-  return projects.map((project) => ({
-    slug: project.slug,
+  const posts = await getContentByType("projects");
+  return posts.map((post) => ({
+    slug: post.slug,
   }));
 }
 
@@ -40,7 +46,7 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = getContentItem("projects", slug);
+  const project = await getContentItem("projects", slug);
 
   if (!project) {
     return notFound();
@@ -48,15 +54,24 @@ export default async function ProjectPage({
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 projects_item img_grad_pm">
+      <PageViewTracker
+        contentType="project"
+        slug={project.slug}
+        title={project.title}
+        authorId={project.author}
+      />
       <ScrollProgress />
       <div className="mx-auto max-w-4xl">
-        <Link
-          href="/projects"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground font-local-inter"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Projects
-        </Link>
+        <Breadcrumbs
+          items={[
+            { label: "Projects", href: "/projects" },
+            {
+              label: project.title,
+              href: `/projects/${project.slug}`,
+              active: true,
+            },
+          ]}
+        />
 
         <article>
           <header className="mb-8 border-b border-border pb-8">
@@ -72,22 +87,32 @@ export default async function ProjectPage({
                     month: "long",
                     day: "numeric",
                   })}
+                  <span className="flex items-center gap-1.5 ml-4 border-l border-border pl-4">
+                    <ViewCounter slug={project.slug} contentType="project" />
+                  </span>
                 </div>
-                <BookmarkButton
-                  key={project.slug}
-                  item={{
-                    slug: project.slug,
-                    title: project.title,
-                    date: project.date,
-                    type: "projects",
-                  }}
-                />
+                <div className="flex items-center gap-2">
+                  <CommentScrollButton />
+                  <BookmarkButton
+                    key={project.slug}
+                    item={{
+                      slug: project.slug,
+                      title: project.title,
+                      date: project.date,
+                      type: "projects",
+                    }}
+                  />
+                </div>
               </div>
             )}
           </header>
 
-          <ContentRenderer content={project.content} id={project.slug} />
+          <ContentArea>
+            <ContentRenderer content={project.content} id={project.slug} />
+          </ContentArea>
         </article>
+
+        <CommentsSection pageId={project.id} slug={project.slug} />
 
         <RelatedContent type="projects" currentSlug={project.slug} />
       </div>

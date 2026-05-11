@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, startTransition } from "react";
 import { createPortal } from "react-dom";
-import { X, Calendar, ArrowRight, Trash2, Bookmark, Play } from "lucide-react";
+import { X, Calendar, Trash2, Bookmark } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useBookmarks } from "@/hooks/use-bookmarks";
-import { useEntertainmentBookmarks } from "@/hooks/use-entertainment-bookmarks";
-import { cn } from "@/lib/utils";
+// import { useEntertainmentBookmarks } from "@/hooks/use-entertainment-bookmarks";
+// import { cn } from "@/lib/utils";
 
 interface BookmarksModalProps {
   isOpen: boolean;
@@ -19,7 +19,12 @@ export function BookmarksModal({ isOpen, onClose }: BookmarksModalProps) {
   const router = useRouter();
 
   useEffect(() => {
-    setMounted(true);
+    startTransition(() => {
+      setMounted(true);
+    });
+  }, []);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
@@ -109,9 +114,6 @@ export function BookmarksModal({ isOpen, onClose }: BookmarksModalProps) {
               </div>
             )}
           </div>
-
-          {/* Entertainment Watchlist Section */}
-          <EntertainmentWatchlistSection onItemClick={onClose} />
         </div>
 
         {bookmarks.length > 0 && (
@@ -124,71 +126,5 @@ export function BookmarksModal({ isOpen, onClose }: BookmarksModalProps) {
       </div>
     </div>,
     document.body,
-  );
-}
-
-function EntertainmentWatchlistSection({
-  onItemClick,
-}: {
-  onItemClick: () => void;
-}) {
-  const { bookmarks, removeBookmark } = useEntertainmentBookmarks();
-  const router = useRouter();
-
-  const handleItemClick = (type: string, id: number) => {
-    router.push(`/entertainment/${type}/${id}`);
-    onItemClick();
-  };
-
-  return (
-    <div className="space-y-4">
-      <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground px-2 flex items-center gap-2">
-        <Play className="h-3 w-3" />
-        Entertainment Watchlist
-      </h3>
-      {bookmarks.length === 0 ? (
-        <div className="p-8 text-center text-muted-foreground bg-muted/20 rounded-xl border border-dashed border-border/50">
-          <p className="text-xs">Your watchlist is empty.</p>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {bookmarks.map((item) => (
-            <div
-              key={`${item.type}-${item.id}`}
-              className="group relative flex items-center gap-4 rounded-xl border border-transparent bg-muted/30 p-4 transition-all hover:border-primary/20 hover:bg-muted/50"
-            >
-              <button
-                onClick={() => handleItemClick(item.type, item.id)}
-                className="flex-1 text-left"
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary px-1.5 py-0.5 rounded bg-primary/10">
-                    {item.type}
-                  </span>
-                  {item.release_date && (
-                    <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {new Date(item.release_date).getFullYear()}
-                    </span>
-                  )}
-                </div>
-                <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1 italic">
-                  {item.title}
-                </h4>
-              </button>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => removeBookmark(item.id)}
-                  className="p-2 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
   );
 }

@@ -1,95 +1,98 @@
-"use client"
+"use client";
 
-import { Line, Bar } from "react-chartjs-2"
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
+  AreaChart,
+  Area,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
   Legend,
-  Filler,
-} from "chart.js"
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, Filler)
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
 
 export function IrrigationEfficiencyChart() {
-  const data = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "Traditional Irrigation",
-        data: [45, 48, 42, 50, 46, 44],
-        borderColor: "rgb(239, 68, 68)",
-        backgroundColor: "rgba(239, 68, 68, 0.1)",
-        tension: 0.4,
-      },
-      {
-        label: "Smart Irrigation System",
-        data: [72, 75, 78, 80, 82, 85],
-        borderColor: "rgb(34, 197, 94)",
-        backgroundColor: "rgba(34, 197, 94, 0.1)",
-        tension: 0.4,
-      },
-    ],
-  }
+  const data = [
+    { name: "Jan", traditional: 45, smart: 72 },
+    { name: "Feb", traditional: 48, smart: 75 },
+    { name: "Mar", traditional: 42, smart: 78 },
+    { name: "Apr", traditional: 50, smart: 80 },
+    { name: "May", traditional: 46, smart: 82 },
+    { name: "Jun", traditional: 44, smart: 85 },
+  ];
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Water Usage Efficiency Comparison (%)",
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 100,
-      },
-    },
-  }
-
-  return <Line data={data} options={options} />
+  return (
+    <div className="w-full h-64">
+      <h3 className="text-center text-sm font-semibold mb-2">Water Usage Efficiency Comparison (%)</h3>
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+          <defs>
+            <linearGradient id="colorTrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="rgb(239, 68, 68)" stopOpacity={0.1}/>
+              <stop offset="95%" stopColor="rgb(239, 68, 68)" stopOpacity={0}/>
+            </linearGradient>
+            <linearGradient id="colorSmart" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="rgb(34, 197, 94)" stopOpacity={0.1}/>
+              <stop offset="95%" stopColor="rgb(34, 197, 94)" stopOpacity={0}/>
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} />
+          <XAxis dataKey="name" fontSize={12} />
+          <YAxis domain={[0, 100]} fontSize={12} />
+          <Tooltip />
+          <Legend verticalAlign="top" height={36} />
+          <Area
+            type="monotone"
+            dataKey="traditional"
+            name="Traditional Irrigation"
+            stroke="rgb(239, 68, 68)"
+            strokeWidth={2}
+            fillOpacity={1}
+            fill="url(#colorTrad)"
+          />
+          <Area
+            type="monotone"
+            dataKey="smart"
+            name="Smart Irrigation System"
+            stroke="rgb(34, 197, 94)"
+            strokeWidth={2}
+            fillOpacity={1}
+            fill="url(#colorSmart)"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
 }
 
 export function CostComparisonChart() {
-  const data = {
-    labels: ["Manual Sorting", "Automated System"],
-    datasets: [
-      {
-        label: "Items per Hour",
-        data: [300, 1800],
-        backgroundColor: ["rgba(59, 130, 246, 0.8)", "rgba(34, 197, 94, 0.8)"],
-        borderColor: ["rgb(59, 130, 246)", "rgb(34, 197, 94)"],
-        borderWidth: 2,
-      },
-    ],
-  }
+  const data = [
+    { name: "Manual Sorting", value: 300 },
+    { name: "Automated System", value: 1800 },
+  ];
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: true,
-        text: "Waste Sorting Throughput Comparison",
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
-  }
+  const colors = ["rgba(59, 130, 246, 0.8)", "rgba(34, 197, 94, 0.8)"];
 
-  return <Bar data={data} options={options} />
+  return (
+    <div className="w-full h-64">
+      <h3 className="text-center text-sm font-semibold mb-2">Waste Sorting Throughput Comparison</h3>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} />
+          <XAxis dataKey="name" fontSize={12} />
+          <YAxis fontSize={12} />
+          <Tooltip />
+          <Bar dataKey="value" name="Items per Hour">
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
 }

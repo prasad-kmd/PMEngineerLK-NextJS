@@ -31,8 +31,6 @@ import {
   Search,
   Hash,
   Heart,
-  Trophy,
-  Clapperboard,
 } from "lucide-react";
 
 const title = "Site Directory";
@@ -105,22 +103,6 @@ const categories = [
     id: "engineering",
     description: "Specialized tools and technical knowledge bases.",
     pages: [
-      {
-        name: "Engineering Tools",
-        href: "/tools",
-        icon: Wrench,
-        color: "text-yellow-500",
-        bgColor: "bg-yellow-500/10",
-        description: "Precision utilities for technical workflows.",
-      },
-      {
-        name: "Quiz Library",
-        href: "/quiz",
-        icon: Trophy,
-        color: "text-amber-500",
-        bgColor: "bg-amber-500/10",
-        description: "Interactive engineering knowledge assessments.",
-      },
       {
         name: "Engineering Wiki",
         href: "/wiki",
@@ -303,6 +285,14 @@ const categories = [
         description: "Legal limitations and liabilities.",
       },
       {
+        name: "Licenses",
+        href: "/licenses",
+        icon: FileText,
+        color: "text-violet-500",
+        bgColor: "bg-violet-500/10",
+        description: "Third-party licenses and attributions.",
+      },
+      {
         name: "Accessibility",
         href: "/accessibility",
         icon: Accessibility,
@@ -348,14 +338,6 @@ const categories = [
         color: "text-indigo-500",
         bgColor: "bg-indigo-500/10",
         description: "Find any content across the platform.",
-      },
-      {
-        name: "Entertainment",
-        href: "/entertainment",
-        icon: Clapperboard,
-        color: "text-purple-500",
-        bgColor: "bg-purple-500/10",
-        description: "Cinematic movie and TV show discovery hub.",
       },
       {
         name: "External Feeds",
@@ -445,7 +427,7 @@ export default function PagesOverview() {
                         {page.description}
                       </p>
                     </div>
-                    <div className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    <div className="absolute inset-0 -z-10 rounded-2xl bg-linear-to-br from-primary/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   </Link>
                 ))}
               </div>
@@ -458,7 +440,7 @@ export default function PagesOverview() {
             Can&apos;t find what you&apos;re looking for? Use the Command
             Palette (Cmd + K) anywhere on the site.
           </p>
-          <div className="h-px w-32 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+          <div className="h-px w-32 bg-linear-to-r from-transparent via-primary/30 to-transparent" />
         </div>
       </div>
     </div>

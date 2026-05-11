@@ -16,30 +16,18 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Slider } from "@/components/ui/slider"
-import { 
-  Chart as ChartJS, 
-  CategoryScale, 
-  LinearScale, 
-  PointElement, 
-  LineElement, 
-  Title, 
-  Tooltip, 
-  Legend,
-  Filler
-} from "chart.js"
-import { Line } from "react-chartjs-2"
-import Link from "next/link"
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
+import {
+  AreaChart,
+  Area,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
+  ResponsiveContainer,
   Legend,
-  Filler
-)
+} from "recharts"
+import Link from "next/link"
 
 export default function PidTunerPage() {
   const [kp, setKp] = useState(1.5)
@@ -102,67 +90,6 @@ export default function PidTunerPage() {
 
     return () => clearInterval(interval)
   }, [isRunning, kp, ki, kd, setpoint])
-
-  const chartData = {
-    labels: history.map(h => h.time.toFixed(1)),
-    datasets: [
-      {
-        label: "Current Value",
-        data: history.map(h => h.value),
-        borderColor: "rgb(20, 184, 166)",
-        backgroundColor: "rgba(20, 184, 166, 0.1)",
-        fill: true,
-        tension: 0.4,
-        borderWidth: 2,
-        pointRadius: 0,
-      },
-      {
-        label: "Setpoint",
-        data: history.map(h => h.setpoint),
-        borderColor: "rgba(255, 99, 132, 0.5)",
-        borderDash: [5, 5],
-        borderWidth: 2,
-        pointRadius: 0,
-        fill: false,
-      }
-    ]
-  }
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: {
-      duration: 0
-    },
-    scales: {
-      y: {
-        min: -10,
-        max: 110,
-        grid: {
-          color: "rgba(255, 255, 255, 0.05)"
-        }
-      },
-      x: {
-        grid: {
-          display: false
-        },
-        ticks: {
-          display: false
-        }
-      }
-    },
-    plugins: {
-      legend: {
-        position: "top" as const,
-        labels: {
-          color: "rgba(255, 255, 255, 0.7)",
-          font: {
-            family: "var(--font-google-sans)"
-          }
-        }
-      }
-    }
-  }
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
@@ -283,7 +210,60 @@ export default function PidTunerPage() {
             <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
               <CardContent className="p-6">
                 <div className="h-[400px] w-full">
-                  <Line data={chartData} options={chartOptions} />
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={history} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+                      <defs>
+                        <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="rgb(20, 184, 166)" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="rgb(20, 184, 166)" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" vertical={false} />
+                      <XAxis 
+                        dataKey="time" 
+                        hide 
+                      />
+                      <YAxis 
+                        domain={[-10, 110]} 
+                        stroke="rgba(255, 255, 255, 0.5)" 
+                        fontSize={10} 
+                        tickLine={false} 
+                        axisLine={false} 
+                      />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: '#1f2937', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                        itemStyle={{ fontSize: '12px' }}
+                        labelStyle={{ display: 'none' }}
+                        isAnimationActive={false}
+                      />
+                      <Legend 
+                        verticalAlign="top" 
+                        height={36}
+                        wrapperStyle={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '12px', fontFamily: 'var(--font-google-sans)' }}
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="value" 
+                        name="Current Value" 
+                        stroke="rgb(20, 184, 166)" 
+                        strokeWidth={2} 
+                        fillOpacity={1}
+                        fill="url(#colorValue)"
+                        dot={false} 
+                        isAnimationActive={false}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="setpoint" 
+                        name="Setpoint" 
+                        stroke="rgba(255, 99, 132, 0.5)" 
+                        strokeDasharray="5 5" 
+                        strokeWidth={2} 
+                        dot={false} 
+                        isAnimationActive={false}
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>

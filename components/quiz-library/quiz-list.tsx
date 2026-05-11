@@ -1,48 +1,84 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Search, Filter, CheckCircle2, Trophy, ArrowRight } from "lucide-react"
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { useState, useEffect, startTransition, useCallback } from "react";
+import { Search, Filter, CheckCircle2, Trophy, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+
+interface Quiz {
+  slug: string;
+  title: string;
+  description: string;
+  category?: string;
+}
+
+interface QuizStatus {
+  completed: boolean;
+  score: number;
+  total: number;
+}
 
 interface QuizListProps {
-  quizzes: any[]
+  quizzes: Quiz[];
 }
 
 export function QuizList({ quizzes }: QuizListProps) {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All")
-  const [quizStatuses, setQuizStatuses] = useState<Record<string, any>>({})
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [quizStatuses, setQuizStatuses] = useState<Record<string, QuizStatus>>(
+    {},
+  );
 
-  const loadStatuses = () => {
-    const statuses: Record<string, any> = {}
-    quizzes.forEach(q => {
-      const stored = localStorage.getItem(`quiz_status_${q.slug}`)
+  const loadStatuses = useCallback(() => {
+    const statuses: Record<string, QuizStatus> = {};
+    quizzes.forEach((q) => {
+      const stored = localStorage.getItem(`quiz_status_${q.slug}`);
       if (stored) {
-        statuses[q.slug] = JSON.parse(stored)
+        try {
+          statuses[q.slug] = JSON.parse(stored);
+        } catch (e) {
+          console.error("Failed to parse quiz status", e);
+        }
       }
-    })
-    setQuizStatuses(statuses)
-  }
+    });
+    setQuizStatuses(statuses);
+  }, [quizzes]);
 
   useEffect(() => {
-    loadStatuses()
-    const handleUpdate = () => loadStatuses()
-    window.addEventListener('quiz_updated', handleUpdate)
-    return () => window.removeEventListener('quiz_updated', handleUpdate)
-  }, [quizzes])
+    startTransition(() => {
+      loadStatuses();
+    });
+    const handleUpdate = () =>
+      startTransition(() => {
+        loadStatuses();
+      });
+    window.addEventListener("quiz_updated", handleUpdate);
+    return () => window.removeEventListener("quiz_updated", handleUpdate);
+  }, [loadStatuses]);
 
-  const categories = ["All", ...Array.from(new Set(quizzes.map(q => q.category || "General")))]
+  const categories = [
+    "All",
+    ...Array.from(new Set(quizzes.map((q) => q.category || "General"))),
+  ];
 
-  const filteredQuizzes = quizzes.filter(q => {
-    const matchesSearch = q.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          q.description.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || (q.category || "General") === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+  const filteredQuizzes = quizzes.filter((q) => {
+    const matchesSearch =
+      q.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      q.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "All" ||
+      (q.category || "General") === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <>
@@ -58,7 +94,7 @@ export function QuizList({ quizzes }: QuizListProps) {
         </div>
         <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
           <Filter className="h-4 w-4 text-muted-foreground shrink-0" />
-          {categories.map(category => (
+          {categories.map((category) => (
             <Button
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}
@@ -74,18 +110,24 @@ export function QuizList({ quizzes }: QuizListProps) {
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filteredQuizzes.map((quiz) => {
-          const status = quizStatuses[quiz.slug]
-          const isCompleted = status?.completed
+          const status = quizStatuses[quiz.slug];
+          const isCompleted = status?.completed;
 
           return (
-            <Card key={quiz.slug} className="group flex flex-col overflow-hidden border-border bg-card transition-all hover:border-primary/50 hover:shadow-lg">
+            <Card
+              key={quiz.slug}
+              className="group flex flex-col overflow-hidden border-border bg-card transition-all hover:border-primary/50 hover:shadow-lg"
+            >
               <CardHeader className="pb-4">
                 <div className="flex items-start justify-between mb-2">
                   <Badge variant="secondary" className="font-google-sans">
                     {quiz.category || "General"}
                   </Badge>
                   {isCompleted && (
-                    <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/20 gap-1">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-500/10 text-green-600 border-green-500/20 gap-1"
+                    >
                       <CheckCircle2 className="h-3 w-3" />
                       Completed
                     </Badge>
@@ -106,7 +148,9 @@ export function QuizList({ quizzes }: QuizListProps) {
                       <Trophy className="h-4 w-4 text-yellow-500" />
                       Best Score
                     </div>
-                    <span className="font-bold">{status.score} / {status.total}</span>
+                    <span className="font-bold">
+                      {status.score} / {status.total}
+                    </span>
                   </div>
                 )}
               </CardContent>
@@ -119,7 +163,7 @@ export function QuizList({ quizzes }: QuizListProps) {
                 </Button>
               </CardFooter>
             </Card>
-          )
+          );
         })}
       </div>
 
@@ -129,10 +173,15 @@ export function QuizList({ quizzes }: QuizListProps) {
             <Search className="h-10 w-10 text-muted-foreground" />
           </div>
           <h3 className="text-xl font-bold google-sans">No quizzes found</h3>
-          <p className="text-muted-foreground mt-2">Try adjusting your search or filters.</p>
+          <p className="text-muted-foreground mt-2">
+            Try adjusting your search or filters.
+          </p>
           <Button
             variant="link"
-            onClick={() => {setSearchQuery(""); setSelectedCategory("All")}}
+            onClick={() => {
+              setSearchQuery("");
+              setSelectedCategory("All");
+            }}
             className="mt-2"
           >
             Clear all filters
@@ -140,5 +189,5 @@ export function QuizList({ quizzes }: QuizListProps) {
         </div>
       )}
     </>
-  )
+  );
 }

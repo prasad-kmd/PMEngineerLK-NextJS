@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import {
-  BookMarked,
-  Star,
-  ExternalLink,
-  Bookmark,
-  Library,
-} from "lucide-react";
+import { BookMarked, Star, ExternalLink, Library } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { SafeLink } from "@/components/ui/safe-link";
 
 const title = "Engineering Reading List";

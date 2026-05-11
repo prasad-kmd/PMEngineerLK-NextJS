@@ -2,13 +2,39 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { marked } from "marked";
+import { cache } from "react";
+import {
+  notion,
+  n2m,
+  DATABASE_IDS,
+  isNotionEnabled,
+  getPlainText,
+  getDate,
+  getMultiSelect,
+  getSelect,
+  getCheckbox,
+  getImageUrl,
+  NotionAPIError,
+} from "./notion";
+import { unstable_cache } from "next/cache";
+import { highlightCode } from "./content/highlighter";
+import {
+  injectAlerts,
+  injectHeadingIds,
+  injectQuiz,
+  sanitizeContent,
+} from "./content/transformers";
+import { contentConfig, notionConfig } from "./constants";
 
 // Custom renderer to add IDs to headings for TOC
 const renderer = new marked.Renderer();
 renderer.heading = ({ text, depth }) => {
-  const id = text
+  let cleanText = text;
+  while (/<[^>]*>/g.test(cleanText)) {
+    cleanText = cleanText.replace(/<[^>]*>/g, "");
+  }
+  const id = cleanText
     .toLowerCase()
-    .replace(/<[^>]*>/g, "")
     .replace(/[^\w]+/g, "-")
     .replace(/^-+|-+$/g, "");
   return `<h${depth} id="${id}">${text}</h${depth}>`;
@@ -29,126 +55,122 @@ const quizExtension = {
       };
     }
   },
-  renderer(token: any) {
-    // Just wrap it in a placeholder that injectQuiz will handle later
-    // to ensure consistent cleaning and parsing logic
+  renderer(token: { json: string }) {
     return `[quiz]${token.json}[/quiz]`;
   },
 };
 
 marked.use({
   renderer,
-  extensions: [quizExtension as any],
+  async: true,
+  extensions: [quizExtension],
 });
 
-function injectHeadingIds(html: string): string {
-  return html.replace(
-    /<h([2-3])([^>]*)>(.*?)<\/h\1>/gi,
-    (match, level, attrs, text) => {
-      if (attrs.toLowerCase().includes("id=")) return match;
-      const id = text
-        .replace(/<[^>]*>/g, "")
-        .toLowerCase()
-        .replace(/[^\w]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-      return `<h${level}${attrs} id="${id}">${text}</h${level}>`;
-    },
-  );
-}
+/**
+ * Highlights code blocks in HTML using Shiki with an enhanced UI wrapper.
+ */
+async function highlightCodeBlocks(html: string): Promise<string> {
+  try {
+    const codeRegex =
+      /<pre[^>]*><code(?:\s+class="language-([^"]+)")?[^>]*>([\s\S]*?)<\/code\s*><\/pre\s*>/g;
+    const matches = Array.from(html.matchAll(codeRegex));
+    if (matches.length === 0) return html;
 
-function injectQuiz(html: string): string {
-  // This is now a fallback for HTML content that doesn't go through marked
-  // To avoid rendering quizzes inside code blocks, we temporarily protect them
-  const placeholders: string[] = [];
-  const protectedHtml = html.replace(/<(pre|code)[\s\S]*?<\/\1>/gi, (match) => {
-    placeholders.push(match);
-    return `__QUIZ_PROTECTED_BLOCK_${placeholders.length - 1}__`;
-  });
+    let result = "";
+    let lastIndex = 0;
 
-  const injectedHtml = protectedHtml.replace(
-    /\[quiz\]([\s\S]*?)\[\/quiz\]/g,
-    (match, jsonContent) => {
-      try {
-        // Normalize JSON content:
-        // 1. Remove any HTML tags that might have been injected by the markdown parser
-        let cleanJson = jsonContent.replace(/<[^>]*>/g, "").trim();
-        // 2. Replace literal newlines and tabs with spaces
-        cleanJson = cleanJson.replace(/[\r\n\t]+/g, " ");
-        // 3. Escape backslashes that are not part of a valid JSON escape sequence.
-        // We must consume valid escapes to prevent their second characters (like in \\)
-        // from being processed as lone backslashes.
-        cleanJson = cleanJson.replace(
-          /\\(["\\\/bfnrt]|u[0-9a-fA-F]{4})|\\/g,
-          (match: string, p1: string) => (p1 ? match : "\\\\"),
-        );
+    for (const match of matches) {
+      const [fullMatch, langMatch, code] = match;
+      const lang = langMatch || "text";
+      const matchIndex = match.index!;
 
-        // Minify and validate JSON
-        const minifiedJson = JSON.stringify(JSON.parse(cleanJson));
-        const encodedJson = minifiedJson.replace(/'/g, "&apos;");
-        return `<div class="interactive-quiz-placeholder" data-quiz='${encodedJson}'></div>`;
-      } catch (e) {
-        console.error(
-          "Quiz HTML inject parse error:",
-          e,
-          "\nContent:",
-          jsonContent,
-        );
-        return `<div class="bg-red-500/10 border border-red-500 p-4 rounded-lg text-red-500 my-4">
-        <p><strong>Quiz Error:</strong> Invalid JSON format.</p>
-        <pre class="text-[10px] mt-2 overflow-auto">${jsonContent.substring(0, 100)}...</pre>
-      </div>`;
+      result += html.substring(lastIndex, matchIndex);
+
+      const decodedCode = code
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, "&");
+
+      if (lang === "mermaid") {
+        result += `
+<div class="mermaid-preview my-12 rounded-3xl border border-border/50 bg-card p-8 shadow-sm overflow-x-auto flex justify-center items-center">
+  <pre class="mermaid m-0 bg-transparent p-0">${decodedCode.trim()}</pre>
+</div>`;
+        lastIndex = matchIndex + fullMatch.length;
+        continue;
       }
-    },
-  );
 
-  return injectedHtml.replace(
-    /__QUIZ_PROTECTED_BLOCK_(\d+)__/g,
-    (match, index) => {
-      return placeholders[parseInt(index)];
-    },
-  );
+      try {
+        const highlighted = await highlightCode(decodedCode.trim(), lang);
+
+        const enhancedHtml = `
+<div class="code-block-wrapper my-12 rounded-2xl overflow-hidden border border-border/40 bg-[#1e1e1e] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] group/code relative transition-all duration-500 hover:shadow-[0_35px_70px_-10px_rgba(var(--primary-rgb),0.15)]">
+  <div class="code-block-header flex items-center justify-between px-3 py-1 bg-[#252526] border-b border-white/5 select-none">
+    <div class="flex items-center gap-5">
+      <div class="flex gap-2.5">
+        <div class="w-3.5 h-3.5 rounded-full bg-[#ff5f57] shadow-inner shadow-black/10 hover:brightness-110 transition-all cursor-pointer"></div>
+        <div class="w-3.5 h-3.5 rounded-full bg-[#febc2e] shadow-inner shadow-black/10 hover:brightness-110 transition-all cursor-pointer"></div>
+        <div class="w-3.5 h-3.5 rounded-full bg-[#28c840] shadow-inner shadow-black/10 hover:brightness-110 transition-all cursor-pointer"></div>
+      </div>
+      <div class="h-5 w-px bg-white/10"></div>
+      <div class="flex items-center gap-3">
+        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 local-jetbrains-mono flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary/40 animate-pulse"></span>
+          ${lang}
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="copy-button group/copy p-2.5 hover:bg-white/5 rounded-xl transition-all duration-300 text-white/30 hover:text-white flex items-center gap-2.5 border border-transparent hover:border-white/10 shadow-sm" 
+              onclick="const codeBlock = this.closest('.code-block-wrapper'); const code = codeBlock.querySelector('code').innerText; navigator.clipboard.writeText(code); const btn = this; const originalContent = btn.innerHTML; btn.innerHTML = '<span class=\\'text-[9px] font-black uppercase tracking-widest text-green-400\\'>Copied!</span><svg class=\\'w-4 h-4 text-green-400 animate-in zoom-in-75 duration-300\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'2.5\\' d=\\'M5 13l4 4L19 7\\'></path></svg>'; btn.classList.add('bg-green-400/5', 'border-green-400/20'); setTimeout(() => { btn.innerHTML = originalContent; btn.classList.remove('bg-green-400/5', 'border-green-400/20'); }, 2000);">
+        <span class="text-[9px] font-black uppercase tracking-[0.2em] opacity-0 group-hover/copy:opacity-100 transition-all duration-300 translate-x-2 group-hover/copy:translate-x-0 hidden sm:inline">Copy Code</span>
+        <svg class="w-4 h-4 transition-all duration-300 group-hover/copy:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="shiki-container relative overflow-x-auto custom-scrollbar-code p-1 bg-[#1e1e1e]">
+    ${highlighted}
+  </div>
+  <div class="absolute bottom-3 right-5 pointer-events-none opacity-20">
+     <span class="text-[9px] font-black text-white uppercase tracking-[0.5em] select-none italic">Engineering Excellence</span>
+  </div>
+  <div class="absolute top-[52px] right-0 bottom-0 w-8 bg-linear-to-l from-[#1e1e1e] to-transparent pointer-events-none z-10 opacity-0 group-hover/code:opacity-100 transition-opacity"></div>
+</div>`;
+        result += enhancedHtml;
+      } catch (e) {
+        console.error("Shiki individual block highlight error:", e);
+        result += fullMatch;
+      }
+
+      lastIndex = matchIndex + fullMatch.length;
+    }
+
+    result += html.substring(lastIndex);
+    return result;
+  } catch (e) {
+    console.error("Shiki highlighting error:", e);
+    return html;
+  }
 }
 
-function injectAlerts(html: string): string {
-  const alertTypes = {
-    NOTE: { color: "blue", icon: "info" },
-    TIP: { color: "green", icon: "lightbulb" },
-    IMPORTANT: { color: "purple", icon: "alert-circle" },
-    WARNING: { color: "yellow", icon: "alert-triangle" },
-    CAUTION: { color: "red", icon: "alert-octagon" },
-  };
-
-  // Match blockquotes containing [!TYPE]
-  // Markdown output varies: sometimes [!TYPE] is in its own <p>, sometimes not
-  // This version is more flexible to handle attributes and various spacing
-  return html.replace(
-    /<blockquote[^>]*>\s*<p[^>]*>\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*(?:<\/p>|<br\/?>)?([\s\S]*?)<\/blockquote>/gi,
-    (match, type, content) => {
-      const upperType = type.toUpperCase() as keyof typeof alertTypes;
-      const config = alertTypes[upperType];
-
-      const colors: Record<string, string> = {
-        blue: "border-blue-500 bg-blue-500/10 text-blue-700 dark:text-blue-400",
-        green:
-          "border-green-500 bg-green-500/10 text-green-700 dark:text-green-400",
-        purple:
-          "border-purple-500 bg-purple-500/10 text-purple-700 dark:text-purple-400",
-        yellow:
-          "border-yellow-500 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
-        red: "border-red-500 bg-red-500/10 text-red-700 dark:text-red-400",
-      };
-
-      return `<div class="my-6 border-l-4 p-4 rounded-r-lg ${colors[config.color] || colors.blue}">
-      <p class="flex items-center gap-2 font-bold mb-2 uppercase text-xs tracking-widest">
-        <span class="opacity-80">${upperType}</span>
-      </p>
-      <div class="prose-direct text-sm leading-relaxed">${content.trim()}</div>
-    </div>`;
-    },
-  );
+export interface Author {
+  name: string;
+  slug: string;
+  role: string;
+  bio: string;
+  avatar: string;
+  twitter?: string;
+  github?: string;
+  linkedin?: string;
+  bodyContent?: string;
 }
 
 export interface ContentItem {
+  id?: string;
   slug: string;
   title: string;
   date?: string;
@@ -162,21 +184,26 @@ export interface ContentItem {
   category?: string;
   tags?: string[];
   aiAssisted?: boolean;
-  type?: "blog" | "articles" | "projects" | "tutorials" | "wiki" | "quizzes";
+  author?: string;
+  type?: "blog" | "articles" | "projects" | "tutorials" | "wiki";
 }
 
+/**
+ * Calculates estimated reading time based on word count.
+ */
 function calculateReadingTime(content: string): number {
-  const wordsPerMinute = 200;
   const words = content.trim().split(/\s+/).length;
-  return Math.ceil(words / wordsPerMinute);
+  return Math.ceil(words / contentConfig.wordsPerMinute);
 }
 
+/**
+ * Extracts the first image URL from Markdown or HTML content.
+ */
 function extractFirstImage(
   content: string,
   isMarkdown: boolean,
 ): string | undefined {
   if (isMarkdown) {
-    // Match markdown image syntax: ![alt](url)
     const markdownImageRegex = /!\[.*?\]\((.*?)\)/;
     const match = content.match(markdownImageRegex);
     if (match && match[1]) {
@@ -184,7 +211,6 @@ function extractFirstImage(
     }
   }
 
-  // Match HTML image syntax: <img src="url" or <img ... src="url"
   const htmlImageRegex = /<img[^>]+src=["']([^"']+)["']/i;
   const match = content.match(htmlImageRegex);
   if (match && match[1]) {
@@ -196,12 +222,117 @@ function extractFirstImage(
 
 const contentDirectory = path.join(process.cwd(), "content");
 
-export function getContentByType(
-  type: "blog" | "articles" | "projects" | "tutorials" | "wiki" | "quizzes",
-): ContentItem[] {
+/**
+ * Low-level fetcher for Notion content list.
+ */
+async function fetchNotionContentByType(
+  type: "blog" | "articles" | "projects" | "tutorials" | "wiki",
+): Promise<ContentItem[]> {
+  const databaseId = DATABASE_IDS[type as keyof typeof DATABASE_IDS];
+  if (!databaseId) return [];
+
+  try {
+    const dbObj = await notion.databases.retrieve({ database_id: databaseId });
+    // @ts-expect-error - Notion SDK might not have data_sources yet
+    const dataSourceId = dbObj.data_sources?.[0]?.id || databaseId;
+    const response = await (notion as unknown).dataSources.query({
+      data_source_id: dataSourceId,
+      filter: {
+        property: "Status",
+        select: {
+          equals: "Published",
+        },
+      },
+      sorts: [
+        {
+          property: "Date",
+          direction: "descending",
+        },
+      ],
+    });
+
+    const items = await Promise.all(
+      (response as unknown).results.map(async (page: unknown) => {
+        const props = page.properties;
+        const slug = getPlainText(props.Slug);
+        const title = getPlainText(props.Name || props.Title);
+        const date = getDate(props.Date);
+        const description = getPlainText(props.Description);
+        const tags = getMultiSelect(props.Tags);
+        const category = getSelect(props.Categories);
+        const aiAssisted = getCheckbox(props.AIAssisted);
+        const technical = getMultiSelect(props.Technical).join(", ");
+
+        let authorSlug = "";
+        if (
+          props.Authors &&
+          props.Authors.relation &&
+          props.Authors.relation.length > 0
+        ) {
+          const authorPage = await notion.pages.retrieve({
+            page_id: props.Authors.relation[0].id,
+          });
+          authorSlug = getPlainText((authorPage as unknown).properties.Slug);
+        }
+
+        return {
+          id: page.id as string,
+          slug,
+          title,
+          date,
+          description,
+          content: "",
+          rawContent: "",
+          final: true,
+          firstImage: undefined,
+          readingTime: 0,
+          technical,
+          category,
+          tags,
+          aiAssisted,
+          author: authorSlug,
+          type: type,
+        };
+      }),
+    );
+
+    return items;
+  } catch (error) {
+    console.error(`Error fetching Notion content for ${type}:`, error);
+    throw new NotionAPIError(
+      `Failed to fetch Notion content for ${type}`,
+      500,
+      error,
+    );
+  }
+}
+
+/**
+ * Gets all content items of a specific type.
+ * Uses React cache and Next.js unstable_cache for optimal performance.
+ */
+export const getContentByType = cache(async function (
+  type: "blog" | "articles" | "projects" | "tutorials" | "wiki",
+): Promise<ContentItem[]> {
+  if (isNotionEnabled) {
+    const fetcher = unstable_cache(
+      async () => fetchNotionContentByType(type),
+      [`content-list-${type}`],
+      {
+        revalidate: notionConfig.revalidate,
+        tags: [`content-${type}`, ...notionConfig.defaultTags],
+      },
+    );
+    try {
+      return await fetcher();
+    } catch {
+      console.error(`Cache fetch failed for ${type}`);
+      return [];
+    }
+  }
+
   const typeDirectory = path.join(contentDirectory, type);
 
-  // Create directory if it doesn't exist
   if (!fs.existsSync(typeDirectory)) {
     return [];
   }
@@ -211,63 +342,31 @@ export function getContentByType(
   const items = files
     .filter((file) => file.endsWith(".md") || file.endsWith(".html"))
     .map((file) => {
-      const slug = file.replace(/\.(md|html)$/, "");
       const fullPath = path.join(typeDirectory, file);
       const fileContents = fs.readFileSync(fullPath, "utf8");
+      const { data, content } = matter(fileContents);
+      const filenameSlug = file.replace(/\.(md|html)$/, "");
+      const slug = data.slug || filenameSlug;
 
-      if (file.endsWith(".md")) {
-        const { data, content } = matter(fileContents);
+      const firstImage = extractFirstImage(content, file.endsWith(".md"));
 
-        // Protect display math from marked mangling by ensuring it's not treated as markdown
-        // but keep the $$ symbols for the math renderer
-        const protectedContent = content.replace(
-          /\$\$\s*([\s\S]*?)\s*\$\$/g,
-          (match, math) => {
-            return `\n\n<div class="math-display">$$${math.trim()}$$</div>\n\n`;
-          },
-        );
-
-        const htmlContent = marked(protectedContent) as string;
-        const firstImage = extractFirstImage(content, true);
-
-        return {
-          slug,
-          title: data.title || slug,
-          date: data.date,
-          description: data.description,
-          content: injectQuiz(injectAlerts(injectHeadingIds(htmlContent))),
-          rawContent: content,
-          final: data.final || false,
-          firstImage,
-          readingTime: calculateReadingTime(content),
-          technical: data.technical,
-          category: data.category,
-          tags: data.tags,
-          aiAssisted: data.aiAssisted || false,
-          type: type,
-        };
-      } else {
-        // HTML file
-        const { data, content } = matter(fileContents);
-        const firstImage = extractFirstImage(content, false);
-
-        return {
-          slug,
-          title: data.title || slug,
-          date: data.date,
-          description: data.description,
-          content: injectQuiz(injectAlerts(injectHeadingIds(content))),
-          rawContent: content,
-          final: data.final || false,
-          firstImage,
-          readingTime: calculateReadingTime(content),
-          technical: data.technical,
-          category: data.category,
-          tags: data.tags,
-          aiAssisted: data.aiAssisted || false,
-          type: type,
-        };
-      }
+      return {
+        slug,
+        title: data.title || slug,
+        date: data.date,
+        description: data.description,
+        content: "",
+        rawContent: content,
+        final: data.final || false,
+        firstImage,
+        readingTime: calculateReadingTime(content),
+        technical: data.technical,
+        category: data.category,
+        tags: data.tags,
+        aiAssisted: data.aiAssisted || false,
+        author: data.author,
+        type: type,
+      };
     })
     .sort((a, b) => {
       if (a.date && b.date) {
@@ -277,15 +376,127 @@ export function getContentByType(
     });
 
   return items;
+});
+
+/**
+ * Low-level fetcher for a single Notion content item.
+ */
+async function fetchNotionContentItem(
+  type: "blog" | "articles" | "projects" | "tutorials" | "wiki",
+  slug: string,
+): Promise<ContentItem | null> {
+  const databaseId = DATABASE_IDS[type as keyof typeof DATABASE_IDS];
+  if (!databaseId) return null;
+
+  try {
+    const dbObj = await notion.databases.retrieve({ database_id: databaseId });
+    // @ts-expect-error - Notion SDK might not have data_sources yet
+    const dataSourceId = dbObj.data_sources?.[0]?.id || databaseId;
+    const response = await (notion as unknown).dataSources.query({
+      data_source_id: dataSourceId,
+      filter: {
+        property: "Slug",
+        rich_text: {
+          equals: slug,
+        },
+      },
+    });
+
+    if ((response as unknown).results.length === 0) return null;
+
+    const page = (response as unknown).results[0];
+    const props = page.properties;
+
+    const mdblocks = await n2m.pageToMarkdown(page.id);
+    const mdString = n2m.toMarkdownString(mdblocks).parent;
+
+    const title = getPlainText(props.Name || props.Title);
+    const date = getDate(props.Date);
+    const description = getPlainText(props.Description);
+    const tags = getMultiSelect(props.Tags);
+    const category = getSelect(props.Categories);
+    const aiAssisted = getCheckbox(props.AIAssisted);
+    const technical = getMultiSelect(props.Technical).join(", ");
+
+    let authorSlug = "";
+    if (
+      props.Authors &&
+      props.Authors.relation &&
+      props.Authors.relation.length > 0
+    ) {
+      const authorPage = await notion.pages.retrieve({
+        page_id: props.Authors.relation[0].id,
+      });
+      authorSlug = getPlainText((authorPage as unknown).properties.Slug);
+    }
+
+    const protectedContent = mdString.replace(
+      /\$\$\s*([\s\S]*?)\s*\$\$/g,
+      (match, math) => {
+        return `\n\n<div class="math-display">$$${math.trim()}$$</div>\n\n`;
+      },
+    );
+
+    const htmlContent = (await marked.parse(protectedContent)) as string;
+    const highlightedHtml = await highlightCodeBlocks(htmlContent);
+    const firstImage = extractFirstImage(mdString, true);
+
+    return {
+      id: page.id as string,
+      slug,
+      title,
+      date,
+      description,
+      content: sanitizeContent(
+        injectQuiz(injectAlerts(injectHeadingIds(highlightedHtml))),
+      ),
+      rawContent: mdString,
+      final: true,
+      firstImage,
+      readingTime: calculateReadingTime(mdString),
+      technical,
+      category,
+      tags,
+      aiAssisted,
+      author: authorSlug,
+      type: type,
+    };
+  } catch (error) {
+    console.error(`Error fetching Notion item ${slug} for ${type}:`, error);
+    throw new NotionAPIError(`Failed to fetch Notion item ${slug}`, 500, error);
+  }
 }
 
-export function getContentItem(
-  type: "blog" | "articles" | "projects" | "tutorials" | "wiki" | "quizzes",
+/**
+ * Gets a single content item by type and slug.
+ */
+export const getContentItem = cache(async function (
+  type: "blog" | "articles" | "projects" | "tutorials" | "wiki",
   slug: string,
-): ContentItem | null {
+): Promise<ContentItem | null> {
+  if (isNotionEnabled) {
+    const fetcher = unstable_cache(
+      async () => fetchNotionContentItem(type, slug),
+      [`content-item-${type}-${slug}`],
+      {
+        revalidate: notionConfig.revalidate,
+        tags: [
+          `content-${type}`,
+          `content-item-${slug}`,
+          ...notionConfig.defaultTags,
+        ],
+      },
+    );
+    try {
+      return await fetcher();
+    } catch {
+      console.error(`Cache fetch failed for ${type}/${slug}`);
+      return null;
+    }
+  }
+
   const typeDirectory = path.join(contentDirectory, type);
 
-  // Try .md first, then .html
   const mdPath = path.join(typeDirectory, `${slug}.md`);
   const htmlPath = path.join(typeDirectory, `${slug}.html`);
 
@@ -299,7 +510,22 @@ export function getContentItem(
     fullPath = htmlPath;
     isMarkdown = false;
   } else {
-    return null;
+    if (!fs.existsSync(typeDirectory)) return null;
+    const files = fs.readdirSync(typeDirectory);
+    const foundFile = files.find((file) => {
+      if (!file.endsWith(".md") && !file.endsWith(".html")) return false;
+      const filePath = path.join(typeDirectory, file);
+      const content = fs.readFileSync(filePath, "utf8");
+      const { data } = matter(content);
+      return data.slug === slug;
+    });
+
+    if (foundFile) {
+      fullPath = path.join(typeDirectory, foundFile);
+      isMarkdown = foundFile.endsWith(".md");
+    } else {
+      return null;
+    }
   }
 
   const fileContents = fs.readFileSync(fullPath, "utf8");
@@ -307,7 +533,6 @@ export function getContentItem(
   if (isMarkdown) {
     const { data, content } = matter(fileContents);
 
-    // Protect display math
     const protectedContent = content.replace(
       /\$\$\s*([\s\S]*?)\s*\$\$/g,
       (match, math) => {
@@ -315,7 +540,9 @@ export function getContentItem(
       },
     );
 
-    const htmlContent = marked(protectedContent) as string;
+    const htmlContent = (await marked.parse(protectedContent)) as string;
+    const highlightedHtml = await highlightCodeBlocks(htmlContent);
+
     const firstImage = extractFirstImage(content, true);
 
     return {
@@ -323,7 +550,9 @@ export function getContentItem(
       title: data.title || slug,
       date: data.date,
       description: data.description,
-      content: injectQuiz(injectAlerts(injectHeadingIds(htmlContent))),
+      content: sanitizeContent(
+        injectQuiz(injectAlerts(injectHeadingIds(highlightedHtml))),
+      ),
       rawContent: content,
       final: data.final || false,
       firstImage,
@@ -332,10 +561,12 @@ export function getContentItem(
       category: data.category,
       tags: data.tags,
       aiAssisted: data.aiAssisted || false,
+      author: data.author,
       type: type,
     };
   } else {
     const { data, content } = matter(fileContents);
+    const highlightedHtml = await highlightCodeBlocks(content);
     const firstImage = extractFirstImage(content, false);
 
     return {
@@ -343,7 +574,9 @@ export function getContentItem(
       title: data.title || slug,
       date: data.date,
       description: data.description,
-      content: injectQuiz(injectAlerts(injectHeadingIds(content))),
+      content: sanitizeContent(
+        injectQuiz(injectAlerts(injectHeadingIds(highlightedHtml))),
+      ),
       rawContent: content,
       final: data.final || false,
       firstImage,
@@ -352,7 +585,233 @@ export function getContentItem(
       category: data.category,
       tags: data.tags,
       aiAssisted: data.aiAssisted || false,
+      author: data.author,
       type: type,
     };
   }
-}
+});
+
+/** Sync variant — only reads frontmatter, no body parsing. For use in card components. */
+export const getAuthorBasic = cache(async function (
+  slug: string,
+): Promise<Author | null> {
+  if (isNotionEnabled) {
+    const fetcher = unstable_cache(
+      async () => {
+        const databaseId = DATABASE_IDS.authors;
+        if (!databaseId) return null;
+        const dbObj = await notion.databases.retrieve({
+          database_id: databaseId,
+        });
+        // @ts-expect-error - Notion SDK might not have data_sources yet
+        const dataSourceId = dbObj.data_sources?.[0]?.id || databaseId;
+        const response = await (notion as unknown).dataSources.query({
+          data_source_id: dataSourceId,
+          filter: {
+            property: "Slug",
+            rich_text: {
+              equals: slug,
+            },
+          },
+        });
+        if ((response as unknown).results.length === 0) return null;
+        const page = (response as unknown).results[0];
+        const props = page.properties;
+        return {
+          name: getPlainText(props.Name || props.Title),
+          slug,
+          role: getPlainText(props.Role),
+          bio: getPlainText(props.Biography),
+          avatar: getImageUrl(props.avatar || props.Avatar) || "",
+          twitter: getPlainText(props.twitter || props.Twitter),
+          github: getPlainText(props.GitHub || props.github),
+          linkedin: getPlainText(
+            props.linkedin || props.LinkedIn || props.Linkedin,
+          ),
+        };
+      },
+      [`author-basic-${slug}`],
+      {
+        revalidate: notionConfig.revalidate,
+        tags: ["authors", ...notionConfig.defaultTags],
+      },
+    );
+    try {
+      return await fetcher();
+    } catch {
+      return null;
+    }
+  }
+
+  const authorPath = path.join(contentDirectory, "authors", `${slug}.md`);
+  if (!fs.existsSync(authorPath)) return null;
+  const fileContents = fs.readFileSync(authorPath, "utf8");
+  const { data } = matter(fileContents);
+  return { ...(data as Author), slug };
+});
+
+/**
+ * Gets full author details including bio and body content.
+ */
+export const getAuthorBySlug = cache(async function (
+  slug: string,
+): Promise<Author | null> {
+  if (isNotionEnabled) {
+    const fetcher = unstable_cache(
+      async () => {
+        const databaseId = DATABASE_IDS.authors;
+        if (!databaseId) return null;
+        const dbObj = await notion.databases.retrieve({
+          database_id: databaseId,
+        });
+        // @ts-expect-error - Notion SDK might not have data_sources yet
+        const dataSourceId = dbObj.data_sources?.[0]?.id || databaseId;
+        const response = await (notion as unknown).dataSources.query({
+          data_source_id: dataSourceId,
+          filter: {
+            property: "Slug",
+            rich_text: {
+              equals: slug,
+            },
+          },
+        });
+        if ((response as unknown).results.length === 0) return null;
+        const page = (response as unknown).results[0];
+        const props = page.properties;
+
+        const mdblocks = await n2m.pageToMarkdown(page.id);
+        const mdString = n2m.toMarkdownString(mdblocks).parent;
+
+        let bodyContent: string | undefined;
+        if (mdString.trim()) {
+          const rawHtml = (await marked.parse(mdString)) as string;
+          bodyContent = sanitizeContent(
+            injectAlerts(injectHeadingIds(rawHtml)),
+          );
+        }
+
+        return {
+          name: getPlainText(props.Name || props.Title),
+          slug,
+          role: getPlainText(props.Role),
+          bio: getPlainText(props.Biography),
+          avatar: getImageUrl(props.avatar || props.Avatar) || "",
+          twitter: getPlainText(props.twitter || props.Twitter),
+          github: getPlainText(props.GitHub || props.github),
+          linkedin: getPlainText(
+            props.linkedin || props.LinkedIn || props.Linkedin,
+          ),
+          bodyContent,
+        };
+      },
+      [`author-full-${slug}`],
+      {
+        revalidate: notionConfig.revalidate,
+        tags: ["authors", ...notionConfig.defaultTags],
+      },
+    );
+    try {
+      return await fetcher();
+    } catch {
+      return null;
+    }
+  }
+
+  const authorPath = path.join(contentDirectory, "authors", `${slug}.md`);
+
+  if (!fs.existsSync(authorPath)) {
+    return null;
+  }
+
+  const fileContents = fs.readFileSync(authorPath, "utf8");
+  const { data, content } = matter(fileContents);
+
+  let bodyContent: string | undefined;
+  if (content.trim()) {
+    const rawHtml = (await marked.parse(content)) as string;
+    bodyContent = sanitizeContent(injectAlerts(injectHeadingIds(rawHtml)));
+  }
+
+  return {
+    ...(data as Author),
+    slug,
+    bodyContent,
+  };
+});
+
+/**
+ * Gets all authors.
+ */
+export const getAllAuthors = cache(async function (): Promise<Author[]> {
+  if (isNotionEnabled) {
+    const fetcher = unstable_cache(
+      async () => {
+        const databaseId = DATABASE_IDS.authors;
+        if (!databaseId) return [];
+        const dbObj = await notion.databases.retrieve({
+          database_id: databaseId,
+        });
+        // @ts-expect-error - Notion SDK might not have data_sources yet
+        const dataSourceId = dbObj.data_sources?.[0]?.id || databaseId;
+        const response = await (notion as unknown).dataSources.query({
+          data_source_id: dataSourceId,
+          filter: {
+            property: "Status",
+            select: {
+              equals: "Published",
+            },
+          },
+        });
+
+        return (response as unknown).results.map((page: unknown) => {
+          const props = page.properties;
+          return {
+            name: getPlainText(props.Name || props.Title),
+            slug: getPlainText(props.Slug),
+            role: getPlainText(props.Role),
+            bio: getPlainText(props.Biography),
+            avatar: getImageUrl(props.avatar || props.Avatar) || "",
+            twitter: getPlainText(props.twitter || props.Twitter),
+            github: getPlainText(props.GitHub || props.github),
+            linkedin: getPlainText(
+              props.linkedin || props.LinkedIn || props.Linkedin,
+            ),
+          };
+        });
+      },
+      ["all-authors"],
+      {
+        revalidate: notionConfig.revalidate,
+        tags: ["authors", ...notionConfig.defaultTags],
+      },
+    );
+    try {
+      return await fetcher();
+    } catch {
+      return [];
+    }
+  }
+
+  const authorsDirectory = path.join(contentDirectory, "authors");
+
+  if (!fs.existsSync(authorsDirectory)) {
+    return [];
+  }
+
+  const files = fs.readdirSync(authorsDirectory);
+  const authors = files
+    .filter((file) => file.endsWith(".md"))
+    .map((file) => {
+      const slug = file.replace(/\.md$/, "");
+      const fullPath = path.join(authorsDirectory, file);
+      const fileContents = fs.readFileSync(fullPath, "utf8");
+      const { data } = matter(fileContents);
+
+      return {
+        ...(data as Author),
+        slug,
+      };
+    });
+
+  return authors;
+});

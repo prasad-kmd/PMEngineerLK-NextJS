@@ -1,18 +1,25 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getContentByType, getContentItem } from "@/lib/content";
-import { ArrowLeft, Clock, BookOpen, Hash } from "lucide-react";
-import Link from "next/link";
+import {
+  getContentByType,
+  getContentItem,
+  getAuthorBasic,
+} from "@/lib/content";
+import { Clock, BookOpen, Hash } from "lucide-react";
+// import Link from "next/link";
 import { ContentRenderer } from "@/components/content-renderer";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { RelatedContent } from "@/components/related-content";
-import { TOC } from "@/components/toc";
+import { ArticleSidebar } from "@/components/article-sidebar";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { CommentsSection } from "@/components/comments/comments-section";
+import { CommentScrollButton } from "@/components/comment-scroll-button";
 
 export async function generateStaticParams() {
-  const wikiEntries = getContentByType("wiki");
-  return wikiEntries.map((entry) => ({
+  const entries = await getContentByType("wiki");
+  return entries.map((entry) => ({
     slug: entry.slug,
   }));
 }
@@ -23,7 +30,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const entry = getContentItem("wiki", slug);
+  const entry = await getContentItem("wiki", slug);
 
   if (!entry) {
     return {};
@@ -41,23 +48,24 @@ export default async function WikiEntryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const entry = getContentItem("wiki", slug);
+  const entry = await getContentItem("wiki", slug);
 
   if (!entry) {
     notFound();
   }
 
+  const author = entry.author ? await getAuthorBasic(entry.author) : null;
+
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 wiki_item img_grad_pm">
       <ScrollProgress />
-      <div className="mx-auto max-w-5xl">
-        <Link
-          href="/wiki"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground font-local-inter"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Wiki
-        </Link>
+      <div className="mx-auto max-w-6xl">
+        <Breadcrumbs
+          items={[
+            { label: "Wiki", href: "/wiki" },
+            { label: entry.title, href: `/wiki/${entry.slug}`, active: true },
+          ]}
+        />
 
         <div className="flex flex-col lg:flex-row gap-12">
           <article className="flex-1 min-w-0">
@@ -86,22 +94,27 @@ export default async function WikiEntryPage({
                     </span>
                   )}
                 </div>
-                <BookmarkButton
-                  key={entry.slug}
-                  item={{
-                    slug: entry.slug,
-                    title: entry.title,
-                    type: "wiki",
-                  }}
-                />
+                <div className="flex items-center gap-2">
+                  <CommentScrollButton />
+                  <BookmarkButton
+                    key={entry.slug}
+                    item={{
+                      slug: entry.slug,
+                      title: entry.title,
+                      type: "wiki",
+                    }}
+                  />
+                </div>
               </div>
             </header>
 
             <ContentRenderer content={entry.content} id={entry.slug} />
           </article>
 
-          <TOC content={entry.content} />
+          <ArticleSidebar content={entry.content} author={author} />
         </div>
+
+        <CommentsSection pageId={entry.id} slug={entry.slug} />
 
         <RelatedContent type="wiki" currentSlug={entry.slug} />
       </div>

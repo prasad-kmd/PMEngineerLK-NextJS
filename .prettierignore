@@ -1,0 +1,12 @@
+# Ignore artifacts:
+build
+coverage
+node_modules
+public/*
+.next
+drizzle/*
+.env*
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+.github

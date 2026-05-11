@@ -1,10 +1,13 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { getContentByType } from "@/lib/content"
-import { Calendar, ArrowRight } from "lucide-react"
+import type { Metadata } from "next";
+import { getContentByType } from "@/lib/content";
+import { ArticleCard } from "@/components/unique-cards";
+import { Pagination } from "@/components/pagination";
+import * as motion from "framer-motion/client";
+import { staggerContainer, fadeInUp } from "@/lib/animations";
 
-const title = "Articles"
-const description = "Technical articles and reflections documenting my engineering journey."
+const title = "Articles";
+const description =
+  "In-depth technical articles, engineering deep dives, and research papers.";
 
 export const metadata: Metadata = {
   title,
@@ -28,78 +31,77 @@ export const metadata: Metadata = {
     description,
     images: [`/api/og?title=${encodeURIComponent(title)}`],
   },
+};
+
+interface ArticlesPageProps {
+  searchParams: Promise<{ page?: string }>;
 }
 
-export default function ArticlesPage() {
-  const entries = getContentByType("articles")
+export default async function ArticlesPage({
+  searchParams,
+}: ArticlesPageProps) {
+  const { page } = await searchParams;
+  const currentPage = parseInt(page || "1");
+  const postsPerPage = 9;
+  const allEntries = await getContentByType("articles");
+
+  const totalPages = Math.ceil(allEntries.length / postsPerPage);
+  const entries = allEntries.slice(
+    (currentPage - 1) * postsPerPage,
+    currentPage * postsPerPage,
+  );
 
   return (
-    <div className="min-h-screen px-6 py-12 lg:px-8 articles_page img_grad_pm">
-      <div className="mx-auto max-w-4xl">
-        <div className="mb-12">
-          <h1 className="mb-4 text-4xl font-bold mozilla-headline">Articles</h1>
-          <p className="text-lg text-muted-foreground leading-relaxed google-sans">
-            Technical articles and reflections documenting my engineering journey.
+    <div className="min-h-screen py-12 articles_page img_grad_pm">
+      <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          className="mb-14"
+        >
+          <h1 className="mb-4 text-4xl font-bold mozilla-headline tracking-tight sm:text-6xl text-foreground">
+            Articles
+          </h1>
+          <p className="text-lg text-muted-foreground leading-relaxed font-google-sans max-w-2xl border-l-4 border-primary pl-4">
+            {description}
           </p>
-        </div>
+        </motion.div>
 
-        {entries.length === 0 ? (
-          <div className="rounded-xl border border-border bg-card p-12 text-center">
-            <p className="text-muted-foreground">
-              No articles yet. Create a <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.md</code>{" "}
-              or <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.html</code> file in the{" "}
-              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">content/articles/</code> directory.
+        {allEntries.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-border bg-card p-12 text-center shadow-inner">
+            <p className="text-muted-foreground font-local-inter">
+              No articles yet. Check back later!
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
-            {entries.map((entry, index) => {
-              const borderColor = index === 0 ? "border-blue-500/70" : "border-border"
-              const hoverBorderColor = index === 0 ? "hover:border-blue-500" : "hover:border-primary/50"
-
-              const backgroundStyle = entry.firstImage
-                ? {
-                  backgroundImage: `var(--item-gradient), url("${entry.firstImage}")`,
-                  backgroundBlendMode: "overlay" as const,
-                  backgroundOrigin: "border-box" as const,
-                  backgroundPosition: "right" as const,
-                  backgroundSize: "cover" as const,
-                  backgroundAttachment: "scroll" as const,
-                }
-                : undefined
-
-              return (
-                <Link
+          <>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10"
+            >
+              {entries.map((entry) => (
+                <motion.div
                   key={entry.slug}
-                  href={`/articles/${entry.slug}`}
-                  className={`group block rounded-xl border ${borderColor} ${hoverBorderColor} bg-card p-6 transition-all hover:shadow-lg hover:shadow-primary/5 overflow-hidden`}
-                  style={backgroundStyle}
+                  variants={fadeInUp}
+                  className="h-full"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <h2 className="mb-2 text-2xl font-semibold group-hover:text-primary font-google-sans">{entry.title}</h2>
-                      {entry.description && (
-                        <p className="mb-3 text-muted-foreground leading-relaxed font-local-inter">{entry.description}</p>
-                      )}
-                      {entry.date && (
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground font-local-inter">
-                          <Calendar className="h-4 w-4" />
-                          {new Date(entry.date).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
-                        </div>
-                      )}
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
+                  <ArticleCard post={entry} />
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              basePath="/articles"
+            />
+          </>
         )}
       </div>
     </div>
-  )
+  );
 }

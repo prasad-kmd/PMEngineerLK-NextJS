@@ -37,3 +37,7 @@ package-lock.json
 npm_dev.log
 tmp/test_url_logic.js
 /tmp
+.npmrc
+
+*/desktop.ini
+**/desktop.ini

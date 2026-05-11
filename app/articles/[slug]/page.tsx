@@ -1,17 +1,32 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getContentByType, getContentItem } from "@/lib/content";
-import { Calendar, ArrowLeft, Clock } from "lucide-react";
-import Link from "next/link";
+import {
+  getContentByType,
+  getContentItem,
+  getAuthorBasic,
+} from "@/lib/content";
+import { Calendar, Clock } from "lucide-react";
+// import Link from "next/link";
 import { ContentRenderer } from "@/components/content-renderer";
 import { BookmarkButton } from "@/components/bookmark-button";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { RelatedContent } from "@/components/related-content";
-import { TOC } from "@/components/toc";
+import { ArticleSidebar } from "@/components/article-sidebar";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import {
+  JsonLd,
+  getContentSchema,
+  getBreadcrumbSchema,
+} from "@/components/json-ld";
+import { CommentsSection } from "@/components/comments/comments-section";
+import { CommentScrollButton } from "@/components/comment-scroll-button";
+import { PageViewTracker } from "@/components/analytics/PageViewTracker";
+import { ViewCounter } from "@/components/content/ViewCounter";
+import { ContentArea } from "@/components/accessibility/ContentArea";
 
 export async function generateStaticParams() {
-  const entries = getContentByType("articles");
+  const entries = await getContentByType("articles");
   return entries.map((entry) => ({
     slug: entry.slug,
   }));
@@ -23,7 +38,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const entry = getContentItem("articles", slug);
+  const entry = await getContentItem("articles", slug);
 
   if (!entry) {
     return {};
@@ -41,23 +56,46 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const entry = getContentItem("articles", slug);
+  const entry = await getContentItem("articles", slug);
 
   if (!entry) {
     notFound();
   }
 
+  const author = entry.author ? await getAuthorBasic(entry.author) : null;
+
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 articles_item img_grad_pm">
+      <PageViewTracker
+        contentType="article"
+        slug={entry.slug}
+        title={entry.title}
+        authorId={entry.author}
+      />
+      <JsonLd
+        data={getContentSchema(
+          { ...entry, authorName: author?.name },
+          "articles",
+        )}
+      />
+      <JsonLd
+        data={getBreadcrumbSchema([
+          { label: "Articles", href: "/articles" },
+          { label: entry.title, href: `/articles/${entry.slug}` },
+        ])}
+      />
       <ScrollProgress />
-      <div className="mx-auto max-w-4xl">
-        <Link
-          href="/articles"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground local-inter"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Articles
-        </Link>
+      <div className="mx-auto max-w-6xl">
+        <Breadcrumbs
+          items={[
+            { label: "Articles", href: "/articles" },
+            {
+              label: entry.title,
+              href: `/articles/${entry.slug}`,
+              active: true,
+            },
+          ]}
+        />
 
         <div className="flex flex-col lg:flex-row gap-12">
           <article className="flex-1 min-w-0">
@@ -80,25 +118,39 @@ export default async function ArticlePage({
                         {entry.readingTime} min read
                       </span>
                     )}
+                    <span className="flex items-center gap-1.5 ml-4 border-l border-border pl-4">
+                      <ViewCounter slug={entry.slug} contentType="article" />
+                    </span>
                   </div>
-                  <BookmarkButton
-                    key={entry.slug}
-                    item={{
-                      slug: entry.slug,
-                      title: entry.title,
-                      date: entry.date,
-                      type: "articles",
-                    }}
-                  />
+                  <div className="flex items-center gap-2">
+                    <CommentScrollButton />
+                    <BookmarkButton
+                      key={entry.slug}
+                      item={{
+                        slug: entry.slug,
+                        title: entry.title,
+                        date: entry.date,
+                        type: "articles",
+                      }}
+                    />
+                  </div>
                 </div>
               )}
             </header>
 
-            <ContentRenderer content={entry.content} id={entry.slug} />
+            <ContentArea>
+              <ContentRenderer content={entry.content} id={entry.slug} />
+            </ContentArea>
           </article>
 
-          <TOC content={entry.content} />
+          <ArticleSidebar
+            content={entry.content}
+            author={author}
+            lastUpdated={entry.date}
+          />
         </div>
+
+        <CommentsSection pageId={entry.id} slug={entry.slug} />
 
         <RelatedContent type="articles" currentSlug={entry.slug} />
       </div>

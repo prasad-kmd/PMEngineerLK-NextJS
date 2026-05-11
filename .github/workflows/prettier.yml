@@ -1,0 +1,50 @@
+name: autofix.ci
+
+on:
+  # push:
+  #   branches: ["main"]
+  # pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: autofix.ci
+        run: pnpm format
+
+      - name: Autofix
+        uses: autofix-ci/action@v1
+
+      - name: Add Job Summary
+        if: always()
+        run: |
+          echo "## 🎨 Prettier Formatting Results" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ **Formatting check complete.** Any required fixes have been handled by the Autofix step." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Formatting check failed.** Please review the workflow logs for details." >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "Powered by [Autofix.ci](https://autofix.ci) and [Prettier](https://prettier.io)." >> $GITHUB_STEP_SUMMARY

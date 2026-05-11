@@ -1,28 +1,79 @@
 "use client";
 
-import { useState, useRef } from "react";
+import {
+  useState,
+  useRef,
+  useActionState,
+  useEffect,
+  startTransition,
+} from "react";
 import { Send, Loader2, Paperclip, X, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { HighlightedTextArea } from "@/components/ui/HighlightedTextArea";
 import { cn } from "@/lib/utils";
-
-interface ContactFormData {
-  name: string;
-  email: string;
-  phone?: string;
-  message: string;
-}
+import { submitContactForm } from "./actions";
+import {
+  showTempMailError,
+  showProfanityError,
+} from "@/lib/validation/notifications";
+import { BlockedWord } from "@/types/validation";
+import {
+  TurnstileWidget,
+  type TurnstileWidgetRef,
+} from "@/components/comments/turnstile-widget";
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
 
 export default function ContactForm() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [state, formAction, isPending] = useActionState(
+    submitContactForm,
+    null,
+  );
   const [file, setFile] = useState<File | null>(null);
+  const [blockedWords, setBlockedWords] = useState<BlockedWord[]>([]);
   const formRef = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const turnstileRef = useRef<TurnstileWidgetRef>(null);
+
+  useEffect(() => {
+    if (state?.success) {
+      toast.success(state.message);
+      formRef.current?.reset();
+      turnstileRef.current?.reset();
+      startTransition(() => {
+        setBlockedWords([]);
+        setFile(null);
+      });
+    } else if (state?.success === false) {
+      if (state.validationError) {
+        const { type, blockedWords: words } = state.validationError;
+        if (type === "temp_mail") {
+          showTempMailError();
+        } else if (type === "profanity" && words) {
+          startTransition(() => {
+            setBlockedWords(words);
+          });
+          showProfanityError(words.length);
+        } else if (type === "turnstile") {
+          toast.error(state.message);
+          turnstileRef.current?.reset();
+        } else {
+          toast.error(state.message);
+        }
+      } else {
+        toast.error(state.message);
+      }
+
+      if (state.errors) {
+        Object.values(state.errors)
+          .flat()
+          .forEach((err: unknown) => toast.error(err as string));
+      }
+    }
+  }, [state]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -41,93 +92,11 @@ export default function ContactForm() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const formData = new FormData(e.currentTarget);
-    const data: ContactFormData = {
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      phone: formData.get("phone") as string,
-      message: formData.get("message") as string,
-    };
-
-    try {
-      // Fetch secrets
-      const secretsResponse = await fetch("/api/secrets");
-      const { telegram_token, telegram_chat_id } = await secretsResponse.json();
-
-      if (!telegram_token || !telegram_chat_id) {
-        throw new Error("Telegram configuration is missing.");
-      }
-
-      // Prepare message text
-      const caption = `
-<b>New Contact Form Submission</b>
-<b>Name:</b> ${data.name}
-<b>Email:</b> ${data.email}
-<b>Phone:</b> ${data.phone || "N/A"}
-<b>Message:</b>
-${data.message}
-      `.trim();
-
-      let response;
-      if (file) {
-        // Use sendDocument if file is attached
-        const tgFormData = new FormData();
-        tgFormData.append("chat_id", telegram_chat_id);
-        tgFormData.append("document", file);
-        tgFormData.append("caption", caption);
-        tgFormData.append("parse_mode", "HTML");
-
-        response = await fetch(
-          `https://api.telegram.org/bot${telegram_token}/sendDocument`,
-          {
-            method: "POST",
-            body: tgFormData,
-          },
-        );
-      } else {
-        // Use sendMessage if no file
-        response = await fetch(
-          `https://api.telegram.org/bot${telegram_token}/sendMessage`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              chat_id: telegram_chat_id,
-              text: caption,
-              parse_mode: "HTML",
-            }),
-          },
-        );
-      }
-
-      const result = await response.json();
-
-      if (result.ok) {
-        toast.success(`Hey ${data.name}, your message has been sent!`);
-        formRef.current?.reset();
-        setFile(null);
-      } else {
-        throw new Error(result.description || "Failed to send message.");
-      }
-    } catch (error: any) {
-      console.error("Error sending message:", error);
-      toast.error(`Failed to send message: ${error.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <form
       ref={formRef}
-      onSubmit={handleSubmit}
-      className="group relative space-y-8 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-card/80 to-card/40 p-1 md:p-1.5"
+      action={formAction}
+      className="group relative space-y-8 overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-card/80 to-card/40 p-1 md:p-1.5"
     >
       {/* Decorative background effect */}
       <div className="absolute -right-24 -top-24 h-48 w-48 rounded-full bg-primary/10 blur-3xl transition-all group-hover:bg-primary/20" />
@@ -145,8 +114,9 @@ ${data.message}
               id="name"
               name="name"
               placeholder="John Doe"
+              defaultValue={(state?.formData?.name as string) || ""}
               required
-              disabled={isLoading}
+              disabled={isPending}
               className="h-11 bg-muted/50 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20"
             />
           </div>
@@ -163,8 +133,9 @@ ${data.message}
               name="email"
               type="email"
               placeholder="john@example.com"
+              defaultValue={(state?.formData?.email as string) || ""}
               required
-              disabled={isLoading}
+              disabled={isPending}
               className="h-11 bg-muted/50 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20"
             />
           </div>
@@ -181,7 +152,8 @@ ${data.message}
             id="phone"
             name="phone"
             placeholder="+94 77 123 4567"
-            disabled={isLoading}
+            defaultValue={(state?.formData?.phone as string) || ""}
+            disabled={isPending}
             className="h-11 bg-muted/50 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20"
           />
         </div>
@@ -193,13 +165,15 @@ ${data.message}
           >
             Your Message
           </Label>
-          <Textarea
+          <HighlightedTextArea
             id="message"
             name="message"
             placeholder="Tell me about your project..."
-            className="min-h-[120px] resize-none bg-muted/50 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20"
+            className="min-h-[120px] bg-muted/50 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20"
+            defaultValue={(state?.formData?.message as string) || ""}
             required
-            disabled={isLoading}
+            disabled={isPending}
+            blockedWords={blockedWords}
           />
         </div>
 
@@ -216,7 +190,7 @@ ${data.message}
               onClick={() => fileInputRef.current?.click()}
               className={cn(
                 "relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-muted-foreground/20 bg-muted/30 py-8 transition-all hover:border-primary/40 hover:bg-muted/50",
-                isLoading && "opacity-50 pointer-events-none",
+                isPending && "opacity-50 pointer-events-none",
               )}
             >
               <Paperclip className="mb-2 h-6 w-6 text-muted-foreground" />
@@ -225,10 +199,11 @@ ${data.message}
               </p>
               <Input
                 ref={fileInputRef}
+                name="file"
                 type="file"
                 className="hidden"
                 onChange={handleFileChange}
-                disabled={isLoading}
+                disabled={isPending}
               />
             </div>
           ) : (
@@ -251,21 +226,43 @@ ${data.message}
                 variant="ghost"
                 size="icon"
                 onClick={removeFile}
-                disabled={isLoading}
+                disabled={isPending}
                 className="h-8 w-8 text-muted-foreground hover:text-destructive"
               >
                 <X className="h-4 w-4" />
               </Button>
+              {/* Hidden input to keep file in FormData when using form action */}
+              <input
+                type="file"
+                name="file"
+                className="hidden"
+                ref={(el) => {
+                  if (el && file) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    el.files = dataTransfer.files;
+                  }
+                }}
+              />
             </div>
           )}
+        </div>
+
+        <div className="flex justify-center py-2">
+          <TurnstileWidget
+            ref={turnstileRef}
+            onVerify={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
         </div>
 
         <Button
           type="submit"
           className="relative h-12 w-full overflow-hidden bg-primary font-semibold text-primary-foreground shadow-lg transition-all hover:shadow-primary/20 active:scale-[0.98]"
-          disabled={isLoading}
+          disabled={isPending}
         >
-          {isLoading ? (
+          {isPending ? (
             <div className="flex items-center justify-center gap-2">
               <Loader2 className="h-5 w-5 animate-spin" />
               <span>Sending...</span>

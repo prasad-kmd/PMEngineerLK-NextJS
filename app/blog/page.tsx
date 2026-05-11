@@ -1,11 +1,13 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { getContentByType } from "@/lib/content"
-import { Calendar, ArrowRight, CheckCircle2 } from "lucide-react"
+import type { Metadata } from "next";
+import { getContentByType } from "@/lib/content";
+import { BlogCard } from "@/components/unique-cards";
+import { Pagination } from "@/components/pagination";
+import * as motion from "framer-motion/client";
+import { staggerContainer, fadeInUp } from "@/lib/animations";
 
-const title = "Blog"
+const title = "Blog";
 const description =
-  "Comprehensive engineering ideas and technical insights. Each post explores practical solutions combining mechanical and mechatronics expertise."
+  "Latest updates, engineering insights, and technical articles from our team.";
 
 export const metadata: Metadata = {
   title,
@@ -29,95 +31,75 @@ export const metadata: Metadata = {
     description,
     images: [`/api/og?title=${encodeURIComponent(title)}`],
   },
+};
+
+interface BlogPageProps {
+  searchParams: Promise<{ page?: string }>;
 }
 
-export default function BlogPage() {
-  const blogPosts = getContentByType("blog")
-  const hasFinalPost = blogPosts.some((post) => post.final)
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const { page } = await searchParams;
+  const currentPage = parseInt(page || "1");
+  const postsPerPage = 9;
+  const allPosts = await getContentByType("blog");
+
+  const totalPages = Math.ceil(allPosts.length / postsPerPage);
+  const posts = allPosts.slice(
+    (currentPage - 1) * postsPerPage,
+    currentPage * postsPerPage,
+  );
 
   return (
-    <div className="min-h-screen px-6 py-12 lg:px-8 blog_page img_grad_pm">
-      <div className="mx-auto max-w-4xl">
-        <div className="mb-12">
-          <h1 className="mb-4 text-4xl font-bold mozilla-headline">Blog</h1>
-          <p className="text-lg text-muted-foreground leading-relaxed font-google-sans">
-            Comprehensive engineering ideas and technical insights. Each post explores practical solutions
-            combining mechanical and mechatronics expertise.
+    <div className="min-h-screen py-12 blog_page img_grad_pm">
+      <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          className="mb-14"
+        >
+          <h1 className="mb-4 text-4xl font-bold mozilla-headline tracking-tight sm:text-6xl text-foreground">
+            Blog
+          </h1>
+          <p className="text-lg text-muted-foreground leading-relaxed font-google-sans max-w-2xl border-l-4 border-primary pl-4">
+            {description}
           </p>
-        </div>
+        </motion.div>
 
-        {blogPosts.length === 0 ? (
-          <div className="rounded-xl border border-border bg-card p-12 text-center">
-            <p className="text-muted-foreground">
-              No ideas yet. Create a <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.md</code> or{" "}
-              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">.html</code> file in the{" "}
-              <code className="rounded bg-muted px-2 py-1 font-mono text-sm">content/blog/</code> directory.
+        {allPosts.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-border bg-card p-12 text-center shadow-inner">
+            <p className="text-muted-foreground font-local-inter">
+              No blog posts yet. Check back later!
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
-            {blogPosts.map((post) => {
-              const borderColor = hasFinalPost
-                ? post.final
-                  ? "border-green-500/70"
-                  : "border-gray-500/30"
-                : "border-border"
-
-              const hoverBorderColor = hasFinalPost
-                ? post.final
-                  ? "hover:border-green-500"
-                  : "hover:border-gray-500/50"
-                : "hover:border-primary/50"
-
-              const backgroundStyle = post.firstImage
-                ? {
-                  backgroundImage: `var(--item-gradient), url("${post.firstImage}")`,
-                  backgroundBlendMode: "overlay" as const,
-                  backgroundOrigin: "border-box" as const,
-                  backgroundPosition: "right" as const,
-                  backgroundSize: "cover" as const,
-                  backgroundAttachment: "scroll" as const,
-                }
-                : undefined
-
-              return (
-                <Link
+          <>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10"
+            >
+              {posts.map((post) => (
+                <motion.div
                   key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className={`group block rounded-xl border ${borderColor} ${hoverBorderColor} bg-card p-6 transition-all hover:shadow-lg hover:shadow-primary/5 relative overflow-hidden`}
-                  style={backgroundStyle}
+                  variants={fadeInUp}
+                  className="h-full"
                 >
-                  {post.final && (
-                    <div className="absolute -top-3 right-6 flex items-center gap-1.5 rounded-full bg-green-500/20 border border-green-500/50 px-3 py-1 text-xs font-medium text-green-400">
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      Marked as Final
-                    </div>
-                  )}
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <h2 className="mb-2 text-2xl font-semibold group-hover:text-primary font-google-sans">{post.title}</h2>
-                      {post.description && (
-                        <p className="mb-3 text-muted-foreground leading-relaxed font-local-inter">{post.description}</p>
-                      )}
-                      {post.date && (
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground font-local-inter">
-                          <Calendar className="h-4 w-4" />
-                          {new Date(post.date).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
-                        </div>
-                      )}
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
+                  <BlogCard post={post} />
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              basePath="/blog"
+            />
+          </>
         )}
       </div>
     </div>
-  )
+  );
 }

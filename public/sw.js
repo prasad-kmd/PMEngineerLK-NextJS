@@ -1,10 +1,10 @@
-const CACHE_NAME = 'prasadm-cache-v1';
+const CACHE_NAME = 'prasadm-blogfolio-cache-v2-5';
 const ASSETS_TO_CACHE = [
   '/',
   '/manifest.json',
-  '/img/favicon/icons8_working_with_a_laptop_16.png',
-  '/img/favicon/icons8_working_with_a_laptop_32.png',
-  '/img/favicon/icons8_working_with_a_laptop_256.png',
+  '/img/favicon/favicon-16.png',
+  '/img/favicon/favicon-32.png',
+  '/img/favicon/favicon-256.png',
 ];
 
 self.addEventListener('install', (event) => {
@@ -43,13 +43,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  const isCloudflareTurnstile = url.hostname === 'challenges.cloudflare.com';
+
   // Static assets (images, fonts, scripts, styles): Cache-first
-  const isStaticAsset = 
-    request.destination === 'image' ||
+  const isStaticAsset =
+    (request.destination === 'image' ||
     request.destination === 'font' ||
     request.destination === 'script' ||
     request.destination === 'style' ||
-    url.pathname.startsWith('/_next/static/');
+    url.pathname.startsWith('/_next/static/')) &&
+    !isCloudflareTurnstile;
 
   if (isStaticAsset) {
     event.respondWith(

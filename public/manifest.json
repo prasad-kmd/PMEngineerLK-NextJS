@@ -1,8 +1,8 @@
 {
-  "id": "prasadm-blogfolio",
-  "name": "PrasadM | Engineer's Blogfolio",
+  "id": "PrasadM-Blogfolio",
+  "name": "PrasadM's Engineer Blogfolio",
   "short_name": "PrasadM",
-  "description": "Personal blogfolio documenting my engineering projects and technical insights.",
+  "description": "A modern, high-performance engineering blogfolio and workspace built with Next.js 16, Tailwind CSS 4, and TypeScript.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
@@ -42,43 +42,38 @@
   "widgets": [],
   "icons": [
     {
-      "src": "/img/favicon/icons8_working_with_a_laptop_16.png",
+      "src": "/img/favicon/favicon-16.png",
       "sizes": "16x16",
       "type": "image/png"
     },
     {
-      "src": "/img/favicon/icons8_working_with_a_laptop_32.png",
+      "src": "/img/favicon/favicon-32.png",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "/img/favicon/icons8_working_with_a_laptop_48.png",
-      "sizes": "48x48",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/img/favicon/icons8_working_with_a_laptop_64.png",
+      "src": "/img/favicon/favicon-64.png",
       "sizes": "64x64",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/img/favicon/icons8_working_with_a_laptop_128.png",
+      "src": "/img/favicon/favicon-128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/img/favicon/icons8_working_with_a_laptop_256.png",
+      "src": "/img/favicon/favicon-256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/favicon/favicon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
-    },
-    {
-      "src": "/img/favicon/icons8_working_with_a_laptop_256.png",
-      "sizes": "256x256",
-      "type": "image/png"
     }
   ],
   "categories": [
@@ -92,7 +87,7 @@
       "url": "/portfolio",
       "icons": [
         {
-          "src": "/img/favicon/portfolio_48px.png",
+          "src": "/img/favicon/portfolio-48.png",
           "sizes": "48x48"
         }
       ]
@@ -102,7 +97,7 @@
       "url": "/blog",
       "icons": [
         {
-          "src": "/img/favicon/blog_48px.png",
+          "src": "/img/favicon/blog-48.png",
           "sizes": "48x48"
         }
       ]
@@ -112,7 +107,7 @@
       "url": "/projects",
       "icons": [
         {
-          "src": "/img/favicon/projects_48px.png",
+          "src": "/img/favicon/projects-48.png",
           "sizes": "48x48"
         }
       ]
@@ -122,7 +117,7 @@
       "url": "/pages",
       "icons": [
         {
-          "src": "/img/favicon/pages_48px.png",
+          "src": "/img/favicon/pages-48.png",
           "sizes": "48x48"
         }
       ]

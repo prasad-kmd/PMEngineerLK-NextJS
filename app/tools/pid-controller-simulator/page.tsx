@@ -8,26 +8,15 @@ import { LineChart as ChartIcon, ChevronLeft, Sliders, Zap } from "lucide-react"
 import Link from "next/link"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
+  AreaChart,
+  Area,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
-  Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+  ResponsiveContainer,
+} from "recharts"
 
 export default function PIDSimulator() {
     const [kp, setKp] = useState<string>("2.5")
@@ -80,72 +69,6 @@ export default function PIDSimulator() {
         }
         return history
     }, [kp, ki, kd])
-
-    const chartData = {
-        labels: simData.map(d => d.time),
-        datasets: [
-            {
-                label: 'Process Variable (PV)',
-                data: simData.map(d => d.position),
-                borderColor: '#8b5cf6',
-                backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                fill: true,
-                tension: 0.4,
-                borderWidth: 3,
-                pointRadius: 0,
-            },
-            {
-                label: 'Setpoint (SP)',
-                data: simData.map(d => d.setpoint),
-                borderColor: 'rgba(255, 255, 255, 0.3)',
-                borderDash: [5, 5],
-                pointRadius: 0,
-                borderWidth: 1,
-            }
-        ]
-    }
-
-    const options = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                mode: 'index' as const,
-                intersect: false,
-            },
-        },
-        scales: {
-            y: {
-                grid: {
-                    color: 'rgba(255, 255, 255, 0.05)'
-                },
-                ticks: {
-                    color: 'rgba(255, 255, 255, 0.5)',
-                    font: { size: 10 }
-                },
-                min: 0,
-                max: 1.5
-            },
-            x: {
-                grid: {
-                    display: false
-                },
-                ticks: {
-                    color: 'rgba(255, 255, 255, 0.5)',
-                    font: { size: 10 },
-                    maxTicksLimit: 10
-                }
-            }
-        },
-        interaction: {
-            mode: 'nearest' as const,
-            axis: 'x' as const,
-            intersect: false,
-        },
-    }
 
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
@@ -247,8 +170,59 @@ export default function PIDSimulator() {
                                     </div>
                                 </div>
                             </CardHeader>
-                            <CardContent className="flex-1 relative pb-6">
-                                <Line data={chartData} options={options} />
+                            <CardContent className="flex-1 relative pb-6 pt-4">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={simData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+                                        <defs>
+                                            <linearGradient id="colorPV" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                                                <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" vertical={false} />
+                                        <XAxis 
+                                            dataKey="time" 
+                                            stroke="rgba(255, 255, 255, 0.5)" 
+                                            fontSize={10} 
+                                            tickLine={false} 
+                                            axisLine={false}
+                                            interval="preserveStartEnd"
+                                            minTickGap={30}
+                                        />
+                                        <YAxis 
+                                            domain={[0, 1.5]} 
+                                            stroke="rgba(255, 255, 255, 0.5)" 
+                                            fontSize={10} 
+                                            tickLine={false} 
+                                            axisLine={false} 
+                                        />
+                                        <Tooltip 
+                                            contentStyle={{ backgroundColor: '#1f2937', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                                            itemStyle={{ fontSize: '12px' }}
+                                            labelStyle={{ color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}
+                                        />
+                                        <Area 
+                                            type="monotone" 
+                                            dataKey="position" 
+                                            name="Process Variable (PV)" 
+                                            stroke="#8b5cf6" 
+                                            strokeWidth={3} 
+                                            fillOpacity={1} 
+                                            fill="url(#colorPV)"
+                                            dot={false} 
+                                            activeDot={{ r: 4 }} 
+                                        />
+                                        <Line 
+                                            type="monotone" 
+                                            dataKey="setpoint" 
+                                            name="Setpoint (SP)" 
+                                            stroke="rgba(255, 255, 255, 0.3)" 
+                                            strokeDasharray="5 5" 
+                                            strokeWidth={1} 
+                                            dot={false} 
+                                        />
+                                    </AreaChart>
+                                </ResponsiveContainer>
                             </CardContent>
                         </Card>
                     </div>

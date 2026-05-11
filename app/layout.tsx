@@ -1,6 +1,6 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+// import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { SidebarProvider } from "@/components/sidebar-context";
@@ -119,6 +119,14 @@ import { CustomContextMenu } from "@/components/custom-context-menu";
 import { Footer } from "@/components/footer";
 import { ViewTransitions } from "@/components/view-transitions";
 import ClickSpark from "@/components/ClickSpark";
+import { AccentColorInitializer } from "@/components/accent-color-initializer";
+import { AuthInitializer } from "@/components/auth/auth-initializer";
+import { PostHogProvider } from "@/components/posthog-provider";
+import PostHogPageviewWrapper from "@/components/analytics/PostHogPageview";
+// import Script from "next/script";
+import { AccessibilityProvider } from "@/providers/AccessibilityProvider";
+import { FloatingButton } from "@/components/accessibility/FloatingButton";
+import { ControlPanel } from "@/components/accessibility/ControlPanel";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -127,7 +135,7 @@ export const metadata: Metadata = {
     default: siteConfig.title,
   },
   description: siteConfig.description,
-  generator: "PrasadM",
+  generator: siteConfig.author,
   creator: siteConfig.author,
   publisher: siteConfig.author,
   robots: {
@@ -145,7 +153,7 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
     url: siteConfig.url,
-    siteName: "PrasadM's Blogfolio",
+    siteName: `${siteConfig.author}'s Workspace`,
     images: [
       {
         url: `/api/og?title=${encodeURIComponent(siteConfig.title)}`,
@@ -165,67 +173,67 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/img/favicon/icons8_working_with_a_laptop.ico" },
+      { url: "/img/favicon/favicon-32.ico" },
       {
-        url: "/img/favicon/icons8_working_with_a_laptop_16.png",
+        url: "/img/favicon/favicon-16.png",
         sizes: "16x16",
         type: "image/png",
       },
       {
-        url: "/img/favicon/icons8_working_with_a_laptop_32.png",
+        url: "/img/favicon/favicon-32.png",
         sizes: "32x32",
         type: "image/png",
       },
       {
-        url: "/img/favicon/icons8_working_with_a_laptop_48.png",
-        sizes: "48x48",
-        type: "image/png",
-      },
-      {
-        url: "/img/favicon/icons8_working_with_a_laptop_64.png",
+        url: "/img/favicon/favicon-64.png",
         sizes: "64x64",
         type: "image/png",
       },
       {
-        url: "/img/favicon/icons8_working_with_a_laptop_128.png",
+        url: "/img/favicon/favicon-128.png",
         sizes: "128x128",
         type: "image/png",
       },
       {
-        url: "/img/favicon/icons8_working_with_a_laptop_256.png",
+        url: "/img/favicon/favicon-256.png",
         sizes: "256x256",
+        type: "image/png",
+      },
+      {
+        url: "/img/favicon/favicon-512.png",
+        sizes: "512x512",
         type: "image/png",
       },
     ],
     apple: [
       {
-        url: "/img/favicon/icons8_working_with_a_laptop_16.png",
+        url: "/img/favicon/favicon-16.png",
         sizes: "16x16",
         type: "image/png",
       },
       {
-        url: "/img/favicon/icons8_working_with_a_laptop_32.png",
+        url: "/img/favicon/favicon-32.png",
         sizes: "32x32",
         type: "image/png",
       },
       {
-        url: "/img/favicon/icons8_working_with_a_laptop_48.png",
-        sizes: "48x48",
-        type: "image/png",
-      },
-      {
-        url: "/img/favicon/icons8_working_with_a_laptop_64.png",
+        url: "/img/favicon/favicon-64.png",
         sizes: "64x64",
         type: "image/png",
       },
       {
-        url: "/img/favicon/icons8_working_with_a_laptop_128.png",
+        url: "/img/favicon/favicon-128.png",
         sizes: "128x128",
         type: "image/png",
       },
       {
-        url: "/img/favicon/icons8_working_with_a_laptop_256.png",
+        url: "/img/favicon/favicon-256.png",
         sizes: "256x256",
+        type: "image/png",
+      },
+      {
+        url: "/img/favicon/favicon-512.png",
+        sizes: "512x512",
         type: "image/png",
       },
     ],
@@ -234,7 +242,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "PrasadM's Blogfolio",
+    title: `${siteConfig.author}'s Workspace`,
   },
 };
 
@@ -250,45 +258,58 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${amoriaregular.variable} ${mozillaHeadline.variable} ${philosopher.variable} ${googleSans.variable} ${mozillaText.variable} ${notoSans.variable} ${notoSansDisplay.variable} ${notoSerifSinhala.variable} ${roboto.variable} ${spaceMono.variable} ${localInter.variable} ${localJetBrainsMono.variable}`}
     >
-      <body className="antialiased selection:bg-brand-200 selection:text-brand-900">
+      <body
+        className="antialiased selection:bg-brand-200 selection:text-brand-900"
+        suppressHydrationWarning
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>
-            <SidebarProvider>
-              <BookmarksProvider>
-                <ViewTransitions>
-                  <ClickSpark
-                    sparkColor="#ffffff"
-                    sparkSize={10}
-                    sparkRadius={15}
-                    sparkCount={8}
-                    duration={400}
-                    easing="linear"
-                    extraScale={1.5}
-                  >
-                    <CustomContextMenu />
-                    <FloatingNavbar className="hidden lg:flex" />
-                    <Navigation />
-                    <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
-                      {children}
-                      <Footer />
-                    </main>
-                    <ScrollToTop />
-                    <Toaster position="bottom-right" richColors />
-                    <ConnectivityListener />
-                    <SpeedInsights />
-                    <ServiceWorkerRegistrar />
-                  </ClickSpark>
-                </ViewTransitions>
-              </BookmarksProvider>
-            </SidebarProvider>
-          </TooltipProvider>
+          <PostHogProvider>
+            <AccessibilityProvider>
+              <PostHogPageviewWrapper />
+              <AccentColorInitializer />
+              <AuthInitializer />
+              <TooltipProvider>
+                <SidebarProvider>
+                  <BookmarksProvider>
+                    <ViewTransitions>
+                      <ClickSpark
+                        // sparkColor="#ffffff"
+                        sparkSize={10}
+                        sparkRadius={15}
+                        sparkCount={8}
+                        duration={400}
+                        easing="linear"
+                        extraScale={1.5}
+                      >
+                        <CustomContextMenu />
+                        <FloatingNavbar className="hidden lg:flex" />
+                        <Navigation />
+                        <main className="transition-[padding] duration-300 lg:pl-(--sidebar-width,256px) overflow-x-clip">
+                          {children}
+                          <Footer />
+                        </main>
+                        <FloatingButton />
+                        <ControlPanel />
+                        <ScrollToTop />
+                        <Toaster position="bottom-right" richColors />
+                        <ConnectivityListener />
+                        {/* <SpeedInsights /> */}
+                        <ServiceWorkerRegistrar />
+                      </ClickSpark>
+                    </ViewTransitions>
+                  </BookmarksProvider>
+                </SidebarProvider>
+              </TooltipProvider>
+            </AccessibilityProvider>
+          </PostHogProvider>
         </ThemeProvider>
       </body>
     </html>

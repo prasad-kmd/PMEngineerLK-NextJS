@@ -1,29 +1,62 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { PanelLeft, Github, Twitter, Linkedin, Mail, ArrowUpRight, Globe, Shield, Terminal, Rss } from "lucide-react"
-import { siteConfig } from "@/lib/config"
+import Link from "next/link";
+import Image from "next/image";
+import {
+  Github,
+  Twitter,
+  Linkedin,
+  Mail,
+  ArrowUpRight,
+  Globe,
+  Shield,
+  Terminal,
+  Rss,
+} from "lucide-react";
+import { siteConfig } from "@/lib/config";
 
 export function Footer() {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="relative border-t border-border bg-card/30 backdrop-blur-md overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+      {/* Decorative background elements with animations */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-20 overflow-hidden">
+        <div
+          className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] bg-primary/20 rounded-full blur-[120px] animate-blob"
+          style={{ animationDuration: "25s" }}
+        />
+        <div
+          className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[70%] bg-primary/10 rounded-full blur-[140px] animate-blob"
+          style={{ animationDuration: "30s", animationDelay: "-10s" }}
+        />
+        <div
+          className="absolute top-[20%] right-[10%] w-[30%] h-[40%] bg-primary/15 rounded-full blur-[100px] animate-blob"
+          style={{ animationDuration: "35s", animationDelay: "-20s" }}
+        />
+      </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-8">
+      <div className="relative mx-auto max-w-7xl px-6 pt-16 lg:pb-8 pb-24 z-10">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-4 lg:grid-cols-5">
           {/* Logo and Brand Identity */}
           <div className="md:col-span-2 lg:col-span-2">
             <Link href="/" className="group flex items-center gap-3 mb-6">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-all group-hover:bg-primary group-hover:text-primary-foreground shadow-sm">
-                <PanelLeft className="h-6 w-6" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 transition-all group-hover:bg-primary shadow-sm overflow-hidden p-1.5">
+                <Image
+                  src="/img/favicon/favicon-256.png"
+                  alt="Logo"
+                  width={32}
+                  height={32}
+                  className="h-full w-full object-contain"
+                />
               </div>
               <div>
-                <span className="text-2xl font-bold mozilla-headline tracking-tight">PrasadM</span>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-primary/80 font-bold google-sans">Engineering Portfolio</p>
+                <span className="text-2xl font-bold mozilla-headline tracking-tight">
+                  PrasadM
+                </span>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-primary/80 font-bold google-sans">
+                  Engineering Portfolio
+                </p>
               </div>
             </Link>
             <p className="text-sm text-muted-foreground google-sans leading-relaxed max-w-sm mb-6">
@@ -31,9 +64,21 @@ export function Footer() {
             </p>
             <div className="flex gap-3">
               {[
-                { icon: Github, href: siteConfig.socialLinks.github, label: "GitHub" },
-                { icon: Twitter, href: siteConfig.socialLinks.twitter, label: "Twitter" },
-                { icon: Linkedin, href: siteConfig.socialLinks.linkedin, label: "LinkedIn" },
+                {
+                  icon: Github,
+                  href: siteConfig.socialLinks.github,
+                  label: "GitHub",
+                },
+                {
+                  icon: Twitter,
+                  href: siteConfig.socialLinks.twitter,
+                  label: "Twitter",
+                },
+                {
+                  icon: Linkedin,
+                  href: siteConfig.socialLinks.linkedin,
+                  label: "LinkedIn",
+                },
                 { icon: Rss, href: "/feed.xml", label: "RSS Feed" },
                 { icon: Mail, href: "/contact", label: "Contact" },
               ].map((social) => (
@@ -64,8 +109,8 @@ export function Footer() {
                 { name: "Tutorials", href: "/tutorials" },
               ].map((link) => (
                 <li key={link.name}>
-                  <Link 
-                    href={link.href} 
+                  <Link
+                    href={link.href}
                     className="group flex items-center text-sm text-muted-foreground hover:text-primary transition-colors google-sans"
                   >
                     {link.name}
@@ -94,8 +139,8 @@ export function Footer() {
                 { name: "Site Directory", href: "/pages" },
               ].map((link) => (
                 <li key={link.name}>
-                  <Link 
-                    href={link.href} 
+                  <Link
+                    href={link.href}
                     className="group flex items-center text-sm text-muted-foreground hover:text-primary transition-colors google-sans"
                   >
                     {link.name}
@@ -120,8 +165,8 @@ export function Footer() {
                 { name: "Security", href: "/security" },
               ].map((link) => (
                 <li key={link.name}>
-                  <Link 
-                    href={link.href} 
+                  <Link
+                    href={link.href}
                     className="group flex items-center text-sm text-muted-foreground hover:text-primary transition-colors google-sans"
                   >
                     {link.name}
@@ -140,16 +185,21 @@ export function Footer() {
               © {currentYear} PrasadM. Documenting Engineering Excellence.
             </p>
             <p className="text-[10px] text-muted-foreground/60 font-mono tracking-tight uppercase">
-              Built with Next.js 15 & Tailwind CSS 4
+              Built with Next.js 16 & Tailwind CSS 4
             </p>
           </div>
-          
-          <Link href="/status" className="flex items-center gap-4 px-4 py-2 rounded-full bg-muted/30 border border-border/50 backdrop-blur-sm hover:bg-muted/50 transition-colors">
+
+          <Link
+            href="/status"
+            className="flex items-center gap-4 px-4 py-2 rounded-full bg-muted/30 border border-border/50 backdrop-blur-sm hover:bg-muted/50 transition-colors"
+          >
             <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-[10px] font-medium google-sans uppercase tracking-tighter text-muted-foreground">Systems Operational</span>
+            <span className="text-[10px] font-medium google-sans uppercase tracking-tighter text-muted-foreground">
+              Systems Operational
+            </span>
           </Link>
         </div>
       </div>
     </footer>
-  )
+  );
 }

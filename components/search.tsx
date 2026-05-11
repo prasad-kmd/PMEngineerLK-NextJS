@@ -13,13 +13,9 @@ import {
   Briefcase,
   FileText,
   Settings,
-  Scaling,
-  Calculator,
-  Image as ImageIcon,
-  BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,
@@ -48,8 +44,7 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const pathname = usePathname();
-  const isEntertainmentPath = pathname?.startsWith("/entertainment");
+  // const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
@@ -59,11 +54,10 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
       }
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        if (isEntertainmentPath) {
-          router.push("/entertainment/search");
-          return;
+        if (e.metaKey || e.ctrlKey) {
+          e.preventDefault();
+          setIsOpen(true);
         }
-        setIsOpen(true);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -98,16 +92,39 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
       return;
     }
 
-    const filtered = allContent
-      .filter(
-        (item) =>
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.description?.toLowerCase().includes(query.toLowerCase()) ||
-          item.type.toLowerCase().includes(query.toLowerCase()),
-      )
-      .slice(0, 8);
+    const timeoutId = setTimeout(async () => {
+      // If query is long enough, try fetching from Notion API if enabled
+      if (query.length > 2) {
+        setIsFetching(true);
+        try {
+          const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+          const data = await res.json();
+          setResults(data.slice(0, 8));
+        } catch (error) {
+          console.error("Search fetch error:", error);
+          // Fallback to local filtering
+          filterLocal();
+        } finally {
+          setIsFetching(false);
+        }
+      } else {
+        filterLocal();
+      }
+    }, 300);
 
-    setResults(filtered);
+    return () => clearTimeout(timeoutId);
+
+    function filterLocal() {
+      const filtered = allContent
+        .filter(
+          (item) =>
+            item.title.toLowerCase().includes(query.toLowerCase()) ||
+            item.description?.toLowerCase().includes(query.toLowerCase()) ||
+            item.type.toLowerCase().includes(query.toLowerCase()),
+        )
+        .slice(0, 8);
+      setResults(filtered);
+    }
   }, [query, allContent]);
 
   const handleClose = () => {
@@ -121,10 +138,6 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
   };
 
   const handleSearchClick = () => {
-    if (isEntertainmentPath) {
-      router.push("/entertainment/search");
-      return;
-    }
     setIsOpen(!isOpen);
   };
 
@@ -132,23 +145,10 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
     { name: "Home", href: "/", icon: Home },
     { name: "Portfolio", href: "/portfolio", icon: Briefcase },
     { name: "Blog", href: "/blog", icon: FileText },
-    { name: "Engineering Tools", href: "/tools", icon: Settings },
-    { name: "Wiki", href: "/wiki", icon: BookOpen },
     { name: "Snippets", href: "/snippets", icon: FileText },
     { name: "Roadmap", href: "/roadmap", icon: Settings },
     { name: "What's Now", href: "/now", icon: User },
     { name: "Setup / Uses", href: "/uses", icon: Settings },
-    { name: "Diff Checker", href: "/tools/diff-checker", icon: Settings },
-    {
-      name: "Persona Creator",
-      href: "/tools/user-persona-creator",
-      icon: User,
-    },
-    {
-      name: "Calculator",
-      href: "/tools/scientific-calculator",
-      icon: Calculator,
-    },
   ];
 
   // Desktop Search (Expands)
@@ -284,7 +284,8 @@ export function Search({ isMobileSidebar = false }: SearchProps) {
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && query.trim()) {
-                      handleResultClick("", ""); // This will be ignored or I should handle it better
+                      router.push(`/search?q=${encodeURIComponent(query)}`);
+                      handleClose();
                     }
                   }}
                   className="ml-3 w-full bg-transparent text-base outline-none placeholder:text-muted-foreground"
