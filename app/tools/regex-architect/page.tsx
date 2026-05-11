@@ -79,7 +79,7 @@ export default function RegexArchitectPage() {
     // Add remaining text
     parts.push(testString.slice(lastIndex))
     return parts
-  }, [testString, matches, error, pattern])
+  }, [testString, matches, regexError, pattern])
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)

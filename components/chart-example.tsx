@@ -3,7 +3,6 @@
 import {
   AreaChart,
   Area,
-  Line,
   BarChart,
   Bar,
   XAxis,

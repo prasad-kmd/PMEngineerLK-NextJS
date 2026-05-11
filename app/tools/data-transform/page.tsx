@@ -31,7 +31,7 @@ export default function DataTransformPage() {
   const handleBase64Encode = () => {
     try {
       setOutput(btoa(input))
-    } catch (e) {
+    } catch {
       toast.error("Invalid input for Base64 encoding")
     }
   }
@@ -39,7 +39,7 @@ export default function DataTransformPage() {
   const handleBase64Decode = () => {
     try {
       setOutput(atob(input))
-    } catch (e) {
+    } catch {
       toast.error("Invalid Base64 input")
     }
   }
@@ -51,7 +51,7 @@ export default function DataTransformPage() {
   const handleUrlDecode = () => {
     try {
       setOutput(decodeURIComponent(input))
-    } catch (e) {
+    } catch {
       toast.error("Invalid URL encoding")
     }
   }
@@ -65,7 +65,7 @@ export default function DataTransformPage() {
     try {
       const chars = input.replace(/\s/g, "").match(/.{1,2}/g) || []
       setOutput(chars.map(h => String.fromCharCode(parseInt(h, 16))).join(""))
-    } catch (e) {
+    } catch {
       toast.error("Invalid Hex input")
     }
   }

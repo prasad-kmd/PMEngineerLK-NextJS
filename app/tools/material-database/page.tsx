@@ -6,7 +6,6 @@ import {
   Search, 
   Info,
   ArrowRight,
-  Filter,
   Layers,
   Thermometer,
   Zap,

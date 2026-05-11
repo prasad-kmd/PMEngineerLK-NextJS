@@ -8,12 +8,15 @@ import {
     Delete,
     RotateCcw,
     Equal,
-    Settings2,
     ChevronLeft
 } from "lucide-react";
 import Link from "next/link";
 import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
+
+const evaluateMath = (sanitized: string) => {
+    return eval(sanitized);
+};
 
 export default function ScientificCalculator() {
     const [expression, setExpression] = useState("");
@@ -101,7 +104,7 @@ export default function ScientificCalculator() {
             }
 
              
-            const res = eval(sanitized);
+            const res = evaluateMath(sanitized);
             const resStr = Number.isFinite(res) ? res.toString() : "Error";
 
             if (resStr !== "Error") {
@@ -112,23 +115,25 @@ export default function ScientificCalculator() {
             } else if (!isAuto) {
                 setResult("Error");
             }
-        } catch (e) {
+        } catch {
             if (!isAuto) setResult("Error");
         }
     };
+
+    const calculateMemo = useCallback(calculate, [expression]);
 
     // Auto-calculate logic
     useEffect(() => {
         const timer = setTimeout(() => {
             if (expression.trim()) {
-                calculate(true);
+                calculateMemo(true);
             } else {
                 setResult(null);
             }
         }, 600);
 
         return () => clearTimeout(timer);
-    }, [expression]);
+    }, [expression, calculateMemo]);
 
     const buttons = [
         { label: <InlineMath math="\sin" />, value: "sin" },

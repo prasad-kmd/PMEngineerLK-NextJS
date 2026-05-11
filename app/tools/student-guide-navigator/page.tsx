@@ -16,7 +16,6 @@ import {
   LayoutDashboard,
   Save,
   Trash2,
-  Calendar,
   Download,
   Upload,
   Plus,
@@ -404,7 +403,7 @@ export default function StudentGuideNavigator() {
         if (data.isNewStudent !== undefined) setIsNewStudent(data.isNewStudent);
         if (data.studentName) setStudentName(data.studentName);
         toast.success("Data restored successfully.");
-      } catch (err) {
+      } catch {
         toast.error("Invalid backup file.");
       }
     };

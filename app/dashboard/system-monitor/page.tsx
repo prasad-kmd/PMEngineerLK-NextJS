@@ -1,11 +1,6 @@
 import React from "react";
 import { requireAdmin } from "@/lib/auth-utils";
 import { SystemMonitorManager } from "@/components/system/SystemMonitorManager";
-import {
-  checkNotionHealth,
-  checkSupabaseHealth,
-  checkPostHogHealth,
-} from "@/lib/system-monitor/health-checks";
 import { db } from "@/lib/db";
 import { systemLogs } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";

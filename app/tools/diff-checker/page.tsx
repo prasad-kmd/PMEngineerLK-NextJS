@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
-import { Split, FileText, ChevronRight, Copy, Trash2, Check, RefreshCw } from "lucide-react"
+import React, { useState } from "react"
+import { Split, FileText, Trash2, Check, RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"

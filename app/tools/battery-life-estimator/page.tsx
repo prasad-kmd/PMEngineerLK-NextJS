@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Battery, ChevronLeft, Info, Clock, AlertTriangle } from "lucide-react"
 import Link from "next/link"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
-import { InlineMath, BlockMath } from "react-katex"
+import { InlineMath } from "react-katex"
 import "katex/dist/katex.min.css"
 
 export default function BatteryLifeEstimator() {

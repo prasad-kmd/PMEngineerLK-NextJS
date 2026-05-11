@@ -12,10 +12,6 @@ import { usePersistentState } from "@/hooks/use-persistent-state"
 import { toast } from "sonner"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
-import { cn } from "@/lib/utils"
-
-const title = "Matrix Calculator"
-const description = "Calculate determinant, inverse, and trace for matrices with real-time validation."
 
 export default function MatrixCalculator() {
     const resultsRef = useRef<HTMLDivElement>(null)
@@ -138,7 +134,7 @@ export default function MatrixCalculator() {
             pdf.addImage(imgData, "PNG", 0, 0, canvas.width / 2, canvas.height / 2)
             pdf.save(`matrix_${size}x${size}_results.pdf`)
             toast.success("Exported successfully", { id: toastId })
-        } catch (e) {
+        } catch {
             toast.error("Export failed", { id: toastId })
         } finally {
             setIsExporting(false)

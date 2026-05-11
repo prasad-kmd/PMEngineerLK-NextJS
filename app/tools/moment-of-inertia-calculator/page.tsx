@@ -90,7 +90,7 @@ export default function MomentOfInertiaCalculator() {
             pdf.addImage(imgData, "PNG", 0, 0, canvas.width / 2, canvas.height / 2)
             pdf.save("moment_of_inertia_results.pdf")
             toast.success("Exported successfully", { id: toastId })
-        } catch (e) {
+        } catch {
             toast.error("Export failed", { id: toastId })
         } finally {
             setIsExporting(false)

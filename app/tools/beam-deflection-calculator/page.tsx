@@ -4,11 +4,11 @@ import React, { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Waypoints, ChevronLeft, Info, Ruler } from "lucide-react"
+import { Waypoints, ChevronLeft, Info } from "lucide-react"
 import Link from "next/link"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
-import { InlineMath, BlockMath } from "react-katex"
+import { InlineMath } from "react-katex"
 import "katex/dist/katex.min.css"
 
 export default function BeamDeflectionCalculator() {
