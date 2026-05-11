@@ -122,7 +122,7 @@ interface Programme {
   min_credits: number;
   min_l56?: number;
   min_l6?: number;
-  categories: Record<string, any>;
+  categories: Record<string, { min: number }>;
 }
 
 export default function StudentGuideNavigator() {
@@ -795,7 +795,7 @@ export default function StudentGuideNavigator() {
                     <CardContent className="p-8 space-y-6">
                       <div className="grid gap-4">
                         {Object.entries(currentProgramme?.categories || {}).map(
-                          ([cat, req]: [string, any]) => {
+                        ([cat, req]) => {
                             const current =
                               progressStats.categoryBreakdown[cat] || 0;
                             const percent = (current / req.min) * 100;
@@ -1112,7 +1112,7 @@ export default function StudentGuideNavigator() {
                       </h4>
                       <div className="grid gap-4 md:grid-cols-2">
                         {Object.entries(currentProgramme?.categories || {}).map(
-                          ([cat, req]: [string, any]) => {
+                          ([cat, req]) => {
                             const current =
                               progressStats.categoryBreakdown[cat] || 0;
                             const isComplete = current >= req.min;
@@ -1496,7 +1496,7 @@ export default function StudentGuideNavigator() {
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: '48px', rowGap: '16px' }}>
               {Object.entries(currentProgramme?.categories || {}).map(
-                ([cat, req]: [string, any]) => {
+                ([cat, req]) => {
                   const current = progressStats.categoryBreakdown[cat] || 0;
                   const percent = Math.min(100, (current / req.min) * 100);
                   return (
@@ -1679,7 +1679,7 @@ function DashboardStatCard({
   label: string;
   value: string;
   sublabel: string;
-  icon: any;
+  icon: React.ElementType;
   color: "primary" | "blue" | "emerald" | "amber";
 }) {
   const containerRef = useRef(null);
@@ -1763,7 +1763,7 @@ function CourseCard({
   onTogglePlan,
   onToggleComplete,
 }: {
-  course: any;
+  course: Course;
   isPlanned: boolean;
   isCompleted: boolean;
   onTogglePlan: () => void;

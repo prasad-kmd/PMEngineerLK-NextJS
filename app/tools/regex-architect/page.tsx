@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { 
   Terminal, 
   ArrowRight, 
@@ -24,11 +24,10 @@ export default function RegexArchitectPage() {
   const [testString, setTestString] = useState("Contact us at support@example.com or sales@company.org")
   const [error, setError] = useState<string | null>(null)
 
-  const matches = useMemo(() => {
-    if (!pattern) return []
+  const { matches, regexError } = useMemo(() => {
+    if (!pattern) return { matches: [], regexError: null }
     try {
       const regex = new RegExp(pattern, flags)
-      setError(null)
       const matchesArray = []
       let match
       
@@ -42,15 +41,21 @@ export default function RegexArchitectPage() {
           if (match.index === regex.lastIndex) regex.lastIndex++ // avoid infinite loop on empty matches
         }
       }
-      return matchesArray
+      return { matches: matchesArray, regexError: null }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Invalid regular expression")
-      return []
+      return { 
+        matches: [], 
+        regexError: e instanceof Error ? e.message : "Invalid regular expression" 
+      }
     }
   }, [pattern, flags, testString])
 
+  useEffect(() => {
+    setError(regexError)
+  }, [regexError])
+
   const highlightedText = useMemo(() => {
-    if (error || !pattern || matches.length === 0) return testString
+    if (regexError || !pattern || matches.length === 0) return testString
 
     let lastIndex = 0
     const parts = []

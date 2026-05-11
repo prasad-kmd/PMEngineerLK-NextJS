@@ -56,7 +56,7 @@ export async function getYTSMovie(imdbId: string): Promise<YTSMovie | null> {
 
     if (data.status === "ok" && data.data.movie_count > 0) {
       // Find the exact match for imdbId
-      const movie = data.data.movies.find((m: any) => m.imdb_code === imdbId);
+      const movie = data.data.movies.find((m: YTSMovie) => m.imdb_code === imdbId);
       return movie || data.data.movies[0];
     }
 

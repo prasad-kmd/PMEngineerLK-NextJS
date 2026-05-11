@@ -55,7 +55,8 @@ export default function CurveFitter() {
             }
         } else if (type === "quadratic") {
             if (points.length < 3) return null
-            let s0 = n, s1 = 0, s2 = 0, s3 = 0, s4 = 0
+            const s0 = n
+            let s1 = 0, s2 = 0, s3 = 0, s4 = 0
             let sy = 0, sxy = 0, sx2y = 0
             for (const p of points) {
                 const x2 = p.x * p.x

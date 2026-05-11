@@ -1,8 +1,7 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { 
-  Settings2, 
   Activity, 
   RotateCcw, 
   Play, 
@@ -36,6 +35,7 @@ export default function PidTunerPage() {
   const [setpoint, setSetpoint] = useState(50)
   const [isRunning, setIsRunning] = useState(true)
   const [history, setHistory] = useState<{ time: number, value: number, setpoint: number }[]>([])
+  const [currentState, setCurrentState] = useState(0)
   
   const stateRef = useRef({
     currentValue: 0,
@@ -80,6 +80,7 @@ export default function PidTunerPage() {
         velocity: newVelocity,
         time: time + 0.1
       }
+      setCurrentState(newValue)
 
       setHistory(prev => {
         const next = [...prev, { time: time, value: newValue, setpoint: setpoint }]
@@ -276,7 +277,7 @@ export default function PidTunerPage() {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Current State</p>
-                    <p className="text-2xl font-bold font-mono">{stateRef.current.currentValue.toFixed(2)}</p>
+                    <p className="text-2xl font-bold font-mono">{currentState.toFixed(2)}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -287,7 +288,7 @@ export default function PidTunerPage() {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Error</p>
-                    <p className="text-2xl font-bold font-mono">{(setpoint - stateRef.current.currentValue).toFixed(2)}</p>
+                    <p className="text-2xl font-bold font-mono">{(setpoint - currentState).toFixed(2)}</p>
                   </div>
                 </CardContent>
               </Card>

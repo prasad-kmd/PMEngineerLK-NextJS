@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
+import { useState, useMemo } from "react"
 import temml from "temml"
 import "./temml.css"
 import { Replace } from "lucide-react"
@@ -11,29 +11,20 @@ import MathMLModal from "@/components/tools/latex-mathml-converter/mathml-modal"
 
 export default function LatexToMathmlPage() {
   const [latex, setLatex] = useState("E = mc^2")
-  const [mathml, setMathml] = useState("")
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const convertLatexToMathML = useCallback((latexCode: string) => {
-    if (!latexCode.trim()) {
-      setMathml("")
-      return
-    }
+  const mathml = useMemo(() => {
+    if (!latex.trim()) return ""
     try {
-      const mml = temml.renderToString(latexCode, { 
+      return temml.renderToString(latex, { 
         displayMode: true, 
         xml: true 
       })
-      setMathml(mml)
     } catch (error) {
       console.error("Temml rendering error:", error)
-      setMathml("error")
+      return "error"
     }
-  }, [])
-
-  useEffect(() => {
-    convertLatexToMathML(latex)
-  }, [latex, convertLatexToMathML])
+  }, [latex])
 
   const handleLatexChange = (value: string) => {
     setLatex(value)
