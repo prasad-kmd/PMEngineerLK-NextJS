@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { 
     Scaling, 
     ArrowRightLeft, 
@@ -88,35 +88,29 @@ export default function UnitConverterPage() {
     const [fromUnit, setFromUnit] = useState(unitData["length"][0].value)
     const [toUnit, setToUnit] = useState(unitData["length"][1].value)
     const [fromValue, setFromValue] = useState("1")
-    const [toValue, setToValue] = useState("")
     const [copied, setCopied] = useState(false)
 
-    useEffect(() => {
-        convert(fromValue, fromUnit, toUnit, category)
-    }, [category, fromUnit, toUnit, fromValue])
-
-    const convert = (val: string, from: string, to: string, cat: UnitCategory) => {
-        const num = parseFloat(val)
+    const toValue = useMemo(() => {
+        const num = parseFloat(fromValue)
         if (isNaN(num)) {
-            setToValue("")
-            return
+            return ""
         }
 
         let result = 0
 
-        if (cat === "temperature") {
+        if (category === "temperature") {
             let celsius = 0
-            if (from === "c") celsius = num
-            else if (from === "f") celsius = (num - 32) * 5 / 9
-            else if (from === "k") celsius = num - 273.15
+            if (fromUnit === "c") celsius = num
+            else if (fromUnit === "f") celsius = (num - 32) * 5 / 9
+            else if (fromUnit === "k") celsius = num - 273.15
 
-            if (to === "c") result = celsius
-            else if (to === "f") result = (celsius * 9 / 5) + 32
-            else if (to === "k") result = celsius + 273.15
+            if (toUnit === "c") result = celsius
+            else if (toUnit === "f") result = (celsius * 9 / 5) + 32
+            else if (toUnit === "k") result = celsius + 273.15
         } else {
-            const units = unitData[cat]
-            const fromObj = units.find(u => u.value === from)
-            const toObj = units.find(u => u.value === to)
+            const units = unitData[category]
+            const fromObj = units.find(u => u.value === fromUnit)
+            const toObj = units.find(u => u.value === toUnit)
 
             if (fromObj && toObj) {
                 const baseValue = num * (fromObj.factor || 1)
@@ -124,8 +118,8 @@ export default function UnitConverterPage() {
             }
         }
 
-        setToValue(parseFloat(result.toFixed(6)).toString())
-    }
+        return parseFloat(result.toFixed(6)).toString()
+    }, [fromValue, fromUnit, toUnit, category])
 
     const handleSwap = () => {
         const tempUnit = fromUnit

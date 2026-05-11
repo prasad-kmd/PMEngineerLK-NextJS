@@ -1,20 +1,18 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState } from "react"
 import { 
   FileArchive, 
   Upload, 
   Download, 
   Trash2, 
   ArrowRight,
-  Check,
-  AlertCircle,
   Zap,
   ShieldCheck,
   Cpu
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { toast } from "sonner"
 import Link from "next/link"
 
@@ -44,7 +42,7 @@ export default function CompressorPage() {
     setIsProcessing(true)
     try {
       const stream = file.stream()
-      // @ts-ignore - CompressionStream is a newer browser API
+      // @ts-expect-error - CompressionStream is a newer browser API
       const compressionStream = new CompressionStream(format)
       const compressedStream = stream.pipeThrough(compressionStream)
       
@@ -68,7 +66,7 @@ export default function CompressorPage() {
     setIsProcessing(true)
     try {
       const stream = file.stream()
-      // @ts-ignore - DecompressionStream is a newer browser API
+      // @ts-expect-error - DecompressionStream is a newer browser API
       const decompressionStream = new DecompressionStream(format)
       const decompressedStream = stream.pipeThrough(decompressionStream)
       
