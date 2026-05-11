@@ -244,6 +244,9 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: `${siteConfig.author}'s Workspace`,
   },
+  verification: {
+    google: "TymVN0yJdgi74htfNZ1E3oGvCs12mHv-5nnw3dSTpnE",
+  },
 };
 
 export const viewport = {

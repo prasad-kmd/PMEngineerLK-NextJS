@@ -89,6 +89,7 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 - **🖼️ Image Excellence** - Next.js optimized images with LQIP, blur-up effects, and native lazy loading
 - **🔍 Semantic SEO** - Full Schema.org (JSON-LD) integration for articles, blog posts, and breadcrumbs
 - **⚡ Premium Shiki Highlighting** - VS Code-accurate syntax highlighting with lazy-loaded languages
+- **🔍 Site Verification** - Integrated Google site ownership verification
 - **📐 LaTeX Support** - Full math notation rendering via KaTeX (Inline: $F=ma$, Block: $$E=mc^2$$)
 - **🎯 Interactive Quizzes** - Dynamic, base64-encoded quiz components injectable directly into content
 - **🚨 GitHub-style Alerts** - Support for `[!NOTE]`, `[!TIP]`, `[!WARNING]`, etc.
