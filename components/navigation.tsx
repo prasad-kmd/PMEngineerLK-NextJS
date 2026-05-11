@@ -3,29 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  FileText,
-  BookOpen,
-  GitBranch,
-  Newspaper,
   Home,
   Menu,
   X,
-  Mail,
   ChevronLeft,
   ChevronRight,
-  PanelLeft,
-  Wrench,
-  UserRound,
-  Info,
-  Book,
   Clapperboard,
+  Search,
+  LogOut,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { WebShareButton } from "./web-share-button";
-import { PushNotificationManager } from "./push-notification-manager";
 import { useSidebar } from "./sidebar-context";
-import { FloatingNavbar } from "./floating-navbar";
 import {
   Tooltip,
   TooltipContent,
@@ -33,19 +22,8 @@ import {
 } from "@/components/ui/tooltip";
 
 const primaryNav = [
-  { name: "Home", href: "/", icon: Home },
-  { name: "Portfolio", href: "/portfolio", icon: UserRound },
-  { name: "Blog", href: "/blog", icon: FileText },
-  { name: "Articles", href: "/articles", icon: BookOpen },
-  { name: "Projects", href: "/projects", icon: GitBranch },
-  { name: "Wiki", href: "/wiki", icon: Book },
-  { name: "Tutorials", href: "/tutorials", icon: Newspaper },
-  { name: "Tools", href: "/tools", icon: Wrench },
-];
-
-const secondaryNav = [
-  { name: "About", href: "/about", icon: Info },
-  { name: "Contact", href: "/contact", icon: Mail },
+  { name: "Home", href: "/entertainment", icon: Home },
+  { name: "Search", href: "/entertainment/search", icon: Search },
 ];
 
 export function Navigation() {
@@ -53,13 +31,24 @@ export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isCollapsed, toggleSidebar } = useSidebar();
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", { method: "POST" });
+      if (response.ok) {
+        window.location.href = "/login";
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   const renderNavItem = (item: {
     name: string;
     href: string;
     icon: React.ElementType;
   }) => {
     const isActive =
-      pathname === item.href || pathname.startsWith(item.href + "/");
+      pathname === item.href || (item.href !== "/entertainment" && pathname.startsWith(item.href));
     return (
       <Tooltip key={item.name} delayDuration={0}>
         <TooltipTrigger asChild>
@@ -101,14 +90,10 @@ export function Navigation() {
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-border bg-background/95 px-4 py-2 backdrop-blur supports-[backdrop-filter]:bg-background/60 lg:hidden">
-        <Link href="/" className="text-lg font-bold">
-          PrasadM
+        <Link href="/" className="text-lg font-bold amoriaregular tracking-wider">
+          GSC HUB
         </Link>
         <div className="flex items-center gap-2">
-          <FloatingNavbar
-            isMobileSidebar={true}
-            className="!relative !top-0 !right-0 !shadow-none !bg-transparent !p-0"
-          />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="rounded-lg p-2 hover:bg-muted ml-1"
@@ -142,10 +127,8 @@ export function Navigation() {
             ) : (
               <ChevronLeft className="h-4 w-4" />
             )}
-            <span className="absolute left-full ml-4 px-2 py-1 bg-popover text-popover-foreground text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-border shadow-sm z-50">
-              {isCollapsed ? "Expand" : "Collapse"}
-            </span>
           </button>
+
           {/* Logo */}
           <div
             className={cn(
@@ -164,7 +147,7 @@ export function Navigation() {
                   isCollapsed && "lg:gap-0 lg:justify-center",
                 )}
               >
-                <PanelLeft
+                <Clapperboard
                   className={cn(
                     "h-6 w-6 text-primary shrink-0 transition-transform",
                     isCollapsed && "scale-110",
@@ -172,20 +155,19 @@ export function Navigation() {
                 />
                 {!isCollapsed && (
                   <div className="animate-in fade-in slide-in-from-left-2 duration-300 hidden lg:block">
-                    <h1 className="text-xl font-bold text-balance leading-tight mozilla-headline">
-                      PrasadM
+                    <h1 className="text-xl font-bold text-balance leading-tight amoriaregular tracking-widest">
+                      GSC HUB
                     </h1>
-                    <p className="mt-1 text-xs text-muted-foreground google-sans">
-                      Engineering Undergraduate
+                    <p className="mt-1 text-[10px] text-muted-foreground google-sans uppercase tracking-tighter">
+                      Premium Entertainment
                     </p>
                   </div>
                 )}
                 {/* Always show on mobile logo */}
                 <div className="lg:hidden">
-                  <h1 className="text-xl font-bold text-balance leading-tight mozilla-headline">
-                    PrasadM
+                  <h1 className="text-xl font-bold text-balance leading-tight amoriaregular tracking-widest">
+                    GSC HUB
                   </h1>
-                  <p className="mt-1 text-xs text-muted-foreground"></p>
                 </div>
               </div>
             </Link>
@@ -194,11 +176,39 @@ export function Navigation() {
           {/* Navigation */}
           <nav className="flex-1 space-y-1 px-3 py-4 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
             {primaryNav.map(renderNavItem)}
-            <hr className="my-2 border-border" />
-            <PushNotificationManager isCollapsed={isCollapsed} />
-            <WebShareButton isCollapsed={isCollapsed} />
-            <hr className="my-2 border-border" />
-            {secondaryNav.map(renderNavItem)}
+
+            <div className="mt-auto pt-4">
+               <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={handleLogout}
+                    className={cn(
+                      "flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium transition-all gap-3 relative group local-jetbrains-mono text-muted-foreground hover:bg-destructive/10 hover:text-destructive",
+                      isCollapsed
+                        ? "lg:justify-center lg:px-2 lg:gap-0"
+                        : "justify-start",
+                    )}
+                  >
+                    <LogOut className="h-5 w-5 shrink-0" />
+                    <span
+                      className={cn(
+                        "transition-opacity duration-300",
+                        isCollapsed
+                          ? "lg:opacity-0 lg:w-0 lg:overflow-hidden"
+                          : "opacity-100",
+                      )}
+                    >
+                      Logout
+                    </span>
+                  </button>
+                </TooltipTrigger>
+                {isCollapsed && (
+                  <TooltipContent side="right" className="ml-2">
+                    Logout
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </div>
           </nav>
 
           {/* Footer */}
@@ -209,8 +219,8 @@ export function Navigation() {
                 isCollapsed && "lg:hidden",
               )}
             >
-              <p className="text-xs text-muted-foreground google-sans">
-                &copy; PrasadM
+              <p className="text-[10px] text-muted-foreground google-sans uppercase tracking-widest">
+                &copy; GSC HUB
               </p>
             </div>
           )}

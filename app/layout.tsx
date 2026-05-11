@@ -1,33 +1,13 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { SidebarProvider } from "@/components/sidebar-context";
 import { ThemeProvider } from "@/components/theme-provider";
-import { FloatingNavbar } from "@/components/floating-navbar";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import "katex/dist/katex.min.css";
 
-// import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
-// import {
-//   Inter,
-//   JetBrains_Mono,
-// } from "next/font/google";
-
-// Initialize fonts
-
-// const inter = Inter({
-//   subsets: ["latin"],
-//   variable: "--font-inter",
-// });
-
-// const jetbrainsMono = JetBrains_Mono({
-//   subsets: ["latin"],
-//   variable: "--font-jetbrains-mono",
-// });
 
 const amoriaregular = localFont({
   src: "../public/fonts/en/AMORIARegular.woff2",
@@ -114,20 +94,18 @@ import { siteConfig } from "@/lib/config";
 import ServiceWorkerRegistrar from "@/components/service-worker-registrar";
 import { ConnectivityListener } from "@/components/connectivity-listener";
 import { ScrollToTop } from "@/components/scroll-to-top";
-import { BookmarksProvider } from "@/hooks/use-bookmarks";
 import { CustomContextMenu } from "@/components/custom-context-menu";
 import { Footer } from "@/components/footer";
-import { ViewTransitions } from "@/components/view-transitions";
 import ClickSpark from "@/components/ClickSpark";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    template: "%s | Blogfolio",
+    template: "%s | GSC Movie Hub",
     default: siteConfig.title,
   },
   description: siteConfig.description,
-  generator: "PrasadM",
+  generator: "GSC",
   creator: siteConfig.author,
   publisher: siteConfig.author,
   robots: {
@@ -145,10 +123,10 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
     url: siteConfig.url,
-    siteName: "PrasadM's Blogfolio",
+    siteName: "GSC Movie Hub",
     images: [
       {
-        url: `/api/og?title=${encodeURIComponent(siteConfig.title)}`,
+        url: `https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537610c4c4f9e3162b66307.svg`,
         width: 1280,
         height: 720,
         alt: siteConfig.description,
@@ -161,7 +139,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.title,
     description: siteConfig.description,
-    images: [`/api/og?title=${encodeURIComponent(siteConfig.title)}`],
+    images: [`https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537610c4c4f9e3162b66307.svg`],
   },
   icons: {
     icon: [
@@ -234,7 +212,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "PrasadM's Blogfolio",
+    title: "GSC Movie Hub",
   },
 };
 
@@ -261,32 +239,26 @@ export default function RootLayout({
         >
           <TooltipProvider>
             <SidebarProvider>
-              <BookmarksProvider>
-                <ViewTransitions>
-                  <ClickSpark
-                    sparkColor="#ffffff"
-                    sparkSize={10}
-                    sparkRadius={15}
-                    sparkCount={8}
-                    duration={400}
-                    easing="linear"
-                    extraScale={1.5}
-                  >
-                    <CustomContextMenu />
-                    <FloatingNavbar className="hidden lg:flex" />
-                    <Navigation />
-                    <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
-                      {children}
-                      <Footer />
-                    </main>
-                    <ScrollToTop />
-                    <Toaster position="bottom-right" richColors />
-                    <ConnectivityListener />
-                    <SpeedInsights />
-                    <ServiceWorkerRegistrar />
-                  </ClickSpark>
-                </ViewTransitions>
-              </BookmarksProvider>
+              <ClickSpark
+                sparkColor="#ffffff"
+                sparkSize={10}
+                sparkRadius={15}
+                sparkCount={8}
+                duration={400}
+                easing="linear"
+                extraScale={1.5}
+              >
+                <CustomContextMenu />
+                <Navigation />
+                <main className="transition-[padding] duration-300 lg:pl-[var(--sidebar-width,256px)]">
+                  {children}
+                  <Footer />
+                </main>
+                <ScrollToTop />
+                <Toaster position="bottom-right" richColors />
+                <ConnectivityListener />
+                <ServiceWorkerRegistrar />
+              </ClickSpark>
             </SidebarProvider>
           </TooltipProvider>
         </ThemeProvider>

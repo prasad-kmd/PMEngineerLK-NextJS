@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -188,22 +187,6 @@
   body {
     @apply bg-background text-foreground;
   }
-
-  /* @media (min-width: 768px) {
-    *,
-    body {
-      cursor: none !important;
-    }
-
-    a,
-    button,
-    [role="button"],
-    input,
-    textarea,
-    select {
-      cursor: none !important;
-    }
-  } */
 }
 
 @utility scrollbar-hide {
@@ -229,120 +212,6 @@
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-muted-foreground/50;
-}
-
-/* KaTeX styling overrides for dark theme */
-.katex {
-  font-size: 1.1em;
-}
-
-.katex-display {
-  margin: 1.5em 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-
-.katex .mord,
-.katex .mop,
-.katex .mbin,
-.katex .mrel,
-.katex .mopen,
-.katex .mclose,
-.katex .mpunct,
-.katex .minner {
-  color: inherit;
-}
-
-/* Highlight.js code block styling */
-pre code.hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 1em;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-}
-
-code.hljs {
-  padding: 0.2em 0.4em;
-  background: var(--muted);
-  border-radius: 0.25rem;
-}
-
-@layer base {
-  .prose *,
-  .prose ::after,
-  .prose ::before,
-  .prose ::backdrop,
-  .prose ::file-selector-button {
-    margin: revert;
-    padding: revert;
-  }
-
-  .prose h1,
-  .prose h2,
-  .prose h3,
-  .prose h4,
-  .prose h5,
-  .prose h6 {
-    font-size: revert;
-    font-weight: revert;
-  }
-
-  .prose ol,
-  .prose ul,
-  .prose menu {
-    list-style: revert;
-  }
-
-  .prose table,
-  .prose td,
-  .prose th {
-    @apply border border-border;
-    padding: 0.5rem;
-    border-collapse: collapse;
-  }
-
-  .prose table {
-    width: 100%;
-  }
-}
-
-.img_grad_pm {
-  background-blend-mode: normal;
-  background-origin: border-box;
-  background-position: left center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
-.blog_page {
-  background-image: var(--page-gradient), url("/img/page/ideas_2.webp");
-}
-
-.blog_item {
-  background-image: var(--page-gradient), url("/img/page/ideas_item.webp");
-}
-
-.articles_page {
-  background-image: var(--page-gradient), url("/img/page/diary.webp");
-}
-
-.articles_item {
-  background-image: var(--page-gradient), url("/img/page/diary_page.webp");
-}
-
-.tutorials_page {
-  background-image: var(--page-gradient), url("/img/page/posts.webp");
-}
-
-.projects_page {
-  background-image: var(--page-gradient), url("/img/page/workflow.webp");
-}
-
-:root {
-  --font-amoria-regular: "amoriaregular", sans-serif;
 }
 
 .amoriaregular {
