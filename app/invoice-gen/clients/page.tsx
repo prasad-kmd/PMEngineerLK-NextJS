@@ -24,7 +24,7 @@ export default async function ClientsPage({
               name="q"
               defaultValue={q}
               placeholder="Search clients..."
-              className="w-full h-12 pl-12 pr-4 rounded-2xl bg-card/20 backdrop-blur-md border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium"
+              className="w-full h-12 pl-4 pr-4 rounded-2xl bg-card/20 backdrop-blur-md border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium"
             />
           </form>
         </div>

@@ -36,7 +36,7 @@ export default async function InvoicesPage({
                 name="q"
                 defaultValue={q}
                 placeholder="Search invoices..."
-                className="w-full h-12 pl-12 pr-4 rounded-2xl bg-card/20 backdrop-blur-md border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium"
+                className="w-full h-12 pl-4 pr-4 rounded-2xl bg-card/20 backdrop-blur-md border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium"
               />
             </form>
           </div>
@@ -70,7 +70,7 @@ export default async function InvoicesPage({
         </Button>
       </div>
 
-      <Card className="bg-card/20 backdrop-blur-md border-border/40 rounded-[2.5rem] overflow-hidden shadow-sm">
+      <Card className="bg-card/20 backdrop-blur-md border-border/40 rounded-2xl overflow-hidden shadow-sm">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -94,7 +94,7 @@ export default async function InvoicesPage({
                           <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                             <ReceiptText className="w-4 h-4" />
                           </div>
-                          <span className="font-bold text-sm google-sans">{invoice.invoiceNumber}</span>
+                          <Link href={`/invoice-gen/invoices/${invoice.id}`}><span className="font-bold text-sm google-sans">{invoice.invoiceNumber}</span></Link>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm font-medium">{invoice.clientName}</td>

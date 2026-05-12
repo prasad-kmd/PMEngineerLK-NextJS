@@ -44,7 +44,7 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map((stat) => (
-          <Card key={stat.title} className="bg-card/20 backdrop-blur-md border-border/40 rounded-3xl hover:border-primary/30 transition-colors">
+          <Card key={stat.title} className="bg-card/20 backdrop-blur-md border-border/40 rounded-2xl hover:border-primary/30 transition-colors">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-xs font-bold google-sans uppercase tracking-widest text-muted-foreground">
                 {stat.title}
@@ -54,14 +54,14 @@ export default async function DashboardPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold google-sans tracking-tight">{stat.value}</div>
+              <div className="text-2xl font-bold font-local-jetbrains-mono tracking-tight">{stat.value}</div>
             </CardContent>
           </Card>
         ))}
       </div>
 
       <div className="grid grid-cols-1 gap-8">
-        <Card className="bg-card/20 backdrop-blur-md border-border/40 rounded-3xl overflow-hidden">
+        <Card className="bg-card/20 backdrop-blur-md border-border/40 rounded-2xl overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between p-6 border-b border-border/40">
             <div>
               <CardTitle className="text-lg font-bold google-sans">Recent Invoices</CardTitle>
@@ -97,7 +97,7 @@ export default async function DashboardPage() {
                     recentInvoices.map((invoice) => (
                       <tr key={invoice.id} className="border-b border-border/40 hover:bg-muted/10 transition-colors group">
                         <td className="px-6 py-4">
-                          <span className="font-bold text-sm google-sans">{invoice.invoiceNumber}</span>
+                          <Link href={`/invoice-gen/invoices/${invoice.id}`}><span className="font-bold text-sm google-sans">{invoice.invoiceNumber}</span></Link>
                         </td>
                         <td className="px-6 py-4 text-sm font-medium">{invoice.clientName}</td>
                         <td className="px-6 py-4 text-sm text-muted-foreground">{formatDate(invoice.issueDate)}</td>
