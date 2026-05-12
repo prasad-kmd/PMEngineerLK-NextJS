@@ -1,16 +1,20 @@
-"use client"
+"use client";
 
 interface EquationPreviewProps {
-  mathml: string
+  mathml: string;
 }
 
 export function EquationPreview({ mathml }: EquationPreviewProps) {
   if (mathml === "error") {
-    return <p className="text-red-500">Error rendering LaTeX</p>
+    return <p className="text-red-500">Error rendering LaTeX</p>;
   }
 
   if (!mathml) {
-    return <p className="text-muted-foreground italic">Your equation preview will appear here</p>
+    return (
+      <p className="text-muted-foreground italic">
+        Your equation preview will appear here
+      </p>
+    );
   }
 
   return (
@@ -18,5 +22,5 @@ export function EquationPreview({ mathml }: EquationPreviewProps) {
       className="text-lg md:text-xl lg:text-2xl text-foreground"
       dangerouslySetInnerHTML={{ __html: mathml }}
     />
-  )
+  );
 }

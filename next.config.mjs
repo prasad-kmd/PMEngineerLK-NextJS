@@ -76,7 +76,7 @@ const nextConfig = {
       { protocol: "https", hostname: "image.tmdb.org" },
       { protocol: "https", hostname: "prasadm.vercel.app" },
       { protocol: "https", hostname: "prasadm.vercel.app/img/*" },
-      new URL('https://prasadm.vercel.app/img/**'),
+      new URL("https://prasadm.vercel.app/img/**"),
     ],
     formats: ["image/webp", "image/avif"],
     dangerouslyAllowSVG: true, // For LQIP shimmers

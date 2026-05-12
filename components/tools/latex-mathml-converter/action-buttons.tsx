@@ -1,12 +1,12 @@
-"use client"
-import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
-import { Copy, Eye } from "lucide-react"
+"use client";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Copy, Eye } from "lucide-react";
 
 interface ActionButtonsProps {
-  mathml: string
-  latex: string
-  onViewMathML: () => void
+  mathml: string;
+  latex: string;
+  onViewMathML: () => void;
 }
 
 export default function ActionButtons({
@@ -16,33 +16,33 @@ export default function ActionButtons({
 }: ActionButtonsProps) {
   const handleCopyMathML = async () => {
     try {
-      await navigator.clipboard.writeText(mathml)
+      await navigator.clipboard.writeText(mathml);
       toast.success("Copied!", {
         description: "MathML code copied to clipboard",
         duration: 2000,
-      })
+      });
     } catch {
       toast.error("Error", {
         description: "Failed to copy to clipboard",
         duration: 2000,
-      })
+      });
     }
-  }
+  };
 
   const handleCopyLatex = async () => {
     try {
-      await navigator.clipboard.writeText(latex)
+      await navigator.clipboard.writeText(latex);
       toast.success("Copied!", {
         description: "LaTeX code copied to clipboard",
         duration: 2000,
-      })
+      });
     } catch {
       toast.error("Error", {
         description: "Failed to copy to clipboard",
         duration: 2000,
-      })
+      });
     }
-  }
+  };
 
   return (
     <div className="flex flex-col sm:flex-row gap-2 justify-end">
@@ -66,15 +66,15 @@ export default function ActionButtons({
         <Copy className="w-3.5 h-3.5" />
         Copy MathML
       </Button>
-      <Button 
-        onClick={onViewMathML} 
-        disabled={!mathml} 
-        size="sm" 
+      <Button
+        onClick={onViewMathML}
+        disabled={!mathml}
+        size="sm"
         className="gap-2 text-xs rounded-lg"
       >
         <Eye className="w-3.5 h-3.5" />
         View MathML
       </Button>
     </div>
-  )
+  );
 }

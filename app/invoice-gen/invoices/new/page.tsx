@@ -4,9 +4,9 @@ import { InvoiceForm } from "@/components/invoice-gen/invoice-form";
 import { redirect } from "next/navigation";
 
 export default async function NewInvoicePage({
-    searchParams,
+  searchParams,
 }: {
-    searchParams: Promise<{ clientId?: string }>;
+  searchParams: Promise<{ clientId?: string }>;
 }) {
   const { clientId } = await searchParams;
   const clients = await getClients();
@@ -18,10 +18,10 @@ export default async function NewInvoicePage({
 
   return (
     <div className="space-y-8">
-      <InvoiceForm 
-        clients={clients} 
-        business={settings} 
-        initialData={clientId ? { clientId } : undefined} 
+      <InvoiceForm
+        clients={clients}
+        business={settings}
+        initialData={clientId ? { clientId } : undefined}
       />
     </div>
   );

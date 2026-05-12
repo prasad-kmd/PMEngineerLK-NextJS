@@ -2,19 +2,45 @@
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createInvoice, updateInvoice } from "@/app/invoice-gen/actions/invoices";
+import {
+  createInvoice,
+  updateInvoice,
+} from "@/app/invoice-gen/actions/invoices";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Save, ReceiptText, User, Calendar, DollarSign, FileText, LayoutPanelTop, UserPlus } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Save,
+  ReceiptText,
+  User,
+  Calendar,
+  DollarSign,
+  FileText,
+  LayoutPanelTop,
+  UserPlus,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { formatCurrency } from "@/lib/utils";
 import { useState, useMemo } from "react";
 import * as z from "zod";
 import { type Client, type BusinessSettings } from "@/lib/db/schema";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { createClient } from "@/app/invoice-gen/actions/clients";
 import { type InvoiceWithAll } from "@/types/invoice";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,7 +73,13 @@ interface InvoiceFormProps {
   initialData?: InvoiceWithAll;
 }
 
-const SectionHeader = ({ icon: Icon, title }: { icon: React.ElementType, title: string }) => (
+const SectionHeader = ({
+  icon: Icon,
+  title,
+}: {
+  icon: React.ElementType;
+  title: string;
+}) => (
   <div className="flex items-center gap-3 mb-6">
     <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
       <Icon className="h-5 w-5" />
@@ -56,7 +88,11 @@ const SectionHeader = ({ icon: Icon, title }: { icon: React.ElementType, title: 
   </div>
 );
 
-export function InvoiceForm({ clients: initialClients, business, initialData }: InvoiceFormProps) {
+export function InvoiceForm({
+  clients: initialClients,
+  business,
+  initialData,
+}: InvoiceFormProps) {
   const router = useRouter();
   const [clients, setClients] = useState(initialClients);
   const [isAddingClient, setIsAddingClient] = useState(false);
@@ -96,8 +132,9 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
 
   const { subtotal, taxAmount, total } = useMemo(() => {
     const sub = (watchedItems || []).reduce(
-      (acc: number, item) => acc + ((item?.quantity || 0) * (item?.unitPrice || 0)),
-      0
+      (acc: number, item) =>
+        acc + (item?.quantity || 0) * (item?.unitPrice || 0),
+      0,
     );
     const tax = (sub * (watchedTaxRate || 0)) / 100;
     const tot = sub + tax - (watchedDiscount || 0);
@@ -120,7 +157,8 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
       router.push("/invoice-gen/invoices");
       router.refresh();
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to save invoice";
+      const message =
+        error instanceof Error ? error.message : "Failed to save invoice";
       toast.error(message);
     }
   }
@@ -134,21 +172,21 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
     if (!newClientName) return;
     try {
       setIsAddingClient(true);
-      const res = await createClient({ 
+      const res = await createClient({
         name: newClientName,
         email: newClientEmail || null,
         phone: newClientPhone || null,
         address: newClientAddress || null,
       });
-      const newClient: Client = { 
-        id: res.id, 
-        userId: "", 
-        name: newClientName, 
-        email: newClientEmail || null, 
-        phone: newClientPhone || null, 
-        address: newClientAddress || null, 
-        createdAt: new Date(), 
-        updatedAt: new Date() 
+      const newClient: Client = {
+        id: res.id,
+        userId: "",
+        name: newClientName,
+        email: newClientEmail || null,
+        phone: newClientPhone || null,
+        address: newClientAddress || null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       setClients([newClient, ...clients]);
       form.setValue("clientId", res.id);
@@ -166,7 +204,10 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
 
   return (
     <div className="max-w-6xl mx-auto animate-in fade-in duration-700">
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+      >
         {/* Left Column */}
         <div className="lg:col-span-8 space-y-8">
           {/* Invoice Details */}
@@ -183,7 +224,10 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                       control={form.control}
                       name="clientId"
                       render={({ field }) => (
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
                           <SelectTrigger className="h-11 rounded-xl bg-background/50 border-border/40 focus:ring-primary/10">
                             <SelectValue placeholder="Select a client" />
                           </SelectTrigger>
@@ -200,10 +244,10 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                   </div>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        size="icon" 
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
                         className="h-11 w-11 rounded-xl bg-background/50 border-border/40 hover:bg-primary/5 hover:text-primary transition-colors"
                       >
                         <UserPlus className="h-4 w-4" />
@@ -218,8 +262,10 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                       </DialogHeader>
                       <div className="space-y-5 py-4 font-google-sans">
                         <div className="space-y-2">
-                          <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Full Name</Label>
-                          <Input 
+                          <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">
+                            Full Name
+                          </Label>
+                          <Input
                             className="h-11 rounded-xl bg-background/50 border-border/40 focus:border-primary/50"
                             value={newClientName}
                             onChange={(e) => setNewClientName(e.target.value)}
@@ -227,8 +273,10 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Email Address</Label>
-                          <Input 
+                          <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">
+                            Email Address
+                          </Label>
+                          <Input
                             type="email"
                             className="h-11 rounded-xl bg-background/50 border-border/40 focus:border-primary/50"
                             value={newClientEmail}
@@ -237,8 +285,10 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Phone Number</Label>
-                          <Input 
+                          <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">
+                            Phone Number
+                          </Label>
+                          <Input
                             className="h-11 rounded-xl bg-background/50 border-border/40 focus:border-primary/50"
                             value={newClientPhone}
                             onChange={(e) => setNewClientPhone(e.target.value)}
@@ -246,16 +296,20 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Address</Label>
-                          <Textarea 
+                          <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">
+                            Address
+                          </Label>
+                          <Textarea
                             className="rounded-xl bg-background/50 border-border/40 focus:border-primary/50 min-h-[80px] resize-none"
                             value={newClientAddress}
-                            onChange={(e) => setNewClientAddress(e.target.value)}
+                            onChange={(e) =>
+                              setNewClientAddress(e.target.value)
+                            }
                             placeholder="123, Main Street, Colombo"
                           />
                         </div>
-                        <Button 
-                          type="button" 
+                        <Button
+                          type="button"
                           className="w-full font-local-inter font-bold h-11 text-sm uppercase tracking-widest mt-2 bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none"
                           onClick={handleQuickAddClient}
                           disabled={isAddingClient || !newClientName}
@@ -280,11 +334,13 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                       <SelectContent className="bg-card/90 backdrop-blur-xl border-border/40 rounded-2xl">
-                        {["draft", "sent", "paid", "overdue", "cancelled"].map((s) => (
-                          <SelectItem key={s} value={s}>
-                            {s.toUpperCase()}
-                          </SelectItem>
-                        ))}
+                        {["draft", "sent", "paid", "overdue", "cancelled"].map(
+                          (s) => (
+                            <SelectItem key={s} value={s}>
+                              {s.toUpperCase()}
+                            </SelectItem>
+                          ),
+                        )}
                       </SelectContent>
                     </Select>
                   )}
@@ -297,7 +353,9 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                 <input
                   type="date"
                   {...form.register("issueDate", { valueAsDate: true })}
-                  defaultValue={form.getValues("issueDate")?.toISOString().split("T")[0]}
+                  defaultValue={
+                    form.getValues("issueDate")?.toISOString().split("T")[0]
+                  }
                   className="w-full h-11 px-4 rounded-xl bg-background/50 border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-local-jetbrains-mono"
                 />
               </div>
@@ -308,7 +366,13 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                 <input
                   type="date"
                   {...form.register("dueDate", { valueAsDate: true })}
-                  defaultValue={form.getValues("dueDate") instanceof Date ? (form.getValues("dueDate") as Date).toISOString().split("T")[0] : ""}
+                  defaultValue={
+                    form.getValues("dueDate") instanceof Date
+                      ? (form.getValues("dueDate") as Date)
+                          .toISOString()
+                          .split("T")[0]
+                      : ""
+                  }
                   className="w-full h-11 px-4 rounded-xl bg-background/50 border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-local-jetbrains-mono"
                 />
               </div>
@@ -322,7 +386,9 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
               <Button
                 type="button"
                 size="sm"
-                onClick={() => append({ description: "", quantity: 1, unitPrice: 0 })}
+                onClick={() =>
+                  append({ description: "", quantity: 1, unitPrice: 0 })
+                }
                 className="rounded-full bg-primary/10 text-primary hover:bg-primary/20 border-none h-9 px-4 font-bold"
               >
                 <Plus className="mr-2 h-4 w-4" />
@@ -331,7 +397,10 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
             </div>
             <div className="space-y-4">
               {fields.map((field, index) => (
-                <div key={field.id} className="grid grid-cols-12 gap-3 items-end p-4 rounded-2xl bg-background/30 border border-border/20">
+                <div
+                  key={field.id}
+                  className="grid grid-cols-12 gap-3 items-end p-4 rounded-2xl bg-background/30 border border-border/20"
+                >
                   <div className="col-span-12 md:col-span-6 space-y-1">
                     <label className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground ml-1">
                       Description
@@ -349,7 +418,9 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                     <input
                       type="number"
                       step="0.1"
-                      {...form.register(`items.${index}.quantity` as const, { valueAsNumber: true })}
+                      {...form.register(`items.${index}.quantity` as const, {
+                        valueAsNumber: true,
+                      })}
                       className="w-full h-10 px-3 rounded-lg bg-background/50 border border-border/40 focus:border-primary/50 outline-none transition-all text-sm font-local-jetbrains-mono"
                     />
                   </div>
@@ -360,7 +431,9 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                     <input
                       type="number"
                       step="0.01"
-                      {...form.register(`items.${index}.unitPrice` as const, { valueAsNumber: true })}
+                      {...form.register(`items.${index}.unitPrice` as const, {
+                        valueAsNumber: true,
+                      })}
                       className="w-full h-10 px-3 rounded-lg bg-background/50 border border-border/40 focus:border-primary/50 outline-none transition-all text-sm font-local-jetbrains-mono"
                     />
                   </div>
@@ -406,7 +479,9 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                   <input
                     type="number"
                     step="0.01"
-                    {...form.register("discountAmount", { valueAsNumber: true })}
+                    {...form.register("discountAmount", {
+                      valueAsNumber: true,
+                    })}
                     className="w-full h-11 px-4 rounded-xl bg-background/50 border border-border/40 focus:border-primary/50 outline-none transition-all font-local-jetbrains-mono"
                   />
                 </div>
@@ -414,22 +489,32 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
               <div className="pt-6 border-t border-border/40 space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-medium font-local-jetbrains-mono">{formatCurrency(subtotal, currency)}</span>
+                  <span className="font-medium font-local-jetbrains-mono">
+                    {formatCurrency(subtotal, currency)}
+                  </span>
                 </div>
                 {(watchedTaxRate ?? 0) > 0 && (
                   <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Tax ({watchedTaxRate}%)</span>
-                      <span className="font-medium">{formatCurrency(taxAmount, currency)}</span>
+                    <span className="text-muted-foreground">
+                      Tax ({watchedTaxRate}%)
+                    </span>
+                    <span className="font-medium">
+                      {formatCurrency(taxAmount, currency)}
+                    </span>
                   </div>
                 )}
                 {(watchedDiscount ?? 0) > 0 && (
                   <div className="flex justify-between text-sm text-rose-500">
                     <span>Discount</span>
-                    <span className="font-local-jetbrains-mono">-{formatCurrency(watchedDiscount ?? 0, currency)}</span>
+                    <span className="font-local-jetbrains-mono">
+                      -{formatCurrency(watchedDiscount ?? 0, currency)}
+                    </span>
                   </div>
                 )}
                 <div className="flex justify-between items-end pt-2">
-                  <span className="text-sm font-bold uppercase tracking-widest google-sans">Total</span>
+                  <span className="text-sm font-bold uppercase tracking-widest google-sans">
+                    Total
+                  </span>
                   <span className="text-3xl font-black font-local-jetbrains-mono tracking-tighter text-primary">
                     {formatCurrency(total, currency)}
                   </span>

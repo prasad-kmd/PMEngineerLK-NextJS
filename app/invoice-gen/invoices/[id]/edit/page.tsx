@@ -24,10 +24,10 @@ export default async function EditInvoicePage({
       <h1 className="text-3xl font-bold google-sans tracking-tight">
         Edit Invoice {invoice.invoiceNumber}
       </h1>
-      <InvoiceForm 
-        clients={clients} 
-        business={settings} 
-        initialData={invoice} 
+      <InvoiceForm
+        clients={clients}
+        business={settings}
+        initialData={invoice}
       />
     </div>
   );

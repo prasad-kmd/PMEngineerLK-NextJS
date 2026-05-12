@@ -31,7 +31,10 @@ export default async function InvoiceDetailPage({
             {invoice.invoiceNumber}
           </h1>
           <p className="text-muted-foreground">
-            Previewing invoice for <span className="text-foreground font-bold">{invoice.client.name}</span>
+            Previewing invoice for{" "}
+            <span className="text-foreground font-bold">
+              {invoice.client.name}
+            </span>
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -55,7 +58,11 @@ export default async function InvoiceDetailPage({
       </div>
 
       <div className="max-w-4xl mx-auto">
-        <InvoicePreview business={settings} client={invoice.client} invoice={invoice} />
+        <InvoicePreview
+          business={settings}
+          client={invoice.client}
+          invoice={invoice}
+        />
       </div>
     </div>
   );

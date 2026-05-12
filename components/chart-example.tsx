@@ -26,17 +26,30 @@ export function IrrigationEfficiencyChart() {
 
   return (
     <div className="w-full h-64">
-      <h3 className="text-center text-sm font-semibold mb-2">Water Usage Efficiency Comparison (%)</h3>
+      <h3 className="text-center text-sm font-semibold mb-2">
+        Water Usage Efficiency Comparison (%)
+      </h3>
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+        <AreaChart
+          data={data}
+          margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
+        >
           <defs>
             <linearGradient id="colorTrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="rgb(239, 68, 68)" stopOpacity={0.1}/>
-              <stop offset="95%" stopColor="rgb(239, 68, 68)" stopOpacity={0}/>
+              <stop
+                offset="5%"
+                stopColor="rgb(239, 68, 68)"
+                stopOpacity={0.1}
+              />
+              <stop offset="95%" stopColor="rgb(239, 68, 68)" stopOpacity={0} />
             </linearGradient>
             <linearGradient id="colorSmart" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="rgb(34, 197, 94)" stopOpacity={0.1}/>
-              <stop offset="95%" stopColor="rgb(34, 197, 94)" stopOpacity={0}/>
+              <stop
+                offset="5%"
+                stopColor="rgb(34, 197, 94)"
+                stopOpacity={0.1}
+              />
+              <stop offset="95%" stopColor="rgb(34, 197, 94)" stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -78,16 +91,24 @@ export function CostComparisonChart() {
 
   return (
     <div className="w-full h-64">
-      <h3 className="text-center text-sm font-semibold mb-2">Waste Sorting Throughput Comparison</h3>
+      <h3 className="text-center text-sm font-semibold mb-2">
+        Waste Sorting Throughput Comparison
+      </h3>
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+        <BarChart
+          data={data}
+          margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
+        >
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey="name" fontSize={12} />
           <YAxis fontSize={12} />
           <Tooltip />
           <Bar dataKey="value" name="Items per Hour">
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+              <Cell
+                key={`cell-${index}`}
+                fill={colors[index % colors.length]}
+              />
             ))}
           </Bar>
         </BarChart>

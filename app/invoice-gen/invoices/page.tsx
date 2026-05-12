@@ -40,20 +40,20 @@ export default async function InvoicesPage({
               />
             </form>
           </div>
-          
+
           <div className="flex items-center gap-1 p-1 bg-muted/10 backdrop-blur-md rounded-2xl border border-border/40 overflow-x-auto no-scrollbar">
             {statusFilters.map((f) => (
               <Link
                 key={f.value}
                 href={`/invoice-gen/invoices?${new URLSearchParams({
                   ...(q ? { q } : {}),
-                  ...(f.value !== 'all' ? { status: f.value } : {})
+                  ...(f.value !== "all" ? { status: f.value } : {}),
                 }).toString()}`}
                 className={cn(
                   "px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap",
-                  (status === f.value || (!status && f.value === 'all'))
+                  status === f.value || (!status && f.value === "all")
                     ? "bg-background text-primary shadow-sm"
-                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
                 )}
               >
                 {f.label}
@@ -62,8 +62,14 @@ export default async function InvoicesPage({
           </div>
         </div>
 
-        <Button asChild className="bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none">
-          <Link href="/invoice-gen/invoices/new" className="flex items-center gap-2">
+        <Button
+          asChild
+          className="bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none"
+        >
+          <Link
+            href="/invoice-gen/invoices/new"
+            className="flex items-center gap-2"
+          >
             <Plus className="w-5 h-5" />
             <span>New Invoice</span>
           </Link>
@@ -76,45 +82,90 @@ export default async function InvoicesPage({
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-border/40 bg-muted/5">
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">Invoice</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">Client</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">Issue Date</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">Due Date</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">Amount</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">Status</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground text-right">Action</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    Invoice
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    Client
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    Issue Date
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    Due Date
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    Amount
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-muted-foreground text-right">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {invoices.length > 0 ? (
                   invoices.map((invoice) => (
-                    <tr key={invoice.id} className="border-b border-border/40 hover:bg-muted/10 transition-colors group">
+                    <tr
+                      key={invoice.id}
+                      className="border-b border-border/40 hover:bg-muted/10 transition-colors group"
+                    >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                             <ReceiptText className="w-4 h-4" />
                           </div>
-                          <Link href={`/invoice-gen/invoices/${invoice.id}`}><span className="font-bold text-sm google-sans">{invoice.invoiceNumber}</span></Link>
+                          <Link href={`/invoice-gen/invoices/${invoice.id}`}>
+                            <span className="font-bold text-sm google-sans">
+                              {invoice.invoiceNumber}
+                            </span>
+                          </Link>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm font-medium">{invoice.clientName}</td>
-                      <td className="px-6 py-4 text-sm text-muted-foreground">{formatDate(invoice.issueDate)}</td>
-                      <td className="px-6 py-4 text-sm text-muted-foreground">{formatDate(invoice.dueDate)}</td>
-                      <td className="px-6 py-4 text-sm font-bold">{formatCurrency(invoice.totalAmount, settings?.currency || "LKR")}</td>
+                      <td className="px-6 py-4 text-sm font-medium">
+                        {invoice.clientName}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-muted-foreground">
+                        {formatDate(invoice.issueDate)}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-muted-foreground">
+                        {formatDate(invoice.dueDate)}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-bold">
+                        {formatCurrency(
+                          invoice.totalAmount,
+                          settings?.currency || "LKR",
+                        )}
+                      </td>
                       <td className="px-6 py-4">
-                        <Badge variant="outline" className={cn(
-                          "rounded-lg px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
-                          invoice.status === 'paid' && "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-                          invoice.status === 'overdue' && "bg-rose-500/10 text-rose-500 border-rose-500/20",
-                          invoice.status === 'draft' && "bg-muted text-muted-foreground",
-                          invoice.status === 'sent' && "bg-blue-500/10 text-blue-500 border-blue-500/20",
-                          invoice.status === 'cancelled' && "bg-orange-500/10 text-orange-500 border-orange-500/20",
-                        )}>
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "rounded-lg px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
+                            invoice.status === "paid" &&
+                              "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+                            invoice.status === "overdue" &&
+                              "bg-rose-500/10 text-rose-500 border-rose-500/20",
+                            invoice.status === "draft" &&
+                              "bg-muted text-muted-foreground",
+                            invoice.status === "sent" &&
+                              "bg-blue-500/10 text-blue-500 border-blue-500/20",
+                            invoice.status === "cancelled" &&
+                              "bg-orange-500/10 text-orange-500 border-orange-500/20",
+                          )}
+                        >
                           {invoice.status}
                         </Badge>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <Button asChild variant="ghost" size="icon" className="rounded-xl group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                        <Button
+                          asChild
+                          variant="ghost"
+                          size="icon"
+                          className="rounded-xl group-hover:bg-primary group-hover:text-primary-foreground transition-all"
+                        >
                           <Link href={`/invoice-gen/invoices/${invoice.id}`}>
                             <ArrowRight className="w-4 h-4" />
                           </Link>
@@ -124,7 +175,10 @@ export default async function InvoicesPage({
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-muted-foreground">
+                    <td
+                      colSpan={7}
+                      className="px-6 py-12 text-center text-muted-foreground"
+                    >
                       No invoices found.
                     </td>
                   </tr>

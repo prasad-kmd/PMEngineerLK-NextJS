@@ -1,113 +1,119 @@
-"use client"
+"use client";
 
-import { useState, useCallback } from "react"
-import { 
-  Braces, 
-  Copy, 
-  Trash2, 
-  Check, 
-  AlertCircle, 
-  FileJson, 
-  Minimize2, 
+import { useState, useCallback } from "react";
+import {
+  Braces,
+  Copy,
+  Trash2,
+  Check,
+  AlertCircle,
+  FileJson,
+  Minimize2,
   Maximize2,
   Download,
   Upload,
   // ArrowRight
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { toast } from "sonner"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { toast } from "sonner";
 // import Link from "next/link"
-import { Breadcrumbs } from "@/components/breadcrumbs"
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export default function JsonFormatterPage() {
-  const [input, setInput] = useState("")
-  const [output, setOutput] = useState("")
-  const [error, setError] = useState<string | null>(null)
-  const [isCopied, setIsCopied] = useState(false)
-  const [spaces, setSpaces] = useState(2)
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isCopied, setIsCopied] = useState(false);
+  const [spaces, setSpaces] = useState(2);
 
-  const formatJson = useCallback((indent: number = spaces) => {
-    if (!input.trim()) {
-      setOutput("")
-      setError(null)
-      return
-    }
+  const formatJson = useCallback(
+    (indent: number = spaces) => {
+      if (!input.trim()) {
+        setOutput("");
+        setError(null);
+        return;
+      }
 
-    try {
-      const parsed = JSON.parse(input)
-      const formatted = JSON.stringify(parsed, null, indent)
-      setOutput(formatted)
-      setError(null)
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : String(err))
-      setOutput("")
-    }
-  }, [input, spaces])
+      try {
+        const parsed = JSON.parse(input);
+        const formatted = JSON.stringify(parsed, null, indent);
+        setOutput(formatted);
+        setError(null);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : String(err));
+        setOutput("");
+      }
+    },
+    [input, spaces],
+  );
 
   const minifyJson = useCallback(() => {
-    if (!input.trim()) return
+    if (!input.trim()) return;
     try {
-      const parsed = JSON.parse(input)
-      setOutput(JSON.stringify(parsed))
-      setError(null)
+      const parsed = JSON.parse(input);
+      setOutput(JSON.stringify(parsed));
+      setError(null);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : String(err))
-      setOutput("")
+      setError(err instanceof Error ? err.message : String(err));
+      setOutput("");
     }
-  }, [input])
+  }, [input]);
 
   const handleCopy = () => {
-    if (!output) return
-    navigator.clipboard.writeText(output)
-    setIsCopied(true)
-    toast.success("Copied to clipboard")
-    setTimeout(() => setIsCopied(false), 2000)
-  }
+    if (!output) return;
+    navigator.clipboard.writeText(output);
+    setIsCopied(true);
+    toast.success("Copied to clipboard");
+    setTimeout(() => setIsCopied(false), 2000);
+  };
 
   const handleClear = () => {
-    setInput("")
-    setOutput("")
-    setError(null)
-  }
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = (e) => {
-      const text = e.target?.result as string
-      setInput(text)
-    }
-    reader.readAsText(file)
-  }
+      const text = e.target?.result as string;
+      setInput(text);
+    };
+    reader.readAsText(file);
+  };
 
   const handleDownload = () => {
-    if (!output) return
-    const blob = new Blob([output], { type: "application/json" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = "formatted.json"
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
+    if (!output) return;
+    const blob = new Blob([output], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "formatted.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
       <div className="mx-auto max-w-6xl">
-                <Breadcrumbs
-                    items={[
-                        { label: "Tools", href: "/tools" },
-                        { label: "JSON Structure Validator", href: "/tools/json-formatter", active: true },
-                    ]}
-                    className="mb-8"
-                />
+        <Breadcrumbs
+          items={[
+            { label: "Tools", href: "/tools" },
+            {
+              label: "JSON Structure Validator",
+              href: "/tools/json-formatter",
+              active: true,
+            },
+          ]}
+          className="mb-8"
+        />
         <div className="mb-8">
-          
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div>
               <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
@@ -115,7 +121,8 @@ export default function JsonFormatterPage() {
                 JSON Structure Validator
               </h1>
               <p className="mt-2 text-muted-foreground">
-                Advanced linting, formatting, and validation engine for complex JSON data.
+                Advanced linting, formatting, and validation engine for complex
+                JSON data.
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -147,9 +154,16 @@ export default function JsonFormatterPage() {
           {/* Input Area */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Input JSON</span>
+              <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Input JSON
+              </span>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={handleClear} className="h-8 text-muted-foreground hover:text-destructive">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleClear}
+                  className="h-8 text-muted-foreground hover:text-destructive"
+                >
                   <Trash2 className="h-4 w-4 mr-2" /> Clear
                 </Button>
               </div>
@@ -166,11 +180,17 @@ export default function JsonFormatterPage() {
               <Button onClick={() => formatJson()} className="gap-2">
                 <Maximize2 className="h-4 w-4" /> Format
               </Button>
-              <Button variant="secondary" onClick={minifyJson} className="gap-2">
+              <Button
+                variant="secondary"
+                onClick={minifyJson}
+                className="gap-2"
+              >
                 <Minimize2 className="h-4 w-4" /> Minify
               </Button>
               <div className="flex items-center gap-2 rounded-lg border border-border bg-background/50 px-3 py-1">
-                <span className="text-xs font-medium text-muted-foreground">Indentation:</span>
+                <span className="text-xs font-medium text-muted-foreground">
+                  Indentation:
+                </span>
                 <select
                   value={spaces}
                   onChange={(e) => setSpaces(parseInt(e.target.value))}
@@ -187,10 +207,21 @@ export default function JsonFormatterPage() {
           {/* Output Area */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Formatted Output</span>
+              <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Formatted Output
+              </span>
               {output && (
-                <Button variant="ghost" size="sm" onClick={handleCopy} className="h-8 text-primary">
-                  {isCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleCopy}
+                  className="h-8 text-primary"
+                >
+                  {isCopied ? (
+                    <Check className="h-4 w-4 mr-2" />
+                  ) : (
+                    <Copy className="h-4 w-4 mr-2" />
+                  )}
                   {isCopied ? "Copied" : "Copy"}
                 </Button>
               )}
@@ -201,7 +232,9 @@ export default function JsonFormatterPage() {
                   <div className="mb-4 rounded-full bg-destructive/10 p-3 text-destructive">
                     <AlertCircle className="h-8 w-8" />
                   </div>
-                  <h3 className="mb-2 font-bold text-destructive">Invalid JSON Structure</h3>
+                  <h3 className="mb-2 font-bold text-destructive">
+                    Invalid JSON Structure
+                  </h3>
                   <p className="max-w-xs text-sm text-muted-foreground font-mono bg-destructive/5 p-4 rounded-lg border border-destructive/20">
                     {error}
                   </p>
@@ -229,24 +262,27 @@ export default function JsonFormatterPage() {
             <div>
               <h3 className="mb-2 font-semibold">Strict Validation</h3>
               <p className="text-sm text-muted-foreground">
-                Uses enterprise-grade parsing to identify missing commas, unquoted keys, and syntax errors.
+                Uses enterprise-grade parsing to identify missing commas,
+                unquoted keys, and syntax errors.
               </p>
             </div>
             <div>
               <h3 className="mb-2 font-semibold">Custom Formatting</h3>
               <p className="text-sm text-muted-foreground">
-                Choose between various indentation levels or minify for production deployment.
+                Choose between various indentation levels or minify for
+                production deployment.
               </p>
             </div>
             <div>
               <h3 className="mb-2 font-semibold">Privacy Focused</h3>
               <p className="text-sm text-muted-foreground">
-                All processing happens locally in your browser. Your data never leaves your machine.
+                All processing happens locally in your browser. Your data never
+                leaves your machine.
               </p>
             </div>
           </div>
         </section>
       </div>
     </div>
-  )
+  );
 }

@@ -1,14 +1,15 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "MathML Integration Engine",
-    description: "Seamlessly transform LaTeX syntax into standards-compliant MathML for high-fidelity web-based mathematical rendering.",
-}
+  title: "MathML Integration Engine",
+  description:
+    "Seamlessly transform LaTeX syntax into standards-compliant MathML for high-fidelity web-based mathematical rendering.",
+};
 
 export default function LatexToMathmlLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode;
 }) {
-    return <>{children}</>
+  return <>{children}</>;
 }

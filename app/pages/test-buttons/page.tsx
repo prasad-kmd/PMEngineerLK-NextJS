@@ -3,8 +3,18 @@
 
 import * as React from "react";
 import { AccentPicker } from "@/components/accent-picker";
-import { Button, buttonVariants, type ButtonProps } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Button,
+  buttonVariants,
+  type ButtonProps,
+} from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -106,7 +116,8 @@ const RECIPES: Recipe[] = [
     id: "accentGhost",
     name: "Accent Ghost",
     description: "No border; hover tint only.",
-    classes: "bg-transparent text-foreground hover:bg-primary/10 hover:text-primary active:bg-primary/15",
+    classes:
+      "bg-transparent text-foreground hover:bg-primary/10 hover:text-primary active:bg-primary/15",
     suggestedVariant: "ghost",
   },
   {
@@ -249,7 +260,10 @@ const RECIPES: Recipe[] = [
 ];
 
 function surfaceWrapperClass(surface: Surface) {
-  return SURFACES.find((s) => s.id === surface)?.wrapperClass ?? SURFACES[0]!.wrapperClass;
+  return (
+    SURFACES.find((s) => s.id === surface)?.wrapperClass ??
+    SURFACES[0]!.wrapperClass
+  );
 }
 
 function safeCopy(text: string) {
@@ -292,14 +306,16 @@ function MiniSwatch() {
 }
 
 export default function TestButtonsPage() {
-  const [selectedRecipeId, setSelectedRecipeId] = React.useState<string>("ctaGlow");
+  const [selectedRecipeId, setSelectedRecipeId] =
+    React.useState<string>("ctaGlow");
 
   const selectedRecipe = React.useMemo(() => {
     if (selectedRecipeId === "__custom") return null;
     return RECIPES.find((r) => r.id === selectedRecipeId) ?? null;
   }, [selectedRecipeId]);
 
-  const [baseVariant, setBaseVariant] = React.useState<BuiltInVariant>("default");
+  const [baseVariant, setBaseVariant] =
+    React.useState<BuiltInVariant>("default");
   const [size, setSize] = React.useState<BuiltInSize>("default");
   const [surface, setSurface] = React.useState<Surface>("background");
 
@@ -313,7 +329,7 @@ export default function TestButtonsPage() {
   const [fullWidth, setFullWidth] = React.useState(false);
 
   const [recipeClasses, setRecipeClasses] = React.useState<string>(
-    RECIPES.find((r) => r.id === "ctaGlow")?.classes ?? ""
+    RECIPES.find((r) => r.id === "ctaGlow")?.classes ?? "",
   );
   const [extraClasses, setExtraClasses] = React.useState<string>("");
 
@@ -324,7 +340,8 @@ export default function TestButtonsPage() {
     if (!selectedRecipe) return;
 
     setRecipeClasses(selectedRecipe.classes);
-    if (selectedRecipe.suggestedVariant) setBaseVariant(selectedRecipe.suggestedVariant);
+    if (selectedRecipe.suggestedVariant)
+      setBaseVariant(selectedRecipe.suggestedVariant);
     if (selectedRecipe.suggestedSize) setSize(selectedRecipe.suggestedSize);
     if (selectedRecipe.iconOnly) {
       setLeftIcon(true);
@@ -338,7 +355,7 @@ export default function TestButtonsPage() {
       buttonVariants({ variant: baseVariant, size }),
       recipeClasses,
       extraClasses,
-      fullWidth && "w-full"
+      fullWidth && "w-full",
     );
   }, [baseVariant, size, recipeClasses, extraClasses, fullWidth]);
 
@@ -348,13 +365,14 @@ export default function TestButtonsPage() {
     if (size !== "default") props.push(`size="${size}"`);
     if (disabled) props.push("disabled");
     if (asChild) props.push("asChild");
-    if (recipeClasses.trim() || extraClasses.trim()) props.push(`className="${cn(recipeClasses, extraClasses)}"`);
+    if (recipeClasses.trim() || extraClasses.trim())
+      props.push(`className="${cn(recipeClasses, extraClasses)}"`);
 
     const inner = [
-      leftIcon ? "<Sparkles className=\"h-4 w-4\" />" : null,
-      loading ? "<Loader2 className=\"h-4 w-4 animate-spin\" />" : null,
+      leftIcon ? '<Sparkles className="h-4 w-4" />' : null,
+      loading ? '<Loader2 className="h-4 w-4 animate-spin" />' : null,
       selectedRecipe?.iconOnly ? null : label,
-      rightIcon ? "<ArrowRight className=\"h-4 w-4\" />" : null,
+      rightIcon ? '<ArrowRight className="h-4 w-4" />' : null,
     ]
       .filter(Boolean)
       .join(" ");
@@ -364,7 +382,19 @@ export default function TestButtonsPage() {
     }
 
     return `<Button ${props.join(" ")}>${inner}</Button>`;
-  }, [asChild, baseVariant, size, disabled, label, leftIcon, rightIcon, loading, recipeClasses, extraClasses, selectedRecipe?.iconOnly]);
+  }, [
+    asChild,
+    baseVariant,
+    size,
+    disabled,
+    label,
+    leftIcon,
+    rightIcon,
+    loading,
+    recipeClasses,
+    extraClasses,
+    selectedRecipe?.iconOnly,
+  ]);
 
   function resetPlayground() {
     setSelectedRecipeId("ctaGlow");
@@ -399,10 +429,16 @@ export default function TestButtonsPage() {
       <div className="mx-auto max-w-7xl space-y-6">
         <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold">Button Lab (Still on Development)</h1>
+            <h1 className="text-3xl font-bold">
+              Button Lab (Still on Development)
+            </h1>
             <p className="text-sm text-muted-foreground">
-              A sandbox for creating/testing Tailwind button recipes (accent-aware).
-              Use <code className="px-1 py-0.5 rounded bg-muted">/pages/test-buttons</code>.
+              A sandbox for creating/testing Tailwind button recipes
+              (accent-aware). Use{" "}
+              <code className="px-1 py-0.5 rounded bg-muted">
+                /pages/test-buttons
+              </code>
+              .
             </p>
             <MiniSwatch />
           </div>
@@ -418,7 +454,9 @@ export default function TestButtonsPage() {
           <Card className="h-fit">
             <CardHeader>
               <CardTitle>Playground</CardTitle>
-              <CardDescription>Pick a recipe, then tweak classes and states.</CardDescription>
+              <CardDescription>
+                Pick a recipe, then tweak classes and states.
+              </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-5">
@@ -430,7 +468,8 @@ export default function TestButtonsPage() {
                 />
                 {selectedRecipe?.needsKeyframes ? (
                   <p className="text-xs text-muted-foreground">
-                    This recipe uses shimmer keyframes (included in this page via global style).
+                    This recipe uses shimmer keyframes (included in this page
+                    via global style).
                   </p>
                 ) : null}
               </div>
@@ -438,7 +477,10 @@ export default function TestButtonsPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <Label>Base variant</Label>
-                  <Select value={baseVariant} onValueChange={(v) => setBaseVariant(v as BuiltInVariant)}>
+                  <Select
+                    value={baseVariant}
+                    onValueChange={(v) => setBaseVariant(v as BuiltInVariant)}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -454,7 +496,10 @@ export default function TestButtonsPage() {
 
                 <div className="space-y-2">
                   <Label>Size</Label>
-                  <Select value={size} onValueChange={(v) => setSize(v as BuiltInSize)}>
+                  <Select
+                    value={size}
+                    onValueChange={(v) => setSize(v as BuiltInSize)}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -471,7 +516,10 @@ export default function TestButtonsPage() {
 
               <div className="space-y-2">
                 <Label>Surface</Label>
-                <Select value={surface} onValueChange={(v) => setSurface(v as Surface)}>
+                <Select
+                  value={surface}
+                  onValueChange={(v) => setSurface(v as Surface)}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -488,7 +536,10 @@ export default function TestButtonsPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <Label>Label</Label>
-                  <Input value={label} onChange={(e) => setLabel(e.target.value)} />
+                  <Input
+                    value={label}
+                    onChange={(e) => setLabel(e.target.value)}
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -543,17 +594,25 @@ export default function TestButtonsPage() {
                 </div>
               </div>
 
-              <div className={cn("rounded-xl p-4", surfaceWrapperClass(surface))}>
+              <div
+                className={cn("rounded-xl p-4", surfaceWrapperClass(surface))}
+              >
                 <div className="mb-3 flex items-center justify-between">
                   <div className="text-xs font-medium opacity-80">Preview</div>
-                  <div className="text-xs text-muted-foreground">Clicks: {clicks}</div>
+                  <div className="text-xs text-muted-foreground">
+                    Clicks: {clicks}
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3">
                   <Button
                     variant={baseVariant}
                     size={size}
-                    className={cn(recipeClasses, extraClasses, fullWidth && "w-full")}
+                    className={cn(
+                      recipeClasses,
+                      extraClasses,
+                      fullWidth && "w-full",
+                    )}
                     disabled={disabled || loading}
                     asChild={asChild}
                     onClick={() => setClicks((c) => c + 1)}
@@ -587,7 +646,11 @@ export default function TestButtonsPage() {
                 </div>
 
                 <p className="mt-3 text-xs text-muted-foreground">
-                  Tip: press <kbd className="px-1 py-0.5 rounded bg-muted text-foreground">Tab</kbd> to check focus rings.
+                  Tip: press{" "}
+                  <kbd className="px-1 py-0.5 rounded bg-muted text-foreground">
+                    Tab
+                  </kbd>{" "}
+                  to check focus rings.
                 </p>
               </div>
 
@@ -620,7 +683,12 @@ export default function TestButtonsPage() {
                     Copy JSX
                   </Button>
 
-                  <Button variant="outline" className="gap-2" onClick={resetPlayground} type="button">
+                  <Button
+                    variant="outline"
+                    className="gap-2"
+                    onClick={resetPlayground}
+                    type="button"
+                  >
                     <RefreshCcw />
                     Full reset
                   </Button>
@@ -628,7 +696,9 @@ export default function TestButtonsPage() {
 
                 <div className="rounded-lg border bg-muted/40 p-3">
                   <div className="mb-2 flex items-center justify-between">
-                    <div className="text-xs font-medium text-muted-foreground">JSX snippet</div>
+                    <div className="text-xs font-medium text-muted-foreground">
+                      JSX snippet
+                    </div>
                     <div className="text-xs text-muted-foreground">
                       paste into your codebase
                     </div>
@@ -647,7 +717,11 @@ export default function TestButtonsPage() {
               <CardHeader>
                 <CardTitle>Built-in Button variants</CardTitle>
                 <CardDescription>
-                  These come from <code className="px-1 py-0.5 rounded bg-muted">components/ui/button.tsx</code>.
+                  These come from{" "}
+                  <code className="px-1 py-0.5 rounded bg-muted">
+                    components/ui/button.tsx
+                  </code>
+                  .
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-wrap gap-3">
@@ -664,7 +738,8 @@ export default function TestButtonsPage() {
               <CardHeader>
                 <CardTitle>Recipe Library (accent-aware)</CardTitle>
                 <CardDescription>
-                  Each recipe is just a Tailwind class string layered on top of your Button base.
+                  Each recipe is just a Tailwind class string layered on top of
+                  your Button base.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -678,7 +753,9 @@ export default function TestButtonsPage() {
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <div className="font-semibold">{r.name}</div>
-                            <div className="text-xs text-muted-foreground">{r.description}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {r.description}
+                            </div>
                           </div>
 
                           <div className="flex gap-2">
@@ -718,7 +795,13 @@ export default function TestButtonsPage() {
                               className={cn(r.classes)}
                               type="button"
                             >
-                              {r.iconOnly ? <Sparkles /> : <><Sparkles /> {r.name}</>}
+                              {r.iconOnly ? (
+                                <Sparkles />
+                              ) : (
+                                <>
+                                  <Sparkles /> {r.name}
+                                </>
+                              )}
                             </Button>
                           </div>
 
@@ -733,7 +816,13 @@ export default function TestButtonsPage() {
                               className={cn(r.classes)}
                               type="button"
                             >
-                              {r.iconOnly ? <Sparkles /> : <><Sparkles /> {r.name}</>}
+                              {r.iconOnly ? (
+                                <Sparkles />
+                              ) : (
+                                <>
+                                  <Sparkles /> {r.name}
+                                </>
+                              )}
                             </Button>
                           </div>
                         </div>
@@ -756,54 +845,76 @@ export default function TestButtonsPage() {
                 <CardDescription>Same recipe across all sizes.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                {["ctaGlow", "accentSoft", "press3D", "tiltSheen", "kbd"].map((id) => {
-                  const r = RECIPES.find((x) => x.id === id);
-                  if (!r) return null;
+                {["ctaGlow", "accentSoft", "press3D", "tiltSheen", "kbd"].map(
+                  (id) => {
+                    const r = RECIPES.find((x) => x.id === id);
+                    if (!r) return null;
 
-                  return (
-                    <div key={id} className="rounded-xl border p-4">
-                      <div className="mb-3 flex items-center justify-between">
-                        <div className="font-semibold">{r.name}</div>
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          className="gap-2"
-                          onClick={() => {
-                            setSelectedRecipeId(r.id);
-                            setRecipeClasses(r.classes);
-                          }}
-                          type="button"
-                        >
-                          <Sparkles />
-                          Load
-                        </Button>
-                      </div>
+                    return (
+                      <div key={id} className="rounded-xl border p-4">
+                        <div className="mb-3 flex items-center justify-between">
+                          <div className="font-semibold">{r.name}</div>
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            className="gap-2"
+                            onClick={() => {
+                              setSelectedRecipeId(r.id);
+                              setRecipeClasses(r.classes);
+                            }}
+                            type="button"
+                          >
+                            <Sparkles />
+                            Load
+                          </Button>
+                        </div>
 
-                      <div className="flex flex-wrap items-center gap-3">
-                        <Button variant="default" size="sm" className={r.classes}>
-                          sm
-                        </Button>
-                        <Button variant="default" size="default" className={r.classes}>
-                          default
-                        </Button>
-                        <Button variant="default" size="lg" className={r.classes}>
-                          lg
-                        </Button>
-                        <Button variant="default" size="icon" className={cn(r.classes, "rounded-full")}>
-                          <Sparkles />
-                        </Button>
+                        <div className="flex flex-wrap items-center gap-3">
+                          <Button
+                            variant="default"
+                            size="sm"
+                            className={r.classes}
+                          >
+                            sm
+                          </Button>
+                          <Button
+                            variant="default"
+                            size="default"
+                            className={r.classes}
+                          >
+                            default
+                          </Button>
+                          <Button
+                            variant="default"
+                            size="lg"
+                            className={r.classes}
+                          >
+                            lg
+                          </Button>
+                          <Button
+                            variant="default"
+                            size="icon"
+                            className={cn(r.classes, "rounded-full")}
+                          >
+                            <Sparkles />
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  },
+                )}
               </CardContent>
             </Card>
           </div>
         </div>
 
         <footer className="text-xs text-muted-foreground">
-          If you want these as official variants (e.g. <code>variant="ctaGlow"</code>), add them into
-          <code className="px-1 py-0.5 rounded bg-muted">components/ui/button.tsx</code> under the CVA variant map.
+          If you want these as official variants (e.g.{" "}
+          <code>variant="ctaGlow"</code>), add them into
+          <code className="px-1 py-0.5 rounded bg-muted">
+            components/ui/button.tsx
+          </code>{" "}
+          under the CVA variant map.
         </footer>
       </div>
     </div>

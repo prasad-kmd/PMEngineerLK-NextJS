@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Dialog,
@@ -6,22 +6,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import Equation from "./Equation"
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import Equation from "./Equation";
 
 interface MoreEquationsModalProps {
-  equations: Record<string, { label: string; value: string }[]>
-  onSelectEquation: (equation: string) => void
+  equations: Record<string, { label: string; value: string }[]>;
+  onSelectEquation: (equation: string) => void;
 }
 
 export default function MoreEquationsModal({
   equations,
   onSelectEquation,
 }: MoreEquationsModalProps) {
-  const categories = Object.keys(equations)
-  const defaultValue = categories[0]
+  const categories = Object.keys(equations);
+  const defaultValue = categories[0];
 
   return (
     <Dialog>
@@ -34,18 +34,28 @@ export default function MoreEquationsModal({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[625px] bg-card border-border">
         <DialogHeader>
-          <DialogTitle className="text-foreground">More Equations & Symbols</DialogTitle>
+          <DialogTitle className="text-foreground">
+            More Equations & Symbols
+          </DialogTitle>
         </DialogHeader>
         <Tabs defaultValue={defaultValue} className="w-full">
           <TabsList className="grid w-full grid-cols-4 h-8">
             {categories.map((category) => (
-              <TabsTrigger key={category} value={category} className="text-xs capitalize">
+              <TabsTrigger
+                key={category}
+                value={category}
+                className="text-xs capitalize"
+              >
                 {category}
               </TabsTrigger>
             ))}
           </TabsList>
           {Object.entries(equations).map(([category, items]) => (
-            <TabsContent key={category} value={category} className="space-y-2 mt-2">
+            <TabsContent
+              key={category}
+              value={category}
+              className="space-y-2 mt-2"
+            >
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 gap-1">
                 {items.map((item) => (
                   <Button
@@ -63,5 +73,5 @@ export default function MoreEquationsModal({
         </Tabs>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

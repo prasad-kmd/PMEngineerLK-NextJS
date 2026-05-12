@@ -49,7 +49,7 @@ import { AIContentIndicator } from "@/components/ai-content-indicator";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { toast } from "sonner";
 import Loading from "@/app/loading";
-import { Breadcrumbs } from "@/components/breadcrumbs"
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
   Tooltip,
   TooltipContent,
@@ -482,13 +482,17 @@ export default function StudentGuideNavigator() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
       <div className="mx-auto max-w-6xl">
-                <Breadcrumbs
-                    items={[
-                        { label: "Tools", href: "/tools" },
-                        { label: "Engineering Student Navigator", href: "/tools/student-guide-navigator", active: true },
-                    ]}
-                    className="mb-8"
-                />
+        <Breadcrumbs
+          items={[
+            { label: "Tools", href: "/tools" },
+            {
+              label: "Engineering Student Navigator",
+              href: "/tools/student-guide-navigator",
+              active: true,
+            },
+          ]}
+          className="mb-8"
+        />
         <div className="flex flex-col gap-8">
           {/* Premium Header */}
           <div className="relative overflow-hidden rounded-2xl bg-card/30 backdrop-blur-xl border border-primary/10 p-8 md:p-10 shadow-xl">
@@ -552,7 +556,9 @@ export default function StudentGuideNavigator() {
                   className="rounded-xl h-11 px-6 font-black uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all gap-2"
                 >
                   <FileText className="h-4 w-4" />
-                  {isExporting ? "Preparing Report..." : "Export Academic Report"}
+                  {isExporting
+                    ? "Preparing Report..."
+                    : "Export Academic Report"}
                 </Button>
 
                 <div className="flex items-center gap-2">
@@ -802,7 +808,7 @@ export default function StudentGuideNavigator() {
                     <CardContent className="p-8 space-y-6">
                       <div className="grid gap-4">
                         {Object.entries(currentProgramme?.categories || {}).map(
-                        ([cat, req]) => {
+                          ([cat, req]) => {
                             const current =
                               progressStats.categoryBreakdown[cat] || 0;
                             const percent = (current / req.min) * 100;
@@ -1423,22 +1429,62 @@ export default function StudentGuideNavigator() {
       <div className="fixed left-[-9999px] top-0">
         <div
           ref={reportRef}
-          style={{ backgroundColor: '#ffffff', color: '#0f172a', padding: '48px', width: '800px' }}
+          style={{
+            backgroundColor: "#ffffff",
+            color: "#0f172a",
+            padding: "48px",
+            width: "800px",
+          }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '4px solid #08784b', paddingBottom: '32px', marginBottom: '32px' }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              borderBottom: "4px solid #08784b",
+              paddingBottom: "32px",
+              marginBottom: "32px",
+            }}
+          >
             <div>
-              <h1 style={{ fontSize: '36px', fontWeight: '900', letterSpacing: '-0.05em', color: '#0f172a', margin: '0 0 4px 0' }}>
+              <h1
+                style={{
+                  fontSize: "36px",
+                  fontWeight: "900",
+                  letterSpacing: "-0.05em",
+                  color: "#0f172a",
+                  margin: "0 0 4px 0",
+                }}
+              >
                 ACADEMIC PROGRESS REPORT
               </h1>
-              <p style={{ color: '#08784b', fontWeight: 'bold', fontSize: '14px', letterSpacing: '0.2em', textTransform: 'uppercase', margin: 0 }}>
+              <p
+                style={{
+                  color: "#08784b",
+                  fontWeight: "bold",
+                  fontSize: "14px",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  margin: 0,
+                }}
+              >
                 Faculty of Engineering Technology · OUSL
               </p>
             </div>
-            <div style={{ textAlign: 'right' }}>
-              <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px 0' }}>
+            <div style={{ textAlign: "right" }}>
+              <p
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "900",
+                  color: "#94a3b8",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  margin: "0 0 4px 0",
+                }}
+              >
                 Generated On
               </p>
-              <p style={{ fontWeight: 'bold', color: '#334155', margin: 0 }}>
+              <p style={{ fontWeight: "bold", color: "#334155", margin: 0 }}>
                 {new Date().toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
@@ -1448,77 +1494,237 @@ export default function StudentGuideNavigator() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', marginBottom: '40px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "48px",
+              marginBottom: "40px",
+            }}
+          >
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+            >
               <div>
-                <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em', margin: '0 0 4px 0' }}>
+                <p
+                  style={{
+                    fontSize: "10px",
+                    fontWeight: "900",
+                    color: "#94a3b8",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.2em",
+                    margin: "0 0 4px 0",
+                  }}
+                >
                   Student Name
                 </p>
-                <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#0f172a', margin: 0 }}>
+                <p
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    color: "#0f172a",
+                    margin: 0,
+                  }}
+                >
                   {studentName || "N/A"}
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em', margin: '0 0 4px 0' }}>
+                <p
+                  style={{
+                    fontSize: "10px",
+                    fontWeight: "900",
+                    color: "#94a3b8",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.2em",
+                    margin: "0 0 4px 0",
+                  }}
+                >
                   Specialization
                 </p>
-                <p style={{ fontSize: '18px', fontWeight: 'bold', color: '#334155', margin: 0 }}>
+                <p
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    color: "#334155",
+                    margin: 0,
+                  }}
+                >
                   {selectedSpec}
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.2em', margin: '0 0 4px 0' }}>
+                <p
+                  style={{
+                    fontSize: "10px",
+                    fontWeight: "900",
+                    color: "#94a3b8",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.2em",
+                    margin: "0 0 4px 0",
+                  }}
+                >
                   Programme
                 </p>
-                <p style={{ color: '#475569', fontWeight: '500', margin: 0 }}>
+                <p style={{ color: "#475569", fontWeight: "500", margin: 0 }}>
                   {currentProgramme?.name}
                 </p>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div style={{ padding: '24px', backgroundColor: '#f8fafc', borderRadius: '16px', border: '1px solid #f1f5f9', textAlign: 'center' }}>
-                <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px 0' }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "16px",
+              }}
+            >
+              <div
+                style={{
+                  padding: "24px",
+                  backgroundColor: "#f8fafc",
+                  borderRadius: "16px",
+                  border: "1px solid #f1f5f9",
+                  textAlign: "center",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: "10px",
+                    fontWeight: "900",
+                    color: "#94a3b8",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    margin: "0 0 4px 0",
+                  }}
+                >
                   Honours GPA
                 </p>
-                <p style={{ fontSize: '36px', fontWeight: '900', color: '#08784b', margin: 0 }}>
+                <p
+                  style={{
+                    fontSize: "36px",
+                    fontWeight: "900",
+                    color: "#08784b",
+                    margin: 0,
+                  }}
+                >
                   {gpaCalculation}
                 </p>
               </div>
-              <div style={{ padding: '24px', backgroundColor: '#f8fafc', borderRadius: '16px', border: '1px solid #f1f5f9', textAlign: 'center' }}>
-                <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px 0' }}>
+              <div
+                style={{
+                  padding: "24px",
+                  backgroundColor: "#f8fafc",
+                  borderRadius: "16px",
+                  border: "1px solid #f1f5f9",
+                  textAlign: "center",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: "10px",
+                    fontWeight: "900",
+                    color: "#94a3b8",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    margin: "0 0 4px 0",
+                  }}
+                >
                   Total Credits
                 </p>
-                <p style={{ fontSize: '36px', fontWeight: '900', color: '#0f172a', margin: 0 }}>
+                <p
+                  style={{
+                    fontSize: "36px",
+                    fontWeight: "900",
+                    color: "#0f172a",
+                    margin: 0,
+                  }}
+                >
                   {progressStats.totalCredits}
                 </p>
               </div>
             </div>
           </div>
 
-          <div style={{ marginBottom: '40px' }}>
-            <h2 style={{ fontSize: '14px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#0f172a', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '32px', height: '4px', backgroundColor: '#08784b', borderRadius: '9999px' }} /> Credit
-              Distribution
+          <div style={{ marginBottom: "40px" }}>
+            <h2
+              style={{
+                fontSize: "14px",
+                fontWeight: "900",
+                textTransform: "uppercase",
+                letterSpacing: "0.2em",
+                color: "#0f172a",
+                marginBottom: "24px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <div
+                style={{
+                  width: "32px",
+                  height: "4px",
+                  backgroundColor: "#08784b",
+                  borderRadius: "9999px",
+                }}
+              />{" "}
+              Credit Distribution
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: '48px', rowGap: '16px' }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                columnGap: "48px",
+                rowGap: "16px",
+              }}
+            >
               {Object.entries(currentProgramme?.categories || {}).map(
                 ([cat, req]) => {
                   const current = progressStats.categoryBreakdown[cat] || 0;
                   const percent = Math.min(100, (current / req.min) * 100);
                   return (
-                    <div key={cat} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', fontWeight: 'bold' }}>
-                        <span style={{ color: '#475569', textTransform: 'uppercase' }}>
+                    <div
+                      key={cat}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "6px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          fontSize: "10px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        <span
+                          style={{
+                            color: "#475569",
+                            textTransform: "uppercase",
+                          }}
+                        >
                           {CATEGORIES[cat] || cat}
                         </span>
-                        <span style={{ color: '#0f172a' }}>
+                        <span style={{ color: "#0f172a" }}>
                           {current} / {req.min} CR
                         </span>
                       </div>
-                      <div style={{ height: '8px', backgroundColor: '#f1f5f9', borderRadius: '9999px', overflow: 'hidden' }}>
+                      <div
+                        style={{
+                          height: "8px",
+                          backgroundColor: "#f1f5f9",
+                          borderRadius: "9999px",
+                          overflow: "hidden",
+                        }}
+                      >
                         <div
-                          style={{ height: '100%', backgroundColor: '#08784b', width: `${percent}%` }}
+                          style={{
+                            height: "100%",
+                            backgroundColor: "#08784b",
+                            width: `${percent}%`,
+                          }}
                         />
                       </div>
                     </div>
@@ -1528,36 +1734,107 @@ export default function StudentGuideNavigator() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px' }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "48px",
+            }}
+          >
             <div>
-              <h2 style={{ fontSize: '14px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#0f172a', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '32px', height: '4px', backgroundColor: '#10b981', borderRadius: '9999px' }} /> Completed
-                Courses
+              <h2
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "900",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.2em",
+                  color: "#0f172a",
+                  marginBottom: "24px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "32px",
+                    height: "4px",
+                    backgroundColor: "#10b981",
+                    borderRadius: "9999px",
+                  }}
+                />{" "}
+                Completed Courses
               </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+              >
                 {completedCourseDetails.length === 0 ? (
-                  <p style={{ fontSize: '12px', fontStyle: 'italic', color: '#94a3b8' }}>
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      fontStyle: "italic",
+                      color: "#94a3b8",
+                    }}
+                  >
                     No courses completed.
                   </p>
                 ) : (
                   completedCourseDetails.map((c) => (
                     <div
                       key={c.code}
-                      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #f1f5f9' }}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "12px",
+                        backgroundColor: "#f8fafc",
+                        borderRadius: "12px",
+                        border: "1px solid #f1f5f9",
+                      }}
                     >
                       <div>
-                        <p style={{ fontSize: '9px', fontWeight: '900', color: '#08784b', textTransform: 'uppercase', margin: 0 }}>
+                        <p
+                          style={{
+                            fontSize: "9px",
+                            fontWeight: "900",
+                            color: "#08784b",
+                            textTransform: "uppercase",
+                            margin: 0,
+                          }}
+                        >
                           {c.code}
                         </p>
-                        <p style={{ fontSize: '11px', fontWeight: 'bold', color: '#0f172a', lineHeight: '1.2', margin: 0 }}>
+                        <p
+                          style={{
+                            fontSize: "11px",
+                            fontWeight: "bold",
+                            color: "#0f172a",
+                            lineHeight: "1.2",
+                            margin: 0,
+                          }}
+                        >
                           {c.name}
                         </p>
                       </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <p style={{ fontSize: '10px', fontWeight: '900', color: '#0f172a', margin: 0 }}>
+                      <div style={{ textAlign: "right" }}>
+                        <p
+                          style={{
+                            fontSize: "10px",
+                            fontWeight: "900",
+                            color: "#0f172a",
+                            margin: 0,
+                          }}
+                        >
                           {c.credits} CR
                         </p>
-                        <p style={{ fontSize: '9px', fontWeight: 'bold', color: '#94a3b8', margin: 0 }}>
+                        <p
+                          style={{
+                            fontSize: "9px",
+                            fontWeight: "bold",
+                            color: "#94a3b8",
+                            margin: 0,
+                          }}
+                        >
                           GPV: {completedCourses[c.code].toFixed(1)}
                         </p>
                       </div>
@@ -1568,29 +1845,105 @@ export default function StudentGuideNavigator() {
             </div>
 
             <div>
-              <h2 style={{ fontSize: '14px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#0f172a', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '32px', height: '4px', backgroundColor: '#3b82f6', borderRadius: '9999px' }} /> Academic
-                Timeline
+              <h2
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "900",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.2em",
+                  color: "#0f172a",
+                  marginBottom: "24px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "32px",
+                    height: "4px",
+                    backgroundColor: "#3b82f6",
+                    borderRadius: "9999px",
+                  }}
+                />{" "}
+                Academic Timeline
               </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "24px",
+                }}
+              >
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => {
                   const semCourses = plannedCourseDetails.filter(
                     (c) => userPlan[c.code] === sem,
                   );
                   if (semCourses.length === 0) return null;
                   return (
-                    <div key={sem} style={{ position: 'relative', paddingLeft: '24px', borderLeft: '2px solid #f1f5f9' }}>
-                      <div style={{ position: 'absolute', left: '-5px', top: 0, width: '8px', height: '8px', borderRadius: '9999px', backgroundColor: '#e2e8f0' }} />
-                      <h3 style={{ fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '12px', letterSpacing: '0.1em' }}>
+                    <div
+                      key={sem}
+                      style={{
+                        position: "relative",
+                        paddingLeft: "24px",
+                        borderLeft: "2px solid #f1f5f9",
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: "-5px",
+                          top: 0,
+                          width: "8px",
+                          height: "8px",
+                          borderRadius: "9999px",
+                          backgroundColor: "#e2e8f0",
+                        }}
+                      />
+                      <h3
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: "900",
+                          textTransform: "uppercase",
+                          color: "#94a3b8",
+                          marginBottom: "12px",
+                          letterSpacing: "0.1em",
+                        }}
+                      >
                         Semester {sem}
                       </h3>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "8px",
+                        }}
+                      >
                         {semCourses.map((c) => (
-                          <div key={c.code} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#334155' }}>
+                          <div
+                            key={c.code}
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontSize: "11px",
+                                fontWeight: "bold",
+                                color: "#334155",
+                              }}
+                            >
                               {c.code} - {c.name}
                             </span>
-                            <span style={{ fontSize: '11px', fontWeight: '900', color: '#94a3b8' }}>
+                            <span
+                              style={{
+                                fontSize: "11px",
+                                fontWeight: "900",
+                                color: "#94a3b8",
+                              }}
+                            >
                               {c.credits} CR
                             </span>
                           </div>
@@ -1600,7 +1953,13 @@ export default function StudentGuideNavigator() {
                   );
                 })}
                 {plannedCourseDetails.length === 0 && (
-                  <p style={{ fontSize: '12px', fontStyle: 'italic', color: '#94a3b8' }}>
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      fontStyle: "italic",
+                      color: "#94a3b8",
+                    }}
+                  >
                     No courses planned.
                   </p>
                 )}
@@ -1608,24 +1967,73 @@ export default function StudentGuideNavigator() {
             </div>
           </div>
 
-          <div style={{ marginTop: '48px', paddingTop: '32px', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div
+            style={{
+              marginTop: "48px",
+              paddingTop: "32px",
+              borderTop: "1px solid #f1f5f9",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+            }}
+          >
             <div>
-              <p style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>
+              <p
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "900",
+                  color: "#94a3b8",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  marginBottom: "8px",
+                }}
+              >
                 Estimated Tuition Fees
               </p>
-              <p style={{ fontSize: '24px', fontWeight: '900', color: '#0f172a', margin: 0 }}>
+              <p
+                style={{
+                  fontSize: "24px",
+                  fontWeight: "900",
+                  color: "#0f172a",
+                  margin: 0,
+                }}
+              >
                 Rs. {feeSummary.total.toLocaleString()}
               </p>
-              <p style={{ fontSize: '9px', color: '#94a3b8', marginTop: '4px', maxWidth: '300px', margin: '4px 0 0 0' }}>
+              <p
+                style={{
+                  fontSize: "9px",
+                  color: "#94a3b8",
+                  marginTop: "4px",
+                  maxWidth: "300px",
+                  margin: "4px 0 0 0",
+                }}
+              >
                 Fees are estimated based on planned courses and may vary based
                 on actual university regulations.
               </p>
             </div>
-            <div style={{ textAlign: 'right' }}>
-              <p style={{ fontSize: '9px', fontWeight: 'bold', color: '#94a3b8', marginBottom: '4px', margin: 0 }}>
+            <div style={{ textAlign: "right" }}>
+              <p
+                style={{
+                  fontSize: "9px",
+                  fontWeight: "bold",
+                  color: "#94a3b8",
+                  marginBottom: "4px",
+                  margin: 0,
+                }}
+              >
                 Student Navigator Document
               </p>
-              <p style={{ fontSize: '10px', fontFamily: 'Google Sans', fontWeight: '900', color: '#08784b', margin: 0 }}>
+              <p
+                style={{
+                  fontSize: "10px",
+                  fontFamily: "Google Sans",
+                  fontWeight: "900",
+                  color: "#08784b",
+                  margin: 0,
+                }}
+              >
                 prasadm.vercel.app
               </p>
             </div>

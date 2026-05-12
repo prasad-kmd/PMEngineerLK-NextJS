@@ -13,7 +13,7 @@ export function DeleteInvoiceButton({ id }: { id: string }) {
 
   async function handleDelete() {
     if (!confirm("Are you sure you want to delete this invoice?")) return;
-    
+
     setIsDeleting(true);
     try {
       await deleteInvoice(id);
@@ -28,8 +28,9 @@ export function DeleteInvoiceButton({ id }: { id: string }) {
   }
 
   return (
-    <Button 
-      variant="destructive" className="bg-destructive text-destructive-foreground shadow-[0_6px_0_0_hsl(3,65%,45%)] hover:brightness-[1.05] active:translate-y-[2px] active:shadow-none"
+    <Button
+      variant="destructive"
+      className="bg-destructive text-destructive-foreground shadow-[0_6px_0_0_hsl(3,65%,45%)] hover:brightness-[1.05] active:translate-y-[2px] active:shadow-none"
       onClick={handleDelete}
       disabled={isDeleting}
     >

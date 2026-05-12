@@ -1,7 +1,15 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { Sun, Moon, Bookmark, Share2, LayoutGrid, Wrench, Tv } from "lucide-react";
+import {
+  Sun,
+  Moon,
+  Bookmark,
+  Share2,
+  LayoutGrid,
+  Wrench,
+  Tv,
+} from "lucide-react";
 import { useEffect, useState, startTransition } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -110,7 +118,7 @@ export function FloatingNavbar({
       )}
     >
       <Search isMobileSidebar={isMobileSidebar} />
-      
+
       {/* Desktop Only Tools & Entertainment */}
       {!isMobileSidebar && (
         <>

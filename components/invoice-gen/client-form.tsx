@@ -52,7 +52,9 @@ export function ClientForm({ initialData }: ClientFormProps) {
       router.refresh();
     } catch (error) {
       console.error("Client form submission error:", error);
-      toast.error("Something went wrong. Please check the console for details.");
+      toast.error(
+        "Something went wrong. Please check the console for details.",
+      );
     }
   }
 
@@ -114,16 +116,16 @@ export function ClientForm({ initialData }: ClientFormProps) {
             </div>
 
             <div className="grid gap-8">
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground ml-1 flex items-center gap-2">
-                <Phone className="h-3 w-3" /> Phone Number
-              </label>
-              <input
-                {...form.register("phone")}
-                placeholder="+1 (555) 000-0000"
-                className="w-full h-12 px-4 rounded-xl bg-background/50 border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all"
-              />
-            </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground ml-1 flex items-center gap-2">
+                  <Phone className="h-3 w-3" /> Phone Number
+                </label>
+                <input
+                  {...form.register("phone")}
+                  placeholder="+1 (555) 000-0000"
+                  className="w-full h-12 px-4 rounded-xl bg-background/50 border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all"
+                />
+              </div>
             </div>
           </div>
 
@@ -160,8 +162,8 @@ export function ClientForm({ initialData }: ClientFormProps) {
           {isSubmitting
             ? "Saving..."
             : initialData
-            ? "Update Client"
-            : "Create Client"}
+              ? "Update Client"
+              : "Create Client"}
         </Button>
       </div>
     </form>

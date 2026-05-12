@@ -64,7 +64,12 @@ export async function getInvoices(filters?: {
   }
 
   if (filters?.status && filters.status !== "all") {
-    conditions.push(eq(invoices.status, filters.status as "draft" | "sent" | "paid" | "overdue" | "cancelled"));
+    conditions.push(
+      eq(
+        invoices.status,
+        filters.status as "draft" | "sent" | "paid" | "overdue" | "cancelled",
+      ),
+    );
   }
 
   if (filters?.startDate) {
@@ -139,7 +144,8 @@ export async function createInvoice(data: z.infer<typeof invoiceSchema>) {
   });
 
   const taxAmount = (subtotal * (validatedData.taxRate ?? 0)) / 100;
-  const totalAmount = subtotal + taxAmount - (validatedData.discountAmount ?? 0);
+  const totalAmount =
+    subtotal + taxAmount - (validatedData.discountAmount ?? 0);
 
   await db.transaction(async (tx) => {
     await tx.insert(invoices).values({
@@ -198,7 +204,8 @@ export async function updateInvoice(
   });
 
   const taxAmount = (subtotal * (validatedData.taxRate ?? 0)) / 100;
-  const totalAmount = subtotal + taxAmount - (validatedData.discountAmount ?? 0);
+  const totalAmount =
+    subtotal + taxAmount - (validatedData.discountAmount ?? 0);
 
   await db.transaction(async (tx) => {
     const [existing] = await tx

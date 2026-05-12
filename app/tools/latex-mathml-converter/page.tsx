@@ -1,57 +1,62 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
-import temml from "temml"
-import "./temml.css"
-import { Replace } from "lucide-react"
-import PredefinedEquations from "@/components/tools/latex-mathml-converter/predefined-equations"
-import EquationEditor from "@/components/tools/latex-mathml-converter/equation-editor"
-import ActionButtons from "@/components/tools/latex-mathml-converter/action-buttons"
-import MathMLModal from "@/components/tools/latex-mathml-converter/mathml-modal"
-import { Breadcrumbs } from "@/components/breadcrumbs"
+import { useState, useMemo } from "react";
+import temml from "temml";
+import "./temml.css";
+import { Replace } from "lucide-react";
+import PredefinedEquations from "@/components/tools/latex-mathml-converter/predefined-equations";
+import EquationEditor from "@/components/tools/latex-mathml-converter/equation-editor";
+import ActionButtons from "@/components/tools/latex-mathml-converter/action-buttons";
+import MathMLModal from "@/components/tools/latex-mathml-converter/mathml-modal";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export default function LatexToMathmlPage() {
-  const [latex, setLatex] = useState("E = mc^2")
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [latex, setLatex] = useState("E = mc^2");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const mathml = useMemo(() => {
-    if (!latex.trim()) return ""
+    if (!latex.trim()) return "";
     try {
-      return temml.renderToString(latex, { 
-        displayMode: true, 
-        xml: true 
-      })
+      return temml.renderToString(latex, {
+        displayMode: true,
+        xml: true,
+      });
     } catch (error) {
-      console.error("Temml rendering error:", error)
-      return "error"
+      console.error("Temml rendering error:", error);
+      return "error";
     }
-  }, [latex])
+  }, [latex]);
 
   const handleLatexChange = (value: string) => {
-    setLatex(value)
-  }
+    setLatex(value);
+  };
 
   const handleEquationSelect = (equation: string) => {
-    setLatex(prev => prev + equation)
-  }
+    setLatex((prev) => prev + equation);
+  };
 
   return (
     <div className="min-h-screen p-6 lg:p-8 flex flex-col items-center">
       <div className="mx-auto max-w-5xl w-full space-y-8">
-                <Breadcrumbs
-                    items={[
-                        { label: "Tools", href: "/tools" },
-                        { label: "MathML Integration Engine", href: "/tools/latex-mathml-converter", active: true },
-                    ]}
-                    className="mb-8"
-                />
+        <Breadcrumbs
+          items={[
+            { label: "Tools", href: "/tools" },
+            {
+              label: "MathML Integration Engine",
+              href: "/tools/latex-mathml-converter",
+              active: true,
+            },
+          ]}
+          className="mb-8"
+        />
         <div className="text-center lg:text-left">
           <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-2 justify-center lg:justify-start text-foreground">
             <Replace className="h-8 w-8 text-purple-500" />
             MathML Integration Engine
           </h1>
           <p className="text-muted-foreground mt-1">
-            Seamlessly transform LaTeX syntax into standards-compliant MathML for high-fidelity web-based mathematical rendering.
+            Seamlessly transform LaTeX syntax into standards-compliant MathML
+            for high-fidelity web-based mathematical rendering.
           </p>
         </div>
 
@@ -61,10 +66,10 @@ export default function LatexToMathmlPage() {
           </div>
 
           <div className="p-6 rounded-2xl border border-border bg-card/30 backdrop-blur-md shadow-xl">
-            <EquationEditor 
-              latex={latex} 
-              mathml={mathml} 
-              onLatexChange={handleLatexChange} 
+            <EquationEditor
+              latex={latex}
+              mathml={mathml}
+              onLatexChange={handleLatexChange}
             />
           </div>
 
@@ -76,15 +81,20 @@ export default function LatexToMathmlPage() {
         </div>
 
         <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-sm text-blue-400">
-          <p><strong>Note:</strong> This tool uses TeMMl for high-performance MathML generation. MathML is widely supported by modern browsers and can be used in HTML for high-quality mathematical rendering without external libraries.</p>
+          <p>
+            <strong>Note:</strong> This tool uses TeMMl for high-performance
+            MathML generation. MathML is widely supported by modern browsers and
+            can be used in HTML for high-quality mathematical rendering without
+            external libraries.
+          </p>
         </div>
       </div>
 
-      <MathMLModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        mathml={mathml} 
+      <MathMLModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        mathml={mathml}
       />
     </div>
-  )
+  );
 }

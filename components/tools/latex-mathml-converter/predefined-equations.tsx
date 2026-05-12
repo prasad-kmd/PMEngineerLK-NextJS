@@ -1,14 +1,16 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Equation from "./Equation"
-import MoreEquationsModal from "./MoreEquationsModal"
+"use client";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Equation from "./Equation";
+import MoreEquationsModal from "./MoreEquationsModal";
 
 interface PredefinedEquationsProps {
-  onSelectEquation: (equation: string) => void
+  onSelectEquation: (equation: string) => void;
 }
 
-export default function PredefinedEquations({ onSelectEquation }: PredefinedEquationsProps) {
+export default function PredefinedEquations({
+  onSelectEquation,
+}: PredefinedEquationsProps) {
   const equations = {
     basic: [
       { label: "Fraction", value: "\\frac{a}{b}" },
@@ -74,11 +76,13 @@ export default function PredefinedEquations({ onSelectEquation }: PredefinedEqua
       { label: "sec", value: "\\sec" },
       { label: "cot", value: "\\cot" },
     ],
-  }
+  };
 
   return (
     <div className="space-y-4">
-      <h2 className="text-sm font-semibold text-foreground">Predefined Equations & Symbols</h2>
+      <h2 className="text-sm font-semibold text-foreground">
+        Predefined Equations & Symbols
+      </h2>
 
       <Tabs defaultValue="basic" className="w-full">
         <TabsList className="grid w-full grid-cols-4 h-9">
@@ -99,7 +103,11 @@ export default function PredefinedEquations({ onSelectEquation }: PredefinedEqua
         {Object.entries(equations)
           .slice(0, 4)
           .map(([category, items]) => (
-            <TabsContent key={category} value={category} className="space-y-2 mt-2">
+            <TabsContent
+              key={category}
+              value={category}
+              className="space-y-2 mt-2"
+            >
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-1">
                 {items.map((item) => (
                   <Button
@@ -120,5 +128,5 @@ export default function PredefinedEquations({ onSelectEquation }: PredefinedEqua
         />
       </Tabs>
     </div>
-  )
+  );
 }

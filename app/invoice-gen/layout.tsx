@@ -23,7 +23,11 @@ export default function InvoiceGenLayout({
           <Breadcrumbs
             items={[
               { label: "Dashboard", href: "/dashboard" },
-              { label: "Invoice Generator", href: "/invoice-gen", active: true },
+              {
+                label: "Invoice Generator",
+                href: "/invoice-gen",
+                active: true,
+              },
             ]}
             className="mb-4 font-local-inter"
           />
