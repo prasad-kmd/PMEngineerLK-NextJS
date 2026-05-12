@@ -29,8 +29,7 @@ export function DeleteInvoiceButton({ id }: { id: string }) {
 
   return (
     <Button 
-      variant="secondary" 
-      className="rounded-full h-12 px-6 font-bold border border-border/40 bg-card/20 backdrop-blur-xl text-rose-500 hover:text-rose-600"
+      variant="destructive" className="bg-destructive text-destructive-foreground shadow-[0_6px_0_0_hsl(3,65%,45%)] hover:brightness-[1.05] active:translate-y-[2px] active:shadow-none"
       onClick={handleDelete}
       disabled={isDeleting}
     >

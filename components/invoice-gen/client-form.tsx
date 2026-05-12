@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { User, Mail, Phone, MapPin, Save, X } from "lucide-react";
 import { type Client } from "@/lib/db/schema";
+// import { div } from "framer-motion/client";
 
 const clientSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -58,9 +59,9 @@ export function ClientForm({ initialData }: ClientFormProps) {
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="max-w-3xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700"
+      className="max-w-4xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700"
     >
-      <div className="p-8 md:p-12 rounded-[3rem] border border-border/40 bg-card/20 backdrop-blur-3xl shadow-sm">
+      <div className="p-8 md:p-12 rounded-2xl border border-border/40 bg-card/20 backdrop-blur-3xl shadow-sm">
         <div className="flex items-start gap-4 mb-10">
           <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
             <User className="h-6 w-6" />
@@ -94,7 +95,7 @@ export function ClientForm({ initialData }: ClientFormProps) {
             )}
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid gap-8">
             <div className="space-y-2">
               <label className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground ml-1 flex items-center gap-2">
                 <Mail className="h-3 w-3" /> Email Address
@@ -111,6 +112,8 @@ export function ClientForm({ initialData }: ClientFormProps) {
                 </p>
               )}
             </div>
+
+            <div className="grid gap-8">
             <div className="space-y-2">
               <label className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground ml-1 flex items-center gap-2">
                 <Phone className="h-3 w-3" /> Phone Number
@@ -120,6 +123,7 @@ export function ClientForm({ initialData }: ClientFormProps) {
                 placeholder="+1 (555) 000-0000"
                 className="w-full h-12 px-4 rounded-xl bg-background/50 border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all"
               />
+            </div>
             </div>
           </div>
 
@@ -137,12 +141,12 @@ export function ClientForm({ initialData }: ClientFormProps) {
         </div>
       </div>
 
-      <div className="flex justify-end gap-4 pt-4">
+      <div className="sticky bottom-20 z-50 flex justify-center gap-4 mt-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <Button
           type="button"
-          variant="secondary"
+          variant="outline"
           onClick={() => router.back()}
-          className="rounded-full h-14 px-8 font-bold border border-border/40 bg-card/50 backdrop-blur-md"
+          className="bg-transparent border-2 border-primary text-primary shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:bg-primary/5 hover:brightness-[1.02] transition-all active:translate-y-[2px] active:shadow-none"
         >
           <X className="mr-2 h-5 w-5" />
           Cancel
@@ -150,7 +154,7 @@ export function ClientForm({ initialData }: ClientFormProps) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-full h-14 px-10 font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95"
+          className="bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none"
         >
           <Save className="mr-3 h-5 w-5" />
           {isSubmitting

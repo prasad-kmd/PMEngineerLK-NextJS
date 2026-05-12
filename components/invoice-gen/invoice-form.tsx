@@ -216,7 +216,7 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                           Quick Add Client
                         </DialogTitle>
                       </DialogHeader>
-                      <div className="space-y-5 py-4">
+                      <div className="space-y-5 py-4 font-google-sans">
                         <div className="space-y-2">
                           <Label className="text-xs font-bold text-muted-foreground ml-1 uppercase tracking-widest">Full Name</Label>
                           <Input 
@@ -256,7 +256,7 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                         </div>
                         <Button 
                           type="button" 
-                          className="w-full rounded-xl font-bold h-12 text-sm uppercase tracking-widest mt-2"
+                          className="w-full font-local-inter font-bold h-11 text-sm uppercase tracking-widest mt-2 bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none"
                           onClick={handleQuickAddClient}
                           disabled={isAddingClient || !newClientName}
                         >
@@ -472,7 +472,7 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
         <div className="lg:col-span-12 sticky bottom-8 z-50 flex justify-center mt-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <Button
             type="submit"
-            className="rounded-full h-16 px-12 font-black uppercase tracking-widest text-sm shadow-2xl shadow-primary/40 transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground flex items-center gap-3"
+            className="bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none"
           >
             <Save className="h-5 w-5" />
             Save Invoice

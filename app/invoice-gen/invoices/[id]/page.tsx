@@ -24,18 +24,6 @@ export default async function InvoiceDetailPage({
 
   return (
     <div className="space-y-10 animate-in fade-in duration-700">
-      <div className="flex items-center gap-4 mb-2">
-        <Link
-          href="/invoice-gen/invoices"
-          className="h-10 w-10 rounded-full border border-border/40 bg-card/20 backdrop-blur-md flex items-center justify-center text-muted-foreground hover:text-primary transition-all"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Link>
-        <span className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
-          Back to Invoices
-        </span>
-      </div>
-
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-2">
           <h1 className="text-4xl md:text-5xl font-black google-sans tracking-tight flex items-center gap-4">
@@ -48,9 +36,9 @@ export default async function InvoiceDetailPage({
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <Button
-            variant="secondary"
             asChild
-            className="rounded-full h-12 px-6 font-bold border border-border/40 bg-card/20 backdrop-blur-xl"
+            variant="outline"
+            className="bg-transparent border-2 border-primary text-primary shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:bg-primary/5 hover:brightness-[1.02] transition-all active:translate-y-[2px] active:shadow-none"
           >
             <Link href={`/invoice-gen/invoices/${invoice.id}/edit`}>
               <FileEdit className="mr-2 h-5 w-5" />

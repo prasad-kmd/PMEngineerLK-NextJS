@@ -62,7 +62,7 @@ export default async function InvoicesPage({
           </div>
         </div>
 
-        <Button asChild className="rounded-2xl h-12 px-6 shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95 font-bold">
+        <Button asChild className="bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none">
           <Link href="/invoice-gen/invoices/new" className="flex items-center gap-2">
             <Plus className="w-5 h-5" />
             <span>New Invoice</span>

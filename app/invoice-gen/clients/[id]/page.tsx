@@ -22,13 +22,13 @@ export default async function ClientDetailPage({
 
   return (
     <div className="space-y-12">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="lg:col-span-2">
           <ClientForm initialData={client} />
         </div>
 
         <div className="lg:col-span-2 space-y-6">
-          <Card className="bg-card/20 backdrop-blur-md border-border/40 rounded-[2.5rem] overflow-hidden shadow-sm">
+          <Card className="bg-card/20 backdrop-blur-md border-border/40 rounded-2xl overflow-hidden shadow-sm">
             <CardHeader className="p-8 border-b border-border/40 bg-muted/5 flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="text-xl font-bold google-sans flex items-center gap-3">
@@ -37,7 +37,7 @@ export default async function ClientDetailPage({
                 </CardTitle>
                 <p className="text-sm text-muted-foreground mt-1 font-medium">All invoices generated for this client.</p>
               </div>
-              <Button asChild size="sm" className="rounded-xl font-bold">
+              <Button asChild size="sm" className="bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none">
                   <Link href={`/invoice-gen/invoices/new?clientId=${client.id}`}>New Invoice</Link>
               </Button>
             </CardHeader>
