@@ -54,6 +54,7 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 ### 📝 Content Management
 
 - **📔 Notion CMS Integration** - Fully integrated with Notion as a headless CMS for blog, articles, projects, tutorials, and wiki
+- **🧾 Professional Invoice Generator** - Comprehensive system for managing clients, generating dynamic invoices, and professional PDF exports with LKR support
 - **💬 Native Notion Comments** - Built-in commenting system using Notion's Comments API with authentication gates and Cloudflare Turnstile protection
 - **✍️ Authors System** - Comprehensive contributor directory with high-fidelity "Dossier" profile pages and contribution metrics
 - **📊 Dynamic Sitemap** - Recursively generated sitemap including all content types and authors

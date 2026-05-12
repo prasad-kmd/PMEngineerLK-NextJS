@@ -6,8 +6,10 @@ import {
   jsonb,
   uuid,
   index,
+  integer,
+  doublePrecision,
 } from "drizzle-orm/pg-core";
-// import { sql } from "drizzle-orm";
+import { type InferSelectModel } from "drizzle-orm";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -21,6 +23,8 @@ export const user = pgTable("user", {
   // Added for future extensibility and localstorage sync
   preferences: jsonb("preferences").default({}),
 });
+
+export type User = InferSelectModel<typeof user>;
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
@@ -84,3 +88,97 @@ export const systemLogs = pgTable(
     };
   },
 );
+
+export const clients = pgTable(
+  "clients",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    email: text("email"),
+    phone: text("phone"),
+    address: text("address"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    nameIdx: index("client_name_idx").on(table.name),
+  }),
+);
+
+export type Client = InferSelectModel<typeof clients>;
+
+export const invoices = pgTable(
+  "invoices",
+  {
+    id: text("id").primaryKey(),
+    invoiceNumber: text("invoice_number").notNull().unique(),
+    clientId: text("client_id")
+      .notNull()
+      .references(() => clients.id),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    issueDate: timestamp("issue_date").notNull(),
+    dueDate: timestamp("due_date"),
+    status: text("status", {
+      enum: ["draft", "sent", "paid", "overdue", "cancelled"],
+    })
+      .default("draft")
+      .notNull(),
+    subtotal: doublePrecision("subtotal").notNull(),
+    taxRate: doublePrecision("tax_rate").default(0).notNull(),
+    taxAmount: doublePrecision("tax_amount").default(0).notNull(),
+    discountAmount: doublePrecision("discount_amount").default(0).notNull(),
+    totalAmount: doublePrecision("total_amount").notNull(),
+    customNotes: text("custom_notes"),
+    paymentTerms: text("payment_terms"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    invoiceNumberIdx: index("invoice_number_idx").on(table.invoiceNumber),
+    statusIdx: index("invoice_status_idx").on(table.status),
+    issueDateIdx: index("issue_date_idx").on(table.issueDate),
+  }),
+);
+
+export type Invoice = InferSelectModel<typeof invoices>;
+
+export const invoiceItems = pgTable("invoice_items", {
+  id: text("id").primaryKey(),
+  invoiceId: text("invoice_id")
+    .notNull()
+    .references(() => invoices.id, { onDelete: "cascade" }),
+  description: text("description").notNull(),
+  quantity: doublePrecision("quantity").notNull(),
+  unitPrice: doublePrecision("unit_price").notNull(),
+  totalPrice: doublePrecision("total_price").notNull(),
+  sortOrder: integer("sort_order").notNull(),
+});
+
+export type InvoiceItem = InferSelectModel<typeof invoiceItems>;
+
+export const businessSettings = pgTable("business_settings", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id)
+    .unique(),
+  businessName: text("business_name").notNull(),
+  address: text("address"),
+  phone: text("phone"),
+  email: text("email"),
+  website: text("website"),
+  logoUrl: text("logo_url"),
+  defaultPaymentTerms: text("default_payment_terms"),
+  defaultTaxRate: doublePrecision("default_tax_rate").default(0).notNull(),
+  invoicePrefix: text("invoice_prefix").default("INV-").notNull(),
+  nextInvoiceNumber: integer("next_invoice_number").default(1).notNull(),
+  invoicePadding: integer("invoice_padding").default(4).notNull(),
+  currency: text("currency").default("LKR").notNull(),
+});
+
+export type BusinessSettings = InferSelectModel<typeof businessSettings>;

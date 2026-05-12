@@ -23,6 +23,7 @@ import {
   BarChart,
   ArrowUpRight,
   Activity,
+  FileText,
 } from "lucide-react";
 
 const getSession = cache(async () => {
@@ -158,6 +159,33 @@ export default async function DashboardPage() {
                               <div>
                                 <h4 className="text-sm font-bold google-sans group-hover:text-primary transition-colors">
                                   Analytics
+                                </h4>
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-local-inter mt-0.5">
+                                  Admin Only
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-4 group-hover:translate-x-0 group-hover:bg-primary group-hover:text-primary-foreground shadow-lg shadow-primary/20">
+                              <ArrowUpRight className="w-3.5 h-3.5" />
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+
+                      <div className="relative group rounded-3xl overflow-hidden p-px">
+                        <div className="absolute inset-0 bg-linear-to-r from-primary/40 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+                        <div className="relative bg-card/20 backdrop-blur-xl border border-border/40 hover:border-primary/30 rounded-3xl flex h-full transition-colors duration-500">
+                          <Link
+                            href="/invoice-gen"
+                            className="flex flex-1 items-center justify-between p-4"
+                          >
+                            <div className="flex items-center gap-4">
+                              <div className="relative flex items-center justify-center p-3 rounded-2xl bg-linear-to-br from-primary/20 to-primary/5 text-primary border border-primary/20 shadow-[0_0_15px_rgba(var(--primary),0.1)] group-hover:shadow-[0_0_20px_rgba(var(--primary),0.3)] group-hover:scale-105 transition-all duration-300">
+                                <FileText className="w-4 h-4 z-10" />
+                              </div>
+                              <div>
+                                <h4 className="text-sm font-bold google-sans group-hover:text-primary transition-colors">
+                                  Invoice Generator
                                 </h4>
                                 <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-local-inter mt-0.5">
                                   Admin Only
