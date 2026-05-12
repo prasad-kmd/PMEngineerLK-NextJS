@@ -474,8 +474,8 @@ export default function ResumeCreator() {
                                         )}
                                     </div>
                                     <div className="ml-8 mb-[-10px] text-white overflow-hidden">
-                                        <h2 className="text-4xl font-bold amoriaregular uppercase tracking-tight leading-none mb-2 break-words">{resume.name}</h2>
-                                        <p className="text-xl font-semibold google-sans break-words" style={{ color: "#3b82f6" }}>{resume.role}</p>
+                                        <h2 className="text-4xl font-bold amoriaregular uppercase tracking-tight leading-none mb-2 wrap-break-word">{resume.name}</h2>
+                                        <p className="text-xl font-semibold google-sans wrap-break-word" style={{ color: "#3b82f6" }}>{resume.role}</p>
                                     </div>
                                 </div>
 
@@ -483,7 +483,7 @@ export default function ResumeCreator() {
                                     <div className="grid grid-cols-2 gap-y-3 mb-10 text-xs font-medium uppercase tracking-wider p-4 rounded-xl overflow-hidden" style={{ backgroundColor: "#f8fafc", color: "#475569" }}>
                                         <div className="flex items-center gap-2 overflow-hidden"><Mail className="h-3.5 w-3.5 shrink-0" style={{ color: "#3b82f6" }} /> <span className="break-all">{resume.email}</span></div>
                                         <div className="flex items-center gap-2 overflow-hidden"><Phone className="h-3.5 w-3.5 shrink-0" style={{ color: "#3b82f6" }} /> <span className="break-all">{resume.phone}</span></div>
-                                        <div className="flex items-center gap-2 overflow-hidden"><MapPin className="h-3.5 w-3.5 shrink-0" style={{ color: "#3b82f6" }} /> <span className="break-words">{resume.location}</span></div>
+                                        <div className="flex items-center gap-2 overflow-hidden"><MapPin className="h-3.5 w-3.5 shrink-0" style={{ color: "#3b82f6" }} /> <span className="wrap-break-word">{resume.location}</span></div>
                                         {resume.website && <div className="flex items-center gap-2 overflow-hidden"><Globe className="h-3.5 w-3.5 shrink-0" style={{ color: "#3b82f6" }} /> <span className="break-all">{resume.website}</span></div>}
                                         {resume.linkedin && <div className="flex items-center gap-2 overflow-hidden"><Linkedin className="h-3.5 w-3.5 shrink-0" style={{ color: "#3b82f6" }} /> <span className="break-all">{resume.linkedin}</span></div>}
                                         {resume.github && <div className="flex items-center gap-2 overflow-hidden"><Github className="h-3.5 w-3.5 shrink-0" style={{ color: "#3b82f6" }} /> <span className="break-all">{resume.github}</span></div>}
@@ -506,10 +506,10 @@ export default function ResumeCreator() {
                                                     <div key={i} className="relative pl-6">
                                                         <div className="absolute left-0 top-1.5 h-2 w-2 rounded-full" style={{ backgroundColor: "#3b82f6" }} />
                                                         <div className="flex justify-between items-start mb-1 gap-4">
-                                                            <h4 className="font-bold text-lg flex-1 break-words" style={{ color: "#1e293b" }}>{exp.role}</h4>
+                                                            <h4 className="font-bold text-lg flex-1 wrap-break-word" style={{ color: "#1e293b" }}>{exp.role}</h4>
                                                             <span className="text-[10px] font-bold px-2 py-1 rounded-md shrink-0" style={{ backgroundColor: "#eff6ff", color: "#3b82f6" }}>{exp.period}</span>
                                                         </div>
-                                                        <p className="text-sm font-bold mb-2 break-words" style={{ color: "#3b82f6" }}>{exp.company}</p>
+                                                        <p className="text-sm font-bold mb-2 wrap-break-word" style={{ color: "#3b82f6" }}>{exp.company}</p>
                                                         <p className="text-sm leading-relaxed" style={{ color: "#475569" }}>{exp.description}</p>
                                                     </div>
                                                 ))}
@@ -525,10 +525,10 @@ export default function ResumeCreator() {
                                                         {resume.education.map((edu, i) => (
                                                             <div key={i}>
                                                                 <div className="flex justify-between items-start mb-1 gap-4">
-                                                                    <h4 className="font-bold text-lg flex-1 break-words" style={{ color: "#1e293b" }}>{edu.degree}</h4>
+                                                                    <h4 className="font-bold text-lg flex-1 wrap-break-word" style={{ color: "#1e293b" }}>{edu.degree}</h4>
                                                                     <span className="text-[10px] font-bold shrink-0" style={{ color: "#94a3b8" }}>{edu.period}</span>
                                                                 </div>
-                                                                <p className="text-sm font-medium break-words" style={{ color: "#475569" }}>{edu.school}</p>
+                                                                <p className="text-sm font-medium wrap-break-word" style={{ color: "#475569" }}>{edu.school}</p>
                                                                 <p className="text-xs mt-1 font-bold" style={{ color: "#22c55e" }}>{edu.grade}</p>
                                                             </div>
                                                         ))}
@@ -542,7 +542,7 @@ export default function ResumeCreator() {
                                                         {resume.projects.map((p, i) => (
                                                             <div key={i} className="p-4 rounded-xl border border-dashed overflow-hidden" style={{ backgroundColor: "#fafafa", borderColor: "#e5e5e5" }}>
                                                                 <div className="flex justify-between items-center mb-1 gap-2">
-                                                                    <h4 className="text-sm font-bold flex-1 break-words" style={{ color: "#1e293b" }}>{p.name}</h4>
+                                                                    <h4 className="text-sm font-bold flex-1 wrap-break-word" style={{ color: "#1e293b" }}>{p.name}</h4>
                                                                     {p.link && <ExternalLink className="h-3 w-3 shrink-0" style={{ color: "#94a3b8" }} />}
                                                                 </div>
                                                                 <p className="text-xs" style={{ color: "#475569" }}>{p.description}</p>

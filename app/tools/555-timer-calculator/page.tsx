@@ -249,7 +249,7 @@ export default function Timer555Calculator() {
                       <Activity className="h-3.3 w-3.3" />
                       Waveform Visualization
                     </div>
-                    <div className="h-16 w-full flex items-end gap-[1px]">
+                    <div className="h-16 w-full flex items-end gap-px">
                       {mode === "astable" ? (
                         Array.from({ length: 20 }).map((_, i) => (
                           <div
@@ -265,9 +265,9 @@ export default function Timer555Calculator() {
                       ) : (
                         <div className="flex items-end w-full">
                           <div className="h-[2px] w-[20%] bg-blue-500" />
-                          <div className="h-full w-[1px] bg-blue-500" />
+                          <div className="h-full w-px bg-blue-500" />
                           <div className="h-full w-[50%] bg-blue-500/40 border-t-2 border-blue-500" />
-                          <div className="h-full w-[1px] bg-blue-500" />
+                          <div className="h-full w-px bg-blue-500" />
                           <div className="h-[2px] w-[30%] bg-blue-500" />
                         </div>
                       )}

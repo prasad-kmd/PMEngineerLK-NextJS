@@ -30,7 +30,7 @@ const invoiceItemSchema = z.object({
 const invoiceSchema = z.object({
   clientId: z.string().min(1, "Client is required"),
   issueDate: z.date(),
-  dueDate: z.date().optional().or(z.literal("")).nullable(),
+  dueDate: z.date().nullable().optional(),
   status: z.enum(["draft", "sent", "paid", "overdue", "cancelled"]),
   taxRate: z.number().min(0).optional().default(0),
   discountAmount: z.number().min(0).optional().default(0),
@@ -68,14 +68,14 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
       ? {
           ...initialData,
           issueDate: new Date(initialData.issueDate),
-          dueDate: initialData.dueDate ? new Date(initialData.dueDate) : "",
+          dueDate: initialData.dueDate ? new Date(initialData.dueDate) : null,
           taxRate: initialData.taxRate ?? 0,
           discountAmount: initialData.discountAmount ?? 0,
         }
       : {
           clientId: "",
           issueDate: new Date(),
-          dueDate: "",
+          dueDate: null,
           status: "draft",
           taxRate: business?.defaultTaxRate || 0,
           discountAmount: 0,
@@ -108,7 +108,7 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
     try {
       const dataToSubmit = {
         ...values,
-        dueDate: values.dueDate === "" ? undefined : (values.dueDate as Date),
+        dueDate: values.dueDate || null,
       };
       if (initialData) {
         await updateInvoice(initialData.id, dataToSubmit);
@@ -307,10 +307,8 @@ export function InvoiceForm({ clients: initialClients, business, initialData }: 
                 </label>
                 <input
                   type="date"
-                  {...form.register("dueDate", { 
-                    valueAsDate: true,
-                    setValueAs: (v) => v === "" ? undefined : new Date(v)
-                  })}
+                  {...form.register("dueDate", { valueAsDate: true })}
+                  defaultValue={form.getValues("dueDate") instanceof Date ? (form.getValues("dueDate") as Date).toISOString().split("T")[0] : ""}
                   className="w-full h-11 px-4 rounded-xl bg-background/50 border border-border/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-local-jetbrains-mono"
                 />
               </div>
