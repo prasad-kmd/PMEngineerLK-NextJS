@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Compass, Info } from "lucide-react"
-import Link from "next/link"
+// import Link from "next/link"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 

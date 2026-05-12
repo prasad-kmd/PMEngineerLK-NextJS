@@ -2,7 +2,7 @@ import { getInvoiceById } from "@/app/invoice-gen/actions/invoices";
 import { getSettings } from "@/app/invoice-gen/actions/settings";
 import { InvoicePreview } from "@/components/invoice-gen/invoice-preview";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ReceiptText, FileEdit } from "lucide-react";
+import { ReceiptText, FileEdit } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PDFDownloadButton } from "@/components/invoice-gen/pdf-template/pdf-download-button";

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Users, ReceiptText, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 
 const navItems = [
   { name: "Dashboard", href: "/invoice-gen/dashboard", icon: LayoutDashboard },

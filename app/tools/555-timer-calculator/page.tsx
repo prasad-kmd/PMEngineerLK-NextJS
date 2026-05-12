@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Timer, Info, Activity } from "lucide-react";
-import Link from "next/link";
+// import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AIContentIndicator } from "@/components/ai-content-indicator";

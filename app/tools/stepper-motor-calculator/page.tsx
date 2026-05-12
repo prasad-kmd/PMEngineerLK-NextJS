@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { MoveUpRight, Disc, Settings } from "lucide-react"
-import Link from "next/link"
+// import Link from "next/link"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import 'katex/dist/katex.min.css'
-import { InlineMath, BlockMath } from 'react-katex'
+import { BlockMath } from 'react-katex'
 
 export default function StepperMotorCalculator() {
     const [driveType, setDriveType] = useState<string>("leadscrew")
