@@ -5,6 +5,8 @@ export const colors = {
   textMuted: "#6b7280", // Gray 500
   border: "#e5e7eb", // Gray 200
   backgroundLight: "#f9fafb", // Gray 50
+  tableHeaderBg: "#f3f4f6", // Gray 100
+  tableHeaderText: "#374151", // Gray 700
   white: "#ffffff",
   discount: "#dc2626", // Red 600
 };
