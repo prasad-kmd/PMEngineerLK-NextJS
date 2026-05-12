@@ -4,9 +4,10 @@ import React, { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { LineChart as ChartIcon, ChevronLeft, Sliders, Zap } from "lucide-react"
+import { LineChart as ChartIcon, Sliders, Zap } from "lucide-react"
 import Link from "next/link"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 import {
   AreaChart,
   Area,
@@ -73,11 +74,13 @@ export default function PIDSimulator() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-5xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "PID Controller Simulator", href: "/tools/pid-controller-simulator", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <ChartIcon className="h-8 w-8 text-violet-500" />

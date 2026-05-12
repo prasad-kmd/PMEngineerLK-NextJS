@@ -4,7 +4,7 @@ import React, { useMemo, useRef, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Sigma, ChevronLeft, Info, Grid3X3, Download, Settings2 } from "lucide-react"
+import { Sigma, Info, Grid3X3, Download, Settings2 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
@@ -12,6 +12,7 @@ import { usePersistentState } from "@/hooks/use-persistent-state"
 import { toast } from "sonner"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function MatrixCalculator() {
     const resultsRef = useRef<HTMLDivElement>(null)
@@ -144,11 +145,13 @@ export default function MatrixCalculator() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-5xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Matrix Calculator", href: "/tools/matrix-calculator", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">

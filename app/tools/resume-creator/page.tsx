@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react"
 import Image from "next/image"
 import { 
     Briefcase, GraduationCap, Code2, Award, User, Mail, Phone, MapPin, 
-    Globe, Download, Trash2, Plus, ChevronLeft, Layout, AlertTriangle, Github, Linkedin, ExternalLink,
+    Globe, Download, Trash2, Plus, Layout, AlertTriangle, Github, Linkedin, ExternalLink,
     Camera, X
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -18,6 +18,7 @@ import jsPDF from "jspdf"
 import Link from "next/link"
 import { usePersistentState } from "@/hooks/use-persistent-state"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 interface Experience {
     company: string
@@ -224,11 +225,13 @@ export default function ResumeCreator() {
     return (
         <div className="min-h-screen pb-20 px-6 lg:px-8 pt-12 bg-background">
             <div className="mx-auto max-w-7xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6 print:hidden">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Resume Architect", href: "/tools/resume-creator", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <header className="mb-12 text-center print:hidden">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">
                         <Layout className="h-3 w-3" />

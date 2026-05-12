@@ -4,9 +4,12 @@ import React, { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Lightbulb, ChevronLeft, Info, Zap } from "lucide-react"
+import { Lightbulb, Info, Zap } from "lucide-react"
 import Link from "next/link"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { Breadcrumbs } from "@/components/breadcrumbs"
+import 'katex/dist/katex.min.css'
+import { InlineMath, BlockMath } from 'react-katex'
 
 const E24_SERIES = [1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0, 3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1]
 
@@ -53,11 +56,13 @@ export default function LEDResistorCalculator() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "LED Series Resistor", href: "/tools/led-resistor-calculator", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <Lightbulb className="h-8 w-8 text-yellow-500" />
@@ -76,11 +81,11 @@ export default function LEDResistorCalculator() {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="vs">Source Voltage (V)</Label>
+                                    <Label htmlFor="vs">Source Voltage (<InlineMath math="V_s" />) [V]</Label>
                                     <Input id="vs" type="number" value={sourceVoltage} onChange={(e) => setSourceVoltage(e.target.value)} />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="vf">LED Forward Voltage (V)</Label>
+                                    <Label htmlFor="vf">LED Forward Voltage (<InlineMath math="V_f" />) [V]</Label>
                                     <div className="grid grid-cols-2 gap-2">
                                         <Input id="vf" type="number" value={forwardVoltage} onChange={(e) => setForwardVoltage(e.target.value)} />
                                         <select 
@@ -96,11 +101,11 @@ export default function LEDResistorCalculator() {
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="if">LED Forward Current (mA)</Label>
+                                    <Label htmlFor="if">LED Forward Current (<InlineMath math="I_f" />) [mA]</Label>
                                     <Input id="if" type="number" value={forwardCurrent} onChange={(e) => setForwardCurrent(e.target.value)} />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="n">Number of LEDs in Series</Label>
+                                    <Label htmlFor="n">Number of LEDs in Series (<InlineMath math="N" />)</Label>
                                     <Input id="n" type="number" value={numLeds} onChange={(e) => setNumLeds(e.target.value)} min="1" />
                                 </div>
                             </CardContent>
@@ -108,10 +113,15 @@ export default function LEDResistorCalculator() {
 
                         <div className="flex items-start gap-3 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-[11px] text-yellow-200">
                             <Info className="h-4 w-4 shrink-0 mt-0.5" />
-                            <p>
-                                Formula: R = (Vs - (Vf × N)) / If <br />
-                                Make sure the source voltage is high enough to drive the total forward voltage of all LEDs in the series string.
-                            </p>
+                            <div>
+                                <p className="font-bold mb-2 underline underline-offset-4 uppercase tracking-wider text-[10px]">Ohm&apos;s Law Formula:</p>
+                                <div className="my-2 py-1 overflow-x-auto">
+                                    <BlockMath math="R = \frac{V_s - (V_f \cdot N)}{I_f}" />
+                                </div>
+                                <p className="mt-2 leading-relaxed opacity-80">
+                                    Ensure <InlineMath math="V_s > (V_f \cdot N)" /> for the circuit to function.
+                                </p>
+                            </div>
                         </div>
                     </div>
 

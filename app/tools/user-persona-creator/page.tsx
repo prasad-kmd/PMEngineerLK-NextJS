@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 interface Persona {
   name: string
@@ -119,6 +120,13 @@ export default function UserPersonaCreator() {
   return (
     <div className="min-h-screen pb-20 px-6 lg:px-8 pt-12 print:p-0">
       <div className="mx-auto max-w-7xl">
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "User Persona Architect", href: "/tools/user-persona-creator", active: true },
+                    ]}
+                    className="mb-8"
+                />
         <header className="mb-12 text-center print:hidden">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">
             <Users className="h-3 w-3" />

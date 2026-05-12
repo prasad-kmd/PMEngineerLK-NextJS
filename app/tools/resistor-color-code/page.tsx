@@ -3,10 +3,11 @@
 import React, { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Zap, ChevronLeft } from "lucide-react"
+import { Zap } from "lucide-react"
 import Link from "next/link"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 const COLORS = [
     { name: "Black", color: "bg-black", hex: "#000000", value: 0, multiplier: 1, tolerance: null, tempCoeff: 250 },
@@ -72,11 +73,13 @@ export default function ResistorColorCode() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Resistor Color Code Solver", href: "/tools/resistor-color-code", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <Zap className="h-8 w-8 text-amber-500" />

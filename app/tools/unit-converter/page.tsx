@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { toast } from "sonner"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 type UnitCategory = "length" | "mass" | "temperature" | "pressure" | "energy" | "torque"
 
@@ -144,6 +145,13 @@ export default function UnitConverterPage() {
     return (
         <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
             <div className="mx-auto max-w-4xl">
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Precision Unit Converter", href: "/tools/unit-converter", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-12 text-center lg:text-left">
                     <h1 className="mb-4 text-4xl font-bold mozilla-headline">Precision Unit Converter</h1>
                     <p className="text-lg text-muted-foreground leading-relaxed local-inter">

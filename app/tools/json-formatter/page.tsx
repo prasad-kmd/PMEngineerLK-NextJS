@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { toast } from "sonner"
 import Link from "next/link"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function JsonFormatterPage() {
   const [input, setInput] = useState("")
@@ -98,14 +99,15 @@ export default function JsonFormatterPage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
       <div className="mx-auto max-w-6xl">
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "JSON Structure Validator", href: "/tools/json-formatter", active: true },
+                    ]}
+                    className="mb-8"
+                />
         <div className="mb-8">
-          <Link
-            href="/tools"
-            className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowRight className="h-4 w-4 rotate-180" />
-            Back to Workspace
-          </Link>
+          
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div>
               <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">

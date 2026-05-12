@@ -8,6 +8,7 @@ import PredefinedEquations from "@/components/tools/latex-mathml-converter/prede
 import EquationEditor from "@/components/tools/latex-mathml-converter/equation-editor"
 import ActionButtons from "@/components/tools/latex-mathml-converter/action-buttons"
 import MathMLModal from "@/components/tools/latex-mathml-converter/mathml-modal"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function LatexToMathmlPage() {
   const [latex, setLatex] = useState("E = mc^2")
@@ -37,6 +38,13 @@ export default function LatexToMathmlPage() {
   return (
     <div className="min-h-screen p-6 lg:p-8 flex flex-col items-center">
       <div className="mx-auto max-w-5xl w-full space-y-8">
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "MathML Integration Engine", href: "/tools/latex-mathml-converter", active: true },
+                    ]}
+                    className="mb-8"
+                />
         <div className="text-center lg:text-left">
           <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-2 justify-center lg:justify-start text-foreground">
             <Replace className="h-8 w-8 text-purple-500" />

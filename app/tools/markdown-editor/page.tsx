@@ -5,6 +5,7 @@ import { marked } from "marked"
 import DOMPurify from "dompurify"
 import { Edit3, Copy, Trash2, Download } from "lucide-react"
 import { toast } from "sonner"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function MarkdownEditorPage() {
     const [markdown, setMarkdown] = useState("# Welcome to the Markdown Editor\n\nEdit this text to see the preview on the right.")
@@ -44,6 +45,13 @@ export default function MarkdownEditorPage() {
     return (
         <div className="min-h-screen flex flex-col p-6 lg:p-8">
             <div className="mx-auto max-w-6xl w-full flex-1 flex flex-col">
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Technical Document Editor", href: "/tools/markdown-editor", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                         <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-2">

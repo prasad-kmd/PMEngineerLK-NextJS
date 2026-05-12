@@ -4,7 +4,7 @@ import React, { useMemo, useRef, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Waypoints, ChevronLeft, Info, Settings, Download } from "lucide-react"
+import { Waypoints, Info, Settings, Download } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -13,6 +13,9 @@ import { usePersistentState } from "@/hooks/use-persistent-state"
 import { toast } from "sonner"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
+import { Breadcrumbs } from "@/components/breadcrumbs"
+import 'katex/dist/katex.min.css'
+import { InlineMath, BlockMath } from 'react-katex'
 
 export default function MomentOfInertiaCalculator() {
     const resultsRef = useRef<HTMLDivElement>(null)
@@ -100,11 +103,13 @@ export default function MomentOfInertiaCalculator() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Moment of Inertia", href: "/tools/moment-of-inertia-calculator", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <Waypoints className="h-8 w-8 text-indigo-500" />
@@ -132,18 +137,18 @@ export default function MomentOfInertiaCalculator() {
                                 {shape === "rectangle" && (
                                     <>
                                         <div className="space-y-2">
-                                            <Label htmlFor="width">Width (b) [mm]</Label>
+                                            <Label htmlFor="width">Width (<InlineMath math="b" />) [mm]</Label>
                                             <Input id="width" type="number" value={width} onChange={(e) => setWidth(e.target.value)} />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="height">Height (h) [mm]</Label>
+                                            <Label htmlFor="height">Height (<InlineMath math="h" />) [mm]</Label>
                                             <Input id="height" type="number" value={height} onChange={(e) => setHeight(e.target.value)} />
                                         </div>
                                     </>
                                 )}
                                 {shape === "circle" && (
                                     <div className="space-y-2">
-                                        <Label htmlFor="diameter">Diameter (d) [mm]</Label>
+                                        <Label htmlFor="diameter">Diameter (<InlineMath math="d" />) [mm]</Label>
                                         <Input id="diameter" type="number" value={diameter} onChange={(e) => setDiameter(e.target.value)} />
                                     </div>
                                 )}
@@ -172,9 +177,27 @@ export default function MomentOfInertiaCalculator() {
 
                         <div className="flex items-start gap-3 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-200 text-xs">
                             <Info className="h-4 w-4 shrink-0 mt-0.5" />
-                            <p>
-                                The Area Moment of Inertia represents a shape's resistance to bending. Ixx is for bending about the horizontal axis, and Iyy is for bending about the vertical axis.
-                            </p>
+                            <div>
+                                <p className="font-bold mb-2 underline underline-offset-4 uppercase tracking-wider text-[10px]">Geometric Formula:</p>
+                                <div className="my-2 py-1 overflow-x-auto">
+                                    {shape === "rectangle" && (
+                                        <BlockMath math="I_{xx} = \frac{bh^3}{12}, \quad I_{yy} = \frac{hb^3}{12}" />
+                                    )}
+                                    {shape === "circle" && (
+                                        <BlockMath math="I_{xx} = I_{yy} = \frac{\pi d^4}{64}" />
+                                    )}
+                                    {shape === "ibeam" && (
+                                        <div className="space-y-3">
+                                            <BlockMath math="I_{xx} = \frac{BH^3}{12} - \frac{(B-t_w)H_w^3}{12}" />
+                                            <BlockMath math="I_{yy} = 2\frac{t_f B^3}{12} + \frac{H_w t_w^3}{12}" />
+                                        </div>
+                                    )}
+                                </div>
+                                <p className="mt-2 leading-relaxed opacity-80">
+                                    Ixx: resistance to bending about the horizontal axis. <br />
+                                    Iyy: resistance to bending about the vertical axis.
+                                </p>
+                            </div>
                         </div>
                     </div>
 
@@ -189,11 +212,11 @@ export default function MomentOfInertiaCalculator() {
                             <CardContent className="flex-1 flex flex-col justify-center space-y-6">
                                 <div className="space-y-4">
                                     <div className="p-4 rounded-xl bg-background/50 border border-border/50">
-                                        <div className="text-[10px] uppercase text-muted-foreground font-bold mb-1">Ixx (mm⁴)</div>
+                                        <div className="text-[10px] uppercase text-muted-foreground font-bold mb-1">Ixx (<InlineMath math="mm^4" />)</div>
                                         <div className="text-2xl font-bold text-indigo-500 tabular-nums">{results.ixx}</div>
                                     </div>
                                     <div className="p-4 rounded-xl bg-background/50 border border-border/50">
-                                        <div className="text-[10px] uppercase text-muted-foreground font-bold mb-1">Iyy (mm⁴)</div>
+                                        <div className="text-[10px] uppercase text-muted-foreground font-bold mb-1">Iyy (<InlineMath math="mm^4" />)</div>
                                         <div className="text-2xl font-bold text-indigo-500 tabular-nums">{results.iyy}</div>
                                     </div>
                                     <div className="p-4 rounded-xl bg-background/50 border border-border/50">

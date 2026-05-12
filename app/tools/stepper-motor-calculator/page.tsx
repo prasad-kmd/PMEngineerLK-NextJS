@@ -4,10 +4,13 @@ import React, { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { MoveUpRight, ChevronLeft, Disc, Settings } from "lucide-react"
+import { MoveUpRight, Disc, Settings } from "lucide-react"
 import Link from "next/link"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { Breadcrumbs } from "@/components/breadcrumbs"
+import 'katex/dist/katex.min.css'
+import { InlineMath, BlockMath } from 'react-katex'
 
 export default function StepperMotorCalculator() {
     const [driveType, setDriveType] = useState<string>("leadscrew")
@@ -52,11 +55,13 @@ export default function StepperMotorCalculator() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Stepper Motor Calculator", href: "/tools/stepper-motor-calculator", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <MoveUpRight className="h-8 w-8 text-rose-500" />
@@ -168,12 +173,25 @@ export default function StepperMotorCalculator() {
                                     </div>
                                 </div>
 
-                                <div className="p-4 rounded-lg border border-border/50 bg-background/30 text-[11px] text-muted-foreground flex gap-3">
-                                    <Settings className="h-4 w-4 shrink-0 mt-0.5 opacity-50" />
-                                    <p>
-                                        Enter this value into your Marlin (M92), Klipper, or GRBL settings to calibrate the motion axis. 
-                                        Ensure your microstepping jumpers or software configuration match the selected value.
-                                    </p>
+                                <div className="p-4 rounded-lg border border-border/50 bg-background/30 text-[11px] text-muted-foreground">
+                                    <div className="mb-3">
+                                        <p className="font-bold mb-1 uppercase tracking-wider text-[10px]">Calculation Formula:</p>
+                                        <div className="py-2 overflow-x-auto">
+                                            {driveType === "leadscrew" ? (
+                                                <BlockMath math="\text{Steps/mm} = \frac{(360/\theta) \cdot m}{L}" />
+                                            ) : (
+                                                <BlockMath math="\text{Steps/mm} = \frac{(360/\theta) \cdot m}{p \cdot N}" />
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-3 pt-2 border-t border-border/50">
+                                        <Settings className="h-4 w-4 shrink-0 mt-0.5 opacity-50" />
+                                        <p>
+                                            Enter this value into your Marlin (M92), Klipper, or GRBL settings.
+                                            <br />
+                                            <span className="italic opacity-70">θ: Step Angle, m: Microstepping, L: Lead, p: Pitch, N: Teeth.</span>
+                                        </p>
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>

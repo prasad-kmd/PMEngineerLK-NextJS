@@ -2,10 +2,11 @@
 
 import React, { useState } from "react"
 import { Card } from "@/components/ui/card"
-import { Wrench, ChevronLeft, Info, Search, Filter } from "lucide-react"
+import { Wrench, Info, Search, Filter } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 const TORQUE_DATA = [
     { size: "M3", pitch: 0.5, class88: 1.3, class109: 1.9, class129: 2.2 },
@@ -31,11 +32,13 @@ export default function BoltTorqueChart() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Bolt Torque Chart", href: "/tools/bolt-torque-chart", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div>
                         <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">

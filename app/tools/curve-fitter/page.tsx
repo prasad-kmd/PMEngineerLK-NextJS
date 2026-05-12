@@ -4,12 +4,13 @@ import React, { useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { LineChart, ChevronLeft, Info, Download } from "lucide-react"
+import { LineChart, Info, Download } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
 import { usePersistentState } from "@/hooks/use-persistent-state"
 import { toast } from "sonner"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function CurveFitter() {
     const [data, setData] = usePersistentState<string>("curve-data", "1, 2.1\n2, 3.9\n3, 6.2\n4, 8.1\n5, 10.3")
@@ -116,11 +117,13 @@ export default function CurveFitter() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Linear Curve Fitter", href: "/tools/curve-fitter", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <LineChart className="h-8 w-8 text-blue-500" />

@@ -4,10 +4,13 @@ import React, { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Activity, ChevronLeft, Info } from "lucide-react"
+import { Activity, Info } from "lucide-react"
 import Link from "next/link"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { Breadcrumbs } from "@/components/breadcrumbs"
+import 'katex/dist/katex.min.css'
+import { InlineMath, BlockMath } from 'react-katex'
 
 export default function OpAmpGainCalculator() {
     const [mode, setMode] = useState<string>("non-inverting")
@@ -40,11 +43,13 @@ export default function OpAmpGainCalculator() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Op-Amp Gain Calculator", href: "/tools/op-amp-gain-calculator", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <Activity className="h-8 w-8 text-red-500" />
@@ -69,15 +74,15 @@ export default function OpAmpGainCalculator() {
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <div className="space-y-2">
-                                        <Label htmlFor="r1">Input Resistor R1 (kΩ)</Label>
+                                        <Label htmlFor="r1">Input Resistor <InlineMath math="R_1" /> (kΩ)</Label>
                                         <Input id="r1" type="number" value={r1} onChange={(e) => setR1(e.target.value)} />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="rf">Feedback Resistor Rf (kΩ)</Label>
+                                        <Label htmlFor="rf">Feedback Resistor <InlineMath math="R_f" /> (kΩ)</Label>
                                         <Input id="rf" type="number" value={rf} onChange={(e) => setRf(e.target.value)} />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="vin">Input Voltage Vin (V)</Label>
+                                        <Label htmlFor="vin">Input Voltage <InlineMath math="V_{in}" /> (V)</Label>
                                         <Input id="vin" type="number" value={vin} onChange={(e) => setVin(e.target.value)} />
                                     </div>
                                 </CardContent>
@@ -86,13 +91,17 @@ export default function OpAmpGainCalculator() {
                             <div className="flex items-start gap-3 p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-[11px] text-red-200">
                                 <Info className="h-4 w-4 shrink-0 mt-0.5" />
                                 <div>
-                                    <p className="font-semibold mb-1">Gain Formula:</p>
-                                    {mode === "non-inverting" ? (
-                                        <p>Gain (Av) = 1 + (Rf / R1)</p>
-                                    ) : (
-                                        <p>Gain (Av) = -(Rf / R1)</p>
-                                    )}
-                                    <p className="mt-2 text-muted-foreground italic">Vout = Vin * Gain</p>
+                                    <p className="font-semibold mb-2 underline underline-offset-4">Gain Formula:</p>
+                                    <div className="my-2 py-1">
+                                        {mode === "non-inverting" ? (
+                                            <BlockMath math="A_v = 1 + \frac{R_f}{R_1}" />
+                                        ) : (
+                                            <BlockMath math="A_v = -\frac{R_f}{R_1}" />
+                                        )}
+                                    </div>
+                                    <p className="mt-2 text-muted-foreground italic flex items-center gap-2">
+                                        <InlineMath math="V_{out} = V_{in} \cdot A_v" />
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -104,14 +113,14 @@ export default function OpAmpGainCalculator() {
                                 </CardHeader>
                                 <CardContent className="flex-1 flex flex-col justify-center space-y-12">
                                     <div className="text-center">
-                                        <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Voltage Gain (Av)</div>
+                                        <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Voltage Gain (<InlineMath math="A_v" />)</div>
                                         <div className="text-5xl font-bold text-red-500 tabular-nums">
                                             {result?.gain || "--"}
                                         </div>
                                     </div>
 
                                     <div className="text-center">
-                                        <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Output Voltage (Vout)</div>
+                                        <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Output Voltage (<InlineMath math="V_{out}" />)</div>
                                         <div className="text-4xl font-bold text-primary tabular-nums">
                                             {result?.vout ? `${result.vout} V` : "--"}
                                         </div>

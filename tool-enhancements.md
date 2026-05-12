@@ -1,54 +1,37 @@
-# Tool Enhancements & Modifications
+# Future Enhancements for Engineering Tools
 
-This document tracks the ongoing enhancements for the engineering and developer tools available in the PMEngineerLK platform.
+This document outlines potential improvements, new features, and technical enhancements for the tools section.
 
-## Objectives
-- [ ] **Breadcrumb Integration**: Add consistent breadcrumb navigation to all tool pages to match the dashboard and main content layout.
-- [ ] **LaTeX Standardization**: Ensure all tools with mathematical equations use `react-katex` for professional rendering.
-- [ ] **UI Consistency**: Align tool headers, card styles, and background elements with the premium site design system.
+## 1. User Interface & Experience
+- **Interactive Circuit Diagrams**: Replace static icons with dynamic SVG circuit diagrams that update based on input values (e.g., changing resistor labels in the Op-Amp or LED calculators).
+- **Tool Search & Filtering**: Add a search bar on the main `/tools` page to quickly find tools by name or category.
+- **Recent Tools**: Implement a "Recently Used" section using local storage to provide quick access to frequently used utilities.
+- **Dark/Light Mode Optimizations**: Further refine KaTeX and chart colors for perfect visibility across all themes.
 
-## Tool Progress
+## 2. Technical Enhancements
+- **Unit Flexibility**: Allow users to switch between different units (e.g., mm vs inches, Celsius vs Fahrenheit, Hz vs rad/s) with automatic conversion.
+- **Export Capabilities**:
+    - Add "Copy as JSON" for all calculation results.
+    - Expand PDF export to more tools (currently only in a few).
+    - Add "Export to CSV" for tools that generate datasets (like the Curve Fitter).
+- **Complex Number Support**: Add support for complex impedance in electronics tools.
+- **Offline Support**: Ensure all tools work as Progressive Web Apps (PWA) for field engineering use without internet.
 
-| Tool Name | Breadcrumbs | LaTeX | UI Polish | Status |
-|-----------|:-----------:|:-----:|:---------:|:------:|
-| 555 Timer Calculator | [ ] | [x] | [ ] | In Progress |
-| Battery Life Estimator | [ ] | [ ] | [ ] | Pending |
-| Beam Deflection Calculator | [ ] | [ ] | [ ] | Pending |
-| Bolt Torque Chart | [ ] | [ ] | [ ] | Pending |
-| Color Contrast Checker | [ ] | [ ] | [ ] | Pending |
-| Compressor | [ ] | [ ] | [ ] | Pending |
-| CSS Unit Converter | [ ] | [ ] | [ ] | Pending |
-| Curve Fitter | [ ] | [ ] | [ ] | Pending |
-| Data Transform | [ ] | [ ] | [ ] | Pending |
-| Diff Checker | [ ] | [ ] | [ ] | Pending |
-| Gear Ratio Calculator | [ ] | [ ] | [ ] | Pending |
-| HTML Encoder | [ ] | [ ] | [ ] | Pending |
-| ISO Fits & Tolerances | [ ] | [ ] | [ ] | Pending |
-| JSON Formatter | [ ] | [ ] | [ ] | Pending |
-| LED Resistor Calculator | [ ] | [ ] | [ ] | Pending |
-| Markdown Editor | [ ] | [ ] | [ ] | Pending |
-| Material Database | [ ] | [ ] | [ ] | Pending |
-| Matrix Calculator | [ ] | [ ] | [ ] | Pending |
-| Moment of Inertia | [ ] | [ ] | [ ] | Pending |
-| Op-Amp Gain Calculator | [ ] | [ ] | [ ] | Pending |
-| PCB Impedance | [ ] | [ ] | [ ] | Pending |
-| PCB Trace Width | [ ] | [ ] | [ ] | Pending |
-| PID Simulator | [ ] | [ ] | [ ] | Pending |
-| PID Tuner | [ ] | [ ] | [ ] | Pending |
-| PWM Voltage Converter | [ ] | [ ] | [ ] | Pending |
-| Regex Architect | [ ] | [ ] | [ ] | Pending |
-| Resistor Color Code | [ ] | [ ] | [ ] | Pending |
-| Resume Creator | [ ] | [ ] | [ ] | Pending |
-| Scientific Calculator | [ ] | [ ] | [ ] | Pending |
-| Sensor Scaling | [ ] | [ ] | [ ] | Pending |
-| Stepper Motor | [ ] | [ ] | [ ] | Pending |
-| Student Guide | [ ] | [ ] | [ ] | Pending |
-| Unit Circle | [ ] | [ ] | [ ] | Pending |
-| Unit Converter | [ ] | [ ] | [ ] | Pending |
-| User Persona Creator | [ ] | [ ] | [ ] | Pending |
-| Voltage Divider | [ ] | [ ] | [ ] | Pending |
+## 3. New Tool Ideas
+- **Control Systems**:
+    - Bode/Nyquist Plot Generator.
+    - State-Space Model Simulator.
+- **Electronics**:
+    - Filter Design Tool (Low-pass, High-pass, Band-pass).
+    - Thermal Resistance/Heatsink Calculator.
+- **Mechanical**:
+    - Stress-Strain Curve Analyzer.
+    - Shaft Torsion Calculator.
+- **Software**:
+    - JWT Debugger/Decoder.
+    - Cron Expression Visualizer.
 
-## Next Steps
-1. Implement `Breadcrumbs` component in all tool pages.
-2. Review each tool for missing LaTeX formatting in descriptions and formulas.
-3. Apply consistent `Container` and `TechnicalBackground` wrapping.
+## 4. Documentation & Help
+- **Tool-specific Tutorials**: Add a "How to use" accordion or modal for each tool with real-world engineering examples.
+- **Reference Links**: Link to Wikipedia or engineering standards (ISO, IPC, IEEE) for each formula used.
+- **AI Integration**: A "Help me choose" assistant that recommends a tool based on a natural language description of an engineering problem.

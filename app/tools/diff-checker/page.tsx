@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function DiffChecker() {
   const [text1, setText1] = useState("")
@@ -89,6 +90,13 @@ export default function DiffChecker() {
   return (
     <div className="min-h-screen pb-20 px-6 lg:px-8 pt-12">
       <div className="mx-auto max-w-6xl">
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Diff Comparison Engine", href: "/tools/diff-checker", active: true },
+                    ]}
+                    className="mb-8"
+                />
         <header className="mb-12 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">
             <Split className="h-3 w-3" />

@@ -4,10 +4,11 @@ import React, { useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { CheckCircle2, XCircle, ChevronLeft, Info, Palette } from "lucide-react"
+import { CheckCircle2, XCircle, Info, Palette } from "lucide-react"
 import Link from "next/link"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
 import { usePersistentState } from "@/hooks/use-persistent-state"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 function getLuminance(hex: string) {
     const rgb = hexToRgb(hex)
@@ -49,11 +50,13 @@ export default function ColorContrastChecker() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Color Contrast Checker", href: "/tools/color-contrast-checker", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <Palette className="h-8 w-8 text-fuchsia-500" />

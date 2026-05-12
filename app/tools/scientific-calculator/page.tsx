@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 const evaluateMath = (sanitized: string) => {
     return eval(sanitized);
@@ -169,6 +170,13 @@ export default function ScientificCalculator() {
     return (
         <div className="min-h-screen p-2 md:p-4 lg:p-6 flex flex-col items-center bg-background overflow-x-hidden">
             <div className="mx-auto max-w-5xl w-full flex flex-col h-full">
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Precision Engineering Calculator", href: "/tools/scientific-calculator", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 {/* Standard Header - Thinner margin */}
                 <div className="mb-3 flex flex-col md:flex-row md:items-center justify-between gap-2">
                     <div className="text-center md:text-left">

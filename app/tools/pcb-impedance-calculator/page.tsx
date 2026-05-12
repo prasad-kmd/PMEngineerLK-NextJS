@@ -4,11 +4,14 @@ import React, { useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Cpu, ChevronLeft, Info, Zap } from "lucide-react"
+import { Cpu, Info, Zap } from "lucide-react"
 import Link from "next/link"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
 import { usePersistentState } from "@/hooks/use-persistent-state"
+import { Breadcrumbs } from "@/components/breadcrumbs"
+import 'katex/dist/katex.min.css'
+import { InlineMath, BlockMath } from 'react-katex'
 
 export default function PCBImpedanceCalculator() {
     const [type, setType] = usePersistentState<string>("pcb-imp-type", "microstrip")
@@ -46,11 +49,13 @@ export default function PCBImpedanceCalculator() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "PCB Impedance Calculator", href: "/tools/pcb-impedance-calculator", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <Zap className="h-8 w-8 text-amber-500" />
@@ -78,7 +83,7 @@ export default function PCBImpedanceCalculator() {
                                     </Tabs>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="dielectric">Dielectric Constant (εᵣ)</Label>
+                                    <Label htmlFor="dielectric">Dielectric Constant (<InlineMath math="\epsilon_r" />)</Label>
                                     <div className="flex gap-4">
                                         <Input
                                             id="dielectric"
@@ -133,13 +138,20 @@ export default function PCBImpedanceCalculator() {
                         <div className="flex items-start gap-3 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-200 text-xs">
                             <Info className="h-4 w-4 shrink-0 mt-0.5" />
                             <div>
-                                <p className="font-bold mb-1">Formula Info:</p>
-                                <p>
-                                    Uses IPC-2141 standard approximations. These formulas are generally accurate when:
+                                <p className="font-bold mb-1 underline underline-offset-4">Formula Info:</p>
+                                <div className="my-3 overflow-x-auto py-2">
+                                    {type === "microstrip" ? (
+                                        <BlockMath math="Z_0 = \frac{87}{\sqrt{\epsilon_r + 1.41}} \ln\left(\frac{5.98h}{0.8w + t}\right)" />
+                                    ) : (
+                                        <BlockMath math="Z_0 = \frac{60}{\sqrt{\epsilon_r}} \ln\left(\frac{1.9h}{0.8w + t}\right)" />
+                                    )}
+                                </div>
+                                <p className="text-[10px] opacity-80">
+                                    Uses IPC-2141 standard approximations. Accurate when:
                                 </p>
-                                <ul className="list-disc ml-4 mt-1 space-y-0.5">
-                                    <li>0.1 &lt; w/h &lt; 3.0</li>
-                                    <li>1 &lt; εᵣ &lt; 15</li>
+                                <ul className="list-disc ml-4 mt-1 space-y-0.5 text-[10px] opacity-80">
+                                    <li><InlineMath math="0.1 < w/h < 3.0" /></li>
+                                    <li><InlineMath math="1 < \epsilon_r < 15" /></li>
                                 </ul>
                             </div>
                         </div>
@@ -152,7 +164,7 @@ export default function PCBImpedanceCalculator() {
                             </CardHeader>
                             <CardContent className="flex-1 flex flex-col justify-center space-y-8">
                                 <div className="text-center">
-                                    <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">Impedance (Z₀)</div>
+                                    <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">Impedance (<InlineMath math="Z_0" />)</div>
                                     <div className="text-6xl font-bold text-amber-500 tabular-nums">
                                         {result ? result.z0 : "--"} <span className="text-2xl text-muted-foreground font-normal">Ω</span>
                                     </div>

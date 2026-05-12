@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Code2, Copy, Replace } from "lucide-react"
 import { toast } from "sonner"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function HtmlEncoderPage() {
     const [input, setInput] = useState("")
@@ -45,6 +46,13 @@ export default function HtmlEncoderPage() {
     return (
         <div className="min-h-screen p-6 lg:p-8 flex flex-col items-center">
             <div className="mx-auto max-w-4xl w-full">
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Security & Syntax Escaper", href: "/tools/html-encoder", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8 text-center lg:text-left">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-2 justify-center lg:justify-start">
                         <Code2 className="h-8 w-8 text-orange-500" />

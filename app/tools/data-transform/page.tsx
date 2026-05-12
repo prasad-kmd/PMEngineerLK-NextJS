@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { 
   FileCode, 
-  ArrowRight, 
+  
   Copy, 
   RefreshCcw,
   Binary,
@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
 import Link from "next/link"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function DataTransformPage() {
   const [input, setInput] = useState("")
@@ -83,14 +84,15 @@ export default function DataTransformPage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
       <div className="mx-auto max-w-4xl">
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Data Transformation Suite", href: "/tools/data-transform", active: true },
+                    ]}
+                    className="mb-8"
+                />
         <div className="mb-8">
-          <Link
-            href="/tools"
-            className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowRight className="h-4 w-4 rotate-180" />
-            Back to Workspace
-          </Link>
+          
           <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
             <FileCode className="h-8 w-8 text-primary" />
             Data Transformation Suite

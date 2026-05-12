@@ -49,6 +49,7 @@ import { AIContentIndicator } from "@/components/ai-content-indicator";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { toast } from "sonner";
 import Loading from "@/app/loading";
+import { Breadcrumbs } from "@/components/breadcrumbs"
 import {
   Tooltip,
   TooltipContent,
@@ -481,6 +482,13 @@ export default function StudentGuideNavigator() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
       <div className="mx-auto max-w-6xl">
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Engineering Student Navigator", href: "/tools/student-guide-navigator", active: true },
+                    ]}
+                    className="mb-8"
+                />
         <div className="flex flex-col gap-8">
           {/* Premium Header */}
           <div className="relative overflow-hidden rounded-2xl bg-card/30 backdrop-blur-xl border border-primary/10 p-8 md:p-10 shadow-xl">

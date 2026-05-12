@@ -5,10 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
-import { Activity, ChevronLeft, Info, Zap } from "lucide-react"
+import { Activity, Info, Zap } from "lucide-react"
 import Link from "next/link"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
 import { usePersistentState } from "@/hooks/use-persistent-state"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export default function PWMVoltageConverter() {
     const [peakVoltage, setPeakVoltage] = usePersistentState<string>("pwm-vpeak", "5")
@@ -31,11 +32,13 @@ export default function PWMVoltageConverter() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "PWM to Voltage Converter", href: "/tools/pwm-voltage-converter", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <Activity className="h-8 w-8 text-rose-500" />

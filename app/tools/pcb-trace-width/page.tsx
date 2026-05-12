@@ -4,10 +4,13 @@ import React, { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Cpu, ChevronLeft, Info, Ruler } from "lucide-react"
+import { Cpu, Info, Ruler } from "lucide-react"
 import Link from "next/link"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { Breadcrumbs } from "@/components/breadcrumbs"
+import 'katex/dist/katex.min.css'
+import { InlineMath, BlockMath } from 'react-katex'
 
 export default function PCBTraceWidth() {
     const [current, setCurrent] = useState<string>("1.0")
@@ -45,11 +48,13 @@ export default function PCBTraceWidth() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "PCB Trace Width Calculator", href: "/tools/pcb-trace-width", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <Cpu className="h-8 w-8 text-emerald-500" />
@@ -116,10 +121,21 @@ export default function PCBTraceWidth() {
 
                         <div className="flex items-start gap-3 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-200 text-xs">
                             <Info className="h-4 w-4 shrink-0 mt-0.5" />
-                            <p>
-                                This calculator uses the IPC-2221 (formerly IPC-D-275) formulas to estimate the required trace width. 
-                                Note that results are estimates and actual performance may vary based on PCB material and environmental factors.
-                            </p>
+                            <div>
+                                <p className="font-bold mb-2 underline underline-offset-4 uppercase tracking-wider text-[10px]">IPC-2221 Formula:</p>
+                                <div className="my-2 py-1 overflow-x-auto">
+                                    <BlockMath math="I = k \cdot \Delta T^b \cdot A^c" />
+                                </div>
+                                <p className="mt-2 leading-relaxed opacity-80">
+                                    Rearranged to solve for Area (<InlineMath math="A" />):
+                                </p>
+                                <div className="my-2 py-1 overflow-x-auto">
+                                    <BlockMath math="A = \left(\frac{I}{k \cdot \Delta T^b}\right)^{1/c}" />
+                                </div>
+                                <p className="mt-2 text-[10px] opacity-70 italic">
+                                    Where k = {layer === "external" ? "0.048 (external)" : "0.024 (internal)"}, b = 0.44, c = 0.725
+                                </p>
+                            </div>
                         </div>
                     </div>
 

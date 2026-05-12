@@ -4,9 +4,12 @@ import React, { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Ruler, ChevronLeft, Info, Scale } from "lucide-react"
+import { Ruler, Info, Scale } from "lucide-react"
 import Link from "next/link"
 import { AIContentIndicator } from "@/components/ai-content-indicator"
+import { Breadcrumbs } from "@/components/breadcrumbs"
+import 'katex/dist/katex.min.css'
+import { InlineMath, BlockMath } from 'react-katex'
 
 export default function SensorScalingCalculator() {
     const [inMin, setInMin] = useState<string>("0.0")
@@ -37,11 +40,13 @@ export default function SensorScalingCalculator() {
     return (
         <div className="min-h-screen p-4 md:p-8 lg:p-12 bg-background">
             <div className="mx-auto max-w-4xl">
-                <Link href="/tools" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
-                    <ChevronLeft className="h-4 w-4" />
-                    Back to Workspace
-                </Link>
-
+                <Breadcrumbs
+                    items={[
+                        { label: "Tools", href: "/tools" },
+                        { label: "Sensor Scaling Calculator", href: "/tools/sensor-scaling-calculator", active: true },
+                    ]}
+                    className="mb-8"
+                />
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold mozilla-headline flex items-center gap-3">
                         <Ruler className="h-8 w-8 text-lime-500" />
@@ -93,11 +98,15 @@ export default function SensorScalingCalculator() {
 
                         <div className="flex items-start gap-3 p-4 rounded-lg bg-lime-500/10 border border-lime-500/20 text-[11px] text-lime-200">
                             <Info className="h-4 w-4 shrink-0 mt-0.5" />
-                            <p>
-                                Uses linear interpolation (y = mx + b). <br />
-                                <strong>Slope (m):</strong> (Y2 - Y1) / (X2 - X1) <br />
-                                <strong>Offset (b):</strong> Y1 - m * X1
-                            </p>
+                            <div>
+                                <p className="font-bold mb-2 underline underline-offset-4 uppercase tracking-wider text-[10px]">Scaling Formula:</p>
+                                <div className="my-2 py-1 overflow-x-auto">
+                                    <BlockMath math="y = y_1 + \frac{y_2 - y_1}{x_2 - x_1} \cdot (x - x_1)" />
+                                </div>
+                                <p className="mt-2 leading-relaxed opacity-80">
+                                    Where <InlineMath math="m = \frac{y_2 - y_1}{x_2 - x_1}" /> and <InlineMath math="b = y_1 - m \cdot x_1" />
+                                </p>
+                            </div>
                         </div>
                     </div>
 
