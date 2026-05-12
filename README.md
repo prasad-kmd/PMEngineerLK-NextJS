@@ -20,12 +20,12 @@ A modern, high-performance technical documentation and engineering portfolio pla
 ![NodeJS 20.x](public/img/badges/node.js-20.x.svg)
 ![pnpm 9](public/img/badges/pnpm-9.svg)
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/prasad-kmd/next-notion-cms?style=for-the-badge&logo=github&logoColor=black)
-![GitHub deployments](https://img.shields.io/github/deployments/prasad-kmd/next-notion-cms/Production?logo=Vercel&style=for-the-badge)
-![GitHub stars](https://img.shields.io/github/stars/prasad-kmd/next-notion-cms?style=for-the-badge&logo=github)
-![GitHub forks](https://img.shields.io/github/forks/prasad-kmd/next-notion-cms?style=for-the-badge&logo=github)
-![GitHub issues](https://img.shields.io/github/issues/prasad-kmd/next-notion-cms?style=for-the-badge&logo=github)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/prasad-kmd/next-notion-cms?style=for-the-badge&logo=github)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/prasad-kmd/PMEngineerLK-NextJS?style=for-the-badge&logo=github&logoColor=black)
+![GitHub deployments](https://img.shields.io/github/deployments/prasad-kmd/PMEngineerLK-NextJS/Production?logo=Vercel&style=for-the-badge)
+![GitHub stars](https://img.shields.io/github/stars/prasad-kmd/PMEngineerLK-NextJS?style=for-the-badge&logo=github)
+![GitHub forks](https://img.shields.io/github/forks/prasad-kmd/PMEngineerLK-NextJS?style=for-the-badge&logo=github)
+![GitHub issues](https://img.shields.io/github/issues/prasad-kmd/PMEngineerLK-NextJS?style=for-the-badge&logo=github)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/prasad-kmd/PMEngineerLK-NextJS?style=for-the-badge&logo=github)
 ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2Fprasad-kmd%2Fnext-notion-cms%2Fraw%2Fmain%2Fpackage.json&query=%24.author&style=for-the-badge&logo=pnpm&label=Author&labelColor=black&link=https%3A%2F%2Fgithub.com%2Fprasad-kmd%2Fnext-notion-cms%2Fblob%2Fmain%2Fpackage.json)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/prasad-kmd/next-notion-cms?style=for-the-badge&logo=git&labelColor=black)
 

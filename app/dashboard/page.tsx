@@ -82,34 +82,34 @@ export default async function DashboardPage() {
 
           <Tabs
             defaultValue="overview"
-            className="w-full space-y-4 font-local-inter"
+            className="w-full space-y-8 font-local-inter"
           >
-            <TabsList className="w-full bg-muted/10 backdrop-blur-md p-1 rounded-2xl border border-border/40 h-auto gap-1">
+            <TabsList className="sticky top-20 z-10 w-full flex flex-wrap justify-center gap-2 p-2 rounded-2xl bg-background/50 backdrop-blur-xl border border-border/50 shadow-sm h-auto">
               <TabsTrigger
                 value="overview"
-                className="flex-1 rounded-xl px-4 py-3 text-sm font-bold transition-all data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm active:scale-[0.98] group"
+                className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all data-[state=active]:bg-primary/10 data-[state=active]:text-primary text-muted-foreground local-jetbrains-mono h-auto group"
               >
                 <div className="flex items-center gap-2.5">
-                  <LayoutDashboard className="w-4 h-4 opacity-50 group-data-[state=active]:opacity-100 transition-opacity" />
-                  <span className="tracking-wide">Overview</span>
+                  <LayoutDashboard className="w-3.5 h-3.5 opacity-50 group-data-[state=active]:opacity-100 transition-opacity" />
+                  <span>Overview</span>
                 </div>
               </TabsTrigger>
               <TabsTrigger
                 value="accounts"
-                className="flex-1 rounded-xl px-4 py-3 text-sm font-bold transition-all data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm active:scale-[0.98] group"
+                className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all data-[state=active]:bg-primary/10 data-[state=active]:text-primary text-muted-foreground local-jetbrains-mono h-auto group"
               >
                 <div className="flex items-center gap-2.5">
-                  <LinkIcon className="w-4 h-4 opacity-50 group-data-[state=active]:opacity-100 transition-opacity" />
-                  <span className="tracking-wide">Accounts</span>
+                  <LinkIcon className="w-3.5 h-3.5 opacity-50 group-data-[state=active]:opacity-100 transition-opacity" />
+                  <span>Accounts</span>
                 </div>
               </TabsTrigger>
               <TabsTrigger
                 value="activity"
-                className="flex-1 rounded-xl px-4 py-3 text-sm font-bold transition-all data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm active:scale-[0.98] group"
+                className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all data-[state=active]:bg-primary/10 data-[state=active]:text-primary text-muted-foreground local-jetbrains-mono h-auto group"
               >
                 <div className="flex items-center gap-2.5">
-                  <Bookmark className="w-4 h-4 opacity-50 group-data-[state=active]:opacity-100 transition-opacity" />
-                  <span className="tracking-wide">Activity</span>
+                  <Bookmark className="w-3.5 h-3.5 opacity-50 group-data-[state=active]:opacity-100 transition-opacity" />
+                  <span>Activity</span>
                 </div>
               </TabsTrigger>
             </TabsList>
