@@ -14,7 +14,7 @@ Disallow: /dashboard/
 Disallow: /sign-in/
 Disallow: /external-link
 Disallow: /quiz/*
-Content-Signal: [ "search=yes", "ai-input=yes", "ai-train=no" ]
+Disallow: /invoice-gen/*
 
 User-Agent: GPTBot
 Disallow: /
@@ -27,3 +27,4 @@ Sitemap: ${baseUrl}/sitemap.xml`;
     },
   });
 }
+// Content-Signal: [ "search=yes", "ai-input=yes", "ai-train=no" ]

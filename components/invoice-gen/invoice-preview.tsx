@@ -27,7 +27,7 @@ export function InvoicePreview({
   const currency = business?.currency || "LKR";
 
   return (
-    <Card className="mx-auto w-full max-w-4xl bg-white text-black shadow-lg overflow-hidden rounded-[2rem]">
+    <Card className="mx-auto w-full max-w-4xl bg-white text-black shadow-lg overflow-hidden rounded-4xl">
       <CardContent className="p-12">
         <div className="flex justify-between border-b border-gray-100 pb-8">
           <div>

@@ -9,6 +9,7 @@ import { FloatingNavbar } from "@/components/floating-navbar";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "katex/dist/katex.min.css";
+import { AgentationToolbar } from "@/components/dev/AgentationToolbar";
 
 // import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
@@ -306,6 +307,7 @@ export default function RootLayout({
                         <ConnectivityListener />
                         {/* <SpeedInsights /> */}
                         <ServiceWorkerRegistrar />
+                        <AgentationToolbar />
                       </ClickSpark>
                     </ViewTransitions>
                   </BookmarksProvider>

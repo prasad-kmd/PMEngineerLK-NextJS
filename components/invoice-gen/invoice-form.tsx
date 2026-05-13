@@ -381,20 +381,7 @@ export function InvoiceForm({
 
           {/* Line Items */}
           <div className="p-8 rounded-2xl border border-border/40 bg-card/20 backdrop-blur-3xl shadow-sm">
-            <div className="flex items-center justify-between mb-8">
-              <SectionHeader icon={Plus} title="Line Items" />
-              <Button
-                type="button"
-                size="sm"
-                onClick={() =>
-                  append({ description: "", quantity: 1, unitPrice: 0 })
-                }
-                className="rounded-full bg-primary/10 text-primary hover:bg-primary/20 border-none h-9 px-4 font-bold"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Add Item
-              </Button>
-            </div>
+            <SectionHeader icon={Plus} title="Line Items" />
             <div className="space-y-4">
               {fields.map((field, index) => (
                 <div
@@ -451,6 +438,15 @@ export function InvoiceForm({
                 </div>
               ))}
             </div>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => append({ description: "", quantity: 1, unitPrice: 0 })}
+              className="w-full mt-6 border-dashed border-2 py-6 rounded-2xl bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary/50 transition-all font-bold group"
+            >
+              <Plus className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+              Add Item
+            </Button>
           </div>
         </div>
 
