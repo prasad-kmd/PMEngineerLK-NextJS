@@ -301,6 +301,16 @@ const mathTools = [
 
 const webTools = [
   {
+    name: "Tailwind Labs",
+    slug: "ts-labs",
+    description:
+      "Interactive Tailwind CSS labs for building accent-aware UI patterns.",
+    icon: FlaskConical,
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+    isNew: true,
+  },
+  {
     name: "Stream Compressor",
     slug: "compressor",
     description:
