@@ -7,42 +7,38 @@ import { cn } from "@/lib/utils";
 export default function Loading() {
   const [progress, setProgress] = useState(0);
   const [logs, setLogs] = useState<string[]>(["[SYS] INITIALIZING_KERNEL..."]);
-  const initialResourceCount = useRef(0);
-  const processedResources = useRef(new Set<string>());
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      initialResourceCount.current =
-        performance.getEntriesByType("resource").length;
-
-      const observer = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        entries.forEach((entry) => {
-          if (!processedResources.current.has(entry.name)) {
-            processedResources.current.add(entry.name);
-            const fileName =
-              entry.name.split("/").pop()?.split("?")[0] || "unknown_asset";
-            const type = (
-              entry as PerformanceResourceTiming
-            ).initiatorType.toUpperCase();
-
-            setLogs((prev) => [
-              ...prev.slice(-4),
-              `[LOAD] ${type}::${fileName.substring(0, 20)}... OK`,
-            ]);
-
-            // Proportional progress based on discovered resources
-            setProgress((prev) => {
-              const next = prev + (100 - prev) * 0.15;
-              return next > 95 ? 95 : next;
-            });
-          }
-        });
+    // Simple deterministic progress for better performance during initial load
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev < 30) return prev + 5;
+        if (prev < 70) return prev + 2;
+        if (prev < 90) return prev + 0.5;
+        return prev;
       });
+    }, 200);
 
-      observer.observe({ entryTypes: ["resource"] });
-      return () => observer.disconnect();
-    }
+    const logMessages = [
+      "[SYS] CONNECTING_TO_UPLINK...",
+      "[SYS] FETCHING_ASSETS...",
+      "[SYS] DEPLOYING_WORKSPACE...",
+      "[SYS] OPTIMIZING_VIEWPORT...",
+      "[SYS] READY_FOR_INPUT...",
+    ];
+
+    let currentLog = 0;
+    const logInterval = setInterval(() => {
+      if (currentLog < logMessages.length) {
+        setLogs((prev) => [...prev.slice(-4), logMessages[currentLog]]);
+        currentLog++;
+      }
+    }, 600);
+
+    return () => {
+      clearInterval(progressInterval);
+      clearInterval(logInterval);
+    };
   }, []);
 
   return (
