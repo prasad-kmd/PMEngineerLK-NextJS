@@ -30,7 +30,7 @@ export default async function ClientsPage({
         </div>
         <Button
           asChild
-          className="rounded-2xl h-12 px-6 shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95 font-bold"
+          className="bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none"
         >
           <Link
             href="/invoice-gen/clients/new"
@@ -60,7 +60,10 @@ export default async function ClientsPage({
                     size="icon"
                     className="rounded-xl opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0"
                   >
-                    <Link href={`/invoice-gen/clients/${client.id}`}>
+                    <Link
+                      href={`/invoice-gen/clients/${client.id}`}
+                      prefetch={false}
+                    >
                       <ArrowRight className="w-5 h-5" />
                     </Link>
                   </Button>
@@ -101,7 +104,10 @@ export default async function ClientsPage({
                     variant="secondary"
                     className="w-full rounded-xl font-bold border border-border/40 bg-background/40 hover:bg-primary hover:text-primary-foreground transition-all"
                   >
-                    <Link href={`/invoice-gen/clients/${client.id}`}>
+                    <Link
+                      href={`/invoice-gen/clients/${client.id}`}
+                      prefetch={false}
+                    >
                       View Details
                     </Link>
                   </Button>

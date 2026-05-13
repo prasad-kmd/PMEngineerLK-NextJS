@@ -49,6 +49,7 @@ export default async function InvoicesPage({
                   ...(q ? { q } : {}),
                   ...(f.value !== "all" ? { status: f.value } : {}),
                 }).toString()}`}
+                prefetch={false}
                 className={cn(
                   "px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap",
                   status === f.value || (!status && f.value === "all")
@@ -117,7 +118,10 @@ export default async function InvoicesPage({
                           <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                             <ReceiptText className="w-4 h-4" />
                           </div>
-                          <Link href={`/invoice-gen/invoices/${invoice.id}`}>
+                          <Link
+                            href={`/invoice-gen/invoices/${invoice.id}`}
+                            prefetch={false}
+                          >
                             <span className="font-bold text-sm google-sans">
                               {invoice.invoiceNumber}
                             </span>
@@ -166,7 +170,10 @@ export default async function InvoicesPage({
                           size="icon"
                           className="rounded-xl group-hover:bg-primary group-hover:text-primary-foreground transition-all"
                         >
-                          <Link href={`/invoice-gen/invoices/${invoice.id}`}>
+                          <Link
+                            href={`/invoice-gen/invoices/${invoice.id}`}
+                            prefetch={false}
+                          >
                             <ArrowRight className="w-4 h-4" />
                           </Link>
                         </Button>

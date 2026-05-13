@@ -3,7 +3,7 @@
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { Layout, LogOut, User } from "lucide-react";
+import { Layout, LogOut, User, FileText, BarChart3 } from "lucide-react";
 import { SiGoogle, SiGithub } from "react-icons/si";
 import { useState, Suspense } from "react";
 import { toast } from "sonner";
@@ -166,6 +166,25 @@ export function UserMenu({
           <Layout className="mr-2 h-4 w-4" />
           <span>Dashboard</span>
         </DropdownMenuItem>
+
+        {session.user.role === "admin" && (
+          <>
+            <DropdownMenuItem
+              onClick={() => router.push("/invoice-gen/dashboard")}
+              className="cursor-pointer"
+            >
+              <FileText className="mr-2 h-4 w-4" />
+              <span>Invoice Generator</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => router.push("/dashboard/analytics")}
+              className="cursor-pointer"
+            >
+              <BarChart3 className="mr-2 h-4 w-4" />
+              <span>Analytics</span>
+            </DropdownMenuItem>
+          </>
+        )}
         <DropdownMenuItem
           onClick={async () => {
             await authClient.signOut();

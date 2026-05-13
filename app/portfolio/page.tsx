@@ -23,22 +23,29 @@ export default async function PortfolioPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-border bg-card/30 py-24 lg:py-32">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_45%_at_50%_50%,var(--primary)_0%,transparent_100%)] opacity-[0.03]" />
+      <section className="relative isolate overflow-hidden border-b border-border bg-card/30 py-24 lg:py-32">
+        {/* Ray animated background */}
+        <div aria-hidden="true" className="ray-hero-bg" />
+        {/* <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(45%_45%_at_50%_50%,var(--primary)_0%,transparent_100%)] opacity-[0.03]"
+        /> */}
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col items-center gap-12 lg:flex-row lg:items-start">
-            <div className="relative h-64 w-64 shrink-0 overflow-hidden rounded-2xl border-4 border-primary/20 shadow-2xl lg:h-80 lg:w-80">
-              <Image
-                src="https://placehold.co/800x800/1e293b/14b8a6?text=Profile+Photo"
-                alt="Profile Photo"
-                fill
-                className="object-cover"
-                priority
-              />
+            <div className="portfolio-hero-avatar h-64 w-64 shrink-0 lg:h-80 lg:w-80">
+              <div className="portfolio-hero-avatar-inner">
+                <Image
+                  src="/img/prasadm-title-img.webp"
+                  alt="Profile Photo"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
             </div>
             <div className="text-center lg:text-left">
               <h1 className="text-4xl font-bold tracking-tight sm:text-6xl amoriaregular">
-                Prasad<span className="text-primary">M</span>
+                Prasad<span className="text-primary"> Madhuranga</span>
               </h1>
               <p className="mt-4 text-xl font-medium text-muted-foreground philosopher">
                 Mechatronics & Mechanical Engineering Undergraduate

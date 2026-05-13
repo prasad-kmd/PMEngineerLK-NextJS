@@ -93,9 +93,13 @@ export function SystemMonitorManager({
 
   useEffect(() => {
     // Fetch data on mount if status is incomplete, or when filter changes
+    // Delay initial fetch to prioritize first paint
     const isIncomplete = !status.notion || !status.supabase || !status.posthog;
     if (isIncomplete || logFilter !== "all") {
-      fetchData();
+      const timeout = setTimeout(() => {
+        fetchData();
+      }, 100);
+      return () => clearTimeout(timeout);
     }
   }, [logFilter, fetchData, status.notion, status.supabase, status.posthog]);
 

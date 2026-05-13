@@ -30,6 +30,7 @@ export default function InvoiceGenLayout({
               },
             ]}
             className="mb-4 font-local-inter"
+            prefetch={false}
           />
 
           <header className="space-y-3 mb-8">

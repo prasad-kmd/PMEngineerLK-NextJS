@@ -286,7 +286,7 @@ export function InvoicePDF({ business, client, invoice }: InvoicePDFProps) {
       title={`Invoice ${invoice.invoiceNumber} for ${client?.name}`}
       author="Prasad Madhuranga"
       subject={`Computer Generated Invoice - ${client?.name}`}
-      keywords="invoice, engineering, LKR, Sri Lanka, PMEngineerLK"
+      keywords={`${invoice.invoiceNumber}, ${client?.name}, LKR, Sri Lanka, Prasad Madhuranga`}
       creator="Prasad Madhuranga (via prasadm.vercel.app)"
       producer="PrasadM Blogfolio"
     >

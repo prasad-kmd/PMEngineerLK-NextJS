@@ -13,9 +13,14 @@ interface BreadcrumbItem {
 interface BreadcrumbsProps {
   items: BreadcrumbItem[];
   className?: string;
+  prefetch?: boolean;
 }
 
-export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
+export function Breadcrumbs({
+  items,
+  className,
+  prefetch = true,
+}: BreadcrumbsProps) {
   return (
     <nav
       aria-label="Breadcrumb"
@@ -26,6 +31,7 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
     >
       <Link
         href="/"
+        prefetch={prefetch}
         className="flex items-center hover:text-primary transition-colors"
       >
         <Home className="h-3.5 w-3.5" />
@@ -42,6 +48,7 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
           ) : (
             <Link
               href={item.href}
+              prefetch={prefetch}
               className="hover:text-primary transition-colors capitalize"
             >
               {item.label}

@@ -38,6 +38,7 @@ export default async function SystemMonitorPage() {
               },
             ]}
             className="mb-4 font-local-inter"
+            prefetch={false}
           />
 
           <SystemMonitorManager

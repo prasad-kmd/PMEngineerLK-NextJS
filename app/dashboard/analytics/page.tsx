@@ -6,7 +6,23 @@ import { Container } from "@/components/container";
 import { TechnicalBackground } from "@/components/technical-background";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AnalyticsNotConfigured } from "@/components/analytics/AnalyticsNotConfigured";
-import { AnalyticsDashboardManager } from "@/components/analytics/AnalyticsDashboardManager";
+import dynamic from "next/dynamic";
+
+const AnalyticsDashboardManager = dynamic(
+  () =>
+    import("@/components/analytics/AnalyticsDashboardManager").then(
+      (mod) => mod.AnalyticsDashboardManager,
+    ),
+  {
+    loading: () => (
+      <div className="space-y-8 animate-pulse">
+        <div className="h-16 w-full bg-card/5 border border-border/40 rounded-2xl" />
+        <div className="h-32 w-full bg-card/10 rounded-3xl border border-border/40" />
+        <div className="h-96 w-full bg-card/10 rounded-3xl border border-border/40" />
+      </div>
+    ),
+  },
+);
 
 const getSession = cache(async () => {
   return await auth.api.getSession({
@@ -47,6 +63,7 @@ export default async function AnalyticsPage() {
               },
             ]}
             className="mb-4 font-local-inter"
+            prefetch={false}
           />
 
           <header className="space-y-3">

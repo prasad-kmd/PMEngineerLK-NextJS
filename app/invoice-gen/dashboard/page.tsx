@@ -167,7 +167,10 @@ export default async function DashboardPage() {
                         className="border-b border-border/40 hover:bg-muted/10 transition-colors group"
                       >
                         <td className="px-6 py-4">
-                          <Link href={`/invoice-gen/invoices/${invoice.id}`}>
+                          <Link
+                            href={`/invoice-gen/invoices/${invoice.id}`}
+                            prefetch={false}
+                          >
                             <span className="font-bold text-sm google-sans">
                               {invoice.invoiceNumber}
                             </span>
@@ -212,7 +215,10 @@ export default async function DashboardPage() {
                             size="icon"
                             className="rounded-xl group-hover:bg-primary group-hover:text-primary-foreground transition-all"
                           >
-                            <Link href={`/invoice-gen/invoices/${invoice.id}`}>
+                            <Link
+                              href={`/invoice-gen/invoices/${invoice.id}`}
+                              prefetch={false}
+                            >
                               <ArrowRight className="w-4 h-4" />
                             </Link>
                           </Button>

@@ -4,14 +4,13 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { cache } from "react";
 import { ProfileOverview } from "@/components/dashboard/profile-overview";
-import { LinkedAccounts } from "@/components/dashboard/linked-accounts";
 import { StatsSummary } from "@/components/dashboard/stats-summary";
 import { DashboardFeedback } from "@/components/dashboard/dashboard-feedback";
 import { Container } from "@/components/container";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TechnicalBackground } from "@/components/technical-background";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { ActivityTab } from "@/components/dashboard/activity-tab";
+import dynamic from "next/dynamic";
 import { db } from "@/lib/db";
 import { user } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -37,6 +36,28 @@ const getUserAccounts = cache(async () => {
     headers: await headers(),
   });
 });
+
+const LinkedAccounts = dynamic(
+  () =>
+    import("@/components/dashboard/linked-accounts").then(
+      (mod) => mod.LinkedAccounts,
+    ),
+  {
+    loading: () => (
+      <div className="h-48 w-full animate-pulse bg-card/10 rounded-3xl border border-border/40" />
+    ),
+  },
+);
+
+const ActivityTab = dynamic(
+  () =>
+    import("@/components/dashboard/activity-tab").then((mod) => mod.ActivityTab),
+  {
+    loading: () => (
+      <div className="h-48 w-full animate-pulse bg-card/10 rounded-3xl border border-border/40" />
+    ),
+  },
+);
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -66,6 +87,7 @@ export default async function DashboardPage() {
           <Breadcrumbs
             items={[{ label: "Dashboard", href: "/dashboard", active: true }]}
             className="mb-4 font-local-inter"
+            prefetch={false}
           />
 
           <DashboardFeedback />

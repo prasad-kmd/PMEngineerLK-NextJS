@@ -2,17 +2,50 @@
 
 import { useState } from "react";
 import { SummaryMetrics } from "./SummaryMetrics";
-import { PageViewsAreaChart } from "./PageViewsAreaChart";
-import { TrafficSourcesChart } from "./TrafficSourcesChart";
-import { BreakdownChart } from "./BreakdownChart";
-import { CountryBreakdownChart } from "./CountryBreakdownChart";
-import { CountryTrendChart } from "./CountryTrendChart";
-import { OutgoingLinksChart } from "./OutgoingLinksChart";
-import { OutgoingLinksTrendChart } from "./OutgoingLinksTrendChart";
-import { OutgoingLinksTable } from "./OutgoingLinksTable";
-import { StackedAreaChart } from "./StackedAreaChart";
-import { MatrixChart } from "./MatrixChart";
-import { TopContentTable } from "./TopContentTable";
+import dynamic from "next/dynamic";
+
+const PageViewsAreaChart = dynamic(
+  () => import("./PageViewsAreaChart").then((mod) => mod.PageViewsAreaChart),
+  {
+    loading: () => (
+      <div className="h-[320px] animate-pulse bg-muted/10 rounded-3xl" />
+    ),
+  },
+);
+const TrafficSourcesChart = dynamic(
+  () => import("./TrafficSourcesChart").then((mod) => mod.TrafficSourcesChart),
+);
+const BreakdownChart = dynamic(
+  () => import("./BreakdownChart").then((mod) => mod.BreakdownChart),
+);
+const CountryBreakdownChart = dynamic(
+  () =>
+    import("./CountryBreakdownChart").then((mod) => mod.CountryBreakdownChart),
+);
+const CountryTrendChart = dynamic(
+  () => import("./CountryTrendChart").then((mod) => mod.CountryTrendChart),
+);
+const OutgoingLinksChart = dynamic(
+  () => import("./OutgoingLinksChart").then((mod) => mod.OutgoingLinksChart),
+);
+const OutgoingLinksTrendChart = dynamic(
+  () =>
+    import("./OutgoingLinksTrendChart").then(
+      (mod) => mod.OutgoingLinksTrendChart,
+    ),
+);
+const OutgoingLinksTable = dynamic(
+  () => import("./OutgoingLinksTable").then((mod) => mod.OutgoingLinksTable),
+);
+const StackedAreaChart = dynamic(
+  () => import("./StackedAreaChart").then((mod) => mod.StackedAreaChart),
+);
+const MatrixChart = dynamic(
+  () => import("./MatrixChart").then((mod) => mod.MatrixChart),
+);
+const TopContentTable = dynamic(
+  () => import("./TopContentTable").then((mod) => mod.TopContentTable),
+);
 import {
   Select,
   SelectContent,
