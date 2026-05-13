@@ -54,6 +54,7 @@ export function MobileBottomNav({
         <TooltipTrigger asChild>
           <Link
             href="/search"
+            prefetch={false}
             className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Search"
           >

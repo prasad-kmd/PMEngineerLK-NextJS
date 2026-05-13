@@ -2,53 +2,32 @@ import type React from "react";
 import type { Metadata } from "next";
 // import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
-import { Navigation } from "@/components/navigation";
-import { SidebarProvider } from "@/components/sidebar-context";
-import { ThemeProvider } from "@/components/theme-provider";
-import { FloatingNavbar } from "@/components/floating-navbar";
-import { Toaster } from "sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import "katex/dist/katex.min.css";
-
-// import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
-// import {
-//   Inter,
-//   JetBrains_Mono,
-// } from "next/font/google";
-
-// Initialize fonts
-
-// const inter = Inter({
-//   subsets: ["latin"],
-//   variable: "--font-inter",
-// });
-
-// const jetbrainsMono = JetBrains_Mono({
-//   subsets: ["latin"],
-//   variable: "--font-jetbrains-mono",
-// });
 
 const amoriaregular = localFont({
   src: "../public/fonts/en/AMORIARegular.woff2",
   variable: "--font-amoria-regular",
   display: "swap",
+  preload: true,
 });
 const mozillaHeadline = localFont({
   src: "../public/fonts/en/MozillaHeadline-Regular.woff2",
   variable: "--font-mozilla-headline",
   display: "swap",
+  preload: true,
 });
 const philosopher = localFont({
   src: "../public/fonts/en/Philosopher.woff2",
   variable: "--font-philosopher",
   display: "swap",
+  preload: true,
 });
 
 const googleSans = localFont({
   src: "../public/fonts/GoogleSans-Regular.woff2",
   variable: "--font-google-sans",
   display: "swap",
+  preload: true,
 });
 
 const mozillaText = localFont({
@@ -66,67 +45,60 @@ const mozillaText = localFont({
   ],
   variable: "--font-mozilla-text",
   display: "swap",
+  preload: false,
 });
 
 const notoSans = localFont({
   src: "../public/fonts/NotoSans-Regular.woff2",
   variable: "--font-noto-sans",
   display: "swap",
+  preload: false,
 });
 
 const notoSansDisplay = localFont({
   src: "../public/fonts/NotoSansDisplay-Regular.woff2",
   variable: "--font-noto-sans-display",
   display: "swap",
+  preload: false,
 });
 
 const notoSerifSinhala = localFont({
   src: "../public/fonts/NotoSerifSinhala-Regular.woff2",
   variable: "--font-noto-serif-sinhala",
   display: "swap",
+  preload: false,
 });
 
 const roboto = localFont({
   src: "../public/fonts/Roboto-Regular.woff2",
   variable: "--font-roboto",
   display: "swap",
+  preload: false,
 });
 
 const spaceMono = localFont({
   src: "../public/fonts/SpaceMono-Regular.woff2",
   variable: "--font-space-mono",
   display: "swap",
+  preload: false,
 });
 
 const localInter = localFont({
   src: "../public/fonts/Inter-Regular.woff2",
   variable: "--font-local-inter",
   display: "swap",
+  preload: true,
 });
 
 const localJetBrainsMono = localFont({
   src: "../public/fonts/JetBrainsMono-Regular.woff2",
   variable: "--font-local-jetbrains-mono",
   display: "swap",
+  preload: false,
 });
 
 import { siteConfig } from "@/lib/config";
-import ServiceWorkerRegistrar from "@/components/service-worker-registrar";
-import { ConnectivityListener } from "@/components/connectivity-listener";
-import { ScrollToTop } from "@/components/scroll-to-top";
-import { BookmarksProvider } from "@/hooks/use-bookmarks";
-import { CustomContextMenu } from "@/components/custom-context-menu";
-import { Footer } from "@/components/footer";
-import { ViewTransitions } from "@/components/view-transitions";
-import ClickSpark from "@/components/ClickSpark";
-import { AccentColorInitializer } from "@/components/accent-color-initializer";
-import { AuthInitializer } from "@/components/auth/auth-initializer";
-import { PostHogProvider } from "@/components/posthog-provider";
-import PostHogPageviewWrapper from "@/components/analytics/PostHogPageview";
-// import Script from "next/script";
-import { AccessibilityProvider } from "@/providers/AccessibilityProvider";
-import { FloatingButton } from "@/components/accessibility/FloatingButton";
-import { ControlPanel } from "@/components/accessibility/ControlPanel";
+import { ClientProviders } from "@/components/client-providers";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -259,61 +231,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${amoriaregular.variable} ${mozillaHeadline.variable} ${philosopher.variable} ${googleSans.variable} ${mozillaText.variable} ${notoSans.variable} ${notoSansDisplay.variable} ${notoSerifSinhala.variable} ${roboto.variable} ${spaceMono.variable} ${localInter.variable} ${localJetBrainsMono.variable}`}
-    >
+    <html lang="en" suppressHydrationWarning>
       <body
-        className="antialiased selection:bg-brand-200 selection:text-brand-900"
+        className={`${amoriaregular.variable} ${mozillaHeadline.variable} ${philosopher.variable} ${googleSans.variable} ${mozillaText.variable} ${notoSans.variable} ${notoSansDisplay.variable} ${notoSerifSinhala.variable} ${roboto.variable} ${spaceMono.variable} ${localInter.variable} ${localJetBrainsMono.variable} antialiased selection:bg-brand-200 selection:text-brand-900`}
         suppressHydrationWarning
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <PostHogProvider>
-            <AccessibilityProvider>
-              <PostHogPageviewWrapper />
-              <AccentColorInitializer />
-              <AuthInitializer />
-              <TooltipProvider>
-                <SidebarProvider>
-                  <BookmarksProvider>
-                    <ViewTransitions>
-                      <ClickSpark
-                        // sparkColor="#ffffff"
-                        sparkSize={10}
-                        sparkRadius={15}
-                        sparkCount={8}
-                        duration={400}
-                        easing="linear"
-                        extraScale={1.5}
-                      >
-                        <CustomContextMenu />
-                        <FloatingNavbar className="hidden lg:flex" />
-                        <Navigation />
-                        <main className="transition-[padding] duration-300 lg:pl-(--sidebar-width,256px) overflow-x-clip">
-                          {children}
-                          <Footer />
-                        </main>
-                        <FloatingButton />
-                        <ControlPanel />
-                        <ScrollToTop />
-                        <Toaster position="bottom-right" richColors />
-                        <ConnectivityListener />
-                        {/* <SpeedInsights /> */}
-                        <ServiceWorkerRegistrar />
-                      </ClickSpark>
-                    </ViewTransitions>
-                  </BookmarksProvider>
-                </SidebarProvider>
-              </TooltipProvider>
-            </AccessibilityProvider>
-          </PostHogProvider>
-        </ThemeProvider>
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );

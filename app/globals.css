@@ -395,7 +395,13 @@
   background-position: left center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: scroll; /* Changed from fixed to scroll for better mobile performance */
+}
+
+@media (min-width: 1024px) {
+  .img_grad_pm {
+    background-attachment: fixed;
+  }
 }
 
 .blog_page {

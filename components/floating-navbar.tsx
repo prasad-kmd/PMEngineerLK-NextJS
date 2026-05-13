@@ -126,6 +126,7 @@ export function FloatingNavbar({
             <TooltipTrigger asChild>
               <Link
                 href="/tools"
+                prefetch={false}
                 className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors relative group font-sans"
                 aria-label="Engineering Workspace"
               >
@@ -163,6 +164,7 @@ export function FloatingNavbar({
             <TooltipTrigger asChild>
               <Link
                 href={item.href}
+                prefetch={false}
                 className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors relative group google-sans"
                 aria-label={item.label}
               >

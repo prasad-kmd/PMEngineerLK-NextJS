@@ -125,6 +125,7 @@ export function Navigation() {
         <TooltipTrigger asChild>
           <Link
             href={item.href}
+            prefetch={false}
             onClick={() => setMobileMenuOpen(false)}
             className={cn(
               "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all gap-3 relative group local-jetbrains-mono",

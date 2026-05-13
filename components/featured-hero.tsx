@@ -23,40 +23,59 @@ import { cn } from "@/lib/utils";
 export default function FeaturedHero({ items }: FeaturedHeroProps) {
   const [mounted, setMounted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadVideo, setLoadVideo] = useState(false);
 
   useEffect(() => {
     startTransition(() => {
       setMounted(true);
     });
+
+    // Only load video after a delay or idle to prioritize LCP
+    const timer = setTimeout(() => {
+      if (typeof window !== "undefined") {
+        const isMobile = window.innerWidth < 768;
+        const isDataSaver =
+          // @ts-expect-error - connection is not on all browsers
+          navigator.connection?.saveData === true;
+        if (!isMobile && !isDataSaver) {
+          setLoadVideo(true);
+        }
+      }
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
+    if (!mounted) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % items.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [items.length]);
+  }, [items.length, mounted]);
 
   return (
     <section className="relative min-h-screen flex items-center py-16 lg:py-0 overflow-hidden bg-background">
       {/* Video Background */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[200%] z-0 pointer-events-none overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover opacity-100 dark:opacity-40 mix-blend-screen dark:mix-blend-lighten"
-          style={{
-            maskImage:
-              "radial-gradient(circle at center, black 25%, transparent 55%)",
-            WebkitMaskImage:
-              "radial-gradient(circle at center, black 25%, transparent 55%)",
-          }}
-        >
-          <source src="/video/black-hole-purple.webm" type="video/webm" />
-        </video>
-      </div>
+      {loadVideo && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[200%] z-0 pointer-events-none overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-100 dark:opacity-40 mix-blend-screen dark:mix-blend-lighten"
+            style={{
+              maskImage:
+                "radial-gradient(circle at center, black 25%, transparent 55%)",
+              WebkitMaskImage:
+                "radial-gradient(circle at center, black 25%, transparent 55%)",
+            }}
+          >
+            <source src="/video/black-hole-purple.webm" type="video/webm" />
+          </video>
+        </div>
+      )}
 
       {/* Dynamic Background Grid */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -198,6 +217,7 @@ export default function FeaturedHero({ items }: FeaturedHeroProps) {
                           alt={item.title}
                           fill
                           priority={idx === 0}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover transition-transform duration-700 hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent" />

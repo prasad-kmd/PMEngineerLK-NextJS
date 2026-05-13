@@ -221,6 +221,7 @@ export default async function Home() {
                         }
                         alt={update.item.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute top-4 left-4">
