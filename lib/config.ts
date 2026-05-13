@@ -2,7 +2,7 @@ export const siteConfig = {
   title: "PrasadM | Engineering Blogfolio",
   description:
     "Personal blogfolio documenting my engineering projects, technical insights, and development journey.",
-  author: "PrasadM",
+  author: "Prasad Madhuranga",
   githubUsername: process.env.NEXT_PUBLIC_GITHUB_USERNAME || "prasad-kmd",
   url:
     process.env.SITE_URL ||
@@ -20,7 +20,7 @@ export const siteConfig = {
       "https://linkedin.com/in/prasad-madhuranga",
     email: process.env.NEXT_PUBLIC_EMAIL
       ? `mailto:${process.env.NEXT_PUBLIC_EMAIL}`
-      : "mailto:contact@prasadm.vercel.app",
+      : "mailto:prasad.madhuranga@pm.me",
     sponsorship:
       process.env.NEXT_PUBLIC_GITHUB_SPONSORS_URL ||
       "https://github.com/sponsors/prasad-kmd",

@@ -10,52 +10,52 @@ interface Milestone {
 
 const milestones: Milestone[] = [
   {
-    title: "Project Initiation & Research",
+    title: "-",
     description:
-      "Literature review, identifying real-world challenges in Sri Lanka, and initial team formation.",
-    date: "Semester 1 - Week 1-4",
+      "-",
+    date: "-",
     status: "completed",
   },
   {
-    title: "Problem Definition & Conceptual Design",
+    title: "-",
     description:
-      "Selecting a specific problem, brainstorming solutions, and developing the 'Big Idea'.",
-    date: "Semester 1 - Week 5-10",
+      "-",
+    date: "-",
     status: "completed",
   },
   {
-    title: "Web Platform Development",
+    title: "-",
     description:
-      "Developing this documentation platform using Next.js 15, Tailwind CSS, and KaTeX.",
-    date: "Ongoing",
+      "-",
+    date: "-",
     status: "completed",
   },
   {
-    title: "Prototyping & Simulations",
+    title: "-",
     description:
-      "Developing CAD models, performing FEA analysis, and initial prototyping of mechanical systems.",
-    date: "Semester 2 - Q1",
+      "-",
+    date: "-",
     status: "in-progress",
   },
   {
-    title: "Mechatronics Integration",
+    title: "-",
     description:
-      "Integrating sensors, actuators, and control systems with the mechanical hardware.",
-    date: "Semester 2 - Q2",
+      "-",
+    date: "-",
     status: "planned",
   },
   {
-    title: "Testing & Validation",
+    title: "-",
     description:
-      "Comprehensive testing of the integrated system and validation against project requirements.",
-    date: "Semester 2 - Q3",
+      "-",
+    date: "-",
     status: "planned",
   },
   {
-    title: "Final Presentation & Documentation",
+    title: "-",
     description:
-      "Submission of the final project report and presentation to the faculty board.",
-    date: "Semester 2 - Q4",
+      "-",
+    date: "-",
     status: "planned",
   },
 ];

@@ -91,10 +91,10 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold">Phone</h3>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      +94 11 234 5678
+                      Not Available At The Moment
                     </p>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Available Mon-Fri, 9:00 AM - 5:00 PM
+                      Will Be Available Soon
                     </p>
                   </div>
                 </div>
@@ -106,13 +106,13 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold">Location</h3>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Faculty of Engineering
+                      Panwila
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      University of [Your University]
+                      Kandy
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Colombo, Sri Lanka
+                      Sri Lanka
                     </p>
                   </div>
                 </div>

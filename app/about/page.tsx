@@ -11,7 +11,7 @@ import {
   HardDrive,
   ShieldCheck,
 } from "lucide-react";
-import Roadmap from "@/components/roadmap";
+// import Roadmap from "@/components/roadmap";
 const title = "About Me";
 const description =
   "A personal engineering initiative focused on solving real-world challenges through innovative mechanical and mechatronics solutions.";
@@ -187,8 +187,9 @@ export default function AboutPage() {
             <h2 className="mb-8 text-3xl font-bold philosopher flex items-center gap-3">
               Project Roadmap
             </h2>
-            <div className="rounded-2xl border border-border bg-card p-8">
-              <Roadmap />
+            <div className="rounded-2xl border border-border bg-card p-8 flex items-center justify-center">
+              <div className="text-center">Will Be updated soon...</div>
+              {/* <Roadmap /> */}
             </div>
           </section>
         </div>

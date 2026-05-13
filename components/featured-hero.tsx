@@ -96,11 +96,11 @@ export default function FeaturedHero({ items }: FeaturedHeroProps) {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.8 }}
-                className="text-6xl md:text-8xl xl:text-9xl font-black amoriaregular leading-[0.85] tracking-tight text-foreground"
+                className="text-3xl md:text-5xl xl:text-6xl font-black amoriaregular leading-[0.85] tracking-tight text-foreground"
               >
-                The Future <br />
+                Creative Ideas Came with <br />
                 <span className="text-primary italic relative">
-                  Is Built.
+                  Infinite Imagination
                   <svg
                     className="absolute -bottom-4 left-0 w-full h-4 text-primary/20"
                     viewBox="0 0 300 20"

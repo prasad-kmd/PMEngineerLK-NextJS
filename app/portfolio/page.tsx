@@ -48,13 +48,10 @@ export default async function PortfolioPage() {
                 Prasad<span className="text-primary"> Madhuranga</span>
               </h1>
               <p className="mt-4 text-xl font-medium text-muted-foreground philosopher">
-                Mechatronics & Mechanical Engineering Undergraduate
+                Mechatronics Engineering Undergraduate
               </p>
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground font-google-sans">
-                Passionate about bridging the gap between hardware and software.
-                I specialize in developing intelligent systems that solve
-                real-world engineering challenges through innovative design and
-                robust implementation.
+              <p className="mt-6 max-w-[80ch] text-md leading-relaxed text-muted-foreground font-google-sans">
+                I am a highly motivated and results-oriented Mechatronics Engineering student with a strong foundation in mechanical engineering principles and a passion for automation and robotics. I am a quick learner with the ability to grasp complex concepts and apply them effectively in practical scenarios. My academic background, combined with my hands-on project experience and dedication to continuous improvement, has equipped me with the skills and mindset to excel in the fast-paced world of engineering.
               </p>
               <PortfolioHeroActions />
             </div>
@@ -114,36 +111,52 @@ export default async function PortfolioPage() {
               </div>
               <div className="space-y-8 font-google-sans">
                 <div className="relative pl-8 border-l-2 border-primary/20">
-                  <div className="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-primary shadow-[0_0_10px_var(--primary)]" />
-                  <span className="text-sm font-bold text-primary">
-                    2023 - Present
+                  <div className="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-border" />
+                  {/* <div className="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-primary shadow-[0_0_10px_var(--primary)]" /> */}
+                  {/* <span className="text-sm font-bold text-primary"> */}
+                  <span className="text-sm font-bold text-muted-foreground">
+                    2024 (Jun - Oct)
                   </span>
                   <h3 className="text-lg font-bold mt-1">
-                    Senior Systems Engineer
+                    Customer Service Assistant
                   </h3>
-                  <p className="text-muted-foreground text-sm">
-                    Industrial Automation Solutions Inc.
-                  </p>
+                  <p className="text-muted-foreground text-sm">People's Bank, Mutwal</p>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    Leading a team of 5 engineers in designing next-generation
-                    PLC controllers and integrating cloud-based predictive
-                    maintenance systems.
+                    Handling customer inquiries, providing information about
+                    products and services, and resolving issues.
                   </p>
                 </div>
                 <div className="relative pl-8 border-l-2 border-primary/20">
                   <div className="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-border" />
                   <span className="text-sm font-bold text-muted-foreground">
-                    2020 - 2023
+                    2024 (Jan -Jun)
                   </span>
                   <h3 className="text-lg font-bold mt-1">
-                    Mechatronics Designer
+                    Trainee Draughtsperson
                   </h3>
                   <p className="text-muted-foreground text-sm">
-                    Robotics Innovation Lab
+                    Department of Engineering Services, Central Province Council, Kandy
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    Developed kinematics algorithms for 6-DOF robotic arms and
-                    implemented computer vision systems for autonomous sorting.
+                    Created detailed technical drawings and schematics for building construction projects using CAD software.
+                    Collaborated with engineers to ensure designs met project requirements and standards.
+                    Assisted in site inspections and field verification to ensure accuracy of drawings.
+                  </p>
+                </div>
+                <div className="relative pl-8 border-l-2 border-primary/20">
+                  <div className="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-border" />
+                  <span className="text-sm font-bold text-muted-foreground">
+                    2022 (Mar - May)
+                  </span>
+                  <h3 className="text-lg font-bold mt-1">
+                    Cashier
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    Hemantha Glass Center, Anamaduwa
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    Handling customer inquiries, providing information about
+                    products and services, and resolving issues.
                   </p>
                 </div>
               </div>
@@ -169,16 +182,31 @@ export default async function PortfolioPage() {
                     The Open University of Sri Lanka
                   </p>
                   <p className="text-xs text-primary mt-1 font-medium">
-                    First Class Honours
+                    Reading
                   </p>
                 </div>
                 <hr className="border-border/50" />
                 <div>
                   <p className="font-bold">
-                    Advanced Diploma in Industrial Electronics
+                    National Certificate in Engineering Draftsmanship (NCED)
                   </p>
                   <p className="text-muted-foreground">
-                    Ceylon-German Technical Training Institute
+                    Techinal College, Pathadumbara, Kandy
+                  </p>
+                  <p className="text-xs text-primary mt-1 font-medium">
+                    Completed
+                  </p>
+                </div>
+                <hr className="border-border/50" />
+                <div>
+                  <p className="font-bold">
+                    G.C.E. Advanced Level
+                  </p>
+                  <p className="text-muted-foreground">
+                    Sri Rahula College, Katugasthota
+                  </p>
+                  <p className="text-xs text-primary mt-1 font-medium">
+                    Completed
                   </p>
                 </div>
               </div>
@@ -195,6 +223,8 @@ export default async function PortfolioPage() {
                   "Autonomous Navigation",
                   "Renewable Energy Systems",
                   "Smart Materials",
+                  "Artificial Intelligence & Machine Vision",
+                  "Mobile Robotics"
                 ].map((interest) => (
                   <div
                     key={interest}
@@ -214,14 +244,14 @@ export default async function PortfolioPage() {
               </h3>
               <div className="flex flex-wrap gap-2 text-xs font-google-sans">
                 <span className="px-3 py-1 bg-muted rounded-full">
-                  English (Professional)
-                </span>
-                <span className="px-3 py-1 bg-muted rounded-full">
                   Sinhala (Native)
                 </span>
                 <span className="px-3 py-1 bg-muted rounded-full">
-                  German (Basic)
+                  English (Professional)
                 </span>
+                {/* <span className="px-3 py-1 bg-muted rounded-full">
+                  German (Basic)
+                </span> */}
               </div>
             </section>
           </div>
