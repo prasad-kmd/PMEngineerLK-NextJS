@@ -1,19 +1,36 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
- * Extracts plain text from a Notion rich_text or title property.
+ * Robust rich text extraction for Notion.
+ * Handles both the "rich_text" property and direct rich_text arrays.
  */
 export function getPlainText(property: unknown): string {
-  if (!property || typeof property !== "object") return "";
+  if (!property) return "";
+
+  // If it's already an array, process it directly
+  if (Array.isArray(property)) {
+    return property.map((t: any) => t.plain_text || "").join("");
+  }
+
+  if (typeof property !== "object") return "";
+
   const p = property as {
-    type: string;
+    type?: string;
     title?: Array<{ plain_text: string }>;
     rich_text?: Array<{ plain_text: string }>;
   };
+
   if (p.type === "title" && p.title) {
     return p.title.map((t) => t.plain_text).join("");
   }
   if (p.type === "rich_text" && p.rich_text) {
     return p.rich_text.map((t) => t.plain_text).join("");
   }
+
+  // Fallback for objects that might just be the rich_text array but not wrapped in type
+  if ((property as any).rich_text && Array.isArray((property as any).rich_text)) {
+    return (property as any).rich_text.map((t: any) => t.plain_text || "").join("");
+  }
+
   return "";
 }
 

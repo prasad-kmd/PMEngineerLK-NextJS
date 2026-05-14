@@ -1,7 +1,7 @@
+import { marked } from "marked";
+
 /**
  * Strips HTML tags from a string using a simple state machine.
- * Completely avoids ReDoS vulnerabilities flagged by CodeQL.
- * Used for cleaning text before generating IDs or parsing JSON.
  */
 export function stripTags(html: string): string {
   if (typeof html !== "string") return "";
@@ -32,7 +32,6 @@ export function injectHeadingIds(html: string): string {
     (match, level, attrs, text) => {
       if (attrs.toLowerCase().includes("id=")) return match;
 
-      // Use safe stripTags instead of vulnerable while + regex loop
       const cleanText = stripTags(text);
       const id = cleanText
         .toLowerCase()
@@ -49,7 +48,6 @@ export function injectHeadingIds(html: string): string {
  */
 export function injectQuiz(html: string): string {
   const placeholders: string[] = [];
-  // Protect pre/code blocks from quiz regex
   const protectedHtml = html.replace(
     /<(pre|code)[\s\S]*?<\/\1\s*>/gi,
     (match) => {
@@ -62,12 +60,10 @@ export function injectQuiz(html: string): string {
     /\[quiz\]([\s\S]*?)\[\/quiz\]/g,
     (match, jsonContent) => {
       try {
-        // Use safe stripTags instead of vulnerable while loop
         let cleanJson = stripTags(jsonContent);
         cleanJson = cleanJson.trim();
         cleanJson = cleanJson.replace(/[\r\n\t]+/g, " ");
 
-        // Escape backslashes while preserving valid JSON escape sequences
         cleanJson = cleanJson.replace(
           /\\(["\\\/bfnrt]|u[0-9a-fA-F]{4})|\\/g,
           (m: string, p1: string) => (p1 ? m : "\\\\"),
@@ -95,6 +91,80 @@ export function injectQuiz(html: string): string {
     /__QUIZ_PROTECTED_BLOCK_(\d+)__/g,
     (match, index) => placeholders[parseInt(index)] ?? "",
   );
+}
+
+/**
+ * Injects custom shortcodes (buttons, tabs, etc.) into the HTML.
+ */
+export async function injectShortcodes(html: string): Promise<string> {
+  // 1. [button href="..."]Title[/button]
+  let processedHtml = html.replace(
+    /\[button\s+href="([^"]+)"\]([\s\S]*?)\[\/button\]/g,
+    (match, href, title) => {
+      return `
+<div class="my-8 inline-block">
+  <a href="${href}" target="_blank" rel="noopener noreferrer"
+     class="group relative inline-flex items-center gap-3 px-8 py-3.5 bg-primary text-primary-foreground rounded-2xl font-black uppercase tracking-widest text-[10px] md:text-xs transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_-15px_rgba(var(--primary-rgb),0.4)] active:scale-[0.98] overflow-hidden no-underline">
+    <span class="relative z-10">${title}</span>
+    <svg class="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7-7 7M5 12h16"></path>
+    </svg>
+    <div class="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+  </a>
+</div>`;
+    },
+  );
+
+  // 2. [tabs] ... [tab title="..."] ... [/tab] ... [/tabs]
+  const tabsRegex = /\[tabs\]([\s\S]*?)\[\/tabs\]/g;
+  const tabRegex = /\[tab\s+title="([^"]+)"\]([\s\S]*?)\[\/tab\]/g;
+
+  const matches = Array.from(processedHtml.matchAll(tabsRegex));
+  for (const match of matches) {
+    const tabsContent = match[1];
+    const tabMatches = Array.from(tabsContent.matchAll(tabRegex));
+
+    if (tabMatches.length === 0) continue;
+
+    let tabHeaders = '<div class="flex border-b border-border mb-6 overflow-x-auto no-scrollbar gap-2">';
+    let tabPanels = '<div class="relative">';
+
+    for (let i = 0; i < tabMatches.length; i++) {
+      const [fullTab, title, content] = tabMatches[i];
+      const isActive = i === 0;
+      const tabId = `tab-${Math.random().toString(36).substring(2, 9)}`;
+
+      const parsedContent = await marked.parse(content.trim());
+
+      tabHeaders += `
+        <button class="tab-trigger px-6 py-3 text-[10px] md:text-xs font-black uppercase tracking-widest transition-all border-b-2 whitespace-nowrap
+                       ${isActive ? 'border-primary text-primary bg-primary/5' : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'}"
+                data-tab-target="${tabId}">
+          ${title}
+        </button>
+      `;
+
+      tabPanels += `
+        <div id="${tabId}" class="tab-panel transition-all duration-300 ${isActive ? 'block animate-in fade-in slide-in-from-bottom-2' : 'hidden'}">
+          <div class="prose-direct">${parsedContent}</div>
+        </div>
+      `;
+    }
+
+    tabHeaders += '</div>';
+    tabPanels += '</div>';
+
+    const tabsHtml = `
+      <div class="notion-tabs-container my-10 border border-border/50 rounded-[2rem] p-6 md:p-8 bg-card/30 backdrop-blur-sm shadow-sm">
+        ${tabHeaders}
+        ${tabPanels}
+      </div>
+    `;
+
+    processedHtml = processedHtml.replace(match[0], tabsHtml);
+  }
+
+  return processedHtml;
 }
 
 /**
@@ -138,14 +208,12 @@ export function injectAlerts(html: string): string {
 
 /**
  * Sanitizes HTML content by removing dangerous script/style tags while preserving GitHub Gists.
- * Addresses CodeQL "Bad HTML filtering regexp" and "Incomplete multi-character sanitization".
  */
 export function sanitizeContent(html: string): string {
   if (typeof html !== "string") return "";
 
   const gists: string[] = [];
 
-  // First pass: Protect valid GitHub Gists
   let processedHtml = html.replace(
     /<script\b[^>]*>([\s\S]*?)<\/script[^>]*>/gim,
     (match) => {
@@ -163,34 +231,25 @@ export function sanitizeContent(html: string): string {
             return `__GIST_PLACEHOLDER_${gists.length - 1}__`;
           }
         } catch {
-          // Invalid URL
         }
       }
-      return match; // Will be removed in next pass if not a gist
+      return match;
     },
   );
 
-  // Aggressively remove script and style tags with improved regex
-  // This pattern is more robust against variations of </script> tags
   const dangerousTagRegex = /<(script|style)\b[^>]*>[\s\S]*?<\/\1[^>]*>/gi;
-  // Apply repeatedly until no more matches are removed to avoid
-  // incomplete multi-character sanitization bypasses.
   let previousHtml: string;
   do {
     previousHtml = processedHtml;
     processedHtml = processedHtml.replace(dangerousTagRegex, "");
   } while (processedHtml !== previousHtml);
 
-  // Final safety pass: encode any remaining "<script" fragments that might have survived
-  // Using a recursive loop to handle nested or obfuscated script tags
-  // This directly addresses the "incomplete multi-character sanitization" warning
   while (/<script\b/i.test(processedHtml) || /<\/script/i.test(processedHtml)) {
     processedHtml = processedHtml
       .replace(/<script\b/gi, "&lt;script")
       .replace(/<\/script/gi, "&lt;/script");
   }
 
-  // Restore protected Gists
   return processedHtml.replace(
     /__GIST_PLACEHOLDER_(\d+)__/g,
     (_, index) => gists[parseInt(index)] ?? "",

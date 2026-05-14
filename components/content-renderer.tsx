@@ -20,7 +20,6 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
 
   useEffect(() => {
     // Process images to be lazy-loaded and optimized if possible
-    // Note: We are using native lazy loading here as we're injecting HTML
     if (contentRef.current) {
       const images = contentRef.current.querySelectorAll("img");
       images.forEach((img) => {
@@ -191,7 +190,94 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
       }
     };
 
+    const renderMermaid = async () => {
+      if (!contentRef.current) return;
+      const mermaidBlocks = contentRef.current.querySelectorAll("pre.mermaid");
+      if (mermaidBlocks.length === 0) return;
+
+      try {
+        const mermaid = (await import("mermaid")).default;
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: document.documentElement.classList.contains("dark") ? "dark" : "default",
+          securityLevel: "loose",
+          fontFamily: "var(--font-google-sans)",
+        });
+
+        mermaidBlocks.forEach(async (block, i) => {
+          if (block.getAttribute("data-processed")) return;
+
+          const source = block.textContent || "";
+          block.setAttribute("data-processed", "true");
+          block.setAttribute("data-source", source);
+
+          const id = `mermaid-${Math.random().toString(36).substring(2, 9)}-${i}`;
+          const { svg } = await mermaid.render(id, source);
+          block.innerHTML = svg;
+
+          const wrapper = block.parentElement;
+          if (wrapper && !wrapper.querySelector(".mermaid-copy-button")) {
+            wrapper.style.position = "relative";
+            wrapper.classList.add("group/mermaid");
+            const button = document.createElement("button");
+            button.className = "mermaid-copy-button absolute right-4 top-4 p-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 backdrop-blur-md opacity-0 group-hover/mermaid:opacity-100 transition-all z-20 hover:bg-primary hover:text-primary-foreground";
+            button.innerHTML = '<span class="text-[9px] font-black uppercase tracking-widest mr-2 hidden sm:inline">Copy Diagram</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+
+            button.onclick = () => {
+              navigator.clipboard.writeText(source).then(() => {
+                const originalHtml = button.innerHTML;
+                button.innerHTML = '<span class="text-[9px] font-black uppercase tracking-widest mr-2">Copied!</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+                setTimeout(() => {
+                  button.innerHTML = originalHtml;
+                }, 2000);
+              });
+            };
+            wrapper.appendChild(button);
+          }
+        });
+      } catch (error) {
+        console.error("Mermaid render error:", error);
+      }
+    };
+
+    const setupTabs = () => {
+      if (!contentRef.current) return;
+      const tabContainers = contentRef.current.querySelectorAll(".notion-tabs-container");
+
+      tabContainers.forEach(container => {
+        const triggers = container.querySelectorAll(".tab-trigger");
+        const panels = container.querySelectorAll(".tab-panel");
+
+        triggers.forEach(trigger => {
+          trigger.addEventListener("click", () => {
+            const targetId = trigger.getAttribute("data-tab-target");
+
+            // Update triggers
+            triggers.forEach(t => {
+              t.classList.remove("border-primary", "text-primary", "bg-primary/5");
+              t.classList.add("border-transparent", "text-muted-foreground", "hover:text-foreground", "hover:bg-muted/50");
+            });
+            trigger.classList.add("border-primary", "text-primary", "bg-primary/5");
+            trigger.classList.remove("border-transparent", "text-muted-foreground", "hover:text-foreground", "hover:bg-muted/50");
+
+            // Update panels
+            panels.forEach(p => {
+              p.classList.add("hidden");
+              p.classList.remove("block", "animate-in", "fade-in", "slide-in-from-bottom-2");
+            });
+            const activePanel = container.querySelector(`#${targetId}`);
+            if (activePanel) {
+              activePanel.classList.remove("hidden");
+              activePanel.classList.add("block", "animate-in", "fade-in", "slide-in-from-bottom-2");
+            }
+          });
+        });
+      });
+    };
+
     renderMath();
+    renderMermaid();
+    setupTabs();
     addCopyButtons();
     processExternalLinks();
   }, [renderedContent]);

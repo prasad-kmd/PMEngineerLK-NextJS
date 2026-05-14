@@ -22,6 +22,7 @@ import {
   injectQuiz,
   injectAlerts,
   injectHeadingIds,
+  injectShortcodes,
 } from "../render/processors";
 
 /**
@@ -185,7 +186,7 @@ export async function fetchNotionContentItem(
       date,
       description,
       content: sanitizeContent(
-        injectQuiz(injectAlerts(injectHeadingIds(highlightedHtml))),
+        await injectShortcodes(injectQuiz(injectAlerts(injectHeadingIds(highlightedHtml)))),
       ),
       rawContent: mdString,
       final: true,

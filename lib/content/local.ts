@@ -11,6 +11,7 @@ import {
   injectQuiz,
   injectAlerts,
   injectHeadingIds,
+  injectShortcodes,
 } from "../render/processors";
 
 const contentDirectory = path.join(process.cwd(), "content");
@@ -125,7 +126,7 @@ export async function getLocalContentItem(
       date: data.date,
       description: data.description,
       content: sanitizeContent(
-        injectQuiz(injectAlerts(injectHeadingIds(highlightedHtml))),
+        await injectShortcodes(injectQuiz(injectAlerts(injectHeadingIds(highlightedHtml)))),
       ),
       rawContent: content,
       final: data.final || false,
@@ -148,7 +149,7 @@ export async function getLocalContentItem(
       date: data.date,
       description: data.description,
       content: sanitizeContent(
-        injectQuiz(injectAlerts(injectHeadingIds(highlightedHtml))),
+        await injectShortcodes(injectQuiz(injectAlerts(injectHeadingIds(highlightedHtml)))),
       ),
       rawContent: content,
       final: data.final || false,
