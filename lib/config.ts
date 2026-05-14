@@ -8,7 +8,7 @@ export const siteConfig = {
     process.env.SITE_URL ||
     (process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000/"),
+      : "https://prasadm.vercel.app/"),
   socialLinks: {
     github:
       process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/prasad-kmd",

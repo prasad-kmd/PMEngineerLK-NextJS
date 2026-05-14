@@ -219,31 +219,88 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
           
           const id = `mermaid-${Math.random().toString(36).substring(2, 9)}-${i}`;
           const { svg } = await mermaid.render(id, source);
-          block.innerHTML = svg;
+          block.innerHTML = `<div class="mermaid-svg-container flex justify-center w-full overflow-visible transition-transform duration-300 origin-center">${svg}</div>`;
 
           const wrapper = block.parentElement;
-          if (wrapper && !wrapper.querySelector(".mermaid-copy-button")) {
+          if (wrapper && !wrapper.querySelector(".mermaid-actions")) {
             wrapper.style.position = "relative";
             wrapper.classList.add("group/mermaid");
-            const button = document.createElement("button");
-            button.className = "mermaid-copy-button absolute right-3 top-3 p-1.5 rounded-md bg-primary/10 text-primary border border-primary/20 backdrop-blur-md opacity-0 group-hover/mermaid:opacity-100 transition-all z-20 hover:bg-primary hover:text-primary-foreground";
-            button.title = "Copy Mermaid Source";
-            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
             
-            button.onclick = (e) => {
-              e.preventDefault();
-              e.stopPropagation();
+            const actionsContainer = document.createElement("div");
+            actionsContainer.className = "mermaid-actions absolute right-4 top-4 flex items-center gap-2 opacity-0 group-hover/mermaid:opacity-100 transition-all z-30";
+            
+            // Zoom In
+            const zoomInBtn = document.createElement("button");
+            zoomInBtn.className = "p-2 rounded-xl bg-primary/10 text-primary border border-primary/20 backdrop-blur-md hover:bg-primary hover:text-primary-foreground transition-all";
+            zoomInBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
+            zoomInBtn.title = "Zoom In";
+            
+            // Zoom Out
+            const zoomOutBtn = document.createElement("button");
+            zoomOutBtn.className = "p-2 rounded-xl bg-primary/10 text-primary border border-primary/20 backdrop-blur-md hover:bg-primary hover:text-primary-foreground transition-all";
+            zoomOutBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
+            zoomOutBtn.title = "Zoom Out";
+
+            // Fullscreen
+            const fullScreenBtn = document.createElement("button");
+            fullScreenBtn.className = "p-2 rounded-xl bg-primary/10 text-primary border border-primary/20 backdrop-blur-md hover:bg-primary hover:text-primary-foreground transition-all";
+            fullScreenBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+            fullScreenBtn.title = "Toggle Fullscreen";
+
+            // Copy Source
+            const copyBtn = document.createElement("button");
+            copyBtn.className = "p-2 rounded-xl bg-primary/10 text-primary border border-primary/20 backdrop-blur-md hover:bg-primary hover:text-primary-foreground transition-all";
+            copyBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+            copyBtn.title = "Copy Source";
+
+            let currentZoom = 1;
+            const svgContainer = block.querySelector(".mermaid-svg-container") as HTMLElement;
+
+            zoomInBtn.onclick = () => {
+              currentZoom += 0.2;
+              if (svgContainer) svgContainer.style.transform = `scale(${currentZoom})`;
+            };
+
+            zoomOutBtn.onclick = () => {
+              currentZoom = Math.max(0.4, currentZoom - 0.2);
+              if (svgContainer) svgContainer.style.transform = `scale(${currentZoom})`;
+            };
+
+            fullScreenBtn.onclick = () => {
+              if (!document.fullscreenElement) {
+                wrapper.requestFullscreen().catch(err => {
+                  console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+                wrapper.classList.add("bg-background", "p-20", "flex", "items-center", "justify-center");
+              } else {
+                document.exitFullscreen();
+                wrapper.classList.remove("bg-background", "p-20", "flex", "items-center", "justify-center");
+              }
+            };
+
+            copyBtn.onclick = () => {
               navigator.clipboard.writeText(source).then(() => {
-                const originalHtml = button.innerHTML;
-                button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-                button.classList.add("text-green-500", "border-green-500/50");
+                const originalHtml = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+                copyBtn.classList.add("text-green-500", "border-green-500/50");
                 setTimeout(() => {
-                  button.innerHTML = originalHtml;
-                  button.classList.remove("text-green-500", "border-green-500/50");
+                  copyBtn.innerHTML = originalHtml;
+                  copyBtn.classList.remove("text-green-500", "border-green-500/50");
                 }, 2000);
               });
             };
-            wrapper.appendChild(button);
+
+            actionsContainer.appendChild(zoomOutBtn);
+            actionsContainer.appendChild(zoomInBtn);
+            actionsContainer.appendChild(fullScreenBtn);
+            actionsContainer.appendChild(copyBtn);
+            wrapper.appendChild(actionsContainer);
+
+            document.addEventListener('fullscreenchange', () => {
+              if (!document.fullscreenElement) {
+                wrapper.classList.remove("bg-background", "p-20", "flex", "items-center", "justify-center");
+              }
+            });
           }
         }
       } catch (error) {
