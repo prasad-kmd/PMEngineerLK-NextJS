@@ -99,17 +99,26 @@ async function highlightCodeBlocks(html: string): Promise<string> {
 
       if (lang === "mermaid") {
         result += `
-<div class="mermaid-preview my-12 rounded-3xl border border-border/50 bg-card p-8 shadow-sm overflow-x-auto flex justify-center items-center">
-  <pre class="mermaid m-0 bg-transparent p-0">${decodedCode.trim()}</pre>
+<div class="mermaid-wrapper group/mermaid relative my-12">
+  <div class="mermaid-preview rounded-3xl border border-border/50 bg-card p-8 shadow-sm overflow-x-auto flex justify-center items-center transition-all duration-500 hover:border-primary/40 hover:shadow-lg">
+    <pre class="mermaid m-0 bg-transparent p-0 text-center">${decodedCode.trim()}</pre>
+  </div>
+  <button class="copy-button absolute top-4 right-4 p-2.5 rounded-xl bg-background/80 text-muted-foreground hover:text-primary hover:bg-background border border-border/50 backdrop-blur-sm transition-all opacity-0 group-hover/mermaid:opacity-100 shadow-sm z-20"
+          onclick="const code = this.closest('.mermaid-wrapper').querySelector('.mermaid').innerText; navigator.clipboard.writeText(code); const btn = this; const original = btn.innerHTML; btn.innerHTML = '<svg class=\\'w-4 h-4 text-green-500 animate-in zoom-in duration-300\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'2.5\\' d=\\'M5 13l4 4L19 7\\'></path></svg>'; setTimeout(() => btn.innerHTML = original, 2000);"
+          aria-label="Copy Mermaid Code">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+    </svg>
+  </button>
 </div>`;
         lastIndex = matchIndex + fullMatch.length;
         continue;
       }
 
       if (lang === "tabs") {
-        result += `<div class="notion-tabs-placeholder my-8" data-tabs-code='${decodedCode
-          .trim()
-          .replace(/'/g, "&apos;")}'></div>`;
+        // Double encode the code to protect it during marked parsing if it gets re-processed
+        const encoded = Buffer.from(decodedCode.trim()).toString("base64");
+        result += `<div class="notion-tabs-placeholder my-8" data-tabs-base64="${encoded}"></div>`;
         lastIndex = matchIndex + fullMatch.length;
         continue;
       }
@@ -242,7 +251,10 @@ async function fetchNotionContentByType(
         const description = getPlainText(props.Description);
         const tags = getMultiSelect(props.Tags);
         const category = getSelect(props.Categories);
-        const aiAssisted = getCheckbox(props.AIAssisted);
+        const aiAssisted =
+          getCheckbox(props.AIAssisted) ||
+          getCheckbox(props["AI Assisted"]) ||
+          getCheckbox(props.aiAssisted);
         const technical = getMultiSelect(props.Technical).join(", ");
         const thumbnail = getImageUrl(props.Thumbnail);
         const rTime = getNumber(props.RTime);
@@ -346,6 +358,7 @@ export const getContentByType = cache(async function (
         rawContent: content,
         final: data.final || false,
         firstImage,
+        thumbnail: data.thumbnail,
         readingTime: rt,
         rTime: rt,
         technical: data.technical,
@@ -406,7 +419,10 @@ async function fetchNotionContentItem(
     const description = getPlainText(props.Description);
     const tags = getMultiSelect(props.Tags);
     const category = getSelect(props.Categories);
-    const aiAssisted = getCheckbox(props.AIAssisted);
+    const aiAssisted =
+      getCheckbox(props.AIAssisted) ||
+      getCheckbox(props["AI Assisted"]) ||
+      getCheckbox(props.aiAssisted);
     const technical = getMultiSelect(props.Technical).join(", ");
     const thumbnail = getImageUrl(props.Thumbnail);
     const rTime = getNumber(props.RTime);

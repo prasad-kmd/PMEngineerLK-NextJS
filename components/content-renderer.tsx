@@ -81,7 +81,8 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
         // Skip if already has a copy button OR is part of a Shiki enhanced block
         if (
           pre.querySelector(".copy-button") ||
-          pre.closest(".code-block-wrapper")
+          pre.closest(".code-block-wrapper") ||
+          pre.classList.contains("mermaid")
         )
           return;
 
@@ -225,7 +226,7 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
 
   const parts = useMemo(() => {
     return renderedContent.split(
-      /(<div class="interactive-quiz-placeholder" data-quiz='[\s\S]*?'>\s*<\/div>|<div class="notion-tabs-placeholder my-8" data-tabs(?:-code)?='[\s\S]*?'>\s*<\/div>)/g,
+      /(<div class="interactive-quiz-placeholder" data-quiz='[\s\S]*?'>\s*<\/div>|<div class="notion-tabs-placeholder my-8" data-tabs(?:-code|-base64)?='[\s\S]*?'>\s*<\/div>)/g,
     );
   }, [renderedContent]);
 
@@ -273,16 +274,26 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
         if (part.includes('class="notion-tabs-placeholder"')) {
           const match =
             part.match(/data-tabs='([\s\S]*?)'/) ||
-            part.match(/data-tabs-code='([\s\S]*?)'/);
+            part.match(/data-tabs-code='([\s\S]*?)'/) ||
+            part.match(/data-tabs-base64="([\s\S]*?)"/);
           const isCode = part.includes("data-tabs-code");
+          const isBase64 = part.includes("data-tabs-base64");
 
           if (match && match[1]) {
             try {
-              const decoded = match[1].replace(/&apos;/g, "'");
               let tabsData: Array<{ title: string; content: string }> = [];
 
-              if (isCode) {
-                // Parse code block format: [Title]\nContent\n[Title2]\nContent2
+              if (isBase64) {
+                const decoded = atob(match[1]);
+                const segments = decoded.split(/^\[(.+?)\]/m).filter(Boolean);
+                for (let i = 0; i < segments.length; i += 2) {
+                  tabsData.push({
+                    title: segments[i],
+                    content: segments[i + 1]?.trim() || "",
+                  });
+                }
+              } else if (isCode) {
+                const decoded = match[1].replace(/&apos;/g, "'");
                 const segments = decoded.split(/^\[(.+?)\]/m).filter(Boolean);
                 for (let i = 0; i < segments.length; i += 2) {
                   tabsData.push({
@@ -291,6 +302,7 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
                   });
                 }
               } else {
+                const decoded = match[1].replace(/&apos;/g, "'");
                 tabsData = JSON.parse(decoded);
               }
 

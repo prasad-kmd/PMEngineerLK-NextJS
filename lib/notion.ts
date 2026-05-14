@@ -219,24 +219,30 @@ n2m.setCustomTransformer("callout", async (block) => {
 n2m.setCustomTransformer("toggle", async (block) => {
   const { toggle, id } = block as { toggle: { rich_text: unknown }; id: string };
   const title = getPlainText(toggle.rich_text);
-  const childBlocks = await notion.blocks.children.list({ block_id: id });
-  const mdBlocks = await n2m.blocksToMarkdown(childBlocks.results);
-  const { parent } = n2m.toMarkdownString(mdBlocks);
 
-  return `
-<details class="notion-toggle group my-4 border border-border/50 rounded-2xl bg-card/30 overflow-hidden transition-all duration-300 hover:border-primary/30">
-  <summary class="flex items-center gap-3 p-4 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
-    <div class="flex items-center justify-center w-6 h-6 rounded-lg bg-primary/10 text-primary group-open:rotate-90 transition-transform duration-300">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+  try {
+    const childBlocks = await notion.blocks.children.list({ block_id: id });
+    const mdBlocks = await n2m.blocksToMarkdown(childBlocks.results);
+    const { parent } = n2m.toMarkdownString(mdBlocks);
+
+    return `
+<details class="notion-toggle group my-6 border border-border/40 rounded-2xl bg-card/40 overflow-hidden transition-all duration-300 hover:border-primary/30 shadow-sm" open>
+  <summary class="flex items-center gap-4 p-5 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+    <div class="flex items-center justify-center w-7 h-7 rounded-xl bg-primary/10 text-primary group-open:rotate-90 transition-all duration-500 shadow-inner shrink-0">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
     </div>
-    <span class="text-sm md:text-base font-bold amoriaregular text-foreground/90 group-hover:text-primary transition-colors">${title}</span>
+    <span class="text-base font-black amoriaregular text-foreground/90 group-hover:text-primary transition-colors tracking-wide">${title}</span>
   </summary>
-  <div class="p-4 pt-0 bg-transparent">
-    <div class="prose-direct text-sm md:text-base leading-relaxed py-2 pl-9">
+  <div class="px-6 pb-6 pt-0">
+    <div class="prose-direct border-l-2 border-primary/10 pl-6 ml-3.5 space-y-4 text-muted-foreground/90 leading-relaxed">
       ${parent}
     </div>
   </div>
 </details>`;
+  } catch (error) {
+    console.error("Toggle block error:", error);
+    return `<div class="notion-toggle-error p-4 border border-red-500/20 bg-red-500/5 rounded-xl text-xs text-red-500">Failed to load toggle content</div>`;
+  }
 });
 
 // Transform Tabs
@@ -270,36 +276,25 @@ n2m.setCustomTransformer("tab_view", async (block) => {
 
 // Transform Buttons
 n2m.setCustomTransformer("button", async (block) => {
-  const { button } = block as {
-    button: {
-      rich_text: unknown;
-      action?: {
-        type: string;
-        url?: string;
-        open_url?: { url: string };
-      };
-    };
-  };
-  // Notion button block structure: button.rich_text, button.action
-  // But Button actions are not fully exposed in a simple way in API sometimes.
-  // If it's a link button, it might have an action type "url".
+  const { button } = block as any;
   const label = getPlainText(button.rich_text);
   let url = "#";
 
-  if (button.action?.type === "url") {
-    url = button.action.url;
-  } else if (button.action?.type === "open_url") {
-    url = button.action.open_url?.url;
+  // Notion API Button block mapping for notion-to-md can be tricky
+  // Some versions of notion-to-md might not pass the action correctly
+  // Or the block type might be different
+  if (button.action) {
+    url = button.action.url || button.action.open_url?.url || url;
   }
 
   return `
-<div class="notion-button-wrapper my-8 flex justify-center">
-  <a href="${url}" target="_blank" rel="noopener noreferrer" class="group relative px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-black amoriaregular tracking-widest uppercase text-sm md:text-base shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all duration-500 hover:-translate-y-1 overflow-hidden">
-    <span class="relative z-10 flex items-center gap-3">
-      ${label}
-      <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+<div class="notion-button-wrapper my-10 flex justify-center">
+  <a href="${url}" target="_blank" rel="noopener noreferrer" class="skip-external-icon group relative px-10 py-5 bg-primary text-primary-foreground rounded-2xl font-black amoriaregular tracking-[0.2em] uppercase text-sm md:text-base shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all duration-500 hover:-translate-y-1 overflow-hidden no-underline border-0">
+    <span class="relative z-10 flex items-center gap-4">
+      ${label || "Click Here"}
+      <svg class="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
     </span>
-    <div class="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+    <div class="absolute inset-0 bg-linear-to-r from-white/0 via-white/25 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
   </a>
 </div>`;
 });
