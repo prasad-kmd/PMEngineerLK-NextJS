@@ -49,7 +49,18 @@ export function BlogCard({ post }: BlogCardProps) {
       href={`/blog/${post.slug}`}
       className="group relative flex flex-col h-full bg-card/30 backdrop-blur-xl border border-border/40 rounded-2xl md:rounded-[2.5rem] overflow-hidden transition-all duration-700 hover:border-primary/40 hover:bg-card/50 hover:-translate-y-2 shadow-2xl dark:border-white/5"
     >
-      <div className="p-4 md:p-10 flex flex-col h-full">
+      {post.thumbnail && (
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={post.thumbnail}
+            alt={post.title}
+            fill
+            className="object-cover opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-700"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-background via-background/80 to-transparent" />
+        </div>
+      )}
+      <div className="relative z-10 p-4 md:p-10 flex flex-col h-full">
         <div className="flex items-center justify-between mb-4 md:mb-10">
           <div className="flex items-center gap-3 md:gap-4">
             <div className="flex flex-col items-center justify-center bg-primary/10 rounded-lg md:rounded-2xl p-1.5 md:p-3 min-w-[50px] md:min-w-[70px] border border-primary/20 group-hover:bg-primary group-hover:border-primary transition-all duration-500">

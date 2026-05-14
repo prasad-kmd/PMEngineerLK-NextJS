@@ -106,6 +106,14 @@ async function highlightCodeBlocks(html: string): Promise<string> {
         continue;
       }
 
+      if (lang === "tabs") {
+        result += `<div class="notion-tabs-placeholder my-8" data-tabs-code='${decodedCode
+          .trim()
+          .replace(/'/g, "&apos;")}'></div>`;
+        lastIndex = matchIndex + fullMatch.length;
+        continue;
+      }
+
       try {
         const highlighted = await highlightCode(decodedCode.trim(), lang);
 
@@ -226,7 +234,8 @@ async function fetchNotionContentByType(
 
     const items = await Promise.all(
       (response as unknown).results.map(async (page: unknown) => {
-        const props = (page as any).properties;
+        const p = page as { properties: Record<string, unknown>; id: string };
+        const props = p.properties;
         const slug = getPlainText(props.Slug);
         const title = getPlainText(props.Name || props.Title);
         const date = getDate(props.Date);
@@ -251,7 +260,7 @@ async function fetchNotionContentByType(
         }
 
         return {
-          id: (page as any).id as string,
+          id: p.id,
           slug,
           title,
           date,
@@ -383,7 +392,10 @@ async function fetchNotionContentItem(
 
     if ((response as unknown).results.length === 0) return null;
 
-    const page = (response as any).results[0];
+    const page = (response as unknown).results[0] as {
+      properties: Record<string, unknown>;
+      id: string;
+    };
     const props = page.properties;
 
     const mdblocks = await n2m.pageToMarkdown(page.id);
@@ -602,7 +614,10 @@ export const getAuthorBasic = cache(async function (
           },
         });
         if ((response as unknown).results.length === 0) return null;
-        const page = (response as any).results[0];
+        const page = (response as unknown).results[0] as {
+          properties: Record<string, unknown>;
+          id: string;
+        };
         const props = page.properties;
         return {
           name: getPlainText(props.Name || props.Title),
@@ -663,7 +678,10 @@ export const getAuthorBySlug = cache(async function (
           },
         });
         if ((response as unknown).results.length === 0) return null;
-        const page = (response as any).results[0];
+        const page = (response as unknown).results[0] as {
+          properties: Record<string, unknown>;
+          id: string;
+        };
         const props = page.properties;
 
         const mdblocks = await n2m.pageToMarkdown(page.id);
@@ -751,7 +769,8 @@ export const getAllAuthors = cache(async function (): Promise<Author[]> {
         });
 
         return (response as unknown).results.map((page: unknown) => {
-          const props = (page as any).properties;
+          const p = page as { properties: Record<string, unknown> };
+          const props = p.properties;
           return {
             name: getPlainText(props.Name || props.Title),
             slug: getPlainText(props.Slug),

@@ -129,27 +129,20 @@ n2m.setCustomTransformer("file", async (block) => {
   const isExternal = file.type === "external";
 
   return `
-<div class="notion-file-block my-8">
-  <a href="${url}" target="_blank" rel="noopener noreferrer" class="group relative flex items-center gap-4 p-4 rounded-2xl border border-border/50 bg-card/50 hover:bg-muted/30 hover:border-primary/40 transition-all duration-300 no-underline overflow-hidden">
-    <div class="relative z-10 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shadow-inner">
-      <svg class="w-7 h-7 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="notion-file-block my-4 inline-block">
+  <a href="${url}" target="_blank" rel="noopener noreferrer" class="skip-external-icon group relative flex items-center gap-3 p-2 pr-4 rounded-xl border border-border/40 bg-card/50 hover:border-primary/40 transition-all duration-300 no-underline overflow-hidden">
+    <div class="relative z-10 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 shadow-inner shrink-0">
+      <svg class="w-5 h-5 transform group-hover:-translate-y-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
       </svg>
-      <div class="absolute bottom-0 left-0 w-full h-1 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"></div>
     </div>
     <div class="relative z-10 flex-1 min-w-0">
-      <div class="text-base font-black amoriaregular text-foreground truncate group-hover:text-primary transition-colors">${name}</div>
-      <div class="text-[10px] tracking-[0.2em] uppercase font-black text-muted-foreground/40 mt-1 flex items-center gap-2">
-        <span class="w-1 h-1 rounded-full bg-primary/40 group-hover:animate-ping"></span>
-        ${isExternal ? "External Resource" : "Hosted File"}
+      <div class="text-[13px] font-bold amoriaregular text-foreground truncate group-hover:text-primary transition-colors">${name}</div>
+      <div class="text-[9px] tracking-widest uppercase font-black text-muted-foreground/30 mt-0.5 flex items-center gap-1.5">
+        <span class="w-1 h-1 rounded-full bg-primary/30"></span>
+        ${isExternal ? "External" : "Hosted"}
       </div>
     </div>
-    <div class="relative z-10 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0">
-       <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-       </svg>
-    </div>
-    <div class="absolute inset-0 bg-linear-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
   </a>
 </div>`;
 });
@@ -238,8 +231,8 @@ n2m.setCustomTransformer("toggle", async (block) => {
     </div>
     <span class="text-sm md:text-base font-bold amoriaregular text-foreground/90 group-hover:text-primary transition-colors">${title}</span>
   </summary>
-  <div class="p-4 pt-0 border-t border-border/10 bg-muted/10">
-    <div class="prose-direct text-sm md:text-base leading-relaxed py-2">
+  <div class="p-4 pt-0 bg-transparent">
+    <div class="prose-direct text-sm md:text-base leading-relaxed py-2 pl-9">
       ${parent}
     </div>
   </div>
@@ -434,16 +427,29 @@ export function getImageUrl(property: unknown): string | undefined {
     type: string;
     files?: Array<{
       type: string;
+      name?: string;
       external?: { url: string };
       file?: { url: string };
     }>;
+    external?: { url: string };
+    file?: { url: string };
+    url?: string;
   };
-  if (p.type !== "files" || !p.files || p.files.length === 0) {
-    return undefined;
+
+  // Handle 'Files & Media' property
+  if (p.type === "files" && p.files && p.files.length > 0) {
+    const file = p.files[0];
+    if (file.type === "external") return file.external?.url;
+    if (file.type === "file") return file.file?.url;
   }
-  const file = p.files[0];
-  if (file.type === "external") return file.external?.url;
-  if (file.type === "file") return file.file?.url;
+
+  // Handle single 'File' property or block
+  if (p.type === "external") return p.external?.url;
+  if (p.type === "file") return p.file?.url;
+
+  // Handle 'Url' property
+  if (p.type === "url" && p.url) return p.url;
+
   return undefined;
 }
 
