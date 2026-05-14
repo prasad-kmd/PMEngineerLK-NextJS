@@ -119,6 +119,11 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
     const processExternalLinks = () => {
       const links = contentRef.current?.querySelectorAll("a");
       links?.forEach((link) => {
+        // Skip link processing for specific components that handle their own styling
+        if (link.closest(".notion-file-card") || link.closest(".shortcode-button") || link.closest(".notion-bookmark")) {
+          return;
+        }
+
         const href = link.getAttribute("href");
         if (href && (href.startsWith("http") || href.startsWith("//"))) {
           try {
@@ -204,8 +209,9 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
           fontFamily: "var(--font-google-sans)",
         });
 
-        mermaidBlocks.forEach(async (block, i) => {
-          if (block.getAttribute("data-processed")) return;
+        for (let i = 0; i < mermaidBlocks.length; i++) {
+          const block = mermaidBlocks[i];
+          if (block.getAttribute("data-processed")) continue;
 
           const source = block.textContent || "";
           block.setAttribute("data-processed", "true");
@@ -220,21 +226,26 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
             wrapper.style.position = "relative";
             wrapper.classList.add("group/mermaid");
             const button = document.createElement("button");
-            button.className = "mermaid-copy-button absolute right-4 top-4 p-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 backdrop-blur-md opacity-0 group-hover/mermaid:opacity-100 transition-all z-20 hover:bg-primary hover:text-primary-foreground";
-            button.innerHTML = '<span class="text-[9px] font-black uppercase tracking-widest mr-2 hidden sm:inline">Copy Diagram</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+            button.className = "mermaid-copy-button absolute right-3 top-3 p-1.5 rounded-md bg-primary/10 text-primary border border-primary/20 backdrop-blur-md opacity-0 group-hover/mermaid:opacity-100 transition-all z-20 hover:bg-primary hover:text-primary-foreground";
+            button.title = "Copy Mermaid Source";
+            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
 
-            button.onclick = () => {
+            button.onclick = (e) => {
+              e.preventDefault();
+              e.stopPropagation();
               navigator.clipboard.writeText(source).then(() => {
                 const originalHtml = button.innerHTML;
-                button.innerHTML = '<span class="text-[9px] font-black uppercase tracking-widest mr-2">Copied!</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+                button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+                button.classList.add("text-green-500", "border-green-500/50");
                 setTimeout(() => {
                   button.innerHTML = originalHtml;
+                  button.classList.remove("text-green-500", "border-green-500/50");
                 }, 2000);
               });
             };
             wrapper.appendChild(button);
           }
-        });
+        }
       } catch (error) {
         console.error("Mermaid render error:", error);
       }

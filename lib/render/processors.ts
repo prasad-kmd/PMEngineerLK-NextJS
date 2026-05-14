@@ -98,12 +98,13 @@ export function injectQuiz(html: string): string {
  */
 export async function injectShortcodes(html: string): Promise<string> {
   // 1. [button href="..."]Title[/button]
-  let processedHtml = html.replace(
-    /\[button\s+href="([^"]+)"\]([\s\S]*?)\[\/button\]/g,
+  // Robust regex to handle various quote types, potential HTML encoding, and surrounding <p> tags
+  const processedHtml = html.replace(
+    /(?:<p>)?\[button\s+href=["&“”‘“]?([^"&“”‘’\]]+?)["&“”’”]?\s*\]([\s\S]*?)\[\/button\](?:<\/p>)?/g,
     (match, href, title) => {
       return `
-<div class="my-8 inline-block">
-  <a href="${href}" target="_blank" rel="noopener noreferrer"
+<div class="my-8 inline-block shortcode-button">
+  <a href="${href.trim()}" target="_blank" rel="noopener noreferrer"
      class="group relative inline-flex items-center gap-3 px-8 py-3.5 bg-primary text-primary-foreground rounded-2xl font-black uppercase tracking-widest text-[10px] md:text-xs transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_40px_-15px_rgba(var(--primary-rgb),0.4)] active:scale-[0.98] overflow-hidden no-underline">
     <span class="relative z-10">${title}</span>
     <svg class="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,11 +117,15 @@ export async function injectShortcodes(html: string): Promise<string> {
   );
 
   // 2. [tabs] ... [tab title="..."] ... [/tab] ... [/tabs]
-  const tabsRegex = /\[tabs\]([\s\S]*?)\[\/tabs\]/g;
-  const tabRegex = /\[tab\s+title="([^"]+)"\]([\s\S]*?)\[\/tab\]/g;
+  const tabsRegex = /(?:<p>)?\[tabs\s*\]([\s\S]*?)\[\/tabs\s*\](?:<\/p>)?/g;
+  const tabRegex = /\[tab\s+title=["&“”‘“]?([^"&“”‘’\]]+?)["&“”’”]?\s*\]([\s\S]*?)\[\/tab\s*\]/g;
 
-  const matches = Array.from(processedHtml.matchAll(tabsRegex));
-  for (const match of matches) {
+  const tabsMatches = Array.from(processedHtml.matchAll(tabsRegex));
+  if (tabsMatches.length === 0) return processedHtml;
+
+  let finalHtml = processedHtml;
+
+  for (const match of tabsMatches) {
     const tabsContent = match[1];
     const tabMatches = Array.from(tabsContent.matchAll(tabRegex));
 
@@ -161,10 +166,10 @@ export async function injectShortcodes(html: string): Promise<string> {
       </div>
     `;
 
-    processedHtml = processedHtml.replace(match[0], tabsHtml);
+    finalHtml = finalHtml.replace(match[0], tabsHtml);
   }
 
-  return processedHtml;
+  return finalHtml;
 }
 
 /**
