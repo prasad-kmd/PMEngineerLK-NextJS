@@ -57,6 +57,7 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 - **🧪 Tailwind Labs** - Interactive sandbox at `/tools/ts-labs/` for building accent-aware UI patterns like buttons with live previews and code export
 - **🛠️ Engineering Workspace** - Extensive collection of professional-grade tools for calculations, design, and analysis with full LaTeX mathematical support and breadcrumb navigation
 - **🧾 Professional Invoice Generator** - Comprehensive system for managing clients, generating dynamic invoices, and professional PDF exports with Inter-based modern typography, zebra-striped layouts, and LKR support
+- **🖼️ Admin-only OG Image Generator** - Professional tool for creating custom Open Graph images with rich customization, SSRF protection, and dynamic layout adjustment under `/admin-tools/og-image`
 - **💬 Native Notion Comments** - Built-in commenting system using Notion's Comments API with authentication gates and Cloudflare Turnstile protection
 - **✍️ Authors System** - Comprehensive contributor directory with high-fidelity "Dossier" profile pages and contribution metrics
 - **📊 Dynamic Sitemap** - Recursively generated sitemap including all content types and authors

@@ -26,6 +26,7 @@ const PROTECTED_ROUTES = [
   { path: "/roadmap", exact: true, role: "admin" },
   { path: "/admin", pattern: "/admin/*", role: "admin" },
   { path: "/invoice-gen", pattern: "/invoice-gen*", role: "admin" },
+  { path: "/admin-tools", pattern: "/admin-tools*", role: "admin" },
 ];
 
 export async function proxy(request: NextRequest) {
@@ -81,5 +82,6 @@ export const config = {
     "/roadmap",
     "/admin/:path*",
     "/invoice-gen/:path*",
+    "/admin-tools/:path*",
   ],
 };

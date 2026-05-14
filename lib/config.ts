@@ -25,6 +25,9 @@ export const siteConfig = {
       process.env.NEXT_PUBLIC_GITHUB_SPONSORS_URL ||
       "https://github.com/sponsors/prasad-kmd",
   },
+  customOgAllowlist: process.env.CUSTOM_OG_IMAGE_HOST_ALLOWLIST
+    ? process.env.CUSTOM_OG_IMAGE_HOST_ALLOWLIST.split(",").map((h) => h.trim())
+    : ["images.unsplash.com", "res.cloudinary.com", "avatars.githubusercontent.com"],
 };
 
 export const ogConfig = {
