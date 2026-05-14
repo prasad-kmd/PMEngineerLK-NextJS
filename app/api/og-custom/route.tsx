@@ -136,7 +136,45 @@ export async function GET(req: NextRequest) {
             left: 0,
             right: 0,
             bottom: 0,
+            backgroundImage: `linear-gradient(${accentColor}08 1px, transparent 1px), linear-gradient(90deg, ${accentColor}08 1px, transparent 1px)`,
+            backgroundSize: "40px 40px",
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             backgroundImage: `radial-gradient(circle at 20% 30%, ${accentColor}15 0%, transparent 40%), radial-gradient(circle at 80% 70%, ${accentColor}10 0%, transparent 40%)`,
+          }}
+        />
+
+        {/* Floating circles for depth */}
+        <div
+          style={{
+            position: "absolute",
+            top: "10%",
+            right: "15%",
+            width: "120px",
+            height: "120px",
+            borderRadius: "50%",
+            border: `1px solid ${accentColor}20`,
+            opacity: 0.5,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "20%",
+            left: "40%",
+            width: "80px",
+            height: "80px",
+            borderRadius: "50%",
+            backgroundColor: `${accentColor}05`,
+            border: `1px solid ${accentColor}10`,
           }}
         />
 
@@ -148,6 +186,7 @@ export async function GET(req: NextRequest) {
             bottom: 0,
             width: "8px",
             backgroundColor: accentColor,
+            boxShadow: `0 0 20px ${accentColor}`,
           }}
         />
 
@@ -299,23 +338,35 @@ export async function GET(req: NextRequest) {
                   height: "80%",
                   borderRadius: "24px",
                   overflow: "hidden",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+                  border: `2px solid ${accentColor}40`,
+                  padding: "4px",
+                  background: `linear-gradient(135deg, ${accentColor}40, transparent)`,
+                  boxShadow: `0 20px 40px rgba(0,0,0,0.6), 0 0 20px ${accentColor}20`,
                   display: "flex",
                 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={imageUrl}
-                  alt="Feature"
-                  width={512}
-                  height={512}
+                <div
                   style={{
                     width: "100%",
                     height: "100%",
-                    objectFit: "cover",
+                    borderRadius: "18px",
+                    overflow: "hidden",
+                    display: "flex",
                   }}
-                />
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={imageUrl}
+                    alt="Feature"
+                    width={512}
+                    height={512}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
               </div>
             ) : (
               <div
