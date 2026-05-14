@@ -35,6 +35,8 @@ Each database (except **Authors**) should have the following properties:
 | **Categories**          | Select        | Main category (used for quizzes and organization).                         |
 | **AIAssisted**          | Checkbox      | (Optional) Show an indicator if AI was used.                               |
 | **Technical**           | Multi-Select  | (Optional) Tech stack or technical details.                                |
+| **Thumbnail**           | Files & Media | (Optional) Hero image for the card. Falls back to first image in content.  |
+| **RTime**               | Number        | (Optional) Explicit reading time in minutes.                               |
 
 For **Authors** Database,
 
@@ -139,6 +141,18 @@ If you encounter issues and need to revert to the Git-based system:
 - **Images:** Use Notion's "Image" block. The converter will handle them.
 - **Math:** Use Notion's inline or block equations. They are compatible with the site's rendering engine.
 - **Quizzes:** You can still embed quizzes by adding the `[quiz] { JSON } [/quiz]` block directly in the Notion page as a text block.
+- **Buttons:** Use the shortcode `[button href="https://example.com"]Button Text[/button]` in a text block.
+- **Tabs:** Use the following shortcode structure in a text block:
+  ```text
+  [tabs]
+  [tab title="Tab 1"] Content for tab 1 [/tab]
+  [tab title="Tab 2"] Content for tab 2 [/tab]
+  [/tabs]
+  ```
+- **Mermaid Diagrams:** Use a code block with language set to `mermaid`. They will be rendered as interactive diagrams.
+- **Toggles & Callouts:** Use Notion's native Toggle and Callout blocks. They are styled to match the site's engineering theme.
+- **Files:** Use Notion's native File block for beautiful, animated download cards.
+- **Web Bookmarks:** Use Notion's native Bookmark block. The site will attempt to fetch OpenGraph metadata for a rich preview.
 
 ---
 

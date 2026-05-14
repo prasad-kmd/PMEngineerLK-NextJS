@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import "katex/dist/katex.min.css";
 import { Quiz } from "@/components/quiz";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import { posthog } from "@/lib/posthog-client";
+import dynamic from "next/dynamic";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
+const MermaidRenderer = dynamic(() => import("./mermaid-renderer"), { ssr: false });
 
 interface ContentRendererProps {
   content: string;
@@ -20,7 +24,6 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
 
   useEffect(() => {
     // Process images to be lazy-loaded and optimized if possible
-    // Note: We are using native lazy loading here as we're injecting HTML
     if (contentRef.current) {
       const images = contentRef.current.querySelectorAll("img");
       images.forEach((img) => {
@@ -77,7 +80,8 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
         // Skip if already has a copy button OR is part of a Shiki enhanced block
         if (
           pre.querySelector(".copy-button") ||
-          pre.closest(".code-block-wrapper")
+          pre.closest(".code-block-wrapper") ||
+          pre.classList.contains("mermaid")
         )
           return;
 
@@ -196,9 +200,11 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
     processExternalLinks();
   }, [renderedContent]);
 
-  const parts = renderedContent.split(
-    /(<div class="interactive-quiz-placeholder" data-quiz='[\s\S]*?'>\s*<\/div>)/g,
-  );
+  const parts = useMemo(() => {
+    return renderedContent.split(
+      /(<div class="interactive-quiz-placeholder" data-quiz='[\s\S]*?'>\s*<\/div>|<div class="interactive-tabs-placeholder my-12" data-tabs='[\s\S]*?'>\s*<\/div>|<pre class="mermaid [\s\S]*?" data-content='[\s\S]*?'><\/pre>)/g,
+    );
+  }, [renderedContent]);
 
   return (
     <div
@@ -240,6 +246,59 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
             }
           }
         }
+
+        if (part.includes('class="interactive-tabs-placeholder')) {
+            const match = part.match(/data-tabs='([\s\S]*?)'/);
+            if (match && match[1]) {
+                try {
+                    const decodedJson = match[1].replace(/&apos;/g, "'");
+                    const tabsData = JSON.parse(decodedJson);
+                    return (
+                        <div key={index} className="my-12">
+                            <Tabs defaultValue={tabsData[0].title} className="w-full">
+                                <TabsList className="w-full justify-start bg-muted/30 p-1 rounded-2xl border border-border/50 h-auto flex-wrap">
+                                    {tabsData.map((tab: { title: string; content: string }) => (
+                                        <TabsTrigger
+                                            key={tab.title}
+                                            value={tab.title}
+                                            className="rounded-xl px-6 py-2.5 data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-sm font-bold amoriaregular tracking-widest text-xs"
+                                        >
+                                            {tab.title}
+                                        </TabsTrigger>
+                                    ))}
+                                </TabsList>
+                                {tabsData.map((tab: { title: string; content: string }) => (
+                                    <TabsContent
+                                        key={tab.title}
+                                        value={tab.title}
+                                        className="mt-6 p-8 rounded-[2.5rem] bg-card/30 border border-border/40 min-h-[200px] animate-in fade-in slide-in-from-bottom-2 duration-500"
+                                    >
+                                        <div dangerouslySetInnerHTML={{ __html: tab.content }} className="prose-direct" />
+                                    </TabsContent>
+                                ))}
+                            </Tabs>
+                        </div>
+                    );
+                } catch (e) {
+                    console.error("Failed to parse tabs data:", e);
+                }
+            }
+        }
+
+        if (part.includes('class="mermaid')) {
+            const codeMatch = part.match(/data-content='([\s\S]*?)'/);
+            if (codeMatch && codeMatch[1]) {
+                const decodedCode = codeMatch[1]
+                    .replace(/&apos;/g, "'")
+                    .replace(/&lt;/g, "<")
+                    .replace(/&gt;/g, ">")
+                    .replace(/&quot;/g, '"')
+                    .replace(/&#39;/g, "'")
+                    .replace(/&amp;/g, "&");
+                return <MermaidRenderer key={index} content={decodedCode.trim()} />;
+            }
+        }
+
         return (
           <div
             key={index}
