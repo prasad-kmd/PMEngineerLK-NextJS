@@ -1,4 +1,4 @@
-import { Author } from "@/lib/content";
+import { Author } from "@/types/content";
 import Link from "next/link";
 import Image from "next/image";
 

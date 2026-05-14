@@ -11,7 +11,8 @@ import {
   Rocket,
 } from "lucide-react";
 // import { Badge } from "@/components/ui/badge";
-import { ContentItem, Author, getContentImage } from "@/lib/content";
+import { Author, ContentItem } from "@/types/content";
+import { getContentImage } from "@/lib/content-utils";
 import { getAuthorBasic } from "@/lib/author-client";
 import { useEffect, useState } from "react";
 import { getBlurDataURL } from "@/lib/utils";

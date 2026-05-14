@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Calendar, User, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { ContentItem, Author, getContentImage } from "@/lib/content";
+import { Author, ContentItem } from "@/types/content";
+import { getContentImage } from "@/lib/content-utils";
 import { getAuthorBasic } from "@/lib/author-client";
 import { useEffect, useState } from "react";
 

@@ -26,6 +26,9 @@ import {
   sanitizeContent,
 } from "./content/transformers";
 import { contentConfig, notionConfig } from "./constants";
+import { Author, ContentItem } from "@/types/content";
+
+export type { Author, ContentItem };
 
 // Custom renderer to add IDs to headings for TOC
 const renderer = new marked.Renderer();
@@ -158,60 +161,6 @@ async function highlightCodeBlocks(html: string): Promise<string> {
   }
 }
 
-export interface Author {
-  name: string;
-  slug: string;
-  role: string;
-  bio: string;
-  avatar: string;
-  twitter?: string;
-  github?: string;
-  linkedin?: string;
-  bodyContent?: string;
-}
-
-export const DEFAULT_IMAGES = {
-  blog: "/img/page/diary_page.webp",
-  articles: "/img/page/diary_page.webp",
-  projects: "/img/page/workflow.webp",
-  tutorials: "/img/page/workflow.webp",
-  wiki: "/img/page/workflow.webp",
-} as const;
-
-/**
- * Returns the preferred image for a content item.
- * Rule: Thumbnail > firstImage > Default.
- */
-export function getContentImage(post: ContentItem): string {
-  if (post.thumbnail) return post.thumbnail;
-  if (post.firstImage) return post.firstImage;
-  return (
-    DEFAULT_IMAGES[post.type as keyof typeof DEFAULT_IMAGES] ||
-    DEFAULT_IMAGES.blog
-  );
-}
-
-export interface ContentItem {
-  id?: string;
-  slug: string;
-  title: string;
-  date?: string;
-  description?: string;
-  content: string;
-  rawContent: string;
-  final?: boolean;
-  firstImage?: string;
-  thumbnail?: string;
-  readingTime?: number;
-  rTime?: number;
-  technical?: string;
-  category?: string;
-  tags?: string[];
-  aiAssisted?: boolean;
-  author?: string;
-  type?: "blog" | "articles" | "projects" | "tutorials" | "wiki";
-}
-
 /**
  * Calculates estimated reading time based on word count.
  */
@@ -277,7 +226,7 @@ async function fetchNotionContentByType(
 
     const items = await Promise.all(
       (response as unknown).results.map(async (page: unknown) => {
-        const props = page.properties;
+        const props = (page as any).properties;
         const slug = getPlainText(props.Slug);
         const title = getPlainText(props.Name || props.Title);
         const date = getDate(props.Date);
@@ -302,7 +251,7 @@ async function fetchNotionContentByType(
         }
 
         return {
-          id: page.id as string,
+          id: (page as any).id as string,
           slug,
           title,
           date,
@@ -396,7 +345,7 @@ export const getContentByType = cache(async function (
         aiAssisted: data.aiAssisted || false,
         author: data.author,
         type: type,
-      };
+      } as ContentItem;
     })
     .sort((a, b) => {
       if (a.date && b.date) {
@@ -434,7 +383,7 @@ async function fetchNotionContentItem(
 
     if ((response as unknown).results.length === 0) return null;
 
-    const page = (response as unknown).results[0];
+    const page = (response as any).results[0];
     const props = page.properties;
 
     const mdblocks = await n2m.pageToMarkdown(page.id);
@@ -653,7 +602,7 @@ export const getAuthorBasic = cache(async function (
           },
         });
         if ((response as unknown).results.length === 0) return null;
-        const page = (response as unknown).results[0];
+        const page = (response as any).results[0];
         const props = page.properties;
         return {
           name: getPlainText(props.Name || props.Title),
@@ -714,7 +663,7 @@ export const getAuthorBySlug = cache(async function (
           },
         });
         if ((response as unknown).results.length === 0) return null;
-        const page = (response as unknown).results[0];
+        const page = (response as any).results[0];
         const props = page.properties;
 
         const mdblocks = await n2m.pageToMarkdown(page.id);
@@ -802,7 +751,7 @@ export const getAllAuthors = cache(async function (): Promise<Author[]> {
         });
 
         return (response as unknown).results.map((page: unknown) => {
-          const props = page.properties;
+          const props = (page as any).properties;
           return {
             name: getPlainText(props.Name || props.Title),
             slug: getPlainText(props.Slug),

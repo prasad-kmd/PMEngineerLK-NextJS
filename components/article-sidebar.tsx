@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AuthorProfile } from "./author-profile";
-import { Author } from "@/lib/content";
+import { Author } from "@/types/content";
 
 // interface TOCItem {
 //   id: string;
