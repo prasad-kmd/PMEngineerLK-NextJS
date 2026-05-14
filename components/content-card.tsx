@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar, User, ArrowUpRight } from "lucide-react";
+import { Calendar, User, ArrowUpRight, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ContentItem, Author } from "@/lib/content";
 import { getAuthorBasic } from "@/lib/author-client";
+import { getContentImage } from "@/lib/content/images";
 
 interface ContentCardProps {
   post: ContentItem;
@@ -49,7 +50,8 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
     }
   }, [post.author]);
 
-  // const category = post.category || post.technical;
+  const displayImage = getContentImage(post);
+  const hasBackground = !!(post.thumbnail || post.firstImage);
 
   return (
     <Link
@@ -57,10 +59,10 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
       className="group relative flex w-full flex-col overflow-hidden rounded-xl md:rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/40 hover:-translate-y-1.5 aspect-video md:aspect-3/2 min-h-[200px] md:min-h-[300px]"
     >
       {/* Background Layer */}
-      {post.firstImage ? (
+      {displayImage ? (
         <div className="absolute inset-0 z-0">
           <Image
-            src={post.firstImage}
+            src={displayImage}
             alt={post.title}
             fill
             className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
@@ -88,7 +90,7 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
                   className={`
                   px-2 md:px-3 py-0.5 md:py-1 text-[8px] md:text-[10px] font-bold uppercase tracking-widest local-jetbrains-mono border-0
                   ${
-                    post.firstImage
+                    hasBackground
                       ? "bg-primary text-white shadow-lg shadow-primary/30"
                       : "bg-primary/10 text-primary"
                   }
@@ -100,7 +102,7 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
           </div>
           <div
             className={`p-1.5 rounded-full border transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-x-2 -translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 ${
-              post.firstImage
+              hasBackground
                 ? "bg-white/10 border-white/20 text-white"
                 : "bg-primary/10 border-primary/20 text-primary"
             }`}
@@ -114,7 +116,7 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
           <h2
             className={`
             mb-1.5 md:mb-3 text-lg md:text-2xl font-bold transition-colors duration-300 line-clamp-2 mozilla-headline leading-[1.1] group-hover:text-primary
-            ${post.firstImage ? "text-white" : "text-foreground"}
+            ${hasBackground ? "text-white" : "text-foreground"}
           `}
           >
             {post.title}
@@ -124,7 +126,7 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
             <p
               className={`
               text-[10px] md:text-xs line-clamp-2 md:line-clamp-3 font-google-sans leading-relaxed opacity-80
-              ${post.firstImage ? "text-gray-300" : "text-muted-foreground"}
+              ${hasBackground ? "text-gray-300" : "text-muted-foreground"}
             `}
             >
               {post.description}
@@ -136,7 +138,7 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
         <div
           className={`
           mt-2 md:mt-4 pt-2 md:pt-4 border-t flex flex-col gap-2 md:gap-4
-          ${post.firstImage ? "border-white/10" : "border-border/50"}
+          ${hasBackground ? "border-white/10" : "border-border/50"}
         `}
         >
           <div className="flex items-center justify-between">
@@ -144,7 +146,7 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
               <div
                 className={`
                 relative h-6 w-6 md:h-7 md:w-7 overflow-hidden rounded-full border transition-transform duration-300
-                ${post.firstImage ? "border-white/20" : "border-border"}
+                ${hasBackground ? "border-white/20" : "border-border"}
               `}
               >
                 {author?.avatar ? (
@@ -160,21 +162,33 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
                   </div>
                 )}
               </div>
-              <p
-                className={`
-                text-[9px] md:text-[11px] font-bold uppercase tracking-wider local-jetbrains-mono
-                ${post.firstImage ? "text-white" : "text-foreground"}
-              `}
-              >
-                {author?.name || "Anonymous"}
-              </p>
+              <div className="flex flex-col">
+                <p
+                  className={`
+                  text-[9px] md:text-[11px] font-bold uppercase tracking-wider local-jetbrains-mono
+                  ${hasBackground ? "text-white" : "text-foreground"}
+                `}
+                >
+                  {author?.name || "Anonymous"}
+                </p>
+                {post.rTime !== undefined && (
+                  <div
+                    className={`
+                    flex items-center gap-1 text-[7px] md:text-[8px] font-black uppercase tracking-widest local-jetbrains-mono
+                    ${hasBackground ? "text-primary/70" : "text-primary"}
+                  `}
+                  >
+                    <Clock size={8} /> {post.rTime} MIN READ
+                  </div>
+                )}
+              </div>
             </div>
 
             {post.date && (
               <div
                 className={`
                  flex items-center gap-1 md:gap-1.5 text-[9px] md:text-[11px] space-mono
-                 ${post.firstImage ? "text-gray-400" : "text-muted-foreground"}
+                 ${hasBackground ? "text-gray-400" : "text-muted-foreground"}
                `}
               >
                 <Calendar className="h-3 w-3" />
@@ -195,7 +209,7 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
                   className={`
                     whitespace-nowrap text-[10px] font-medium px-2.5 py-1 rounded-md border
                     ${
-                      post.firstImage
+                      hasBackground
                         ? "bg-white/5 border-white/10 text-white/60 group-hover:text-white/90"
                         : "bg-muted/50 border-border text-muted-foreground group-hover:text-primary"
                     }

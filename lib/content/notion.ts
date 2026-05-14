@@ -9,6 +9,7 @@ import {
   getSelect,
   getCheckbox,
   getImageUrl,
+  getNumber,
   NotionAPIError,
 } from "../notion";
 import { ContentItem, ContentType } from "./types";
@@ -63,6 +64,8 @@ export async function fetchNotionContentByType(
         const category = getSelect(props.Categories);
         const aiAssisted = getCheckbox(props.AIAssisted);
         const technical = getMultiSelect(props.Technical).join(", ");
+        const thumbnail = getImageUrl(props.Thumbnail);
+        const rTime = getNumber(props.RTime);
 
         let authorSlug = "";
         if (
@@ -86,7 +89,9 @@ export async function fetchNotionContentByType(
           rawContent: "",
           final: true,
           firstImage: undefined,
+          thumbnail,
           readingTime: 0,
+          rTime,
           technical,
           category,
           tags,
@@ -147,6 +152,8 @@ export async function fetchNotionContentItem(
     const category = getSelect(props.Categories);
     const aiAssisted = getCheckbox(props.AIAssisted);
     const technical = getMultiSelect(props.Technical).join(", ");
+    const thumbnail = getImageUrl(props.Thumbnail);
+    const rTime = getNumber(props.RTime);
 
     let authorSlug = "";
     if (
@@ -183,7 +190,9 @@ export async function fetchNotionContentItem(
       rawContent: mdString,
       final: true,
       firstImage,
+      thumbnail,
       readingTime: calculateReadingTime(mdString),
+      rTime,
       technical,
       category,
       tags,

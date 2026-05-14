@@ -61,6 +61,16 @@ export function getCheckbox(property: unknown): boolean {
 }
 
 /**
+ * Extracts a number from a Notion number property.
+ */
+export function getNumber(property: unknown): number | undefined {
+  if (!property || typeof property !== "object") return undefined;
+  const p = property as { type: string; number?: number };
+  if (p.type !== "number" || p.number === undefined) return undefined;
+  return p.number;
+}
+
+/**
  * Extracts an image URL from a Notion file or external image property.
  */
 export function getImageUrl(property: unknown): string | undefined {

@@ -35,6 +35,8 @@ Each database (except **Authors**) should have the following properties:
 | **Categories**          | Select        | Main category (used for quizzes and organization).                         |
 | **AIAssisted**          | Checkbox      | (Optional) Show an indicator if AI was used.                               |
 | **Technical**           | Multi-Select  | (Optional) Tech stack or technical details.                                |
+| **Thumbnail**           | Files / URL   | (Optional) Image used for the card. Falls back to first image or default.  |
+| **RTime**               | Number        | (Optional) Reading time in minutes. If omitted, it will not be shown.      |
 
 For **Authors** Database,
 
@@ -139,6 +141,7 @@ If you encounter issues and need to revert to the Git-based system:
 - **Images:** Use Notion's "Image" block. The converter will handle them.
 - **Math:** Use Notion's inline or block equations. They are compatible with the site's rendering engine.
 - **Quizzes:** You can still embed quizzes by adding the `[quiz] { JSON } [/quiz]` block directly in the Notion page as a text block.
+- **Thumbnail & RTime:** Use the `Thumbnail` property for custom card images and `RTime` to specify a manual reading time.
 
 ---
 

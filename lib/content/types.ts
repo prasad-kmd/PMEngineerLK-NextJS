@@ -20,7 +20,9 @@ export interface ContentItem {
   rawContent: string;
   final?: boolean;
   firstImage?: string;
+  thumbnail?: string;
   readingTime?: number;
+  rTime?: number;
   technical?: string;
   category?: string;
   tags?: string[];
