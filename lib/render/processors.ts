@@ -3,7 +3,7 @@
  * Completely avoids ReDoS vulnerabilities flagged by CodeQL.
  * Used for cleaning text before generating IDs or parsing JSON.
  */
-function stripTags(html: string): string {
+export function stripTags(html: string): string {
   if (typeof html !== "string") return "";
 
   let result = "";
