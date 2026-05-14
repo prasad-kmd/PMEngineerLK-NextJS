@@ -31,7 +31,9 @@ function stripTags(html: string): string {
 function sanitizeText(text: string | null, maxLength: number): string {
   if (!text) return "";
   const stripped = stripTags(text);
-  const truncated = stripped.length > maxLength ? stripped.substring(0, maxLength) + "..." : stripped;
+  // Normalize whitespace (collapse multiple spaces/newlines)
+  const normalized = stripped.replace(/\s+/g, " ");
+  const truncated = normalized.length > maxLength ? normalized.substring(0, maxLength) + "..." : normalized;
   return truncated
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -136,11 +138,12 @@ export async function GET(req: NextRequest) {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: `linear-gradient(${accentColor}08 1px, transparent 1px), linear-gradient(90deg, ${accentColor}08 1px, transparent 1px)`,
-            backgroundSize: "40px 40px",
+            backgroundColor: "#030303",
+            backgroundImage: `linear-gradient(140deg, ${accentColor}20 0%, #030303 35%, #030303 65%, ${accentColor}15 100%)`,
           }}
         />
 
+        {/* Grid Pattern */}
         <div
           style={{
             position: "absolute",
@@ -148,7 +151,22 @@ export async function GET(req: NextRequest) {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundImage: `radial-gradient(circle at 20% 30%, ${accentColor}15 0%, transparent 40%), radial-gradient(circle at 80% 70%, ${accentColor}10 0%, transparent 40%)`,
+            backgroundImage: `linear-gradient(${accentColor}15 1px, transparent 1px), linear-gradient(90deg, ${accentColor}15 1px, transparent 1px)`,
+            backgroundSize: "50px 50px",
+            opacity: 0.4,
+          }}
+        />
+
+        {/* Additional accent glows */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-15%",
+            left: "-5%",
+            width: "50%",
+            height: "50%",
+            background: `radial-gradient(circle, ${accentColor}25 0%, transparent 70%)`,
+            borderRadius: "50%",
           }}
         />
 
@@ -156,25 +174,24 @@ export async function GET(req: NextRequest) {
         <div
           style={{
             position: "absolute",
-            top: "10%",
-            right: "15%",
-            width: "120px",
-            height: "120px",
+            top: "5%",
+            right: "10%",
+            width: "300px",
+            height: "300px",
             borderRadius: "50%",
-            border: `1px solid ${accentColor}20`,
-            opacity: 0.5,
+            border: `1px solid ${accentColor}10`,
+            opacity: 0.3,
           }}
         />
         <div
           style={{
             position: "absolute",
-            bottom: "20%",
-            left: "40%",
-            width: "80px",
-            height: "80px",
+            bottom: "-10%",
+            left: "20%",
+            width: "400px",
+            height: "400px",
             borderRadius: "50%",
-            backgroundColor: `${accentColor}05`,
-            border: `1px solid ${accentColor}10`,
+            background: `radial-gradient(circle, ${accentColor}08 0%, transparent 70%)`,
           }}
         />
         

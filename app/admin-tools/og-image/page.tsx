@@ -32,7 +32,7 @@ export default function OgImageGeneratorPage() {
     siteUrl: siteConfig.url.replace(/^https?:\/\//, "").replace(/\/$/, ""),
     author: siteConfig.author,
     accent: "indigo",
-    icon: "/favicon.ico",
+    icon: "https://prasadm.vercel.app/img/prasadm-title-img-512.png",
     image: "",
   });
 
