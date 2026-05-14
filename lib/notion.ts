@@ -27,26 +27,54 @@ export const n2m = new NotionToMarkdown({ notionClient: notion });
 /** Helper to fetch OpenGraph metadata for Web Bookmarks */
 async function fetchOpengraphMetadata(url: string) {
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(url, {
+      signal: AbortSignal.timeout(5000),
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+      },
+    });
     const html = await res.text();
+
     const titleMatch =
-      html.match(/<title[^>]*>([^<]+)<\/title>/i) ||
-      html.match(/<meta property="og:title" content="([^"]+)"/i);
+      html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:title["']/i) ||
+      html.match(/<title[^>]*>([^<]+)<\/title>/i);
+
     const descMatch =
-      html.match(/<meta name="description" content="([^"]+)"/i) ||
-      html.match(/<meta property="og:description" content="([^"]+)"/i);
-    const imageMatch = html.match(
-      /<meta property="og:image" content="([^"]+)"/i,
-    );
+      html.match(/<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:description["']/i) ||
+      html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']description["']/i);
+
+    const imageMatch =
+      html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+
+    let image = imageMatch ? imageMatch[1] : "";
+
+    // Resolve relative image URLs
+    if (image && !image.startsWith("http")) {
+      try {
+        const urlObj = new URL(url);
+        image = new URL(image, urlObj.origin).href;
+      } catch (e) {
+        // Fallback to original
+      }
+    }
 
     return {
-      title: titleMatch ? titleMatch[1] : url,
+      title: titleMatch ? titleMatch[1] : new URL(url).hostname,
       description: descMatch ? descMatch[1] : "",
-      image: imageMatch ? imageMatch[1] : "",
+      image,
       url,
     };
   } catch {
-    return { title: url, description: "", image: "", url };
+    try {
+      return { title: new URL(url).hostname, description: "", image: "", url };
+    } catch {
+      return { title: url, description: "", image: "", url };
+    }
   }
 }
 
@@ -98,18 +126,30 @@ n2m.setCustomTransformer("file", async (block) => {
   };
   const url = file.type === "external" ? file.external?.url : file.file?.url;
   const name = file.name || "Download File";
-  const sizeText = file.type === "file" ? "" : "External Link";
+  const isExternal = file.type === "external";
 
   return `
-<div class="notion-file my-6 inline-flex p-4 rounded-2xl border border-border/50 bg-muted/20 hover:bg-muted/40 hover:border-primary/30 transition-all group lg:min-w-[400px]">
-  <a href="${url}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 no-underline w-full">
-    <div class="h-12 w-12 rounded-xl bg-card border border-border flex items-center justify-center shrink-0 group-hover:text-primary transition-colors shadow-sm">
-      <svg class="w-5 h-5 text-muted-foreground/50 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+<div class="notion-file-block my-8">
+  <a href="${url}" target="_blank" rel="noopener noreferrer" class="group relative flex items-center gap-4 p-4 rounded-2xl border border-border/50 bg-card/50 hover:bg-muted/30 hover:border-primary/40 transition-all duration-300 no-underline overflow-hidden">
+    <div class="relative z-10 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 shadow-inner">
+      <svg class="w-7 h-7 transform group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+      </svg>
+      <div class="absolute bottom-0 left-0 w-full h-1 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"></div>
     </div>
-    <div class="overflow-hidden flex-1">
-      <div class="text-sm font-bold text-foreground truncate group-hover:text-primary transition-colors">${name}</div>
-      <div class="text-[10px] tracking-widest uppercase font-black text-muted-foreground/50 mt-1">${sizeText || "Attachment"}</div>
+    <div class="relative z-10 flex-1 min-w-0">
+      <div class="text-base font-black amoriaregular text-foreground truncate group-hover:text-primary transition-colors">${name}</div>
+      <div class="text-[10px] tracking-[0.2em] uppercase font-black text-muted-foreground/40 mt-1 flex items-center gap-2">
+        <span class="w-1 h-1 rounded-full bg-primary/40 group-hover:animate-ping"></span>
+        ${isExternal ? "External Resource" : "Hosted File"}
+      </div>
     </div>
+    <div class="relative z-10 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0">
+       <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+       </svg>
+    </div>
+    <div class="absolute inset-0 bg-linear-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
   </a>
 </div>`;
 });
@@ -176,24 +216,99 @@ n2m.setCustomTransformer("callout", async (block) => {
     if (callout.icon.type === "file" && callout.icon.file)
       iconHtml = `<img src="${callout.icon.file.url}" class="w-6 h-6 object-contain" />`;
   }
-  return `<div class="notion-callout my-6 p-5 rounded-3xl bg-muted/20 hover:bg-muted/30 border border-border/50 flex gap-4 items-start shadow-sm transition-colors">
-    <div class="shrink-0 mt-0.5">${iconHtml}</div>
-    <div class="text-foreground/90 leading-relaxed text-sm md:text-base prose-direct">${text}</div>
+  return `<div class="notion-callout my-8 p-6 rounded-3xl bg-primary/5 hover:bg-primary/10 border border-primary/20 flex gap-5 items-start shadow-sm transition-all duration-300 group">
+    <div class="shrink-0 w-10 h-10 rounded-xl bg-background border border-primary/10 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500">${iconHtml}</div>
+    <div class="text-foreground/90 leading-relaxed text-sm md:text-base font-google-sans">${text}</div>
   </div>`;
 });
 
-// Transform Tabs (if using Notion's official tabs)
-n2m.setCustomTransformer("tabs", async (block) => {
+// Transform Toggle Lists
+n2m.setCustomTransformer("toggle", async (block) => {
+  const { toggle, id } = block as { toggle: { rich_text: unknown }; id: string };
+  const title = getPlainText(toggle.rich_text);
+  const childBlocks = await notion.blocks.children.list({ block_id: id });
+  const mdBlocks = await n2m.blocksToMarkdown(childBlocks.results);
+  const { parent } = n2m.toMarkdownString(mdBlocks);
+
+  return `
+<details class="notion-toggle group my-4 border border-border/50 rounded-2xl bg-card/30 overflow-hidden transition-all duration-300 hover:border-primary/30">
+  <summary class="flex items-center gap-3 p-4 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+    <div class="flex items-center justify-center w-6 h-6 rounded-lg bg-primary/10 text-primary group-open:rotate-90 transition-transform duration-300">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+    </div>
+    <span class="text-sm md:text-base font-bold amoriaregular text-foreground/90 group-hover:text-primary transition-colors">${title}</span>
+  </summary>
+  <div class="p-4 pt-0 border-t border-border/10 bg-muted/10">
+    <div class="prose-direct text-sm md:text-base leading-relaxed py-2">
+      ${parent}
+    </div>
+  </div>
+</details>`;
+});
+
+// Transform Tabs
+n2m.setCustomTransformer("tab_view", async (block) => {
   const { id } = block as { id: string };
   const childBlocks = await notion.blocks.children.list({ block_id: id });
-  let htmlResult = `<div class="notion-tabs border border-border/50 rounded-3xl p-4 my-6 bg-card"><div class="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4 pb-2 border-b border-border">Tabbed Focus Area</div>`;
+
+  const tabs: Array<{ title: string; content: string }> = [];
+
   for (const child of childBlocks.results) {
-    const md = await n2m.pageToMarkdown((child as { id: string }).id);
-    const parsedHTML = n2m.toMarkdownString(md).parent;
-    htmlResult += `<div class="notion-tab-content my-4">${parsedHTML}</div>`;
+    const childBlock = child as {
+      id: string;
+      type: string;
+      title?: unknown;
+      [key: string]: unknown;
+    };
+    // Each child is likely a 'page' or something that acts as a tab container
+    const title =
+      getPlainText(childBlock.title) ||
+      getPlainText(childBlock[childBlock.type]?.rich_text) ||
+      "Tab";
+    const md = await n2m.pageToMarkdown(childBlock.id);
+    const { parent } = n2m.toMarkdownString(md);
+    tabs.push({ title, content: parent });
   }
-  htmlResult += `</div>`;
-  return htmlResult;
+
+  const tabsJson = JSON.stringify(tabs).replace(/'/g, "&apos;");
+
+  return `<div class="notion-tabs-placeholder my-8" data-tabs='${tabsJson}'></div>`;
+});
+
+// Transform Buttons
+n2m.setCustomTransformer("button", async (block) => {
+  const { button } = block as {
+    button: {
+      rich_text: unknown;
+      action?: {
+        type: string;
+        url?: string;
+        open_url?: { url: string };
+      };
+    };
+  };
+  // Notion button block structure: button.rich_text, button.action
+  // But Button actions are not fully exposed in a simple way in API sometimes.
+  // If it's a link button, it might have an action type "url".
+  const label = getPlainText(button.rich_text);
+  let url = "#";
+
+  if (button.action?.type === "url") {
+    url = button.action.url;
+  } else if (button.action?.type === "open_url") {
+    url = button.action.open_url?.url;
+  }
+
+  return `
+<div class="notion-button-wrapper my-8 flex justify-center">
+  <a href="${url}" target="_blank" rel="noopener noreferrer" class="group relative px-8 py-4 bg-primary text-primary-foreground rounded-2xl font-black amoriaregular tracking-widest uppercase text-sm md:text-base shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all duration-500 hover:-translate-y-1 overflow-hidden">
+    <span class="relative z-10 flex items-center gap-3">
+      ${label}
+      <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+    </span>
+    <div class="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+  </a>
+</div>`;
 });
 
 export const DATABASE_IDS = {
@@ -232,12 +347,21 @@ export async function searchNotion(query: string) {
  * Extracts plain text from a Notion rich_text or title property.
  */
 export function getPlainText(property: unknown): string {
-  if (!property || typeof property !== "object") return "";
+  if (!property) return "";
+
+  // Handle direct rich_text arrays
+  if (Array.isArray(property)) {
+    return property.map((t) => t.plain_text || "").join("");
+  }
+
+  if (typeof property !== "object") return "";
+
   const p = property as {
     type: string;
     title?: Array<{ plain_text: string }>;
     rich_text?: Array<{ plain_text: string }>;
   };
+
   if (p.type === "title" && p.title) {
     return p.title.map((t) => t.plain_text).join("");
   }
@@ -245,6 +369,17 @@ export function getPlainText(property: unknown): string {
     return p.rich_text.map((t) => t.plain_text).join("");
   }
   return "";
+}
+
+/**
+ * Extracts a number from a Notion number property.
+ */
+export function getNumber(property: unknown): number | undefined {
+  if (!property || typeof property !== "object") return undefined;
+  const p = property as { type: string; number?: number | null };
+  if (p.type !== "number" || p.number === null || p.number === undefined)
+    return undefined;
+  return p.number;
 }
 
 /**

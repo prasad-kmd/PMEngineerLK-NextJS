@@ -196,3 +196,15 @@ export function sanitizeContent(html: string): string {
     (_, index) => gists[parseInt(index)] ?? "",
   );
 }
+
+/**
+ * Enhanced sanitizer that allows specific data attributes and tags for our custom blocks.
+ */
+export function injectSafeAttributes(html: string): string {
+  // Since we are already using dangerouslySetInnerHTML, we mostly need to ensure
+  // our custom attributes aren't stripped if we were using a more restrictive sanitizer.
+  // The current sanitizeContent is very basic (it only removes scripts/styles).
+
+  // We can add more targeted transformations here if needed.
+  return html;
+}

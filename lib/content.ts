@@ -14,6 +14,7 @@ import {
   getSelect,
   getCheckbox,
   getImageUrl,
+  getNumber,
   NotionAPIError,
 } from "./notion";
 import { unstable_cache } from "next/cache";
@@ -169,6 +170,27 @@ export interface Author {
   bodyContent?: string;
 }
 
+export const DEFAULT_IMAGES = {
+  blog: "/img/page/diary_page.webp",
+  articles: "/img/page/diary_page.webp",
+  projects: "/img/page/workflow.webp",
+  tutorials: "/img/page/workflow.webp",
+  wiki: "/img/page/workflow.webp",
+} as const;
+
+/**
+ * Returns the preferred image for a content item.
+ * Rule: Thumbnail > firstImage > Default.
+ */
+export function getContentImage(post: ContentItem): string {
+  if (post.thumbnail) return post.thumbnail;
+  if (post.firstImage) return post.firstImage;
+  return (
+    DEFAULT_IMAGES[post.type as keyof typeof DEFAULT_IMAGES] ||
+    DEFAULT_IMAGES.blog
+  );
+}
+
 export interface ContentItem {
   id?: string;
   slug: string;
@@ -179,7 +201,9 @@ export interface ContentItem {
   rawContent: string;
   final?: boolean;
   firstImage?: string;
+  thumbnail?: string;
   readingTime?: number;
+  rTime?: number;
   technical?: string;
   category?: string;
   tags?: string[];
@@ -262,6 +286,8 @@ async function fetchNotionContentByType(
         const category = getSelect(props.Categories);
         const aiAssisted = getCheckbox(props.AIAssisted);
         const technical = getMultiSelect(props.Technical).join(", ");
+        const thumbnail = getImageUrl(props.Thumbnail);
+        const rTime = getNumber(props.RTime);
 
         let authorSlug = "";
         if (
@@ -285,7 +311,9 @@ async function fetchNotionContentByType(
           rawContent: "",
           final: true,
           firstImage: undefined,
-          readingTime: 0,
+          thumbnail,
+          readingTime: rTime,
+          rTime,
           technical,
           category,
           tags,
@@ -350,6 +378,7 @@ export const getContentByType = cache(async function (
 
       const firstImage = extractFirstImage(content, file.endsWith(".md"));
 
+      const rt = calculateReadingTime(content);
       return {
         slug,
         title: data.title || slug,
@@ -359,7 +388,8 @@ export const getContentByType = cache(async function (
         rawContent: content,
         final: data.final || false,
         firstImage,
-        readingTime: calculateReadingTime(content),
+        readingTime: rt,
+        rTime: rt,
         technical: data.technical,
         category: data.category,
         tags: data.tags,
@@ -417,6 +447,8 @@ async function fetchNotionContentItem(
     const category = getSelect(props.Categories);
     const aiAssisted = getCheckbox(props.AIAssisted);
     const technical = getMultiSelect(props.Technical).join(", ");
+    const thumbnail = getImageUrl(props.Thumbnail);
+    const rTime = getNumber(props.RTime);
 
     let authorSlug = "";
     if (
@@ -453,7 +485,9 @@ async function fetchNotionContentItem(
       rawContent: mdString,
       final: true,
       firstImage,
-      readingTime: calculateReadingTime(mdString),
+      thumbnail,
+      readingTime: rTime || calculateReadingTime(mdString),
+      rTime,
       technical,
       category,
       tags,
@@ -544,6 +578,7 @@ export const getContentItem = cache(async function (
     const highlightedHtml = await highlightCodeBlocks(htmlContent);
 
     const firstImage = extractFirstImage(content, true);
+    const rt = calculateReadingTime(content);
 
     return {
       slug,
@@ -556,7 +591,8 @@ export const getContentItem = cache(async function (
       rawContent: content,
       final: data.final || false,
       firstImage,
-      readingTime: calculateReadingTime(content),
+      readingTime: rt,
+      rTime: rt,
       technical: data.technical,
       category: data.category,
       tags: data.tags,
@@ -568,6 +604,7 @@ export const getContentItem = cache(async function (
     const { data, content } = matter(fileContents);
     const highlightedHtml = await highlightCodeBlocks(content);
     const firstImage = extractFirstImage(content, false);
+    const rt = calculateReadingTime(content);
 
     return {
       slug,
@@ -580,7 +617,8 @@ export const getContentItem = cache(async function (
       rawContent: content,
       final: data.final || false,
       firstImage,
-      readingTime: calculateReadingTime(content),
+      readingTime: rt,
+      rTime: rt,
       technical: data.technical,
       category: data.category,
       tags: data.tags,

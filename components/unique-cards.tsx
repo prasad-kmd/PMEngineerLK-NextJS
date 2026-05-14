@@ -11,7 +11,7 @@ import {
   Rocket,
 } from "lucide-react";
 // import { Badge } from "@/components/ui/badge";
-import { ContentItem, Author } from "@/lib/content";
+import { ContentItem, Author, getContentImage } from "@/lib/content";
 import { getAuthorBasic } from "@/lib/author-client";
 import { useEffect, useState } from "react";
 import { getBlurDataURL } from "@/lib/utils";
@@ -109,9 +109,11 @@ export function BlogCard({ post }: BlogCardProps) {
               <span className="text-[11px] md:text-[14px] font-black tracking-widest uppercase text-muted-foreground font-mozilla-headline">
                 {author?.name || "Anonymous"}
               </span>
-              <span className="text-[8px] md:text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest flex items-center gap-1.5 font-local-inter">
-                <Clock size={8} /> {post.readingTime} MIN READ
-              </span>
+              {post.readingTime && post.readingTime > 0 ? (
+                <span className="text-[8px] md:text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest flex items-center gap-1.5 font-local-inter">
+                  <Clock size={8} /> {post.readingTime} MIN READ
+                </span>
+              ) : null}
             </div>
           </div>
           <div className="h-8 w-8 md:h-10 md:w-10 rounded-full border border-border/40 dark:border-white/10 flex items-center justify-center text-muted-foreground/40 group-hover:border-primary group-hover:text-primary transition-all duration-500">
@@ -155,7 +157,7 @@ export function ArticleCard({ post }: ArticleCardProps) {
     >
       <div className="relative aspect-[21/9] md:aspect-[16/9] overflow-hidden border-b border-border/40 dark:border-white/5">
         <Image
-          src={post.firstImage || "/img/page/diary_page.webp"}
+          src={getContentImage(post)}
           alt={post.title}
           fill
           className="object-cover transition-all duration-700 group-hover:scale-105"
@@ -247,7 +249,7 @@ export function ProjectCard({ post }: ProjectCardProps) {
     >
       <div className="relative aspect-video md:aspect-[4/3] overflow-hidden m-2.5 md:m-4 rounded-xl md:rounded-[1.8rem]">
         <Image
-          src={post.firstImage || "/img/page/workflow.webp"}
+          src={getContentImage(post)}
           alt={post.title}
           fill
           className="object-cover transition-all duration-1000 group-hover:scale-110 grayscale-[0.3] group-hover:grayscale-0"

@@ -23,18 +23,20 @@ Each database (except **Authors**) should have the following properties:
 
 - For `/blog`,`/articles`,`/projects`,`/tutorials` and `/wiki`
 
-| Property Name           | Property Type | Description                                                                |
-| :---------------------- | :------------ | :------------------------------------------------------------------------- |
-| **Name** (or **Title**) | Title         | The display name of the content item (automatically detected).             |
-| **Slug**                | Text          | The URL slug (e.g., `my-awesome-post`).                                    |
-| **Authors**             | Relation      | This has relation with `Authors` database.                                 |
-| **Date**                | Date          | Publication date.                                                          |
-| **Status**              | Select        | [Published, Draft ] Set to `Published` for the item to appear on the site. |
-| **Description**         | Text          | A brief summary for the card view.                                         |
-| **Tags**                | Multi-select  | Keywords for filtering.                                                    |
-| **Categories**          | Select        | Main category (used for quizzes and organization).                         |
-| **AIAssisted**          | Checkbox      | (Optional) Show an indicator if AI was used.                               |
-| **Technical**           | Multi-Select  | (Optional) Tech stack or technical details.                                |
+| Property Name           | Property Type   | Description                                                                    |
+| :---------------------- | :-------------- | :----------------------------------------------------------------------------- |
+| **Name** (or **Title**) | Title           | The display name of the content item (automatically detected).                 |
+| **Slug**                | Text            | The URL slug (e.g., `my-awesome-post`).                                        |
+| **Authors**             | Relation        | This has relation with `Authors` database.                                     |
+| **Date**                | Date            | Publication date.                                                              |
+| **Status**              | Select          | [Published, Draft] Set to `Published` for the item to appear on the site.      |
+| **Description**         | Text            | A brief summary for the card view.                                             |
+| **Thumbnail**           | Files and Media | (Optional) Custom image for the post card. Overrides auto-extracted images.    |
+| **RTime**               | Number          | (Optional) Reading time in minutes. If omitted, it is auto-calculated.         |
+| **Tags**                | Multi-select    | Keywords for filtering.                                                        |
+| **Categories**          | Select          | Main category (used for quizzes and organization).                             |
+| **AIAssisted**          | Checkbox        | (Optional) Show an indicator if AI was used.                                   |
+| **Technical**           | Multi-Select    | (Optional) Tech stack or technical details.                                    |
 
 For **Authors** Database,
 
@@ -139,6 +141,11 @@ If you encounter issues and need to revert to the Git-based system:
 - **Images:** Use Notion's "Image" block. The converter will handle them.
 - **Math:** Use Notion's inline or block equations. They are compatible with the site's rendering engine.
 - **Quizzes:** You can still embed quizzes by adding the `[quiz] { JSON } [/quiz]` block directly in the Notion page as a text block.
+- **Tabs:** Use the **"Tab View"** block in Notion (if available) or create a Toggle List where each child is a page to represent tabs.
+- **Buttons:** Use the Notion **"Button"** block. Currently, it supports "Open URL" actions.
+- **Mermaid:** Use a **"Code"** block and set the language to **"Mermaid"**. It will be rendered as a diagram.
+- **Callouts:** Use the **"Callout"** block. Icons and emojis are supported.
+- **Files:** Use the **"File"** block for downloads. Both hosted and external files are styled as action cards.
 
 ---
 

@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import "katex/dist/katex.min.css";
 import { Quiz } from "@/components/quiz";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import { posthog } from "@/lib/posthog-client";
+import { useTheme } from "next-themes";
 
 interface ContentRendererProps {
   content: string;
@@ -16,11 +17,14 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const toastShown = useRef(false);
   const pathname = usePathname();
+  const { theme, resolvedTheme } = useTheme();
   const renderedContent = content;
+
+  // Track active tabs state
+  const [activeTabs, setActiveTabs] = useState<Record<string, number>>({});
 
   useEffect(() => {
     // Process images to be lazy-loaded and optimized if possible
-    // Note: We are using native lazy loading here as we're injecting HTML
     if (contentRef.current) {
       const images = contentRef.current.querySelectorAll("img");
       images.forEach((img) => {
@@ -77,7 +81,8 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
         // Skip if already has a copy button OR is part of a Shiki enhanced block
         if (
           pre.querySelector(".copy-button") ||
-          pre.closest(".code-block-wrapper")
+          pre.closest(".code-block-wrapper") ||
+          pre.classList.contains("mermaid")
         )
           return;
 
@@ -191,14 +196,37 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
       }
     };
 
+    const renderMermaid = async () => {
+      if (!contentRef.current) return;
+      const mermaidElements = contentRef.current.querySelectorAll(".mermaid");
+      if (mermaidElements.length === 0) return;
+
+      try {
+        const mermaid = (await import("mermaid")).default;
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: resolvedTheme === "dark" ? "dark" : "default",
+          securityLevel: "loose",
+        });
+        await mermaid.run({
+          nodes: Array.from(mermaidElements),
+        });
+      } catch (error) {
+        console.error("Mermaid render error:", error);
+      }
+    };
+
     renderMath();
+    renderMermaid();
     addCopyButtons();
     processExternalLinks();
-  }, [renderedContent]);
+  }, [renderedContent, resolvedTheme]);
 
-  const parts = renderedContent.split(
-    /(<div class="interactive-quiz-placeholder" data-quiz='[\s\S]*?'>\s*<\/div>)/g,
-  );
+  const parts = useMemo(() => {
+    return renderedContent.split(
+      /(<div class="interactive-quiz-placeholder" data-quiz='[\s\S]*?'>\s*<\/div>|<div class="notion-tabs-placeholder my-8" data-tabs='[\s\S]*?'>\s*<\/div>)/g,
+    );
+  }, [renderedContent]);
 
   return (
     <div
@@ -240,6 +268,61 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
             }
           }
         }
+
+        if (part.includes('class="notion-tabs-placeholder"')) {
+          const match = part.match(/data-tabs='([\s\S]*?)'/);
+          if (match && match[1]) {
+            try {
+              const decodedJson = match[1].replace(/&apos;/g, "'");
+              const tabsData = JSON.parse(decodedJson) as Array<{
+                title: string;
+                content: string;
+              }>;
+              const activeIndex = activeTabs[index] || 0;
+
+              return (
+                <div
+                  key={index}
+                  className="notion-tabs-container my-8 border border-border/50 rounded-3xl overflow-hidden bg-card/30"
+                >
+                  <div className="flex border-b border-border/10 overflow-x-auto no-scrollbar bg-muted/20">
+                    {tabsData.map((tab, i) => (
+                      <button
+                        key={i}
+                        onClick={() =>
+                          setActiveTabs((prev) => ({ ...prev, [index]: i }))
+                        }
+                        className={`px-6 py-4 text-sm font-black amoriaregular tracking-widest uppercase transition-all whitespace-nowrap border-b-2 ${
+                          activeIndex === i
+                            ? "text-primary border-primary bg-primary/5"
+                            : "text-muted-foreground border-transparent hover:text-foreground hover:bg-muted/10"
+                        }`}
+                      >
+                        {tab.title}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="p-6 md:p-8">
+                    <div
+                      className="prose-direct"
+                      dangerouslySetInnerHTML={{
+                        __html: tabsData[activeIndex].content,
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            } catch (e) {
+              console.error("Failed to parse tabs data:", e);
+              return (
+                <div key={index} className="text-red-500">
+                  Error loading tabs
+                </div>
+              );
+            }
+          }
+        }
+
         return (
           <div
             key={index}

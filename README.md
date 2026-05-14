@@ -94,8 +94,11 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 - **⚡ Premium Shiki Highlighting** - VS Code-accurate syntax highlighting with lazy-loaded languages
 - **🔍 Site Verification** - Integrated Google site ownership verification
 - **📐 LaTeX Support** - Full math notation rendering via KaTeX (Inline: $F=ma$, Block: $$E=mc^2$$) with route-specific CSS loading
+- **📊 Mermaid Diagrams** - Support for Mermaid diagrams in code blocks with theme-aware client-side rendering
+- **📑 Interactive Tabs** - Support for tabbed content areas with smooth transitions and state management
 - **🎯 Interactive Quizzes** - Dynamic, base64-encoded quiz components injectable directly into content
 - **🚨 GitHub-style Alerts** - Support for `[!NOTE]`, `[!TIP]`, `[!WARNING]`, etc.
+- **🔳 Enhanced Notion Blocks** - Redesigned Callouts, animated File cards, and URL-action Buttons
 
 ---
 
