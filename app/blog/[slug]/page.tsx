@@ -105,10 +105,10 @@ export default async function BlogPostPage({
                       month: "long",
                       day: "numeric",
                     })}
-                    {post.readingTime && (
+                    { (post.rTime || post.readingTime) && (
                       <span className="flex items-center gap-1.5 ml-4 border-l border-border pl-4">
                         <Clock className="h-3.5 w-3.5" />
-                        {post.readingTime} min read
+                        { (post.rTime || post.readingTime) } min read
                       </span>
                     )}
                     <span className="flex items-center gap-1.5 ml-4 border-l border-border pl-4">

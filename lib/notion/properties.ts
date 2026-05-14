@@ -72,7 +72,11 @@ export function getImageUrl(property: unknown): string | undefined {
       external?: { url: string };
       file?: { url: string };
     }>;
+    url?: string;
   };
+
+  if (p.type === "url" && p.url) return p.url;
+
   if (p.type !== "files" || !p.files || p.files.length === 0) {
     return undefined;
   }

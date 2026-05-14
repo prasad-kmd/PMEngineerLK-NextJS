@@ -80,23 +80,21 @@ export function registerCustomTransformers() {
     const sizeText = file.type === "file" ? "Verified Attachment" : "External Link";
 
     return `
-<div class="notion-file my-6 inline-flex p-4 rounded-2xl border border-border/50 bg-muted/20 hover:bg-muted/40 hover:border-primary/30 transition-all group lg:min-w-[400px] cursor-pointer" onclick="window.open('${url}', '_blank')">
-  <div class="flex items-center gap-4 no-underline w-full">
-    <div class="h-12 w-12 rounded-xl bg-card border border-border flex items-center justify-center shrink-0 group-hover:text-primary group-hover:scale-110 transition-all shadow-sm">
-      <svg class="w-5 h-5 text-muted-foreground/50 group-hover:text-primary animate-bounce-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-    </div>
-    <div class="overflow-hidden flex-1">
-      <div class="text-sm font-bold text-foreground truncate group-hover:text-primary transition-colors">${name}</div>
-      <div class="text-[10px] tracking-widest uppercase font-black text-muted-foreground/50 mt-1 flex items-center gap-2">
-        <span>${sizeText}</span>
-        <span class="h-1 w-1 rounded-full bg-border"></span>
-        <span class="group-hover:text-primary transition-colors">Download Now</span>
-      </div>
-    </div>
-    <div class="text-muted-foreground/20 group-hover:text-primary/40 transition-colors">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-    </div>
-  </div>
+<div class="notion-file my-8 w-full">
+    <a href="${url}" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between p-6 rounded-[2rem] border border-border bg-card/30 hover:bg-primary/[0.03] hover:border-primary/30 transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-primary/5 active:scale-[0.98] no-underline">
+        <div class="flex items-center gap-5">
+            <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+            <div class="flex flex-col gap-1">
+                <span class="font-bold amoriaregular tracking-widest text-sm uppercase text-foreground group-hover:text-primary transition-colors">${name}</span>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">${sizeText}</span>
+            </div>
+        </div>
+        <div class="p-3 rounded-xl bg-muted/50 group-hover:bg-primary group-hover:text-white transition-all duration-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        </div>
+    </a>
 </div>`;
   });
 
@@ -171,7 +169,7 @@ export function registerCustomTransformers() {
         if (rt.annotations.bold) content = `<strong>${content}</strong>`;
         if (rt.annotations.italic) content = `<em>${content}</em>`;
         if (rt.annotations.code) content = `<code class="bg-primary/10 text-primary px-1 rounded">${content}</code>`;
-        if (rt.href) content = `<a href="${rt.href}" target="_blank" rel="noopener noreferrer" class="text-primary underline">${content}</a>`;
+        if (rt.href) content = `<a href="${rt.href}" target="_blank" rel="noopener noreferrer" class="text-primary underline font-medium">${content}</a>`;
         return content;
     }).join("");
 
@@ -180,14 +178,17 @@ export function registerCustomTransformers() {
       if (callout.icon.type === "emoji" && callout.icon.emoji)
         iconHtml = `<span class="text-2xl">${callout.icon.emoji}</span>`;
       if (callout.icon.type === "external" && callout.icon.external)
-        iconHtml = `<img src="${callout.icon.external.url}" class="w-6 h-6 object-contain" />`;
+        iconHtml = `<img src="${callout.icon.external.url}" class="w-6 h-6 object-contain" alt="Callout icon" />`;
       if (callout.icon.type === "file" && callout.icon.file)
-        iconHtml = `<img src="${callout.icon.file.url}" class="w-6 h-6 object-contain" />`;
+        iconHtml = `<img src="${callout.icon.file.url}" class="w-6 h-6 object-contain" alt="Callout icon" />`;
     }
-    return `<div class="notion-callout my-8 p-6 rounded-[2rem] bg-linear-to-br from-muted/20 to-muted/5 hover:to-muted/20 border border-border/50 flex gap-5 items-start shadow-sm transition-all duration-300 group">
-    <div class="shrink-0 mt-0.5 p-3 rounded-2xl bg-background border border-border/50 shadow-xs group-hover:scale-110 transition-transform">${iconHtml}</div>
-    <div class="text-foreground/90 leading-relaxed text-sm md:text-base prose-direct flex-1 pt-1">${text}</div>
-  </div>`;
+    return `
+<div class="notion-callout p-6 rounded-2xl border border-border bg-muted/30 my-6 flex gap-4 items-start">
+    <div class="text-2xl">${iconHtml}</div>
+    <div class="flex-1 notion-callout-text prose-p:m-0 font-google-sans text-foreground/90">
+        ${text}
+    </div>
+</div>`;
   });
 
   // Transform Toggles
@@ -202,22 +203,23 @@ export function registerCustomTransformers() {
     let childrenHtml = "";
     for (const child of childBlocks.results) {
         const md = await n2m.pageToMarkdown((child as { id: string }).id);
-        childrenHtml += n2m.toMarkdownString(md).parent;
+        const rawMd = n2m.toMarkdownString(md).parent;
+        // Parse markdown to HTML using the same marked instance
+        const { marked } = await import("../render/marked");
+        childrenHtml += await marked.parse(rawMd);
     }
 
     return `
-<details class="notion-toggle my-4 border border-border/50 rounded-2xl overflow-hidden bg-card/30 transition-all duration-300 group">
-  <summary class="flex items-center gap-3 p-4 cursor-pointer hover:bg-muted/20 transition-colors list-none">
-    <div class="flex-1 flex items-center gap-3 font-bold text-foreground/90">
-      <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center group-open:rotate-90 transition-transform duration-300">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-      </span>
-      ${text}
+<details class="notion-toggle group my-4 p-4 rounded-2xl border border-border bg-card/30 transition-all duration-300">
+    <summary class="flex items-center gap-3 cursor-pointer font-bold amoriaregular tracking-widest text-sm uppercase select-none list-none">
+        <span class="p-2 rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-open:rotate-90">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+        </span>
+        ${text}
+    </summary>
+    <div class="mt-4 pl-4 md:pl-12 border-l-2 border-primary/20 animate-in fade-in slide-in-from-top-2 duration-500 prose-direct">
+        ${childrenHtml}
     </div>
-  </summary>
-  <div class="p-6 pt-2 border-t border-border/40 text-muted-foreground leading-relaxed prose-direct space-y-4">
-    ${childrenHtml}
-  </div>
 </details>`;
   });
 }

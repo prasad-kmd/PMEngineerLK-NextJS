@@ -112,10 +112,10 @@ export default async function ArticlePage({
                       month: "long",
                       day: "numeric",
                     })}
-                    {entry.readingTime && (
+                    { (entry.rTime || entry.readingTime) && (
                       <span className="flex items-center gap-1.5 ml-4 border-l border-border pl-4">
                         <Clock className="h-3.5 w-3.5" />
-                        {entry.readingTime} min read
+                        { (entry.rTime || entry.readingTime) } min read
                       </span>
                     )}
                     <span className="flex items-center gap-1.5 ml-4 border-l border-border pl-4">

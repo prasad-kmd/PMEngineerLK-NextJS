@@ -98,10 +98,10 @@ export default async function WikiEntryPage({
                       {entry.technical || "General Engineering"}
                     </span>
                   </div>
-                  {entry.readingTime && (
+                  { (entry.rTime || entry.readingTime) && (
                     <span className="flex items-center gap-1.5 border-l border-border pl-4 font-local-inter">
                       <Clock className="h-3.5 w-3.5" />
-                      {entry.readingTime} min read
+                      { (entry.rTime || entry.readingTime) } min read
                     </span>
                   )}
                   <span className="flex items-center gap-1.5 border-l border-border pl-4 font-local-inter">

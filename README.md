@@ -53,7 +53,9 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 
 ### 📝 Content Management
 
-- **📔 Notion CMS Integration** - Fully integrated with Notion as a headless CMS for blog, articles, projects, tutorials, and wiki
+- **📔 Notion CMS Integration** - Fully integrated with Notion as a headless CMS for blog, articles, projects, tutorials, and wiki with support for custom properties like `Thumbnail`, `RTime` (Reading Time), and `AI Assisted` indicators
+- **🧩 Enhanced Notion Blocks** - Advanced rendering for Toggles, Callouts, and Files (as animated download cards), plus custom shortcodes for `[button]` and `[tabs]`
+- **📊 Mermaid Diagrams** - Built-in support for rendering Mermaid.js diagrams directly from Notion code blocks with theme-aware styling and copy-to-clipboard functionality
 - **🧪 Tailwind Labs** - Interactive sandbox at `/tools/ts-labs/` for building accent-aware UI patterns like buttons with live previews and code export
 - **🛠️ Engineering Workspace** - Extensive collection of professional-grade tools for calculations, design, and analysis with full LaTeX mathematical support and breadcrumb navigation
 - **🧾 Professional Invoice Generator** - Comprehensive system for managing clients, generating dynamic invoices, and professional PDF exports with Inter-based modern typography, zebra-striped layouts, and LKR support
@@ -95,6 +97,7 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 - **🔍 Site Verification** - Integrated Google site ownership verification
 - **📐 LaTeX Support** - Full math notation rendering via KaTeX (Inline: $F=ma$, Block: $$E=mc^2$$) with route-specific CSS loading
 - **🎯 Interactive Quizzes** - Dynamic, base64-encoded quiz components injectable directly into content
+- **🤖 AI-Assisted Content** - Optional visual indicators for content generated or assisted by AI, manageable via Notion properties
 - **🚨 GitHub-style Alerts** - Support for `[!NOTE]`, `[!TIP]`, `[!WARNING]`, etc.
 
 ---

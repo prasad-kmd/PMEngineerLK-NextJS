@@ -68,7 +68,7 @@ export async function fetchNotionContentByType(
         const description = getPlainText(props.Description);
         const tags = getMultiSelect(props.Tags);
         const category = getSelect(props.Categories);
-        const aiAssisted = getCheckbox(props.AIAssisted);
+        const aiAssisted = getCheckbox(props.AIAssisted) || getCheckbox(props["AI Assisted"]);
         const technical = getMultiSelect(props.Technical).join(", ");
         const thumbnail = getImageUrl(props.Thumbnail);
         const rTime = getNumber(props.RTime);
@@ -156,7 +156,7 @@ export async function fetchNotionContentItem(
     const description = getPlainText(props.Description);
     const tags = getMultiSelect(props.Tags);
     const category = getSelect(props.Categories);
-    const aiAssisted = getCheckbox(props.AIAssisted);
+    const aiAssisted = getCheckbox(props.AIAssisted) || getCheckbox(props["AI Assisted"]);
     const technical = getMultiSelect(props.Technical).join(", ");
     const thumbnail = getImageUrl(props.Thumbnail);
     const rTime = getNumber(props.RTime);
