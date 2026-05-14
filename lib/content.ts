@@ -27,6 +27,7 @@ import {
 } from "./content/transformers";
 import { contentConfig, notionConfig } from "./constants";
 import { Author, ContentItem } from "@/types/content";
+import { mapNotionPageToContentItem } from "./notion/page-mapper";
 
 export type { Author, ContentItem };
 
@@ -98,13 +99,14 @@ async function highlightCodeBlocks(html: string): Promise<string> {
         .replace(/&amp;/g, "&");
 
       if (lang === "mermaid") {
+        const encodedCode = Buffer.from(decodedCode.trim()).toString("base64");
         result += `
-<div class="mermaid-wrapper group/mermaid relative my-12">
+<div class="mermaid-wrapper group/mermaid relative my-12" data-mermaid-base64="${encodedCode}">
   <div class="mermaid-preview rounded-3xl border border-border/50 bg-card p-8 shadow-sm overflow-x-auto flex justify-center items-center transition-all duration-500 hover:border-primary/40 hover:shadow-lg">
     <pre class="mermaid m-0 bg-transparent p-0 text-center">${decodedCode.trim()}</pre>
   </div>
   <button class="copy-button absolute top-4 right-4 p-2.5 rounded-xl bg-background/80 text-muted-foreground hover:text-primary hover:bg-background border border-border/50 backdrop-blur-sm transition-all opacity-0 group-hover/mermaid:opacity-100 shadow-sm z-20"
-          onclick="const code = this.closest('.mermaid-wrapper').querySelector('.mermaid').innerText; navigator.clipboard.writeText(code); const btn = this; const original = btn.innerHTML; btn.innerHTML = '<svg class=\\'w-4 h-4 text-green-500 animate-in zoom-in duration-300\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'2.5\\' d=\\'M5 13l4 4L19 7\\'></path></svg>'; setTimeout(() => btn.innerHTML = original, 2000);"
+          onclick="const wrapper = this.closest('.mermaid-wrapper'); const code = atob(wrapper.getAttribute('data-mermaid-base64')); navigator.clipboard.writeText(code); const btn = this; const original = btn.innerHTML; btn.innerHTML = '<svg class=\\'w-4 h-4 text-green-500 animate-in zoom-in duration-300\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'2.5\\' d=\\'M5 13l4 4L19 7\\'></path></svg>'; setTimeout(() => btn.innerHTML = original, 2000);"
           aria-label="Copy Mermaid Code">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
@@ -116,9 +118,9 @@ async function highlightCodeBlocks(html: string): Promise<string> {
       }
 
       if (lang === "tabs") {
-        // Double encode the code to protect it during marked parsing if it gets re-processed
+        // Use a more distinct marker that marked won't touch
         const encoded = Buffer.from(decodedCode.trim()).toString("base64");
-        result += `<div class="notion-tabs-placeholder my-8" data-tabs-base64="${encoded}"></div>`;
+        result += `\n\n<NOTION_TABS_START data-tabs-base64="${encoded}">TABS_PLACEHOLDER</NOTION_TABS_END>\n\n`;
         lastIndex = matchIndex + fullMatch.length;
         continue;
       }
@@ -243,54 +245,7 @@ async function fetchNotionContentByType(
 
     const items = await Promise.all(
       (response as unknown).results.map(async (page: unknown) => {
-        const p = page as { properties: Record<string, unknown>; id: string };
-        const props = p.properties;
-        const slug = getPlainText(props.Slug);
-        const title = getPlainText(props.Name || props.Title);
-        const date = getDate(props.Date);
-        const description = getPlainText(props.Description);
-        const tags = getMultiSelect(props.Tags);
-        const category = getSelect(props.Categories);
-        const aiAssisted =
-          getCheckbox(props.AIAssisted) ||
-          getCheckbox(props["AI Assisted"]) ||
-          getCheckbox(props.aiAssisted);
-        const technical = getMultiSelect(props.Technical).join(", ");
-        const thumbnail = getImageUrl(props.Thumbnail);
-        const rTime = getNumber(props.RTime);
-
-        let authorSlug = "";
-        if (
-          props.Authors &&
-          props.Authors.relation &&
-          props.Authors.relation.length > 0
-        ) {
-          const authorPage = await notion.pages.retrieve({
-            page_id: props.Authors.relation[0].id,
-          });
-          authorSlug = getPlainText((authorPage as unknown).properties.Slug);
-        }
-
-        return {
-          id: p.id,
-          slug,
-          title,
-          date,
-          description,
-          content: "",
-          rawContent: "",
-          final: true,
-          firstImage: undefined,
-          thumbnail,
-          readingTime: rTime,
-          rTime,
-          technical,
-          category,
-          tags,
-          aiAssisted,
-          author: authorSlug,
-          type: type,
-        };
+        return await mapNotionPageToContentItem(page, type);
       }),
     );
 
@@ -405,39 +360,11 @@ async function fetchNotionContentItem(
 
     if ((response as unknown).results.length === 0) return null;
 
-    const page = (response as unknown).results[0] as {
-      properties: Record<string, unknown>;
-      id: string;
-    };
-    const props = page.properties;
+    const page = (response as unknown).results[0];
+    const item = await mapNotionPageToContentItem(page, type);
 
-    const mdblocks = await n2m.pageToMarkdown(page.id);
+    const mdblocks = await n2m.pageToMarkdown(item.id!);
     const mdString = n2m.toMarkdownString(mdblocks).parent;
-
-    const title = getPlainText(props.Name || props.Title);
-    const date = getDate(props.Date);
-    const description = getPlainText(props.Description);
-    const tags = getMultiSelect(props.Tags);
-    const category = getSelect(props.Categories);
-    const aiAssisted =
-      getCheckbox(props.AIAssisted) ||
-      getCheckbox(props["AI Assisted"]) ||
-      getCheckbox(props.aiAssisted);
-    const technical = getMultiSelect(props.Technical).join(", ");
-    const thumbnail = getImageUrl(props.Thumbnail);
-    const rTime = getNumber(props.RTime);
-
-    let authorSlug = "";
-    if (
-      props.Authors &&
-      props.Authors.relation &&
-      props.Authors.relation.length > 0
-    ) {
-      const authorPage = await notion.pages.retrieve({
-        page_id: props.Authors.relation[0].id,
-      });
-      authorSlug = getPlainText((authorPage as unknown).properties.Slug);
-    }
 
     const protectedContent = mdString.replace(
       /\$\$\s*([\s\S]*?)\s*\$\$/g,
@@ -451,26 +378,13 @@ async function fetchNotionContentItem(
     const firstImage = extractFirstImage(mdString, true);
 
     return {
-      id: page.id as string,
-      slug,
-      title,
-      date,
-      description,
+      ...item,
       content: sanitizeContent(
         injectQuiz(injectAlerts(injectHeadingIds(highlightedHtml))),
       ),
       rawContent: mdString,
-      final: true,
       firstImage,
-      thumbnail,
-      readingTime: rTime || calculateReadingTime(mdString),
-      rTime,
-      technical,
-      category,
-      tags,
-      aiAssisted,
-      author: authorSlug,
-      type: type,
+      readingTime: item.readingTime || calculateReadingTime(mdString),
     };
   } catch (error) {
     console.error(`Error fetching Notion item ${slug} for ${type}:`, error);
@@ -568,6 +482,7 @@ export const getContentItem = cache(async function (
       rawContent: content,
       final: data.final || false,
       firstImage,
+      thumbnail: data.thumbnail,
       readingTime: rt,
       rTime: rt,
       technical: data.technical,
@@ -594,6 +509,7 @@ export const getContentItem = cache(async function (
       rawContent: content,
       final: data.final || false,
       firstImage,
+      thumbnail: data.thumbnail,
       readingTime: rt,
       rTime: rt,
       technical: data.technical,
@@ -630,10 +546,7 @@ export const getAuthorBasic = cache(async function (
           },
         });
         if ((response as unknown).results.length === 0) return null;
-        const page = (response as unknown).results[0] as {
-          properties: Record<string, unknown>;
-          id: string;
-        };
+        const page = (response as any).results[0];
         const props = page.properties;
         return {
           name: getPlainText(props.Name || props.Title),
@@ -694,10 +607,7 @@ export const getAuthorBySlug = cache(async function (
           },
         });
         if ((response as unknown).results.length === 0) return null;
-        const page = (response as unknown).results[0] as {
-          properties: Record<string, unknown>;
-          id: string;
-        };
+        const page = (response as any).results[0];
         const props = page.properties;
 
         const mdblocks = await n2m.pageToMarkdown(page.id);

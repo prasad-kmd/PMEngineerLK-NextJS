@@ -226,7 +226,7 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
 
   const parts = useMemo(() => {
     return renderedContent.split(
-      /(<div class="interactive-quiz-placeholder" data-quiz='[\s\S]*?'>\s*<\/div>|<div class="notion-tabs-placeholder my-8" data-tabs(?:-code|-base64)?='[\s\S]*?'>\s*<\/div>)/g,
+      /(<div class="interactive-quiz-placeholder" data-quiz='[\s\S]*?'>\s*<\/div>|<div class="notion-tabs-placeholder my-8" data-tabs(?:-code|-base64)?='[\s\S]*?'>\s*<\/div>|<NOTION_TABS_START data-tabs-base64="[\s\S]*?">[\s\S]*?<\/NOTION_TABS_END>|<NOTION_BUTTON label=".*?" url=".*?">[\s\S]*?<\/NOTION_BUTTON>|<NOTION_TOGGLE_START title=".*?">[\s\S]*?<\/NOTION_TOGGLE_END>)/gi,
     );
   }, [renderedContent]);
 
@@ -271,11 +271,14 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
           }
         }
 
-        if (part.includes('class="notion-tabs-placeholder"')) {
+        if (
+          part.toLowerCase().includes('class="notion-tabs-placeholder"') ||
+          part.toLowerCase().includes("<notion_tabs_start")
+        ) {
           const match =
-            part.match(/data-tabs='([\s\S]*?)'/) ||
-            part.match(/data-tabs-code='([\s\S]*?)'/) ||
-            part.match(/data-tabs-base64="([\s\S]*?)"/);
+            part.match(/data-tabs='([\s\S]*?)'/i) ||
+            part.match(/data-tabs-code='([\s\S]*?)'/i) ||
+            part.match(/data-tabs-base64=["']([\s\S]*?)["']/i);
           const isCode = part.includes("data-tabs-code");
           const isBase64 = part.includes("data-tabs-base64");
 
@@ -349,6 +352,84 @@ export function ContentRenderer({ content, id }: ContentRendererProps) {
               );
             }
           }
+        }
+
+        if (part.toLowerCase().includes("<notion_button")) {
+          const labelMatch = part.match(/label=["'](.*?)["']/i);
+          const urlMatch = part.match(/url=["'](.*?)["']/i);
+          const label = (labelMatch?.[1] || "Click Here").replace(/&quot;/g, '"');
+          const url = urlMatch?.[1] || "#";
+
+          return (
+            <div key={index} className="notion-button-wrapper my-10 flex justify-center">
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="skip-external-icon group relative px-10 py-5 bg-primary text-primary-foreground rounded-2xl font-black amoriaregular tracking-[0.2em] uppercase text-sm md:text-base shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all duration-500 hover:-translate-y-1 overflow-hidden no-underline border-0"
+              >
+                <span className="relative z-10 flex items-center gap-4">
+                  {label}
+                  <svg
+                    className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2.5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    ></path>
+                  </svg>
+                </span>
+                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/25 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+              </a>
+            </div>
+          );
+        }
+
+        if (part.toLowerCase().includes("<notion_toggle_start")) {
+          const titleMatch = part.match(/title=["'](.*?)["']/i);
+          const contentMatch = part.match(/>([\s\S]*?)<\/NOTION_TOGGLE_END>/i);
+          const title = (titleMatch?.[1] || "Toggle").replace(/&quot;/g, '"');
+          const innerHtml = contentMatch?.[1] || "";
+
+          return (
+            <details
+              key={index}
+              className="notion-toggle group my-6 border border-border/40 rounded-2xl bg-card/40 overflow-hidden transition-all duration-300 hover:border-primary/30 shadow-sm"
+              open
+            >
+              <summary className="flex items-center gap-4 p-5 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+                <div className="flex items-center justify-center w-7 h-7 rounded-xl bg-primary/10 text-primary group-open:rotate-90 transition-all duration-500 shadow-inner shrink-0">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth="3"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 5l7 7-7 7"
+                    ></path>
+                  </svg>
+                </div>
+                <span className="text-base font-black amoriaregular text-foreground/90 group-hover:text-primary transition-colors tracking-wide">
+                  {title}
+                </span>
+              </summary>
+              <div className="px-6 pb-6 pt-0">
+                <div
+                  className="prose-direct border-l-2 border-primary/10 pl-6 ml-3.5 space-y-4 text-muted-foreground/90 leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: innerHtml }}
+                />
+              </div>
+            </details>
+          );
         }
 
         return (
