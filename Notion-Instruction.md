@@ -35,6 +35,8 @@ Each database (except **Authors**) should have the following properties:
 | **Categories**          | Select        | Main category (used for quizzes and organization).                         |
 | **AIAssisted**          | Checkbox      | (Optional) Show an indicator if AI was used.                               |
 | **Technical**           | Multi-Select  | (Optional) Tech stack or technical details.                                |
+| **Thumbnail**           | Files / URL   | (Optional) Image used for the card. Falls back to first image or default.  |
+| **RTime**               | Number        | (Optional) Reading time in minutes. If omitted, it will not be shown.      |
 
 For **Authors** Database,
 
@@ -139,6 +141,36 @@ If you encounter issues and need to revert to the Git-based system:
 - **Images:** Use Notion's "Image" block. The converter will handle them.
 - **Math:** Use Notion's inline or block equations. They are compatible with the site's rendering engine.
 - **Quizzes:** You can still embed quizzes by adding the `[quiz] { JSON } [/quiz]` block directly in the Notion page as a text block.
+- **Thumbnail & RTime:** Use the `Thumbnail` property for custom card images and `RTime` to specify a manual reading time.
+
+### **Custom Shortcodes**
+
+Since some native Notion blocks (like Buttons or Tabs) are not fully supported or customizable via the API, use these shortcodes in a simple text block:
+
+#### **1. Buttons**
+Use the `[button]` shortcode to add site-styled buttons.
+```
+[button href="https://github.com/PrasadM-99"]View My GitHub[/button]
+```
+
+#### **2. Tabs**
+Use `[tabs]` and `[tab]` to create interactive tabbed areas. Content inside tabs is parsed as Markdown.
+```
+[tabs]
+[tab title="First Tab"]
+Content for the first tab...
+[/tab]
+[tab title="Second Tab"]
+Content for the second tab...
+[/tab]
+[/tabs]
+```
+
+#### **3. Mermaid Diagrams**
+Native Notion code blocks with the language set to `mermaid` will automatically render as interactive diagrams. Each diagram includes a "Copy Diagram" button.
+
+#### **4. Web Bookmarks**
+Standard Notion "Web Bookmark" blocks are enhanced with sophisticated cards, OpenGraph metadata fetching, and automatic fallbacks.
 
 ---
 

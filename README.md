@@ -53,7 +53,9 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 
 ### 📝 Content Management
 
-- **📔 Notion CMS Integration** - Fully integrated with Notion as a headless CMS for blog, articles, projects, tutorials, and wiki
+- **📔 Notion CMS Integration** - Fully integrated with Notion as a headless CMS for blog, articles, projects, tutorials, and wiki with support for `Thumbnail` and `RTime` properties
+- **🎨 Enhanced Block Rendering** - Sophisticated rendering for Notion Callouts, Files, Bookmarks, and Mermaid diagrams with interactive copy buttons
+- **🧩 Custom Shortcodes** - Support for `[button]` and `[tabs]` shortcodes in Notion for advanced content layouts
 - **🧪 Tailwind Labs** - Interactive sandbox at `/tools/ts-labs/` for building accent-aware UI patterns like buttons with live previews and code export
 - **🛠️ Engineering Workspace** - Extensive collection of professional-grade tools for calculations, design, and analysis with full LaTeX mathematical support and breadcrumb navigation
 - **🧾 Professional Invoice Generator** - Comprehensive system for managing clients, generating dynamic invoices, and professional PDF exports with Inter-based modern typography, zebra-striped layouts, and LKR support
