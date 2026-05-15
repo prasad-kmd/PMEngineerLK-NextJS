@@ -174,7 +174,7 @@ export default async function ChangelogPage() {
           </p>
         </header>
 
-        <div className="relative space-y-12 before:absolute before:left-[17px] before:top-2 before:bottom-2 before:w-[2px] before:bg-border lg:before:left-1/2 lg:before:-ml-[1px]">
+        <div className="relative space-y-12 before:absolute before:left-[17px] before:top-2 before:bottom-2 before:w-[2px] before:bg-border lg:before:left-1/2 lg:before:-ml-px">
           {updates.map((update, idx) => (
             <div
               key={idx}

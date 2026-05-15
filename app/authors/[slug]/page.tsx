@@ -71,7 +71,7 @@ export default async function AuthorDetailPage({
       {/* Hyper-Dossier Background */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-0 left-0 w-full h-[600px] bg-[radial-gradient(circle_at_50%_-10%,rgba(var(--primary-rgb),0.08)_0%,transparent_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_0.5px,transparent_0.5px),linear-gradient(to_bottom,var(--border)_0.5px,transparent_0.5px)] bg-[size:30px_30px] opacity-[0.03]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_0.5px,transparent_0.5px),linear-gradient(to_bottom,var(--border)_0.5px,transparent_0.5px)] bg-size-[30px_30px] opacity-[0.03]" />
       </div>
 
       <Container>
@@ -90,7 +90,7 @@ export default async function AuthorDetailPage({
             {/* Researcher Profile Card */}
             <aside className="w-full lg:col-span-4 lg:sticky lg:top-24 order-1">
               <FadeIn direction="up">
-                <div className="relative mb-8 group p-1.5 rounded-[2.5rem] bg-gradient-to-br from-border/50 to-transparent border border-border shadow-xl">
+                <div className="relative mb-8 group p-1.5 rounded-[2.5rem] bg-linear-to-br from-border/50 to-transparent border border-border shadow-xl">
                   <div className="aspect-square relative overflow-hidden rounded-[2.2rem] border border-border/50">
                     {author.avatar &&
                     typeof author.avatar === "string" &&
@@ -111,7 +111,7 @@ export default async function AuthorDetailPage({
                         </span>
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-40" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent opacity-40" />
                   </div>
 
                   <div className="absolute -bottom-3 -right-3 h-14 w-14 bg-primary rounded-2xl flex items-center justify-center text-primary-foreground shadow-lg rotate-12 transition-transform group-hover:rotate-0 group-hover:scale-110 border-4 border-background">
@@ -171,7 +171,7 @@ export default async function AuthorDetailPage({
                     </div>
                   </div>
 
-                  <div className="relative p-6 rounded-[2rem] bg-muted/50 border border-border overflow-hidden group/stats">
+                  <div className="relative p-6 rounded-4xl bg-muted/50 border border-border overflow-hidden group/stats">
                     <div className="absolute top-0 right-0 p-3 opacity-5 group-hover/stats:opacity-10 transition-opacity">
                       <BookOpen size={48} className="text-primary" />
                     </div>
@@ -206,7 +206,7 @@ export default async function AuthorDetailPage({
                     <h2 className="text-xl font-black amoriaregular text-foreground uppercase tracking-[0.2em] shrink-0">
                       Publication Feed
                     </h2>
-                    <div className="h-px flex-1 bg-gradient-to-r from-border to-transparent" />
+                    <div className="h-px flex-1 bg-linear-to-r from-border to-transparent" />
                   </div>
 
                   <div className="grid gap-4">
@@ -219,9 +219,9 @@ export default async function AuthorDetailPage({
                         >
                           <Link
                             href={`/${post.type}/${post.slug}`}
-                            className="group relative block p-6 rounded-[1.5rem] bg-card border border-border hover:border-primary/30 transition-all duration-500 overflow-hidden shadow-sm"
+                            className="group relative block p-6 rounded-3xl bg-card border border-border hover:border-primary/30 transition-all duration-500 overflow-hidden shadow-sm"
                           >
-                            <div className="absolute -top-12 -right-12 w-32 h-32 bg-primary/5 rounded-full blur-[40px] group-hover:bg-primary/10 transition-colors duration-500" />
+                            <div className="absolute -top-12 -right-12 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-500" />
 
                             <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-6">
                               <div className="md:w-24 shrink-0">
@@ -236,7 +236,7 @@ export default async function AuthorDetailPage({
                               </div>
 
                               <div className="flex-1">
-                                <div className="flex flex-wrap items-center gap-2.5 mb-2 text-[8px] font-black uppercase tracking-[0.1em] text-muted-foreground/40">
+                                <div className="flex flex-wrap items-center gap-2.5 mb-2 text-[8px] font-black uppercase tracking-widest text-muted-foreground/40">
                                   {post.category && (
                                     <span className="flex items-center gap-1.5 border border-border px-2 py-0.5 rounded bg-muted/50">
                                       <Tag

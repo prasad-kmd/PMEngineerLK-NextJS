@@ -151,7 +151,7 @@ export default function OpenBooksPage() {
                     key={book.key}
                     className="group flex flex-col overflow-hidden border-border bg-card/40 backdrop-blur-md transition-all hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1"
                   >
-                    <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+                    <div className="relative aspect-3/4 overflow-hidden bg-muted">
                       <Image
                         src={
                           imageError[book.key]
@@ -169,7 +169,7 @@ export default function OpenBooksPage() {
                           }));
                         }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-80" />
+                      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-80" />
                       <div className="absolute bottom-4 left-4 right-4">
                         <span className="text-[10px] font-bold uppercase tracking-widest text-primary-foreground/80 bg-primary/20 backdrop-blur-sm px-2 py-0.5 rounded border border-white/10">
                           Digital Resource
@@ -177,7 +177,7 @@ export default function OpenBooksPage() {
                       </div>
                     </div>
                     <CardHeader className="p-4 flex-1">
-                      <CardTitle className="line-clamp-2 text-base font-bold google-sans group-hover:text-primary transition-colors min-h-[3rem]">
+                      <CardTitle className="line-clamp-2 text-base font-bold google-sans group-hover:text-primary transition-colors min-h-12">
                         {title}
                       </CardTitle>
                     </CardHeader>

@@ -93,7 +93,7 @@ export default async function WikiPage({ searchParams }: WikiPageProps) {
                 <motion.div key={entry.slug} variants={fadeInUp}>
                   <Link
                     href={`/wiki/${entry.slug}`}
-                    className="group relative flex flex-col h-full bg-card/40 backdrop-blur-md border border-border rounded-[2rem] p-8 transition-all duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10 overflow-hidden"
+                    className="group relative flex flex-col h-full bg-card/40 backdrop-blur-md border border-border rounded-4xl p-8 transition-all duration-500 hover:-translate-y-2 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10 overflow-hidden"
                   >
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                       <Hash className="h-24 w-24 -mr-8 -mt-8 rotate-12" />

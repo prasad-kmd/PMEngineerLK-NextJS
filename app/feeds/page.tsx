@@ -139,7 +139,7 @@ export default function FeedsPage() {
                   <CardContent className="p-0">
                     <SafeLink
                       href={post.link}
-                      className="flex items-center gap-4 p-5 hover:bg-primary/[0.03] transition-colors"
+                      className="flex items-center gap-4 p-5 hover:bg-primary/3 transition-colors"
                     >
                       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
                         <FileText className="h-6 w-6" />

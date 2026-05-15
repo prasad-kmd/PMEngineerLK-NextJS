@@ -53,9 +53,9 @@ export default async function AuthorsPage() {
               <FadeIn key={author.slug} delay={index * 0.05} direction="up">
                 <Link
                   href={`/authors/${author.slug}`}
-                  className="group relative flex flex-col h-full bg-card/50 backdrop-blur-xl border border-border rounded-[2rem] overflow-hidden transition-all duration-500 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5"
+                  className="group relative flex flex-col h-full bg-card/50 backdrop-blur-xl border border-border rounded-4xl overflow-hidden transition-all duration-500 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5"
                 >
-                  <div className="aspect-square relative overflow-hidden m-3 rounded-[1.5rem] border border-border/50">
+                  <div className="aspect-square relative overflow-hidden m-3 rounded-3xl border border-border/50">
                     {author.avatar &&
                     typeof author.avatar === "string" &&
                     author.avatar.trim() !== "" ? (
@@ -74,13 +74,13 @@ export default async function AuthorsPage() {
                         </span>
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                     <div className="absolute top-4 right-4">
                       <div className="h-8 w-8 rounded-xl bg-background/40 backdrop-blur-md border border-border/50 flex items-center justify-center text-foreground/40 group-hover:text-primary transition-colors">
                         <ArrowRight
                           size={16}
-                          className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rotate-[-45deg]"
+                          className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 -rotate-45"
                         />
                       </div>
                     </div>
@@ -88,7 +88,7 @@ export default async function AuthorsPage() {
 
                   <div className="px-6 pb-8 pt-2 flex flex-col h-full">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="h-[1px] w-6 bg-primary/40" />
+                      <div className="h-px w-6 bg-primary/40" />
                       <span className="text-[9px] font-black text-primary uppercase tracking-[0.3em] local-jetbrains-mono">
                         {author.role.split(" ")[0]}
                       </span>
@@ -127,7 +127,7 @@ export default async function AuthorsPage() {
                   </div>
 
                   {/* Hover Accent */}
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-primary/0 via-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-linear-to-r from-primary/0 via-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </Link>
               </FadeIn>
             ))}

@@ -135,9 +135,9 @@ export default async function PublicStatusPage() {
 
         {/* Overall Status Badge */}
         <div
-          className={`w-full rounded-[2rem] border-2 ${currentStatus.border} ${currentStatus.bg} p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl backdrop-blur-sm relative overflow-hidden`}
+          className={`w-full rounded-4xl border-2 ${currentStatus.border} ${currentStatus.bg} p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl backdrop-blur-sm relative overflow-hidden`}
         >
-          <div className="absolute top-0 left-0 w-full h-1 opacity-20 bg-gradient-to-r from-transparent via-current to-transparent" />
+          <div className="absolute top-0 left-0 w-full h-1 opacity-20 bg-linear-to-r from-transparent via-current to-transparent" />
 
           <div className="flex items-center gap-6">
             <div
