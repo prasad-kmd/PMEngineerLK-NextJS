@@ -1,4 +1,4 @@
-import { ContentItem, ContentType } from "./types";
+import { ContentItem } from "./types";
 
 export const DEFAULT_IMAGES: Record<string, string> = {
   blog: "/img/page/diary_page.webp",

@@ -4,15 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ShieldCheck,
-  ArrowLeft,
   Shield,
-  UserX,
-  Laptop,
   Palette,
   Bookmark,
   Ban,
   ChevronDown,
-  Check,
   X,
   Database,
   BarChart2,

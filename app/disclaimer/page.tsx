@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { AlertTriangle, ArrowLeft, BookOpen, Bot, FileWarning, FlaskConical, Globe, Wrench } from "lucide-react";
+import { AlertTriangle, BookOpen, Bot, FileWarning, FlaskConical, Globe, Wrench } from "lucide-react";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 

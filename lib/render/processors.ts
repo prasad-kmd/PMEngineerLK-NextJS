@@ -135,7 +135,7 @@ export async function injectShortcodes(html: string): Promise<string> {
     let tabPanels = '<div class="relative">';
 
     for (let i = 0; i < tabMatches.length; i++) {
-      const [fullTab, title, content] = tabMatches[i];
+      const [title, content] = tabMatches[i];
       const isActive = i === 0;
       const tabId = `tab-${Math.random().toString(36).substring(2, 9)}`;
       
@@ -160,7 +160,7 @@ export async function injectShortcodes(html: string): Promise<string> {
     tabPanels += '</div>';
 
     const tabsHtml = `
-      <div class="notion-tabs-container my-10 border border-border/50 rounded-[2rem] p-6 md:p-8 bg-card/30 backdrop-blur-sm shadow-sm">
+      <div class="notion-tabs-container my-10 border border-border/50 rounded-4xl p-6 md:p-8 bg-card/30 backdrop-blur-sm shadow-sm">
         ${tabHeaders}
         ${tabPanels}
       </div>

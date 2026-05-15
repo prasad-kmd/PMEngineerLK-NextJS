@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getContentByType, getContentItem } from "@/lib/content";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+// import { ArrowLeft } from "lucide-react";
+// import Link from "next/link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ContentRenderer } from "@/components/content-renderer";
 import { ScrollProgress } from "@/components/scroll-progress";

@@ -7,7 +7,6 @@ import {
   Gamepad2,
   Filter,
   Loader2,
-  ChevronLeft,
 } from "lucide-react";
 import {
   Card,
@@ -18,7 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+// import Link from "next/link";
 import Image from "next/image";
 import { SafeLink } from "@/components/ui/safe-link";
 import { Breadcrumbs } from "@/components/breadcrumbs";

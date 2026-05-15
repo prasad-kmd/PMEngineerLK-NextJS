@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import { Scale, ArrowLeft, FileText, UserCog, Globe, ShieldCheck, BarChart2, KeyRound } from "lucide-react";
+// import Link from "next/link";
+import { Scale, FileText, UserCog, Globe, ShieldCheck, BarChart2, KeyRound } from "lucide-react";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 

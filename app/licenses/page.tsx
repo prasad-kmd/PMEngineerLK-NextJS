@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft,
   Package,
   Type,
   Image as ImageIcon,
