@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getContentByType } from "@/lib/content";
 import { Book, ArrowRight, Hash } from "lucide-react";
 import { Pagination } from "@/components/pagination";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import * as motion from "framer-motion/client";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 
@@ -51,6 +52,10 @@ export default async function WikiPage({ searchParams }: WikiPageProps) {
       <div className="absolute bottom-0 left-0 -z-10 w-[400px] h-[400px] bg-secondary/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="mx-auto max-w-6xl px-6 lg:px-8 relative z-10">
+        <Breadcrumbs
+          items={[{ label: "Wiki", href: "/wiki", active: true }]}
+          className="mb-8"
+        />
         <motion.div
           initial="hidden"
           animate="visible"

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Roadmap from "@/components/roadmap";
 import { Calendar, Target, Flag, ShieldCheck } from "lucide-react";
 import { requireAdmin } from "@/lib/auth-utils";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const title = "Project Roadmap";
 const description =
@@ -24,6 +25,10 @@ export default async function RoadmapPage() {
   return (
     <div className="min-h-screen pb-20 px-6 lg:px-8 pt-12">
       <div className="mx-auto max-w-4xl">
+        <Breadcrumbs
+          items={[{ label: "Roadmap", href: "/roadmap", active: true }]}
+          className="mb-8"
+        />
         <header className="mb-16 text-center">
           <div className="flex flex-col items-center gap-4 mb-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest">

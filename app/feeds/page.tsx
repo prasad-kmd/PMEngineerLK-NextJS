@@ -14,6 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SafeLink } from "@/components/ui/safe-link";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 interface FeedItem {
   title: string;
@@ -80,14 +81,14 @@ export default function FeedsPage() {
   return (
     <div className="min-h-screen p-6 lg:p-12 img_grad_pm">
       <div className="mx-auto max-w-4xl">
+        <Breadcrumbs
+          items={[
+            { label: "Tools", href: "/tools" },
+            { label: "External Feeds", href: "/feeds", active: true },
+          ]}
+          className="mb-8"
+        />
         <div className="mb-8">
-          <Link
-            href="/tools"
-            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mb-4"
-          >
-            <ChevronLeft className="w-3 h-3" />
-            Back to Tools
-          </Link>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h1 className="text-4xl font-bold mozilla-headline flex items-center gap-3 text-balance">

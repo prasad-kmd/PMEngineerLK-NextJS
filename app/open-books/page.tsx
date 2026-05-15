@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { SafeLink } from "@/components/ui/safe-link";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 interface Book {
   key: string;
@@ -75,14 +76,14 @@ export default function OpenBooksPage() {
   return (
     <div className="min-h-screen p-6 lg:p-12 img_grad_pm">
       <div className="mx-auto max-w-7xl">
+        <Breadcrumbs
+          items={[
+            { label: "Tools", href: "/tools" },
+            { label: "Open Books", href: "/open-books", active: true },
+          ]}
+          className="mb-8"
+        />
         <div className="mb-8">
-          <Link
-            href="/tools"
-            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mb-4"
-          >
-            <ChevronLeft className="w-3 h-3" />
-            Back to Tools
-          </Link>
           <h1 className="text-4xl font-bold mozilla-headline flex items-center gap-3">
             <Library className="h-10 w-10 text-primary" />
             Open Books Library

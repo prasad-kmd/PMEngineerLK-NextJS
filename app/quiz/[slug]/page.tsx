@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getContentByType, getContentItem } from "@/lib/content";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ContentRenderer } from "@/components/content-renderer";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { Badge } from "@/components/ui/badge";
@@ -48,13 +49,13 @@ export default async function QuizPage({
     <div className="min-h-screen px-6 py-12 lg:px-8 bg-background">
       <ScrollProgress />
       <div className="mx-auto max-w-4xl">
-        <Link
-          href="/quiz"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground font-local-inter"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Quiz Library
-        </Link>
+        <Breadcrumbs
+          items={[
+            { label: "Quizzes", href: "/quiz" },
+            { label: quiz.title, href: `/quiz/${quiz.slug}`, active: true },
+          ]}
+          className="mb-8"
+        />
 
         <article className="min-w-0">
           <header className="mb-8 border-b border-border pb-8">

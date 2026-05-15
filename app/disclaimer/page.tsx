@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { AlertTriangle, ArrowLeft } from "lucide-react";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
 export const metadata: Metadata = {
@@ -36,13 +37,13 @@ export default function DisclaimerPage() {
       </section>
 
       <div className="mx-auto max-w-4xl px-6 py-12 lg:px-8">
-        <Link
-          href="/pages"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-8 transition-colors"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Directory
-        </Link>
+        <Breadcrumbs
+          items={[
+            { label: "Directory", href: "/pages" },
+            { label: "Disclaimer", href: "/disclaimer", active: true },
+          ]}
+          className="mb-8"
+        />
 
         <div className="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-muted-foreground leading-relaxed">
           <div className="flex items-center justify-between border-b border-border pb-4">

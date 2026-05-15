@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { Clock, BookOpen, Rocket, Code, Coffee } from "lucide-react";
 import { SafeLink } from "@/components/ui/safe-link";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const title = "Now";
 const description =
@@ -23,6 +24,10 @@ export default function NowPage() {
   return (
     <div className="min-h-screen pb-20 px-6 lg:px-8 pt-12">
       <div className="mx-auto max-w-3xl">
+        <Breadcrumbs
+          items={[{ label: "Now", href: "/now", active: true }]}
+          className="mb-8"
+        />
         <header className="mb-16">
           <h1 className="text-4xl font-bold tracking-tight lg:text-5xl mb-4 amoriaregular">
             What I&apos;m doing now

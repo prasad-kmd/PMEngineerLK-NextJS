@@ -1,5 +1,6 @@
 import { getContentByType } from "@/lib/content";
 import { QuizList } from "@/components/quiz-library/quiz-list";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const metadata = {
   title: "Quiz Library",
@@ -13,6 +14,10 @@ export default async function QuizListPage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 bg-background">
       <div className="mx-auto max-w-6xl">
+        <Breadcrumbs
+          items={[{ label: "Quizzes", href: "/quiz", active: true }]}
+          className="mb-8"
+        />
         <header className="mb-12">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline lg:text-5xl">
             Quiz Library

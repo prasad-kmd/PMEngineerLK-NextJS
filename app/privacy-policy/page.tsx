@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 // import { siteConfig } from "@/lib/config";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 
@@ -78,13 +79,13 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <div className="mx-auto max-w-6xl px-6 py-12 lg:px-8">
-        <Link
-          href="/pages"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-8 transition-colors"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Directory
-        </Link>
+        <Breadcrumbs
+          items={[
+            { label: "Directory", href: "/pages" },
+            { label: "Privacy Policy", href: "/privacy-policy", active: true },
+          ]}
+          className="mb-8"
+        />
 
         {/* Dashboard Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-border pb-8 mb-12 gap-4">

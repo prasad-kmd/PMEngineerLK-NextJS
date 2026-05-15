@@ -5,6 +5,7 @@ import { FadeIn } from "@/components/fade-in";
 import { AuthorBioExpander } from "@/components/author-bio-expander";
 import Image from "next/image";
 import Link from "next/link";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
   Github,
   Twitter,
@@ -76,13 +77,13 @@ export default async function AuthorDetailPage({
       <Container>
         <div className="max-w-7xl mx-auto">
           <FadeIn direction="down">
-            <Link
-              href="/authors"
-              className="inline-flex items-center px-4 py-1.5 rounded-xl bg-muted border border-border text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground hover:text-primary hover:border-primary/30 transition-all mb-12 group backdrop-blur-xl"
-            >
-              <ChevronLeft className="mr-1.5 h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
-              Directory Index
-            </Link>
+            <Breadcrumbs
+              items={[
+                { label: "Authors", href: "/authors" },
+                { label: author.name, href: `/authors/${slug}`, active: true },
+              ]}
+              className="mb-8"
+            />
           </FadeIn>
 
           <div className="flex flex-col lg:grid lg:grid-cols-12 gap-12 xl:gap-16 items-start">

@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ContentCard } from "@/components/content-card";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import * as motion from "framer-motion/client";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 
@@ -56,6 +57,10 @@ export default async function TutorialsPage({
   return (
     <div className="min-h-screen py-12 tutorials_page img_grad_pm">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        <Breadcrumbs
+          items={[{ label: "Tutorials", href: "/tutorials", active: true }]}
+          className="mb-8"
+        />
         <motion.div
           initial="hidden"
           animate="visible"

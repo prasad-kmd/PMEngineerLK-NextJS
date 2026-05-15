@@ -9,11 +9,19 @@ import {
 import { TechnicalBackground } from "@/components/technical-background";
 import Link from "next/link";
 import Image from "next/image";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export default function SignInPage() {
   return (
-    <div className="relative flex min-h-screen items-center justify-center p-4 overflow-hidden">
+    <div className="relative flex flex-col min-h-screen items-center justify-center p-4 overflow-hidden">
       <TechnicalBackground />
+
+      <div className="w-full max-w-md mb-8 relative z-10">
+        <Breadcrumbs
+          items={[{ label: "Sign In", href: "/sign-in", active: true }]}
+          className="justify-center mb-0"
+        />
+      </div>
 
       <Card className="w-full max-w-md border-border/50 bg-card/30 backdrop-blur-2xl shadow-2xl relative z-10 transition-all duration-500 hover:shadow-primary/5">
         <CardHeader className="text-center space-y-2 pb-2">

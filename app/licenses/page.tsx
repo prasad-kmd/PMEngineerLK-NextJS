@@ -13,6 +13,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { SafeLink } from "@/components/ui/safe-link";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 // Types for our license data
 type Category = "All" | "Software" | "Fonts" | "Assets";
@@ -239,6 +240,15 @@ export default function LicensesPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-6 pt-12">
+        <Breadcrumbs
+          items={[
+            { label: "Directory", href: "/pages" },
+            { label: "Licenses", href: "/licenses", active: true },
+          ]}
+          className="mb-0"
+        />
+      </div>
       {/* Custom Hero Section (max 50vh) */}
       <section className="relative h-[45vh] min-h-[320px] max-h-[50vh] flex items-end justify-center overflow-hidden border-b border-border/40">
         {/* Background Grid & Accents */}

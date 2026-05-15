@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Palette, Type, Layout, Image as ImageIcon, Copy } from "lucide-react";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const title = "Style Guide";
 const description =
@@ -46,6 +47,10 @@ export default function StyleGuidePage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
       <div className="mx-auto max-w-5xl">
+        <Breadcrumbs
+          items={[{ label: "Style Guide", href: "/style-guide", active: true }]}
+          className="mb-8"
+        />
         <header className="mb-12">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline flex items-center gap-3">
             <Palette className="h-10 w-10 text-primary" />
