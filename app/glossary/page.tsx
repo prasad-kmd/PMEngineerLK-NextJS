@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Book, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const terms = [
   {
@@ -56,6 +57,10 @@ export default function GlossaryPage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
       <div className="mx-auto max-w-5xl">
+        <Breadcrumbs
+          items={[{ label: "Glossary", href: "/glossary", active: true }]}
+          className="mb-8"
+        />
         <header className="mb-12">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline flex items-center gap-3">
             <Book className="h-10 w-10 text-primary" />

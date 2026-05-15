@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/card";
 import { SafeLink } from "@/components/ui/safe-link";
 import { getGitHubUser, getGitHubRepos } from "@/lib/github";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const title = "Open Source Projects";
 const description =
@@ -54,7 +55,11 @@ export default async function OpenSourcePage() {
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
+        <Breadcrumbs
+          items={[{ label: "Open Source", href: "/open-source", active: true }]}
+          className="mb-8"
+        />
         <div className="mb-12">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline flex items-center gap-3">
             <Github className="h-10 w-10" />

@@ -41,6 +41,7 @@ import {
   FileArchive,
 } from "lucide-react";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 interface Tool {
   name: string;
@@ -560,7 +561,11 @@ function ToolSection({
 export default function ToolsPage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
+        <Breadcrumbs
+          items={[{ label: "Tools", href: "/tools", active: true }]}
+          className="mb-8"
+        />
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline tracking-tight">
             Engineering Workspace

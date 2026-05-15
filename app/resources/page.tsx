@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Download, FileText, Box, Code, FileArchive } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Card } from "@/components/ui/card";
 
 const title = "Downloads & Resources";
@@ -65,6 +66,10 @@ export default function ResourcesPage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
       <div className="mx-auto max-w-5xl">
+        <Breadcrumbs
+          items={[{ label: "Resources", href: "/resources", active: true }]}
+          className="mb-8"
+        />
         <div className="mb-12 text-center lg:text-left">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline flex items-center justify-center lg:justify-start gap-3">
             <FileArchive className="h-10 w-10 text-primary" />

@@ -11,6 +11,7 @@ import {
   Mail,
 } from "lucide-react";
 import Link from "next/link";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 // Server component with revalidation
 export const revalidate = 3600;
@@ -108,7 +109,11 @@ export default async function PublicStatusPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center py-20 px-4">
-      <div className="max-w-3xl w-full space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="max-w-5xl w-full space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+        <Breadcrumbs
+          items={[{ label: "Status", href: "/status", active: true }]}
+          className="mb-8"
+        />
         {/* Header */}
         <div className="flex flex-col items-center text-center space-y-4">
           <Link href="/" className="group flex items-center gap-2 mb-4">

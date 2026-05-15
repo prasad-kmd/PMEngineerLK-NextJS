@@ -4,6 +4,7 @@ import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { AlertTriangle, ArrowRight, X } from "lucide-react";
 import Link from "next/link";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const REDIRECT_DELAY = 5; // seconds
 
@@ -91,6 +92,15 @@ function ExternalLinkContent() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4 text-foreground selection:bg-primary/20">
+      <div className="w-full max-w-md mb-8">
+        <Breadcrumbs
+          items={[
+            { label: "External Link", href: "/external-link", active: true },
+          ]}
+          className="justify-center mb-0"
+        />
+      </div>
+
       <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-2xl transition-all duration-300">
         {/* Glow effect */}
         <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-primary/20 blur-3xl" />

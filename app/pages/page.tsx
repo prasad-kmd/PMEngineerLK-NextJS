@@ -32,6 +32,7 @@ import {
   Hash,
   Heart,
 } from "lucide-react";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const title = "Site Directory";
 const description =
@@ -363,6 +364,10 @@ export default function PagesOverview() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 bg-background">
       <div className="mx-auto max-w-6xl">
+        <Breadcrumbs
+          items={[{ label: "Directory", href: "/pages", active: true }]}
+          className="mb-8"
+        />
         <header className="mb-12 text-center lg:text-left">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline lg:text-5xl">
             Site Directory

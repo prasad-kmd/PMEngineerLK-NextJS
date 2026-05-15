@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Scale, ArrowLeft, FileText, UserCog, Globe, ShieldCheck, BarChart2, KeyRound } from "lucide-react";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Terms and Conditions",
@@ -321,14 +322,18 @@ export default function TermsAndConditionsPage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-4xl px-6 py-12 lg:px-8">
-        <Link
-          href="/pages"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-8 transition-colors"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Directory
-        </Link>
+      <div className="mx-auto max-w-6xl px-6 py-12 lg:px-8">
+       <Breadcrumbs
+          items={[
+            { label: "Directory", href: "/pages" },
+            {
+              label: "Terms & Conditions",
+              href: "/terms-and-conditions",
+              active: true,
+            },
+          ]}
+          className="mb-8"
+        />
 
         <div className="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-muted-foreground leading-relaxed">
           <div className="flex items-center justify-between border-b border-border pb-4">

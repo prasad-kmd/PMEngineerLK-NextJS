@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getContentByType } from "@/lib/content";
 import { ArticleCard } from "@/components/unique-cards";
 import { Pagination } from "@/components/pagination";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import * as motion from "framer-motion/client";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 
@@ -54,6 +55,10 @@ export default async function ArticlesPage({
   return (
     <div className="min-h-screen py-12 articles_page img_grad_pm">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        <Breadcrumbs
+          items={[{ label: "Articles", href: "/articles", active: true }]}
+          className="mb-8"
+        />
         <motion.div
           initial="hidden"
           animate="visible"

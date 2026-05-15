@@ -25,6 +25,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 // import { siteConfig } from "@/lib/config";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 // ---------------------------------------------------------------------------
 // Storage / Data items we actually collect
@@ -149,13 +150,13 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <div className="mx-auto max-w-6xl px-6 py-12 lg:px-8">
-        <Link
-          href="/pages"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-8 transition-colors"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Directory
-        </Link>
+        <Breadcrumbs
+          items={[
+            { label: "Directory", href: "/pages" },
+            { label: "Privacy Policy", href: "/privacy-policy", active: true },
+          ]}
+          className="mb-8"
+        />
 
         {/* ── Transparency Dashboard ── */}
         <section className="rounded-2xl border border-border bg-card p-6 space-y-6">

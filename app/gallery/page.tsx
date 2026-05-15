@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import GalleryClient from "@/components/gallery-client";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const title = "Project Gallery";
 const description =
@@ -66,6 +67,10 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen py-20 px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
+        <Breadcrumbs
+          items={[{ label: "Gallery", href: "/gallery", active: true }]}
+          className="mb-8"
+        />
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold philosopher lg:text-5xl mb-4">
             Project Gallery

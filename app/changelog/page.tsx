@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { GitCommit, Tag, ArrowRight } from "lucide-react";
 import { promises as fs } from "fs";
 import path from "path";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import type { ChangelogEntry } from "@/types/changelog";
 
 const title = "Changelog";
@@ -158,7 +159,11 @@ export default async function ChangelogPage() {
 
   return (
     <div className="min-h-screen pb-20 px-6 lg:px-8 pt-12">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-6xl">
+        <Breadcrumbs
+          items={[{ label: "Changelog", href: "/changelog", active: true }]}
+          className="mb-8"
+        />
         <header className="mb-16 text-center">
           <h1 className="text-4xl font-bold tracking-tight lg:text-5xl mb-4 amoriaregular">
             Changelog

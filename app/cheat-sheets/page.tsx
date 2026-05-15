@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Printer, Download, Layout, Cpu, Code2, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const title = "Engineering Cheat Sheets";
 const description =
@@ -47,6 +48,10 @@ export default function CheatSheetsPage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
       <div className="mx-auto max-w-5xl">
+        <Breadcrumbs
+          items={[{ label: "Cheat Sheets", href: "/cheat-sheets", active: true }]}
+          className="mb-8"
+        />
         <header className="mb-12">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline flex items-center gap-3">
             <Printer className="h-10 w-10 text-primary" />

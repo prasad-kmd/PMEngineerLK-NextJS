@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Heart, Coffee, Star, Rocket, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
   Card,
   CardHeader,
@@ -68,6 +69,10 @@ export default function SponsorshipPage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
       <div className="mx-auto max-w-5xl text-center">
+        <Breadcrumbs
+          items={[{ label: "Sponsorship", href: "/sponsorship", active: true }]}
+          className="mb-8 text-left"
+        />
         <header className="mb-16">
           <div className="inline-flex items-center justify-center p-3 mb-6 rounded-2xl bg-primary/10 text-primary">
             <Heart className="h-8 w-8 fill-current" />

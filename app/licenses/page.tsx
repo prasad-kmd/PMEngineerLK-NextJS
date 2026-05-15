@@ -13,6 +13,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { SafeLink } from "@/components/ui/safe-link";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 // Types for our license data
 type Category = "All" | "Software" | "Fonts" | "Assets";
@@ -239,8 +240,17 @@ export default function LicensesPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-6 pt-12">
+        <Breadcrumbs
+          items={[
+            { label: "Directory", href: "/pages" },
+            { label: "Licenses", href: "/licenses", active: true },
+          ]}
+          className="mb-0"
+        />
+      </div>
       {/* Custom Hero Section (max 50vh) */}
-      <section className="relative h-[45vh] min-h-[320px] max-h-[50vh] flex items-end justify-center overflow-hidden border-b border-border/40">
+      <section className="relative h-[45vh] min-h-[100px] max-h-[200px] flex items-end justify-center overflow-hidden border-b border-border/40">
         {/* Background Grid & Accents */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[32px_32px] mask-[radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
@@ -255,15 +265,6 @@ export default function LicensesPage() {
             transition={{ duration: 0.6 }}
             className="max-w-4xl"
           >
-            <div className="flex justify-start mb-6">
-              <SafeLink
-                href="/pages"
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-muted/40 border border-border/50 text-xs font-medium text-muted-foreground hover:text-primary hover:border-primary/30 transition-all backdrop-blur-md"
-              >
-                <ArrowLeft className="h-3 w-3" />
-                <span>Back to Directory</span>
-              </SafeLink>
-            </div>
 
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight amoriaregular mb-4">
               Legal <span className="text-primary italic">Credits.</span>

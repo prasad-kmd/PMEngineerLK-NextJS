@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ShieldAlert, Lock, Bug, Mail, FileCheck } from "lucide-react";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const title = "Security Policy";
 const description =
@@ -13,7 +14,14 @@ export const metadata: Metadata = {
 export default function SecurityPage() {
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-5xl">
+        <Breadcrumbs
+          items={[
+            { label: "Directory", href: "/pages" },
+            { label: "Security", href: "/security", active: true },
+          ]}
+          className="mb-8"
+        />
         <header className="mb-12">
           <h1 className="mb-4 text-4xl font-bold mozilla-headline flex items-center gap-3">
             <ShieldAlert className="h-10 w-10 text-primary" />

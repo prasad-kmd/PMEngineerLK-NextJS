@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import {
   ArrowRight,
   Check,
@@ -417,6 +418,15 @@ export default function TestButtonsPage() {
 
   return (
     <div className="min-h-screen bg-background px-6 py-10 lg:px-10">
+      <div className="mx-auto max-w-7xl mb-8">
+        <Breadcrumbs
+          items={[
+            { label: "Directory", href: "/pages" },
+            { label: "Button Lab", href: "/pages/test-buttons", active: true },
+          ]}
+          className="mb-0"
+        />
+      </div>
       {/* Local keyframes for the shimmer recipe (keeps this page self-contained). */}
       <style jsx global>{`
         @keyframes btnShimmer {

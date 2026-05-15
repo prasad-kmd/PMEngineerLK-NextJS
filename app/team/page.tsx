@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { Mail, Linkedin, Github } from "lucide-react";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const title = "Our Team";
 const description =
@@ -76,6 +77,10 @@ export default function TeamPage() {
   return (
     <div className="min-h-screen py-20 px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
+        <Breadcrumbs
+          items={[{ label: "Team", href: "/team", active: true }]}
+          className="mb-8"
+        />
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold philosopher lg:text-5xl mb-4">
             Meet Our Team

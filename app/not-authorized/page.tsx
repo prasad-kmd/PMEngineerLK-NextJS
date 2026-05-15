@@ -4,6 +4,7 @@ import { ShieldAlert, LogIn, UserX, Home, LayoutDashboard } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { SignOutButton } from "@/components/auth/SignOutButton";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export default async function NotAuthorizedPage() {
   const session = await auth.api.getSession({
@@ -12,6 +13,14 @@ export default async function NotAuthorizedPage() {
 
   return (
     <div className="max-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
+      <div className="max-w-lg w-full">
+        <Breadcrumbs
+          items={[
+            { label: "Not Authorized", href: "/not-authorized", active: true },
+          ]}
+          className="mb-8 justify-center"
+        />
+      </div>
       {/* Background geometric element */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10" />
 

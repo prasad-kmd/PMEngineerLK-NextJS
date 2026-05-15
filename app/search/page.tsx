@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useSearchParams } from "next/navigation";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 interface SearchResult {
   slug: string;
@@ -61,7 +62,11 @@ function SearchContent() {
 
   return (
     <div className="min-h-screen px-6 py-12 lg:px-8 img_grad_pm">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-5xl">
+        <Breadcrumbs
+          items={[{ label: "Search", href: "/search", active: true }]}
+          className="mb-8"
+        />
         <div className="mb-12">
           <h1 className="mb-8 text-4xl font-bold mozilla-headline flex items-center gap-3">
             <SearchIcon className="h-10 w-10 text-primary" />

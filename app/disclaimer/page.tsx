@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AlertTriangle, ArrowLeft, BookOpen, Bot, FileWarning, FlaskConical, Globe, Wrench } from "lucide-react";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Disclaimer",
@@ -233,14 +234,14 @@ export default function DisclaimerPage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-4xl px-6 py-12 lg:px-8">
-        <Link
-          href="/pages"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-8 transition-colors"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Directory
-        </Link>
+      <div className="mx-auto max-w-6xl px-6 py-12 lg:px-8">
+        <Breadcrumbs
+          items={[
+            { label: "Directory", href: "/pages" },
+            { label: "Disclaimer", href: "/disclaimer", active: true },
+          ]}
+          className="mb-8"
+        />
 
         <div className="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-muted-foreground leading-relaxed">
           <div className="flex items-center justify-between border-b border-border pb-4">
