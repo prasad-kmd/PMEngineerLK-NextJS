@@ -497,23 +497,6 @@ export function ResumePDF({ resume }: ResumePDFProps) {
                 ))}
               </View>
             )}
-
-            {/* Non Related Referees - NEW SECTION */}
-            {resume.referees && resume.referees.length > 0 && (resume.referees || []).some(r => r.name) && (
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Non Related Referees</Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-                  {(resume.referees || []).filter(r => r.name).map((ref, i) => (
-                    <View key={i} style={{ width: "48%", marginBottom: 8 }} wrap={false}>
-                      <Text style={{ fontSize: 9, fontWeight: 700, color: colors.primary }}>{ref.name}</Text>
-                      <Text style={{ fontSize: 8, color: colors.text }}>{ref.position}</Text>
-                      <Text style={{ fontSize: 8, color: colors.textMuted }}>{ref.workingPlacement}</Text>
-                      <Text style={{ fontSize: 8, color: colors.accent }}>{ref.contactDetails}</Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
-            )}
           </View>
 
           {/* Side Column */}
@@ -569,6 +552,23 @@ export function ResumePDF({ resume }: ResumePDFProps) {
                     <Text style={{ fontSize: 8.5 }}>{cert}</Text>
                   </View>
                 ))}
+              </View>
+            )}
+
+            {/* Non Related Referees - MOVED HERE */}
+            {resume.referees && resume.referees.length > 0 && (resume.referees || []).some(r => r.name) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Non Related Referees</Text>
+                <View style={{ gap: 8 }}>
+                  {(resume.referees || []).filter(r => r.name).map((ref, i) => (
+                    <View key={i} style={{ marginBottom: 4 }} wrap={false}>
+                      <Text style={{ fontSize: 9, fontWeight: 700, color: colors.primary }}>{ref.name}</Text>
+                      <Text style={{ fontSize: 8, color: colors.text }}>{ref.position}</Text>
+                      <Text style={{ fontSize: 8, color: colors.textMuted }}>{ref.workingPlacement}</Text>
+                      <Text style={{ fontSize: 8, color: colors.accent }}>{ref.contactDetails}</Text>
+                    </View>
+                  ))}
+                </View>
               </View>
             )}
           </View>
