@@ -22,7 +22,7 @@ export default function ResumePDFLink({ resume }: ResumePDFLinkProps) {
           disabled={loading}
         >
           <Download className="mr-2 h-5 w-5" />
-          {loading ? "Generating PDF..." : "Download Resume (PDF)"}
+          {loading ? <span className="hidden sm:inline">Generating PDF...</span> : <span className="hidden sm:inline">Download Resume (PDF)</span>}
         </Button>
       )}
     </PDFDownloadLink>

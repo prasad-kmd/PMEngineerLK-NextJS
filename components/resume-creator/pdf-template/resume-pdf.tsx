@@ -8,26 +8,34 @@ import {
   Link,
 } from "@react-pdf/renderer";
 import { registerFonts } from "@/components/invoice-gen/pdf-template/pdf-fonts";
+import {
+  EmailIcon,
+  PhoneIcon,
+  MapPinIcon,
+  GlobeIcon,
+  LinkedinIcon,
+  GithubIcon,
+} from "./pdf-icons";
 
 // Register fonts before rendering
 registerFonts();
 
 // --- Types ---
-interface Experience {
+export interface Experience {
   company: string;
   role: string;
   period: string;
   description: string;
 }
 
-interface Education {
+export interface Education {
   school: string;
   degree: string;
   period: string;
   grade: string;
 }
 
-interface Project {
+export interface Project {
   name: string;
   description: string;
   link: string;
@@ -49,168 +57,127 @@ export interface ResumeData {
   skills: string[];
   certifications: string[];
   projects: Project[];
+  languages: string[];
+  volunteering: Experience[];
 }
 
 // --- Theme ---
 const colors = {
-  primary: "#0f172a",
-  accent: "#3b82f6",
-  text: "#1e293b",
-  textMuted: "#475569",
-  textLight: "#94a3b8",
-  border: "#e2e8f0",
-  bgLight: "#f8fafc",
-  bgCard: "#fafafa",
+  primary: "#1e293b", // slate-800
+  accent: "#0891b2", // cyan-600
+  text: "#334155", // slate-700
+  textMuted: "#64748b", // slate-500
+  textLight: "#94a3b8", // slate-400
+  border: "#e2e8f0", // slate-200
+  bgLight: "#f8fafc", // slate-50
   white: "#ffffff",
-  green: "#22c55e",
-  greenMuted: "rgba(34, 197, 94, 0.7)",
-  purple: "rgba(168, 85, 247, 0.7)",
-  orange: "#f97316",
-  orangeBg: "#fff7ed",
-  orangeBorder: "#ffedd5",
-  skyBlue: "#0ea5e9",
-  skyBlueBg: "#f0f9ff",
-  skyBlueDark: "#0369a1",
-  accentBg: "#eff6ff",
 };
 
 const spacing = {
-  xs: 3,
-  sm: 6,
-  md: 10,
-  lg: 16,
-  xl: 24,
-  pagePadding: 32,
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 20,
+  xl: 32,
+  pagePadding: 40,
 };
 
 // --- Styles ---
 const styles = StyleSheet.create({
   page: {
-    paddingTop: spacing.pagePadding,
-    paddingBottom: 60,
-    paddingHorizontal: 0,
+    padding: spacing.pagePadding,
     fontSize: 9,
-    fontFamily: "Montserrat",
+    fontFamily: "Inter",
     color: colors.text,
-    lineHeight: 1.4,
+    lineHeight: 1.5,
     backgroundColor: colors.white,
   },
 
-  // ---- Header (dark banner) ----
-  headerBanner: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.pagePadding,
-    paddingTop: 28,
-    paddingBottom: 20,
+  // ---- Header ----
+  header: {
     flexDirection: "row",
-    alignItems: "flex-end",
-  },
-  profileImage: {
-    width: 72,
-    height: 72,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: colors.white,
-    objectFit: "cover",
-  },
-  profilePlaceholder: {
-    width: 72,
-    height: 72,
-    borderRadius: 12,
-    backgroundColor: colors.accent,
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: "center",
+    marginBottom: spacing.lg,
+    borderBottomWidth: 2,
+    borderBottomColor: colors.primary,
+    paddingBottom: spacing.md,
   },
-  profileInitial: {
-    fontSize: 28,
-    fontWeight: 700,
-    color: colors.white,
-    fontFamily: "Montserrat",
-  },
-  headerTextBlock: {
-    marginLeft: 16,
+  headerLeft: {
     flex: 1,
   },
   nameText: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 700,
-    color: colors.white,
+    color: colors.primary,
     fontFamily: "Montserrat",
     textTransform: "uppercase",
-    letterSpacing: 0.5,
+    letterSpacing: 1,
   },
   roleText: {
     fontSize: 12,
     fontWeight: 500,
     color: colors.accent,
-    fontFamily: "Inter",
     marginTop: 2,
+    letterSpacing: 0.5,
+  },
+  headerImage: {
+    width: 64,
+    height: 64,
+    borderRadius: 8,
+    marginLeft: spacing.md,
+    objectFit: "cover",
   },
 
-  // ---- Contact bar ----
-  contactBar: {
-    backgroundColor: colors.bgLight,
-    paddingVertical: 8,
-    paddingHorizontal: spacing.pagePadding,
+  // ---- Contact Row ----
+  contactRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 6,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    gap: 12,
+    marginBottom: spacing.lg,
   },
   contactItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 14,
+    gap: 4,
   },
-  contactLabel: {
-    fontSize: 7,
-    fontWeight: 700,
-    color: colors.accent,
-    fontFamily: "Inter",
-    marginRight: 3,
-    textTransform: "uppercase",
-  },
-  contactValue: {
-    fontSize: 7.5,
+  contactText: {
+    fontSize: 8,
     color: colors.textMuted,
-    fontFamily: "Inter",
   },
   contactLink: {
-    fontSize: 7.5,
+    fontSize: 8,
     color: colors.textMuted,
-    fontFamily: "Inter",
     textDecoration: "none",
   },
 
-  // ---- Body ----
-  body: {
-    paddingHorizontal: spacing.pagePadding,
-    paddingTop: spacing.lg,
+  // ---- Layout ----
+  mainContainer: {
+    flexDirection: "row",
+    gap: spacing.lg,
+  },
+  leftColumn: {
+    flex: 2.2,
+  },
+  rightColumn: {
+    flex: 1,
   },
 
   // ---- Section ----
-  sectionTitle: {
-    fontSize: 9,
-    fontWeight: 700,
-    textTransform: "uppercase",
-    letterSpacing: 1.5,
-    fontFamily: "Inter",
-    marginBottom: spacing.sm,
-    paddingBottom: 3,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  sectionBlock: {
+  section: {
     marginBottom: spacing.lg,
   },
-
-  // ---- Summary ----
-  summaryText: {
-    fontSize: 9,
-    color: colors.textMuted,
-    lineHeight: 1.5,
-    fontFamily: "Inter",
+  sectionTitle: {
+    fontSize: 10,
+    fontWeight: 700,
+    color: colors.primary,
+    fontFamily: "Montserrat",
+    textTransform: "uppercase",
+    letterSpacing: 1.2,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    paddingBottom: 4,
+    marginBottom: spacing.sm,
   },
 
   // ---- Experience ----
@@ -220,245 +187,133 @@ const styles = StyleSheet.create({
   expHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
     marginBottom: 2,
   },
   expRole: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: 700,
-    color: colors.text,
-    fontFamily: "Montserrat",
-    flex: 1,
+    color: colors.primary,
   },
-  expPeriodBadge: {
-    backgroundColor: colors.accentBg,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 3,
-  },
-  expPeriodText: {
-    fontSize: 7,
-    fontWeight: 700,
-    color: colors.accent,
-    fontFamily: "Inter",
+  expPeriod: {
+    fontSize: 8,
+    fontWeight: 500,
+    color: colors.textMuted,
   },
   expCompany: {
     fontSize: 9,
-    fontWeight: 700,
+    fontWeight: 600,
     color: colors.accent,
-    fontFamily: "Inter",
-    marginBottom: 3,
+    marginBottom: 4,
   },
-  expDescription: {
+  bulletPoint: {
+    flexDirection: "row",
+    marginBottom: 2,
+    paddingLeft: 4,
+  },
+  bullet: {
+    width: 8,
+    fontSize: 8,
+    color: colors.accent,
+  },
+  bulletText: {
+    flex: 1,
     fontSize: 8.5,
-    color: colors.textMuted,
-    lineHeight: 1.5,
-    fontFamily: "Inter",
-  },
-  expDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: colors.accent,
-    marginRight: 8,
-    marginTop: 4,
-  },
-  expRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-  },
-  expContent: {
-    flex: 1,
-  },
-
-  // ---- Two-column layout ----
-  twoColRow: {
-    flexDirection: "row",
-    gap: spacing.xl,
-  },
-  colMain: {
-    flex: 2,
-  },
-  colSide: {
-    flex: 1,
+    color: colors.text,
   },
 
   // ---- Education ----
   educationItem: {
-    marginBottom: spacing.md,
-  },
-  eduHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 1,
-  },
-  eduDegree: {
-    fontSize: 11,
-    fontWeight: 700,
-    color: colors.text,
-    fontFamily: "Montserrat",
-    flex: 1,
-  },
-  eduPeriod: {
-    fontSize: 7,
-    fontWeight: 700,
-    color: colors.textLight,
-    fontFamily: "Inter",
+    marginBottom: spacing.sm,
   },
   eduSchool: {
     fontSize: 9,
-    fontWeight: 500,
-    color: colors.textMuted,
-    fontFamily: "Inter",
-  },
-  eduGrade: {
-    fontSize: 8,
     fontWeight: 700,
-    color: colors.green,
-    fontFamily: "Inter",
-    marginTop: 2,
+    color: colors.primary,
   },
-
-  // ---- Projects ----
-  projectItem: {
-    backgroundColor: colors.bgCard,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderStyle: "dashed",
-    borderRadius: 6,
-    padding: 8,
-    marginBottom: spacing.sm,
-  },
-  projectHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 2,
-  },
-  projectName: {
-    fontSize: 9,
-    fontWeight: 700,
+  eduDegree: {
+    fontSize: 8.5,
     color: colors.text,
-    fontFamily: "Montserrat",
-    flex: 1,
   },
-  projectLinkText: {
-    fontSize: 7,
-    color: colors.textLight,
-    fontFamily: "Inter",
-    textDecoration: "none",
-  },
-  projectDescription: {
+  eduPeriod: {
     fontSize: 8,
     color: colors.textMuted,
-    fontFamily: "Inter",
-    lineHeight: 1.4,
   },
 
   // ---- Skills ----
-  skillsWrap: {
+  skillGroup: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 4,
   },
-  skillBadge: {
-    backgroundColor: colors.orangeBg,
-    borderWidth: 1,
-    borderColor: colors.orangeBorder,
-    borderRadius: 3,
-    paddingHorizontal: 5,
+  skillTag: {
+    fontSize: 8,
+    paddingHorizontal: 6,
     paddingVertical: 2,
-  },
-  skillText: {
-    fontSize: 7.5,
-    fontWeight: 700,
-    color: colors.orange,
-    fontFamily: "Inter",
+    backgroundColor: colors.bgLight,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 4,
+    color: colors.text,
   },
 
-  // ---- Certifications ----
-  certItem: {
-    backgroundColor: colors.skyBlueBg,
-    borderRadius: 4,
-    paddingHorizontal: 6,
-    paddingVertical: 4,
-    marginBottom: 4,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 4,
+  // ---- Projects ----
+  projectItem: {
+    marginBottom: spacing.sm,
   },
-  certBullet: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: colors.skyBlue,
-    marginTop: 3,
-  },
-  certText: {
-    fontSize: 7.5,
+  projectName: {
+    fontSize: 9,
     fontWeight: 700,
-    color: colors.skyBlueDark,
-    fontFamily: "Inter",
-    flex: 1,
+    color: colors.primary,
+  },
+  projectLink: {
+    fontSize: 8,
+    color: colors.accent,
+    textDecoration: "none",
+    marginBottom: 2,
+  },
+  projectDesc: {
+    fontSize: 8.5,
+    color: colors.textMuted,
   },
 
   // ---- Footer ----
-  fixedFooter: {
+  footer: {
     position: "absolute",
-    bottom: 20,
+    bottom: spacing.pagePadding,
     left: spacing.pagePadding,
     right: spacing.pagePadding,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingTop: 6,
   },
-  footerLeft: {
-    fontSize: 6.5,
+  footerText: {
+    fontSize: 7,
     color: colors.textLight,
-    fontFamily: "Inter",
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
   },
-  footerRight: {
-    fontSize: 6.5,
-    color: colors.textLight,
-    fontFamily: "Inter",
-  },
-  footerLink: {
-    fontSize: 6.5,
-    color: colors.textLight,
-    textDecoration: "underline",
-  },
-  pageNumber: {
-    position: "absolute",
-    bottom: 20,
-    left: 0,
-    right: 0,
-    textAlign: "center",
-    fontSize: 6.5,
-    color: colors.textLight,
-    fontFamily: "Inter",
-  },
-
-  // ---- Gradient bar (top & bottom) ----
-  gradientBar: {
-    height: 3,
-    flexDirection: "row",
-  },
-  gradientSegment1: { flex: 1, backgroundColor: "#3b82f6" },
-  gradientSegment2: { flex: 1, backgroundColor: "#22c55e" },
-  gradientSegment3: { flex: 1, backgroundColor: "#a855f7" },
-  gradientSegment4: { flex: 1, backgroundColor: "#f97316" },
 });
 
-// --- Helper ---
+// --- Helpers ---
 const normalizeUrl = (url: string) => {
   if (!url) return "";
-  return url.startsWith("http") ? url : `https://${url}`;
+  if (url.startsWith("http")) return url;
+  return `https://${url}`;
+};
+
+const renderDescription = (text: string) => {
+  if (!text) return null;
+  const lines = text.split("\n").filter((line) => line.trim() !== "");
+  if (lines.length > 1) {
+    return lines.map((line, i) => (
+      <View key={i} style={styles.bulletPoint}>
+        <Text style={styles.bullet}>•</Text>
+        <Text style={styles.bulletText}>{line.trim().replace(/^[•\-\*]\s*/, "")}</Text>
+      </View>
+    ));
+  }
+  return <Text style={styles.bulletText}>{text}</Text>;
 };
 
 // --- Component ---
@@ -474,271 +329,201 @@ export function ResumePDF({ resume }: ResumePDFProps) {
       title={`${resume.name} - Resume`}
       author={resume.name}
       subject={`Professional Resume - ${resume.name}`}
-      keywords={`resume, cv, ${resume.name}, ${resume.role}`}
-      creator="Resume Architect (via prasadm.vercel.app)"
-      producer="PrasadM Blogfolio"
+      creator="Resume Architect"
     >
-      <Page size="A4" style={styles.page} wrap>
-        {/* Gradient bar top */}
-        <View style={styles.gradientBar} fixed>
-          <View style={styles.gradientSegment1} />
-          <View style={styles.gradientSegment2} />
-          <View style={styles.gradientSegment3} />
-          <View style={styles.gradientSegment4} />
-        </View>
-
-        {/* Header banner */}
-        <View style={styles.headerBanner} wrap={false}>
-          {resume.image ? (
-            <Image src={resume.image} style={styles.profileImage} />
-          ) : (
-            <View style={styles.profilePlaceholder}>
-              <Text style={styles.profileInitial}>
-                {resume.name.charAt(0).toUpperCase()}
-              </Text>
-            </View>
-          )}
-          <View style={styles.headerTextBlock}>
+      <Page size="A4" style={styles.page}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
             <Text style={styles.nameText}>{resume.name}</Text>
             <Text style={styles.roleText}>{resume.role}</Text>
           </View>
+          {resume.image && <Image src={resume.image} style={styles.headerImage} />}
         </View>
 
-        {/* Contact bar */}
-        <View style={styles.contactBar} wrap={false}>
+        {/* Contact info */}
+        <View style={styles.contactRow}>
           {resume.email && (
             <View style={styles.contactItem}>
-              <Text style={styles.contactLabel}>Email</Text>
-              <Link
-                src={`mailto:${resume.email}`}
-                style={styles.contactLink}
-              >
+              <EmailIcon size={8} color={colors.accent} />
+              <Link src={`mailto:${resume.email}`} style={styles.contactLink}>
                 {resume.email}
               </Link>
             </View>
           )}
           {resume.phone && (
             <View style={styles.contactItem}>
-              <Text style={styles.contactLabel}>Phone</Text>
-              <Text style={styles.contactValue}>{resume.phone}</Text>
+              <PhoneIcon size={8} color={colors.accent} />
+              <Text style={styles.contactText}>{resume.phone}</Text>
             </View>
           )}
           {resume.location && (
             <View style={styles.contactItem}>
-              <Text style={styles.contactLabel}>Location</Text>
-              <Text style={styles.contactValue}>{resume.location}</Text>
+              <MapPinIcon size={8} color={colors.accent} />
+              <Text style={styles.contactText}>{resume.location}</Text>
             </View>
           )}
           {resume.website && (
             <View style={styles.contactItem}>
-              <Text style={styles.contactLabel}>Web</Text>
-              <Link
-                src={normalizeUrl(resume.website)}
-                style={styles.contactLink}
-              >
+              <GlobeIcon size={8} color={colors.accent} />
+              <Link src={normalizeUrl(resume.website)} style={styles.contactLink}>
                 {resume.website}
               </Link>
             </View>
           )}
           {resume.linkedin && (
             <View style={styles.contactItem}>
-              <Text style={styles.contactLabel}>LinkedIn</Text>
-              <Link
-                src={normalizeUrl(resume.linkedin)}
-                style={styles.contactLink}
-              >
-                {resume.linkedin}
+              <LinkedinIcon size={8} color={colors.accent} />
+              <Link src={normalizeUrl(resume.linkedin)} style={styles.contactLink}>
+                LinkedIn
               </Link>
             </View>
           )}
           {resume.github && (
             <View style={styles.contactItem}>
-              <Text style={styles.contactLabel}>GitHub</Text>
-              <Link
-                src={normalizeUrl(resume.github)}
-                style={styles.contactLink}
-              >
-                {resume.github}
+              <GithubIcon size={8} color={colors.accent} />
+              <Link src={normalizeUrl(resume.github)} style={styles.contactLink}>
+                GitHub
               </Link>
             </View>
           )}
         </View>
 
-        {/* Body */}
-        <View style={styles.body}>
-          {/* Professional Summary */}
-          {resume.summary && (
-            <View style={styles.sectionBlock} wrap={false}>
-              <Text style={[styles.sectionTitle, { color: colors.accent }]}>
-                Professional Summary
-              </Text>
-              <Text style={styles.summaryText}>{resume.summary}</Text>
-            </View>
-          )}
+        {/* Main Content Layout */}
+        <View style={styles.mainContainer}>
+          {/* Main Column */}
+          <View style={styles.leftColumn}>
+            {/* Summary */}
+            {resume.summary && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Professional Summary</Text>
+                <Text style={{ fontSize: 8.5, color: colors.text }}>{resume.summary}</Text>
+              </View>
+            )}
 
-          {/* Work Experience */}
-          {resume.experiences.length > 0 && (
-            <View style={styles.sectionBlock}>
-              <Text
-                style={[styles.sectionTitle, { color: colors.accent }]}
-                minPresenceAhead={40}
-              >
-                Work Experience
-              </Text>
-              {resume.experiences.map((exp, i) => (
-                <View key={i} style={styles.experienceItem} wrap={false}>
-                  <View style={styles.expRow}>
-                    <View style={styles.expDot} />
-                    <View style={styles.expContent}>
-                      <View style={styles.expHeader}>
-                        <Text style={styles.expRole}>{exp.role}</Text>
-                        {exp.period && (
-                          <View style={styles.expPeriodBadge}>
-                            <Text style={styles.expPeriodText}>
-                              {exp.period}
-                            </Text>
-                          </View>
-                        )}
-                      </View>
-                      <Text style={styles.expCompany}>{exp.company}</Text>
-                      {exp.description && (
-                        <Text style={styles.expDescription}>
-                          {exp.description}
-                        </Text>
-                      )}
+            {/* Experience */}
+            {resume.experiences && resume.experiences.length > 0 && resume.experiences.some(e => e.role || e.company) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Experience</Text>
+                {resume.experiences.filter(e => e.role || e.company).map((exp, i) => (
+                  <View key={i} style={styles.experienceItem} wrap={false}>
+                    <View style={styles.expHeader}>
+                      <Text style={styles.expRole}>{exp.role}</Text>
+                      <Text style={styles.expPeriod}>{exp.period}</Text>
                     </View>
+                    <Text style={styles.expCompany}>{exp.company}</Text>
+                    <View>{renderDescription(exp.description)}</View>
                   </View>
-                </View>
-              ))}
-            </View>
-          )}
+                ))}
+              </View>
+            )}
 
-          {/* Two-column: Education + Projects | Skills + Certs */}
-          <View style={styles.twoColRow}>
-            {/* Left column */}
-            <View style={styles.colMain}>
-              {/* Education */}
-              {resume.education.length > 0 && (
-                <View style={styles.sectionBlock}>
-                  <Text
-                    style={[
-                      styles.sectionTitle,
-                      { color: colors.greenMuted },
-                    ]}
-                    minPresenceAhead={40}
-                  >
-                    Education
-                  </Text>
-                  {resume.education.map((edu, i) => (
-                    <View key={i} style={styles.educationItem} wrap={false}>
-                      <View style={styles.eduHeader}>
-                        <Text style={styles.eduDegree}>{edu.degree}</Text>
-                        {edu.period && (
-                          <Text style={styles.eduPeriod}>{edu.period}</Text>
-                        )}
-                      </View>
-                      <Text style={styles.eduSchool}>{edu.school}</Text>
-                      {edu.grade && (
-                        <Text style={styles.eduGrade}>{edu.grade}</Text>
-                      )}
+            {/* Volunteering */}
+            {resume.volunteering && resume.volunteering.length > 0 && resume.volunteering.some(v => v.role || v.company) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Volunteering & Community</Text>
+                {resume.volunteering.filter(v => v.role || v.company).map((vol, i) => (
+                  <View key={i} style={styles.experienceItem} wrap={false}>
+                    <View style={styles.expHeader}>
+                      <Text style={styles.expRole}>{vol.role}</Text>
+                      <Text style={styles.expPeriod}>{vol.period}</Text>
                     </View>
+                    <Text style={styles.expCompany}>{vol.company}</Text>
+                    <View>{renderDescription(vol.description)}</View>
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* Projects */}
+            {resume.projects && resume.projects.length > 0 && resume.projects.some(p => p.name) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Projects</Text>
+                {resume.projects.filter(p => p.name).map((proj, i) => (
+                  <View key={i} style={styles.projectItem} wrap={false}>
+                    <Text style={styles.projectName}>{proj.name}</Text>
+                    {proj.link && (
+                      <Link src={normalizeUrl(proj.link)} style={styles.projectLink}>
+                        {proj.link}
+                      </Link>
+                    )}
+                    <Text style={styles.projectDesc}>{proj.description}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+
+          {/* Side Column */}
+          <View style={styles.rightColumn}>
+            {/* Skills */}
+            {resume.skills && resume.skills.length > 0 && resume.skills.some(s => s.trim()) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Skills</Text>
+                <View style={styles.skillGroup}>
+                  {resume.skills.filter(s => s.trim()).map((skill, i) => (
+                    <Text key={i} style={styles.skillTag}>
+                      {skill}
+                    </Text>
                   ))}
                 </View>
-              )}
+              </View>
+            )}
 
-              {/* Projects */}
-              {resume.projects.length > 0 && (
-                <View style={styles.sectionBlock}>
-                  <Text
-                    style={[styles.sectionTitle, { color: colors.purple }]}
-                    minPresenceAhead={40}
-                  >
-                    Key Projects
-                  </Text>
-                  {resume.projects.map((p, i) => (
-                    <View key={i} style={styles.projectItem} wrap={false}>
-                      <View style={styles.projectHeader}>
-                        <Text style={styles.projectName}>{p.name}</Text>
-                        {p.link && (
-                          <Link
-                            src={normalizeUrl(p.link)}
-                            style={styles.projectLinkText}
-                          >
-                            ↗
-                          </Link>
-                        )}
-                      </View>
-                      <Text style={styles.projectDescription}>
-                        {p.description}
+            {/* Languages */}
+            {resume.languages && resume.languages.length > 0 && resume.languages.some(l => l.trim()) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Languages</Text>
+                <View style={styles.skillGroup}>
+                  {resume.languages.filter(l => l.trim()).map((lang, i) => (
+                    <Text key={i} style={styles.skillTag}>
+                      {lang}
+                    </Text>
+                  ))}
+                </View>
+              </View>
+            )}
+
+            {/* Education */}
+            {resume.education && resume.education.length > 0 && resume.education.some(e => e.school || e.degree) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Education</Text>
+                {resume.education.filter(e => e.school || e.degree).map((edu, i) => (
+                  <View key={i} style={styles.educationItem} wrap={false}>
+                    <Text style={styles.eduSchool}>{edu.school}</Text>
+                    <Text style={styles.eduDegree}>{edu.degree}</Text>
+                    <Text style={styles.eduPeriod}>{edu.period}</Text>
+                    {edu.grade && (
+                      <Text style={{ fontSize: 8, color: colors.accent, marginTop: 1 }}>
+                        {edu.grade}
                       </Text>
-                    </View>
-                  ))}
-                </View>
-              )}
-            </View>
-
-            {/* Right column */}
-            <View style={styles.colSide}>
-              {/* Skills */}
-              {resume.skills.length > 0 && (
-                <View style={styles.sectionBlock}>
-                  <Text
-                    style={[
-                      styles.sectionTitle,
-                      { color: "rgba(249, 115, 22, 0.7)" },
-                    ]}
-                  >
-                    Technical Skills
-                  </Text>
-                  <View style={styles.skillsWrap}>
-                    {resume.skills.map((s, i) => (
-                      <View key={i} style={styles.skillBadge}>
-                        <Text style={styles.skillText}>{s}</Text>
-                      </View>
-                    ))}
+                    )}
                   </View>
-                </View>
-              )}
+                ))}
+              </View>
+            )}
 
-              {/* Certifications */}
-              {resume.certifications.length > 0 && (
-                <View style={styles.sectionBlock}>
-                  <Text
-                    style={[
-                      styles.sectionTitle,
-                      { color: "rgba(14, 165, 233, 0.7)" },
-                    ]}
-                  >
-                    Certifications
-                  </Text>
-                  {resume.certifications.map((c, i) => (
-                    <View key={i} style={styles.certItem} wrap={false}>
-                      <View style={styles.certBullet} />
-                      <Text style={styles.certText}>{c}</Text>
-                    </View>
-                  ))}
-                </View>
-              )}
-            </View>
+            {/* Certifications */}
+            {resume.certifications && resume.certifications.length > 0 && resume.certifications.some(c => c.trim()) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Certifications</Text>
+                {resume.certifications.filter(c => c.trim()).map((cert, i) => (
+                  <View key={i} style={{ marginBottom: 4 }}>
+                    <Text style={{ fontSize: 8.5 }}>{cert}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         </View>
 
-        {/* Fixed footer on every page */}
-        <View style={styles.fixedFooter} fixed>
-          <Text style={styles.footerLeft}>
-            Resume Architect by PM-Engineer Tools
-          </Text>
-          <Text style={styles.footerRight}>© {currentYear}</Text>
+        {/* Footer */}
+        <View style={styles.footer} fixed>
+          <Link src="https://prasadm.vercel.app/tools/resume-creator" style={styles.contactLink}>
+            <Text style={styles.footerText}>Generated via Resume Architect</Text>
+          </Link>
+          <Text style={styles.footerText}>© {currentYear} | Page 1</Text>
         </View>
-
-        {/* Page numbers */}
-        <Text
-          style={styles.pageNumber}
-          render={({ pageNumber, totalPages }) =>
-            `${pageNumber} / ${totalPages}`
-          }
-          fixed
-        />
       </Page>
     </Document>
   );

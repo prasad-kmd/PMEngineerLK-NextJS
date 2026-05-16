@@ -19,7 +19,7 @@ const ResumePDFLink = dynamic(() => import("./pdf-link"), {
       disabled
     >
       <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-      Loading...
+      <span className="hidden sm:inline">Loading...</span>
     </Button>
   ),
 });
@@ -35,7 +35,7 @@ export function PDFDownloadButton({ resume }: PDFDownloadButtonProps) {
         onClick={() => setIsLoaded(true)}
       >
         <Download className="mr-2 h-5 w-5" />
-        Generate PDF
+        <span className="hidden sm:inline">Generate PDF</span>
       </Button>
     );
   }

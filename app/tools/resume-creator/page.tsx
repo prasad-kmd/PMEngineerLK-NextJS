@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
-import Image from "next/image";
+import React, { useState, useEffect } from "react";
 import {
   Briefcase,
   GraduationCap,
@@ -9,60 +8,33 @@ import {
   Award,
   User,
   Layout,
-  AlertTriangle,
+  RotateCcw,
+  FileDown,
+  ChevronRight,
+  Sparkles,
+  Download,
   Trash2,
-  Plus,
-  Camera,
-  X,
+  Database,
+  Upload,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { usePersistentState } from "@/hooks/use-persistent-state";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PDFDownloadButton } from "@/components/resume-creator/pdf-template/pdf-download-button";
+import { ResumeData } from "@/components/resume-creator/pdf-template/resume-pdf";
+import { cn } from "@/lib/utils";
 
-interface Experience {
-  company: string;
-  role: string;
-  period: string;
-  description: string;
-}
-
-interface Education {
-  school: string;
-  degree: string;
-  period: string;
-  grade: string;
-}
-
-interface Project {
-  name: string;
-  description: string;
-  link: string;
-}
-
-interface ResumeData {
-  name: string;
-  role: string;
-  email: string;
-  phone: string;
-  location: string;
-  website: string;
-  linkedin: string;
-  github: string;
-  image: string | null;
-  summary: string;
-  experiences: Experience[];
-  education: Education[];
-  skills: string[];
-  certifications: string[];
-  projects: Project[];
-}
+// Import sub-editors
+import { PersonalInfoEditor } from "@/components/resume-creator/editor/personal-info-editor";
+import { ExperienceEditor } from "@/components/resume-creator/editor/experience-editor";
+import { EducationEditor } from "@/components/resume-creator/editor/education-editor";
+import { SkillsEditor } from "@/components/resume-creator/editor/skills-editor";
+import { ProjectsEditor } from "@/components/resume-creator/editor/projects-editor";
+import { AdditionalEditor } from "@/components/resume-creator/editor/additional-editor";
 
 const initialResume: ResumeData = {
   name: "John Doe",
@@ -111,99 +83,96 @@ const initialResume: ResumeData = {
       link: "https://shop.example.com",
     },
   ],
+  languages: ["English (Professional)", "Sinhala (Native)"],
+  volunteering: [],
 };
+
+type EditorSection = "personal" | "experience" | "education" | "skills" | "projects" | "additional";
 
 export default function ResumeCreator() {
   const [resume, setResume] = usePersistentState<ResumeData>(
     "resume-data",
     initialResume,
   );
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [activeSection, setActiveSection] = useState<EditorSection>("personal");
+  const [isSticky, setIsSticky] = useState(false);
 
-  const updateField = (
-    field: keyof ResumeData,
-    value: string | Experience[] | Education[] | Project[] | string[] | null,
-  ) => {
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const updateField = (field: keyof ResumeData, value: string | null) => {
     setResume((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        toast.error("Image size must be less than 2MB");
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        updateField("image", event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+  const handleReset = () => {
+    if (confirm("Are you sure you want to reset all data? This cannot be undone.")) {
+      setResume(initialResume);
+      toast.success("Editor reset successfully");
     }
   };
 
-  const removeImage = () => {
-    updateField("image", null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+  const handleExport = () => {
+    const dataStr = JSON.stringify(resume, null, 2);
+    const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
+    const exportFileDefaultName = `resume-${resume.name.toLowerCase().replace(/\s+/g, "-")}.json`;
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
+    linkElement.click();
+    toast.success("Resume data exported as JSON");
   };
 
-  const addItem = (
-    field:
-      | "experiences"
-      | "education"
-      | "projects"
-      | "skills"
-      | "certifications",
-  ) => {
-    const newItem = {
-      experiences: { company: "", role: "", period: "", description: "" },
-      education: { school: "", degree: "", period: "", grade: "" },
-      projects: { name: "", description: "", link: "" },
-      skills: "",
-      certifications: "",
-    }[field];
-    setResume((prev) => ({ ...prev, [field]: [...prev[field], newItem] }));
+  const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const json = JSON.parse(e.target?.result as string);
+          setResume(json);
+          toast.success("Resume data imported successfully");
+        } catch (error) {
+          toast.error("Failed to import JSON: Invalid format");
+        }
+      };
+      reader.readAsText(file);
+    }
   };
 
-  const removeItem = (
-    field:
-      | "experiences"
-      | "education"
-      | "projects"
-      | "skills"
-      | "certifications",
-    index: number,
-  ) => {
-    setResume((prev) => ({
-      ...prev,
-      [field]: prev[field].filter((_, i) => i !== index),
-    }));
-  };
+  const sections = [
+    { id: "personal", label: "Personal Info", icon: User, color: "text-amber-500" },
+    { id: "experience", label: "Work Experience", icon: Briefcase, color: "text-blue-500" },
+    { id: "education", label: "Education", icon: GraduationCap, color: "text-emerald-500" },
+    { id: "skills", label: "Skills & Awards", icon: Code2, color: "text-orange-500" },
+    { id: "projects", label: "Key Projects", icon: Sparkles, color: "text-purple-500" },
+    { id: "additional", label: "Languages & More", icon: Globe, color: "text-sky-500" },
+  ] as const;
 
-  const updateListItem = (
-    field: "experiences" | "education" | "projects",
-    index: number,
-    subfield: string,
-    value: string,
-  ) => {
-    const newList = [...resume[field]];
-    newList[index] = { ...newList[index], [subfield]: value };
-    setResume((prev) => ({ ...prev, [field]: newList }));
-  };
-
-  const updateStringList = (
-    field: "skills" | "certifications",
-    index: number,
-    value: string,
-  ) => {
-    const newList = [...resume[field]];
-    newList[index] = value;
-    setResume((prev) => ({ ...prev, [field]: newList }));
+  const renderActiveSection = () => {
+    switch (activeSection) {
+      case "personal":
+        return <PersonalInfoEditor resume={resume} updateField={updateField} />;
+      case "experience":
+        return <ExperienceEditor resume={resume} setResume={setResume} />;
+      case "education":
+        return <EducationEditor resume={resume} setResume={setResume} />;
+      case "skills":
+        return <SkillsEditor resume={resume} setResume={setResume} />;
+      case "projects":
+        return <ProjectsEditor resume={resume} setResume={setResume} />;
+      case "additional":
+        return <AdditionalEditor resume={resume} setResume={setResume} />;
+    }
   };
 
   return (
-    <div className="min-h-screen pb-20 px-6 lg:px-8 pt-12 bg-background">
-      <div className="mx-auto max-w-7xl">
+    <div className="min-h-screen pb-20 bg-background/50">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-12">
         <Breadcrumbs
           items={[
             { label: "Tools", href: "/tools" },
@@ -215,482 +184,251 @@ export default function ResumeCreator() {
           ]}
           className="mb-8"
         />
-        <header className="mb-12 text-center print:hidden">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-4">
-            <Layout className="h-3 w-3" />
-            Professional Tools
+
+        {/* Page Header */}
+        <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 print:hidden">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] local-jetbrains-mono">
+              <Layout className="h-3 w-3" />
+              Productivity Tool
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight lg:text-6xl amoriaregular">
+              Resume Architect
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl google-sans">
+              Build a clean, professional, ATS-friendly CV in minutes.
+            </p>
           </div>
-          <h1 className="text-4xl font-bold tracking-tight lg:text-5xl mb-4 mozilla-headline">
-            Resume Architect
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Craft a high-impact, professional resume. Fill in your details below
-            and generate a precision PDF.
-          </p>
+
+          {/* <div className="flex flex-wrap items-center gap-3">
+             <div className="flex bg-card/50 backdrop-blur-md border border-border rounded-xl p-1 shadow-sm">
+                <Button variant="ghost" size="sm" onClick={handleReset} title="Reset Data" className="h-9 px-3 text-xs font-bold gap-2">
+                  <RotateCcw className="h-3.5 w-3.5" /> Reset
+                </Button>
+                <div className="w-px h-4 bg-border my-auto mx-1" />
+                <Button variant="ghost" size="sm" onClick={handleExport} title="Export JSON" className="h-9 px-3 text-xs font-bold gap-2">
+                  <Download className="h-3.5 w-3.5" /> Export
+                </Button>
+                <div className="w-px h-4 bg-border my-auto mx-1" />
+                <label className="cursor-pointer">
+                   <div className="h-9 px-3 inline-flex items-center justify-center rounded-md text-xs font-bold gap-2 hover:bg-muted transition-colors">
+                      <Upload className="h-3.5 w-3.5" /> Import
+                   </div>
+                   <input type="file" className="hidden" accept=".json" onChange={handleImport} />
+                </label>
+             </div>
+             <PDFDownloadButton resume={resume} />
+          </div> */}
         </header>
 
-        {/* Mobile Warning */}
-        <div className="lg:hidden p-6 bg-amber-500/10 border border-amber-500/20 rounded-xl mb-8 print:hidden">
-          <p className="text-amber-500 font-bold flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5" />
-            Desktop Recommended
-          </p>
-          <p className="text-sm text-muted-foreground mt-1">
-            This tool is optimized for large screens to ensure the best
-            editing experience. Please use a desktop for the best results.
-          </p>
-        </div>
+        {/* Main Editor Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Navigation Sidebar (Desktop) */}
+          <aside className="hidden lg:block lg:col-span-3 sticky top-24">
+             <div className="rounded-2xl border border-border bg-card/30 backdrop-blur-xl p-6 shadow-2xl space-y-6">
+                <div className="space-y-1">
+                   <h2 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground local-jetbrains-mono mb-4 px-2">Sections</h2>
+                   <nav className="space-y-1">
+                     {sections.map((section) => (
+                       <button
+                         key={section.id}
+                         onClick={() => setActiveSection(section.id as EditorSection)}
+                         className={cn(
+                           "w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold transition-all group",
+                           activeSection === section.id
+                             ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]"
+                             : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                         )}
+                       >
+                         <section.icon className={cn("h-4.5 w-4.5", activeSection === section.id ? "text-white" : section.color)} />
+                         {section.label}
+                         {activeSection === section.id && <ChevronRight className="ml-auto h-4 w-4 animate-in slide-in-from-left-1" />}
+                       </button>
+                     ))}
+                   </nav>
+                </div>
 
-        {/* Editor */}
-        <div className="space-y-8 print:hidden">
-          {/* Personal Info */}
-          <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-xl flex items-center gap-2 google-sans">
-                <User className="h-5 w-5 text-primary" /> Personal Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="mb-6">
-                <Label className="block mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Profile Photo
-                </Label>
-                <div className="flex items-center gap-4">
-                  <div
-                    className="relative h-20 w-20 rounded-xl bg-muted border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:bg-muted/80 transition-colors"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    {resume.image ? (
-                      <Image
-                        src={resume.image}
-                        alt="Profile"
-                        className="h-full w-full object-cover"
-                        width={80}
-                        height={80}
-                        unoptimized
-                      />
-                    ) : (
-                      <Camera className="h-8 w-8 text-muted-foreground" />
-                    )}
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      {resume.image ? "Change Photo" : "Upload Photo"}
-                    </Button>
-                    {resume.image && (
+                <div className="pt-6 border-t border-border/50">
+                   <div className="rounded-2xl bg-primary/5 border border-primary/10 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                         <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                         <span className="text-[10px] font-black uppercase tracking-widest text-primary local-jetbrains-mono">Template: Professional</span>
+                      </div>
+                      <p className="text-[11px] text-muted-foreground google-sans leading-relaxed">
+                        Your resume is using the ATS-optimized technical template.
+                      </p>
+                   </div>
+                </div>
+             </div>
+          </aside>
+
+          {/* Mobile Navigation (Horizontal Scroll) */}
+          <nav className="lg:hidden flex overflow-x-auto pb-4 gap-2 no-scrollbar scroll-smooth">
+             {sections.map((section) => (
+               <button
+                 key={section.id}
+                 onClick={() => setActiveSection(section.id as EditorSection)}
+                 className={cn(
+                   "flex items-center gap-2 shrink-0 rounded-full px-5 py-2.5 text-xs font-bold transition-all border",
+                   activeSection === section.id
+                     ? "bg-primary border-primary text-primary-foreground shadow-lg shadow-primary/15"
+                     : "bg-card border-border text-muted-foreground"
+                 )}
+               >
+                 <section.icon className="h-4 w-4" />
+                 {section.label}
+               </button>
+             ))}
+          </nav>
+
+          {/* Editor Content Area */}
+          <main className="lg:col-span-9 space-y-8">
+             <Card className="rounded-2xl border-border bg-card/50 backdrop-blur-sm p-8 md:p-10 shadow-xl transition-all border hover:border-primary/20">
+                <div className="mb-10">
+                   <div className="flex items-center gap-4 mb-2">
+                      <div className={cn("flex h-12 w-12 items-center justify-center rounded-2xl bg-muted shadow-inner")}>
+                         {(() => {
+                           const active = sections.find(s => s.id === activeSection);
+                           const Icon = active?.icon || User;
+                           return <Icon className={cn("h-6 w-6", active?.color)} />;
+                         })()}
+                      </div>
+                      <div>
+                         <h2 className="text-2xl font-bold tracking-tight philosopher">
+                           {sections.find(s => s.id === activeSection)?.label}
+                         </h2>
+                         <p className="text-sm text-muted-foreground google-sans">
+                           Fill in the details for this section below.
+                         </p>
+                      </div>
+                   </div>
+                   <hr className="mt-8 border-border/50" />
+                </div>
+
+                <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                   {renderActiveSection()}
+                </div>
+
+                {/* Footer Navigation */}
+                <div className="mt-12 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                   <div className="flex items-center gap-2">
+                      <p className="text-xs text-muted-foreground google-sans">Editing Progress</p>
+                      <div className="w-32 h-1.5 bg-muted rounded-full overflow-hidden">
+                         <div 
+                           className="h-full bg-primary transition-all duration-500" 
+                           style={{ width: `${((sections.findIndex(s => s.id === activeSection) + 1) / sections.length) * 100}%` }}
+                         />
+                      </div>
+                   </div>
+                   <div className="flex gap-3">
                       <Button
                         variant="ghost"
-                        size="sm"
-                        className="text-destructive flex items-center gap-1"
-                        onClick={removeImage}
+                        disabled={activeSection === "personal"}
+                        onClick={() => {
+                          const idx = sections.findIndex(s => s.id === activeSection);
+                          setActiveSection(sections[idx - 1].id as EditorSection);
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        className="rounded-xl px-6"
                       >
-                        <X className="h-3 w-3" /> Remove
+                        Previous
                       </Button>
-                    )}
-                    <p className="text-[10px] text-muted-foreground">
-                      JPG, PNG (max 2MB)
-                    </p>
-                  </div>
+                      <Button
+                        disabled={activeSection === "projects"}
+                        onClick={() => {
+                          const idx = sections.findIndex(s => s.id === activeSection);
+                          setActiveSection(sections[idx + 1].id as EditorSection);
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        className="rounded-xl px-8"
+                      >
+                        Next Section
+                      </Button>
+                   </div>
                 </div>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Full Name</Label>
-                  <Input
-                    value={resume.name}
-                    onChange={(e) => updateField("name", e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Professional Title</Label>
-                  <Input
-                    value={resume.role}
-                    onChange={(e) => updateField("role", e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Email</Label>
-                  <Input
-                    value={resume.email}
-                    onChange={(e) => updateField("email", e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Phone</Label>
-                  <Input
-                    value={resume.phone}
-                    onChange={(e) => updateField("phone", e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Location</Label>
-                  <Input
-                    value={resume.location}
-                    onChange={(e) => updateField("location", e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Website</Label>
-                  <Input
-                    value={resume.website}
-                    onChange={(e) => updateField("website", e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>LinkedIn</Label>
-                  <Input
-                    value={resume.linkedin}
-                    onChange={(e) => updateField("linkedin", e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>GitHub</Label>
-                  <Input
-                    value={resume.github}
-                    onChange={(e) => updateField("github", e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Professional Summary</Label>
-                <Textarea
-                  value={resume.summary}
-                  onChange={(e) => updateField("summary", e.target.value)}
-                  rows={4}
-                />
-              </div>
-            </CardContent>
-          </Card>
+             </Card>
 
-          {/* Experience */}
-          <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-xl flex items-center gap-2 google-sans">
-                <Briefcase className="h-5 w-5 text-blue-500" /> Work
-                Experience
-              </CardTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => addItem("experiences")}
-              >
-                <Plus className="h-4 w-4 mr-1" /> Add
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {resume.experiences.map((exp, idx) => (
-                <div
-                  key={idx}
-                  className="space-y-4 p-4 rounded-lg bg-muted/30 relative group"
-                >
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute top-2 right-2 text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => removeItem("experiences", idx)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <Input
-                      placeholder="Company"
-                      value={exp.company}
-                      onChange={(e) =>
-                        updateListItem(
-                          "experiences",
-                          idx,
-                          "company",
-                          e.target.value,
-                        )
-                      }
-                    />
-                    <Input
-                      placeholder="Role"
-                      value={exp.role}
-                      onChange={(e) =>
-                        updateListItem(
-                          "experiences",
-                          idx,
-                          "role",
-                          e.target.value,
-                        )
-                      }
-                    />
-                    <Input
-                      placeholder="Period (e.g. 2021 - Present)"
-                      value={exp.period}
-                      onChange={(e) =>
-                        updateListItem(
-                          "experiences",
-                          idx,
-                          "period",
-                          e.target.value,
-                        )
-                      }
-                    />
-                  </div>
-                  <Textarea
-                    placeholder="Description..."
-                    value={exp.description}
-                    onChange={(e) =>
-                      updateListItem(
-                        "experiences",
-                        idx,
-                        "description",
-                        e.target.value,
-                      )
-                    }
-                  />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+             {/* Secondary Actions (Mobile) */}
+             <div className="lg:hidden grid grid-cols-2 gap-3 pb-8">
+                <Button variant="outline" onClick={handleReset} className="rounded-xl gap-2 font-bold text-xs h-12">
+                   <RotateCcw className="h-4 w-4" /> Reset
+                </Button>
+                <Button variant="outline" onClick={handleExport} className="rounded-xl gap-2 font-bold text-xs h-12">
+                   <Download className="h-4 w-4" /> Export JSON
+                </Button>
+             </div>
+          </main>
 
-          {/* Education */}
-          <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-xl flex items-center gap-2 google-sans">
-                <GraduationCap className="h-5 w-5 text-green-500" /> Education
-              </CardTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => addItem("education")}
-              >
-                <Plus className="h-4 w-4 mr-1" /> Add
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {resume.education.map((edu, idx) => (
-                <div
-                  key={idx}
-                  className="space-y-4 p-4 rounded-lg bg-muted/30 relative group"
-                >
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute top-2 right-2 text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => removeItem("education", idx)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <Input
-                      placeholder="School/University"
-                      value={edu.school}
-                      onChange={(e) =>
-                        updateListItem(
-                          "education",
-                          idx,
-                          "school",
-                          e.target.value,
-                        )
-                      }
-                    />
-                    <Input
-                      placeholder="Degree"
-                      value={edu.degree}
-                      onChange={(e) =>
-                        updateListItem(
-                          "education",
-                          idx,
-                          "degree",
-                          e.target.value,
-                        )
-                      }
-                    />
-                    <Input
-                      placeholder="Period"
-                      value={edu.period}
-                      onChange={(e) =>
-                        updateListItem(
-                          "education",
-                          idx,
-                          "period",
-                          e.target.value,
-                        )
-                      }
-                    />
-                    <Input
-                      placeholder="Grade/GPA"
-                      value={edu.grade}
-                      onChange={(e) =>
-                        updateListItem(
-                          "education",
-                          idx,
-                          "grade",
-                          e.target.value,
-                        )
-                      }
-                    />
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Skills */}
-          <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-xl flex items-center gap-2 google-sans">
-                <Code2 className="h-5 w-5 text-orange-500" /> Technical Skills
-              </CardTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => addItem("skills")}
-              >
-                <Plus className="h-4 w-4 mr-1" /> Add
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-3">
-                {resume.skills.map((skill, idx) => (
-                  <div key={idx} className="flex items-center gap-1 group">
-                    <Input
-                      className="w-32"
-                      value={skill}
-                      onChange={(e) =>
-                        updateStringList("skills", idx, e.target.value)
-                      }
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => removeItem("skills", idx)}
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Certifications */}
-          <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-xl flex items-center gap-2 google-sans">
-                <Award className="h-5 w-5 text-sky-500" /> Certifications
-              </CardTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => addItem("certifications")}
-              >
-                <Plus className="h-4 w-4 mr-1" /> Add
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {resume.certifications.map((cert, idx) => (
-                <div key={idx} className="flex items-center gap-2 group">
-                  <Input
-                    value={cert}
-                    onChange={(e) =>
-                      updateStringList("certifications", idx, e.target.value)
-                    }
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => removeItem("certifications", idx)}
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Projects */}
-          <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-xl flex items-center gap-2 google-sans">
-                <Code2 className="h-5 w-5 text-purple-500" /> Key Projects
-              </CardTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => addItem("projects")}
-              >
-                <Plus className="h-4 w-4 mr-1" /> Add
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {resume.projects.map((proj, idx) => (
-                <div
-                  key={idx}
-                  className="space-y-4 p-4 rounded-lg bg-muted/30 relative group"
-                >
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute top-2 right-2 text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => removeItem("projects", idx)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <Input
-                      placeholder="Project Name"
-                      value={proj.name}
-                      onChange={(e) =>
-                        updateListItem(
-                          "projects",
-                          idx,
-                          "name",
-                          e.target.value,
-                        )
-                      }
-                    />
-                    <Input
-                      placeholder="Link (optional)"
-                      value={proj.link}
-                      onChange={(e) =>
-                        updateListItem(
-                          "projects",
-                          idx,
-                          "link",
-                          e.target.value,
-                        )
-                      }
-                    />
-                  </div>
-                  <Textarea
-                    placeholder="Description..."
-                    value={proj.description}
-                    onChange={(e) =>
-                      updateListItem(
-                        "projects",
-                        idx,
-                        "description",
-                        e.target.value,
-                      )
-                    }
-                  />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Generate PDF Button */}
-          <div className="flex justify-center pt-4 pb-8">
-            <PDFDownloadButton resume={resume} />
-          </div>
         </div>
+
+        {/* Floating Action Bar */}
+        <div className="fixed bottom-15 left-6 right-6 z-40 pointer-events-none">
+           <div className="pointer-events-auto mx-auto max-w-2xl rounded-2xl bg-card/70 border border-border p-2 backdrop-blur-xl shadow-2xl flex items-center justify-between gap-2 md:gap-4 px-4 md:px-6">
+              
+              {/* Desktop Actions */}
+              <div className="hidden lg:flex items-center gap-1 border-r border-border pr-4 mr-2">
+                <Button variant="ghost" size="icon" onClick={handleReset} title="Reset Data" className="h-10 w-10 rounded-full hover:text-destructive transition-colors">
+                  <RotateCcw className="h-4.5 w-4.5" />
+                </Button>
+                <Button variant="ghost" size="icon" onClick={handleExport} title="Export JSON" className="h-10 w-10 rounded-full hover:text-primary transition-colors">
+                  <Download className="h-4.5 w-4.5" />
+                </Button>
+                <label className="cursor-pointer">
+                   <div className="h-10 w-10 inline-flex items-center justify-center rounded-full hover:bg-muted transition-colors hover:text-primary">
+                      <Upload className="h-4.5 w-4.5" />
+                   </div>
+                   <input type="file" className="hidden" accept=".json" onChange={handleImport} />
+                </label>
+              </div>
+
+              {/* Navigation Actions */}
+              <div className="flex-1 flex items-center justify-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={activeSection === "personal"}
+                  onClick={() => {
+                    const idx = sections.findIndex(s => s.id === activeSection);
+                    setActiveSection(sections[idx - 1].id as EditorSection);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="rounded-full h-10 px-4 md:px-6 text-xs font-bold gap-2 bg-background/50"
+                >
+                  <ChevronRight className="h-4 w-4 rotate-180" /> <span className="hidden sm:inline">Previous</span>
+                </Button>
+                
+                <div className="hidden md:flex flex-col items-center px-4">
+                   <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground local-jetbrains-mono mb-1">Progress</span>
+                   <div className="w-24 h-1 bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-primary transition-all duration-500" 
+                        style={{ width: `${((sections.findIndex(s => s.id === activeSection) + 1) / sections.length) * 100}%` }}
+                      />
+                   </div>
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={activeSection === "additional"}
+                  onClick={() => {
+                    const idx = sections.findIndex(s => s.id === activeSection);
+                    setActiveSection(sections[idx + 1].id as EditorSection);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="rounded-full h-10 px-4 md:px-6 text-xs font-bold gap-2 bg-background/50"
+                >
+                  <span className="hidden sm:inline">Next Section</span> <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <div className="flex items-center">
+                <PDFDownloadButton resume={resume} className="rounded-full h-10 px-6 shadow-lg shadow-primary/20" />
+              </div>
+           </div>
+        </div>
+
       </div>
       <AIContentIndicator />
     </div>
