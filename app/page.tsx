@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileText, BookOpen, GitBranch, Newspaper } from "lucide-react";
+import { FileText, BookOpen, GitBranch, Newspaper, Wrench } from "lucide-react";
 import FeaturedHero, { type HeroItem } from "@/components/featured-hero";
 import MagicBentoClient from "@/components/magic-bento-client";
 import { getContentByType } from "@/lib/content";
@@ -113,6 +113,12 @@ export default async function Home() {
                 href: "/projects",
                 icon: GitBranch,
                 desc: "Showcase of our engineering projects and demonstrations",
+              },
+              {
+                title: "Tools",
+                href: "/tools",
+                icon: Wrench,
+                desc: "Professional engineering tools, calculators, and workspace",
               },
               {
                 title: "Tutorials",

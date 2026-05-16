@@ -136,6 +136,14 @@ const categories = [
         bgColor: "bg-pink-500/10",
         description: "Reusable technical shortcuts and cheatsheets.",
       },
+      {
+        name: "Tools Workspace",
+        href: "/tools",
+        icon: Wrench,
+        color: "text-amber-500",
+        bgColor: "bg-amber-500/10",
+        description: "Professional tools and engineering calculators.",
+      },
     ],
   },
   {

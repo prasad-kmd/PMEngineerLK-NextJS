@@ -3,7 +3,7 @@
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { Layout, LogOut, User, FileText, BarChart3, ShieldUser } from "lucide-react";
+import { Layout, LogOut, User, FileText, BarChart3, ShieldUser, Tv } from "lucide-react";
 import { SiGoogle, SiGithub } from "react-icons/si";
 import { useState, Suspense } from "react";
 import { toast } from "sonner";
@@ -189,6 +189,13 @@ export function UserMenu({
             >
               <ShieldUser className="mr-2 h-4 w-4" />
               <span>Admin Tools</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => (window.location.href = "https://gsc-m-hub.vercel.app/entertainment")}
+              className="cursor-pointer"
+            >
+              <Tv className="mr-2 h-4 w-4" />
+              <span>Entertainment</span>
             </DropdownMenuItem>
           </>
         )}

@@ -14,6 +14,7 @@ import {
   UserStar,
   BadgeInfo,
   Book,
+  Wrench,
 } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
@@ -100,6 +101,7 @@ const primaryNav = [
   { name: "Projects", href: "/projects", icon: FolderGit2 },
   { name: "Wiki", href: "/wiki", icon: Book },
   { name: "Tutorials", href: "/tutorials", icon: LibraryBig },
+  { name: "Tools", href: "/tools", icon: Wrench },
 ];
 
 const secondaryNav = [
