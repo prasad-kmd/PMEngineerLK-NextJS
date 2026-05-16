@@ -35,6 +35,7 @@ import { EducationEditor } from "@/components/resume-creator/editor/education-ed
 import { SkillsEditor } from "@/components/resume-creator/editor/skills-editor";
 import { ProjectsEditor } from "@/components/resume-creator/editor/projects-editor";
 import { AdditionalEditor } from "@/components/resume-creator/editor/additional-editor";
+import { RefereesEditor } from "@/components/resume-creator/editor/referees-editor";
 
 const initialResume: ResumeData = {
   name: "John Doe",
@@ -65,7 +66,7 @@ const initialResume: ResumeData = {
       grade: "3.9 GPA",
     },
   ],
-  skills: [
+  technicalSkills: [
     "React",
     "Next.js",
     "TypeScript",
@@ -73,6 +74,11 @@ const initialResume: ResumeData = {
     "PostgreSQL",
     "AWS",
     "Docker",
+  ],
+  personalSkills: [
+    "Problem Solving",
+    "Team Leadership",
+    "Effective Communication",
   ],
   certifications: ["AWS Certified Developer", "Google Cloud Professional"],
   projects: [
@@ -84,10 +90,11 @@ const initialResume: ResumeData = {
     },
   ],
   languages: ["English (Professional)", "Sinhala (Native)"],
-  volunteering: [],
+  extraCurricular: [],
+  referees: [],
 };
 
-type EditorSection = "personal" | "experience" | "education" | "skills" | "projects" | "additional";
+type EditorSection = "personal" | "experience" | "education" | "skills" | "projects" | "additional" | "referees";
 
 export default function ResumeCreator() {
   const [resume, setResume] = usePersistentState<ResumeData>(
@@ -96,6 +103,42 @@ export default function ResumeCreator() {
   );
   const [activeSection, setActiveSection] = useState<EditorSection>("personal");
   const [isSticky, setIsSticky] = useState(false);
+
+  // Migration for new data structure fields
+  useEffect(() => {
+    const needsMigration = 
+      resume && (
+        !resume.technicalSkills || 
+        !resume.personalSkills || 
+        !resume.extraCurricular || 
+        !resume.referees
+      );
+
+    if (needsMigration) {
+      setResume((prev) => {
+        const migrated = { ...prev };
+        
+        if (!migrated.technicalSkills) {
+          migrated.technicalSkills = (prev as any).skills || [];
+        }
+        if (!migrated.personalSkills) {
+          migrated.personalSkills = [];
+        }
+        if (!migrated.extraCurricular) {
+          migrated.extraCurricular = (prev as any).volunteering || [];
+        }
+        if (!migrated.referees) {
+          migrated.referees = [];
+        }
+
+        // Clean up old fields
+        delete (migrated as any).skills;
+        delete (migrated as any).volunteering;
+
+        return migrated;
+      });
+    }
+  }, [resume, setResume]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -150,7 +193,8 @@ export default function ResumeCreator() {
     { id: "education", label: "Education", icon: GraduationCap, color: "text-emerald-500" },
     { id: "skills", label: "Skills & Awards", icon: Code2, color: "text-orange-500" },
     { id: "projects", label: "Key Projects", icon: Sparkles, color: "text-purple-500" },
-    { id: "additional", label: "Languages & More", icon: Globe, color: "text-sky-500" },
+    { id: "additional", label: "Extra Activities", icon: Globe, color: "text-sky-500" },
+    { id: "referees", label: "Referees", icon: Database, color: "text-rose-500" },
   ] as const;
 
   const renderActiveSection = () => {
@@ -167,6 +211,8 @@ export default function ResumeCreator() {
         return <ProjectsEditor resume={resume} setResume={setResume} />;
       case "additional":
         return <AdditionalEditor resume={resume} setResume={setResume} />;
+      case "referees":
+        return <RefereesEditor resume={resume} setResume={setResume} />;
     }
   };
 
@@ -334,17 +380,17 @@ export default function ResumeCreator() {
                        >
                          Previous
                        </Button>
-                       <Button
-                         disabled={activeSection === "projects"}
-                         onClick={() => {
-                           const idx = sections.findIndex(s => s.id === activeSection);
-                           setActiveSection(sections[idx + 1].id as EditorSection);
-                           window.scrollTo({ top: 0, behavior: "smooth" });
-                         }}
-                         className="rounded-xl px-8 bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none transition-all"
-                       >
-                         Next Section
-                       </Button>
+                        <Button
+                          disabled={activeSection === "referees"}
+                          onClick={() => {
+                            const idx = sections.findIndex(s => s.id === activeSection);
+                            setActiveSection(sections[idx + 1].id as EditorSection);
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                          }}
+                          className="rounded-xl px-8 bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none transition-all"
+                        >
+                          Next Section
+                        </Button>
                     </div>
                 </div>
              </Card>
@@ -411,7 +457,7 @@ export default function ResumeCreator() {
                 <Button
                   variant="outline"
                   size="sm"
-                  disabled={activeSection === "additional"}
+                  disabled={activeSection === "referees"}
                   onClick={() => {
                     const idx = sections.findIndex(s => s.id === activeSection);
                     setActiveSection(sections[idx + 1].id as EditorSection);

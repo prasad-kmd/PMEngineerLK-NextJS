@@ -41,6 +41,13 @@ export interface Project {
   link: string;
 }
 
+export interface Referee {
+  name: string;
+  position: string;
+  workingPlacement: string;
+  contactDetails: string;
+}
+
 export interface ResumeData {
   name: string;
   role: string;
@@ -54,11 +61,13 @@ export interface ResumeData {
   summary: string;
   experiences: Experience[];
   education: Education[];
-  skills: string[];
+  technicalSkills: string[];
+  personalSkills: string[];
   certifications: string[];
   projects: Project[];
   languages: string[];
-  volunteering: Experience[];
+  extraCurricular: Experience[];
+  referees: Referee[];
 }
 
 // --- Theme ---
@@ -416,11 +425,32 @@ export function ResumePDF({ resume }: ResumePDFProps) {
               </View>
             )}
 
+            {/* Education - MOVED HERE */}
+            {resume.education && resume.education.length > 0 && (resume.education || []).some(e => e.school || e.degree) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Education</Text>
+                {(resume.education || []).filter(e => e.school || e.degree).map((edu, i) => (
+                  <View key={i} style={styles.educationItem} wrap={false}>
+                    <Text style={styles.eduSchool}>{edu.school}</Text>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                      <Text style={styles.eduDegree}>{edu.degree}</Text>
+                      <Text style={styles.eduPeriod}>{edu.period}</Text>
+                    </View>
+                    {edu.grade && (
+                      <Text style={{ fontSize: 8, color: colors.accent, marginTop: 1 }}>
+                        {edu.grade}
+                      </Text>
+                    )}
+                  </View>
+                ))}
+              </View>
+            )}
+
             {/* Experience */}
-            {resume.experiences && resume.experiences.length > 0 && resume.experiences.some(e => e.role || e.company) && (
+            {resume.experiences && resume.experiences.length > 0 && (resume.experiences || []).some(e => e.role || e.company) && (
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Experience</Text>
-                {resume.experiences.filter(e => e.role || e.company).map((exp, i) => (
+                {(resume.experiences || []).filter(e => e.role || e.company).map((exp, i) => (
                   <View key={i} style={styles.experienceItem} wrap={false}>
                     <View style={styles.expHeader}>
                       <Text style={styles.expRole}>{exp.role}</Text>
@@ -433,11 +463,11 @@ export function ResumePDF({ resume }: ResumePDFProps) {
               </View>
             )}
 
-            {/* Volunteering */}
-            {resume.volunteering && resume.volunteering.length > 0 && resume.volunteering.some(v => v.role || v.company) && (
+            {/* Extra Curricular Activities - RENAMED */}
+            {resume.extraCurricular && resume.extraCurricular.length > 0 && (resume.extraCurricular || []).some(v => v.role || v.company) && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Volunteering & Community</Text>
-                {resume.volunteering.filter(v => v.role || v.company).map((vol, i) => (
+                <Text style={styles.sectionTitle}>Extra Curriculum Activities</Text>
+                {(resume.extraCurricular || []).filter(v => v.role || v.company).map((vol, i) => (
                   <View key={i} style={styles.experienceItem} wrap={false}>
                     <View style={styles.expHeader}>
                       <Text style={styles.expRole}>{vol.role}</Text>
@@ -451,10 +481,10 @@ export function ResumePDF({ resume }: ResumePDFProps) {
             )}
 
             {/* Projects */}
-            {resume.projects && resume.projects.length > 0 && resume.projects.some(p => p.name) && (
+            {resume.projects && resume.projects.length > 0 && (resume.projects || []).some(p => p.name) && (
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Projects</Text>
-                {resume.projects.filter(p => p.name).map((proj, i) => (
+                {(resume.projects || []).filter(p => p.name).map((proj, i) => (
                   <View key={i} style={styles.projectItem} wrap={false}>
                     <Text style={styles.projectName}>{proj.name}</Text>
                     {proj.link && (
@@ -467,16 +497,47 @@ export function ResumePDF({ resume }: ResumePDFProps) {
                 ))}
               </View>
             )}
+
+            {/* Non Related Referees - NEW SECTION */}
+            {resume.referees && resume.referees.length > 0 && (resume.referees || []).some(r => r.name) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Non Related Referees</Text>
+                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+                  {(resume.referees || []).filter(r => r.name).map((ref, i) => (
+                    <View key={i} style={{ width: "48%", marginBottom: 8 }} wrap={false}>
+                      <Text style={{ fontSize: 9, fontWeight: 700, color: colors.primary }}>{ref.name}</Text>
+                      <Text style={{ fontSize: 8, color: colors.text }}>{ref.position}</Text>
+                      <Text style={{ fontSize: 8, color: colors.textMuted }}>{ref.workingPlacement}</Text>
+                      <Text style={{ fontSize: 8, color: colors.accent }}>{ref.contactDetails}</Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
           </View>
 
           {/* Side Column */}
           <View style={styles.rightColumn}>
-            {/* Skills */}
-            {resume.skills && resume.skills.length > 0 && resume.skills.some(s => s.trim()) && (
+            {/* Technical Skills */}
+            {resume.technicalSkills && resume.technicalSkills.length > 0 && (resume.technicalSkills || []).some(s => s.trim()) && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Skills</Text>
+                <Text style={styles.sectionTitle}>Technical Skills</Text>
                 <View style={styles.skillGroup}>
-                  {resume.skills.filter(s => s.trim()).map((skill, i) => (
+                  {(resume.technicalSkills || []).filter(s => s.trim()).map((skill, i) => (
+                    <Text key={i} style={styles.skillTag}>
+                      {skill}
+                    </Text>
+                  ))}
+                </View>
+              </View>
+            )}
+
+            {/* Personal Skills */}
+            {resume.personalSkills && resume.personalSkills.length > 0 && (resume.personalSkills || []).some(s => s.trim()) && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Personal Skills</Text>
+                <View style={styles.skillGroup}>
+                  {(resume.personalSkills || []).filter(s => s.trim()).map((skill, i) => (
                     <Text key={i} style={styles.skillTag}>
                       {skill}
                     </Text>
@@ -486,11 +547,11 @@ export function ResumePDF({ resume }: ResumePDFProps) {
             )}
 
             {/* Languages */}
-            {resume.languages && resume.languages.length > 0 && resume.languages.some(l => l.trim()) && (
+            {resume.languages && resume.languages.length > 0 && (resume.languages || []).some(l => l.trim()) && (
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Languages</Text>
                 <View style={styles.skillGroup}>
-                  {resume.languages.filter(l => l.trim()).map((lang, i) => (
+                  {(resume.languages || []).filter(l => l.trim()).map((lang, i) => (
                     <Text key={i} style={styles.skillTag}>
                       {lang}
                     </Text>
@@ -499,30 +560,11 @@ export function ResumePDF({ resume }: ResumePDFProps) {
               </View>
             )}
 
-            {/* Education */}
-            {resume.education && resume.education.length > 0 && resume.education.some(e => e.school || e.degree) && (
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Education</Text>
-                {resume.education.filter(e => e.school || e.degree).map((edu, i) => (
-                  <View key={i} style={styles.educationItem} wrap={false}>
-                    <Text style={styles.eduSchool}>{edu.school}</Text>
-                    <Text style={styles.eduDegree}>{edu.degree}</Text>
-                    <Text style={styles.eduPeriod}>{edu.period}</Text>
-                    {edu.grade && (
-                      <Text style={{ fontSize: 8, color: colors.accent, marginTop: 1 }}>
-                        {edu.grade}
-                      </Text>
-                    )}
-                  </View>
-                ))}
-              </View>
-            )}
-
             {/* Certifications */}
-            {resume.certifications && resume.certifications.length > 0 && resume.certifications.some(c => c.trim()) && (
+            {resume.certifications && resume.certifications.length > 0 && (resume.certifications || []).some(c => c.trim()) && (
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Certifications</Text>
-                {resume.certifications.filter(c => c.trim()).map((cert, i) => (
+                {(resume.certifications || []).filter(c => c.trim()).map((cert, i) => (
                   <View key={i} style={{ marginBottom: 4 }}>
                     <Text style={{ fontSize: 8.5 }}>{cert}</Text>
                   </View>

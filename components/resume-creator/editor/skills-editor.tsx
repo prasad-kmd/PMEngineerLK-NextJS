@@ -13,18 +13,18 @@ interface SkillsEditorProps {
 }
 
 export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
-  const addItem = (field: "skills" | "certifications") => {
+  const addItem = (field: "technicalSkills" | "personalSkills" | "certifications") => {
     setResume((prev) => ({ ...prev, [field]: [...prev[field], ""] }));
   };
 
-  const removeItem = (field: "skills" | "certifications", index: number) => {
+  const removeItem = (field: "technicalSkills" | "personalSkills" | "certifications", index: number) => {
     setResume((prev) => ({
       ...prev,
       [field]: prev[field].filter((_, i) => i !== index),
     }));
   };
 
-  const updateItem = (field: "skills" | "certifications", index: number, value: string) => {
+  const updateItem = (field: "technicalSkills" | "personalSkills" | "certifications", index: number, value: string) => {
     const newList = [...resume[field]];
     newList[index] = value;
     setResume((prev) => ({ ...prev, [field]: newList }));
@@ -39,31 +39,67 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
             <h3 className="text-lg font-bold amoriaregular">Technical Skills</h3>
             <p className="text-xs text-muted-foreground">List your core technical expertise.</p>
           </div>
-          <Button onClick={() => addItem("skills")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
+          <Button onClick={() => addItem("technicalSkills")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
             <Plus className="h-3.5 w-3.5" /> Add Skill
           </Button>
         </div>
         <div className="flex flex-wrap gap-3">
-          {resume.skills.map((skill, idx) => (
+          {(resume.technicalSkills || []).map((skill, idx) => (
             <div key={idx} className="flex items-center gap-1 group animate-in zoom-in-95 duration-200">
               <Input
                 className="h-9 w-32 md:w-40 bg-background/50"
                 placeholder="e.g. React"
                 value={skill}
-                onChange={(e) => updateItem("skills", idx, e.target.value)}
+                onChange={(e) => updateItem("technicalSkills", idx, e.target.value)}
               />
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() => removeItem("skills", idx)}
+                onClick={() => removeItem("technicalSkills", idx)}
               >
                 <X className="h-3.5 w-3.5" />
               </Button>
             </div>
           ))}
-          {resume.skills.length === 0 && (
-            <p className="text-sm text-muted-foreground italic py-4">No skills added yet.</p>
+          {(resume.technicalSkills || []).length === 0 && (
+            <p className="text-sm text-muted-foreground italic py-4">No technical skills added yet.</p>
+          )}
+        </div>
+      </div>
+
+      {/* Personal Skills */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between border-b border-border pb-4">
+          <div>
+            <h3 className="text-lg font-bold amoriaregular">Personal Skills</h3>
+            <p className="text-xs text-muted-foreground">Soft skills, leadership, and personal traits.</p>
+          </div>
+          <Button onClick={() => addItem("personalSkills")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
+            <Plus className="h-3.5 w-3.5" /> Add Skill
+          </Button>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          {(resume.personalSkills || []).map((skill, idx) => (
+            <div key={idx} className="flex items-center gap-1 group animate-in zoom-in-95 duration-200">
+              <Input
+                className="h-9 w-32 md:w-40 bg-background/50"
+                placeholder="e.g. Leadership"
+                value={skill}
+                onChange={(e) => updateItem("personalSkills", idx, e.target.value)}
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => removeItem("personalSkills", idx)}
+              >
+                <X className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          ))}
+          {(resume.personalSkills || []).length === 0 && (
+            <p className="text-sm text-muted-foreground italic py-4">No personal skills added yet.</p>
           )}
         </div>
       </div>
@@ -80,7 +116,7 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
           </Button>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          {resume.certifications.map((cert, idx) => (
+          {(resume.certifications || []).map((cert, idx) => (
             <div key={idx} className="flex items-center gap-2 group animate-in slide-in-from-left-2 duration-200">
               <Input
                 className="h-9 bg-background/50"
@@ -98,7 +134,7 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
               </Button>
             </div>
           ))}
-          {resume.certifications.length === 0 && (
+          {(resume.certifications || []).length === 0 && (
             <p className="text-sm text-muted-foreground italic py-4 col-span-2">No certifications added yet.</p>
           )}
         </div>

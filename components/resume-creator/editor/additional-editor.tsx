@@ -33,27 +33,27 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
     setResume((prev) => ({ ...prev, [field]: newList }));
   };
 
-  const addVolunteering = () => {
+  const addExtraCurricular = () => {
     setResume((prev) => ({
       ...prev,
-      volunteering: [
-        ...(prev.volunteering || []),
+      extraCurricular: [
+        ...(prev.extraCurricular || []),
         { company: "", role: "", period: "", description: "" },
       ],
     }));
   };
 
-  const removeVolunteering = (index: number) => {
+  const removeExtraCurricular = (index: number) => {
     setResume((prev) => ({
       ...prev,
-      volunteering: prev.volunteering.filter((_, i) => i !== index),
+      extraCurricular: prev.extraCurricular.filter((_, i) => i !== index),
     }));
   };
 
-  const updateVolunteering = (index: number, field: string, value: string) => {
-    const newList = [...resume.volunteering];
+  const updateExtraCurricular = (index: number, field: string, value: string) => {
+    const newList = [...resume.extraCurricular];
     newList[index] = { ...newList[index], [field]: value };
-    setResume((prev) => ({ ...prev, volunteering: newList }));
+    setResume((prev) => ({ ...prev, extraCurricular: newList }));
   };
 
   return (
@@ -99,7 +99,7 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
         </div>
       </div>
 
-      {/* Volunteering */}
+      {/* Extra Curriculum Activities */}
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center gap-3">
@@ -107,40 +107,40 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
               <Heart className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold amoriaregular">Volunteering & Community</h3>
-              <p className="text-xs text-muted-foreground">Charity work, community service, and other contributions.</p>
+              <h3 className="text-lg font-bold amoriaregular">Extra Curriculum Activities</h3>
+              <p className="text-xs text-muted-foreground">Clubs, sports, community service, and other activities.</p>
             </div>
           </div>
-          <Button onClick={addVolunteering} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
+          <Button onClick={addExtraCurricular} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
             <Plus className="h-3.5 w-3.5" /> Add Entry
           </Button>
         </div>
         
         <div className="space-y-4">
-          {(resume.volunteering || []).map((vol, idx) => (
+          {(resume.extraCurricular || []).map((vol, idx) => (
             <EditablePanel
               key={idx}
-              title={vol.role || "Volunteer Role"}
+              title={vol.role || "Activity Role"}
               subtitle={vol.company}
               period={vol.period}
-              onRemove={() => removeVolunteering(idx)}
-              defaultExpanded={idx === (resume.volunteering || []).length - 1}
+              onRemove={() => removeExtraCurricular(idx)}
+              defaultExpanded={idx === (resume.extraCurricular || []).length - 1}
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Organisation</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest">Organisation/Institution</Label>
                   <Input
-                    placeholder="e.g. Red Cross"
+                    placeholder="e.g. Chess Club"
                     value={vol.company}
-                    onChange={(e) => updateVolunteering(idx, "company", e.target.value)}
+                    onChange={(e) => updateExtraCurricular(idx, "company", e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Role</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest">Role/Position</Label>
                   <Input
-                    placeholder="e.g. Community Coordinator"
+                    placeholder="e.g. Captain"
                     value={vol.role}
-                    onChange={(e) => updateVolunteering(idx, "role", e.target.value)}
+                    onChange={(e) => updateExtraCurricular(idx, "role", e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
@@ -148,21 +148,21 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
                   <Input
                     placeholder="e.g. 2022 - 2023"
                     value={vol.period}
-                    onChange={(e) => updateVolunteering(idx, "period", e.target.value)}
+                    onChange={(e) => updateExtraCurricular(idx, "period", e.target.value)}
                   />
                 </div>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Contribution</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest">Contribution/Details</Label>
                   <span className={cn("text-[9px] local-jetbrains-mono", vol.description.length > 500 ? "text-destructive" : "text-muted-foreground")}>
                     {vol.description.length}/500
                   </span>
                 </div>
                 <Textarea
-                  placeholder="Describe your impact and the causes you supported..."
+                  placeholder="Describe your achievements and activities..."
                   value={vol.description}
-                  onChange={(e) => updateVolunteering(idx, "description", e.target.value)}
+                  onChange={(e) => updateExtraCurricular(idx, "description", e.target.value)}
                   rows={3}
                   className="resize-none"
                   maxLength={500}
@@ -170,8 +170,8 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
               </div>
             </EditablePanel>
           ))}
-          {(resume.volunteering || []).length === 0 && (
-            <p className="text-sm text-muted-foreground italic py-4">No volunteering entries added yet.</p>
+          {(resume.extraCurricular || []).length === 0 && (
+            <p className="text-sm text-muted-foreground italic py-4">No activities added yet.</p>
           )}
         </div>
       </div>
