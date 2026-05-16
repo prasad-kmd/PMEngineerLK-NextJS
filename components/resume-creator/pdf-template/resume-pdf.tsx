@@ -113,12 +113,13 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat",
     textTransform: "uppercase",
     letterSpacing: 1,
+    lineHeight: 1.1,
   },
   roleText: {
     fontSize: 12,
     fontWeight: 500,
     color: colors.accent,
-    marginTop: 2,
+    marginTop: 6,
     letterSpacing: 0.5,
   },
   headerImage: {
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
+    marginBottom: 2,
   },
   contactText: {
     fontSize: 8,
@@ -183,6 +185,7 @@ const styles = StyleSheet.create({
   // ---- Experience ----
   experienceItem: {
     marginBottom: spacing.md,
+    paddingBottom: 2,
   },
   expHeader: {
     flexDirection: "row",
@@ -345,7 +348,9 @@ export function ResumePDF({ resume }: ResumePDFProps) {
         <View style={styles.contactRow}>
           {resume.email && (
             <View style={styles.contactItem}>
-              <EmailIcon size={8} color={colors.accent} />
+              <View style={{ marginTop: -1 }}>
+                <EmailIcon size={8} color={colors.accent} />
+              </View>
               <Link src={`mailto:${resume.email}`} style={styles.contactLink}>
                 {resume.email}
               </Link>
@@ -353,19 +358,25 @@ export function ResumePDF({ resume }: ResumePDFProps) {
           )}
           {resume.phone && (
             <View style={styles.contactItem}>
-              <PhoneIcon size={8} color={colors.accent} />
+              <View style={{ marginTop: -1 }}>
+                <PhoneIcon size={8} color={colors.accent} />
+              </View>
               <Text style={styles.contactText}>{resume.phone}</Text>
             </View>
           )}
           {resume.location && (
             <View style={styles.contactItem}>
-              <MapPinIcon size={8} color={colors.accent} />
+              <View style={{ marginTop: -1 }}>
+                <MapPinIcon size={8} color={colors.accent} />
+              </View>
               <Text style={styles.contactText}>{resume.location}</Text>
             </View>
           )}
           {resume.website && (
             <View style={styles.contactItem}>
-              <GlobeIcon size={8} color={colors.accent} />
+              <View style={{ marginTop: -1 }}>
+                <GlobeIcon size={8} color={colors.accent} />
+              </View>
               <Link src={normalizeUrl(resume.website)} style={styles.contactLink}>
                 {resume.website}
               </Link>
@@ -373,7 +384,9 @@ export function ResumePDF({ resume }: ResumePDFProps) {
           )}
           {resume.linkedin && (
             <View style={styles.contactItem}>
-              <LinkedinIcon size={8} color={colors.accent} />
+              <View style={{ marginTop: -1 }}>
+                <LinkedinIcon size={8} color={colors.accent} />
+              </View>
               <Link src={normalizeUrl(resume.linkedin)} style={styles.contactLink}>
                 LinkedIn
               </Link>
@@ -381,7 +394,9 @@ export function ResumePDF({ resume }: ResumePDFProps) {
           )}
           {resume.github && (
             <View style={styles.contactItem}>
-              <GithubIcon size={8} color={colors.accent} />
+              <View style={{ marginTop: -1 }}>
+                <GithubIcon size={8} color={colors.accent} />
+              </View>
               <Link src={normalizeUrl(resume.github)} style={styles.contactLink}>
                 GitHub
               </Link>
