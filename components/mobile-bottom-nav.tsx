@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { Search, Menu, X, Sun, Moon } from "lucide-react";
+import { Search, Menu, X, Sun, Moon, Wrench, LayoutGrid } from "lucide-react";
 import { useEffect, useState, startTransition } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -69,6 +69,26 @@ export function MobileBottomNav({
       {/* Accent Picker */}
       <AccentPicker side="top" />
 
+      {/* Theme Toggle */}
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger asChild>
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? (
+              <Sun className="h-5 w-5 animate-in zoom-in-50 duration-300" />
+            ) : (
+              <Moon className="h-5 w-5 animate-in zoom-in-50 duration-300" />
+            )}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="top" sideOffset={12}>
+          Toggle Theme
+        </TooltipContent>
+      </Tooltip>
+
       {/* Sidebar Toggle */}
       <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
@@ -89,23 +109,37 @@ export function MobileBottomNav({
         </TooltipContent>
       </Tooltip>
 
-      {/* Theme Toggle */}
+      {/* Tools */}
       <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
-          <button
-            onClick={toggleTheme}
+          <Link
+            href="/tools"
+            prefetch={false}
             className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Toggle theme"
+            aria-label="Engineering Workspace"
           >
-            {theme === "dark" ? (
-              <Sun className="h-5 w-5 animate-in zoom-in-50 duration-300" />
-            ) : (
-              <Moon className="h-5 w-5 animate-in zoom-in-50 duration-300" />
-            )}
-          </button>
+            <Wrench className="h-5 w-5" />
+          </Link>
         </TooltipTrigger>
         <TooltipContent side="top" sideOffset={12}>
-          Toggle Theme
+          Engineering Workspace
+        </TooltipContent>
+      </Tooltip>
+
+      {/* Pages */}
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger asChild>
+          <Link
+            href="/pages"
+            prefetch={false}
+            className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Site Directory"
+          >
+            <LayoutGrid className="h-5 w-5" />
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent side="top" sideOffset={12}>
+          Site Directory
         </TooltipContent>
       </Tooltip>
 
