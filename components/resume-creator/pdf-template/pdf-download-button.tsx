@@ -32,9 +32,22 @@ function PDFLoadingButton({ size, className }: { size: "default" | "sm" | "lg" |
 }
 
 export function PDFDownloadButton({ resume, className, size = "lg" }: PDFDownloadButtonProps & { className?: string; size?: "default" | "sm" | "lg" | "icon" }) {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [dataSnapshot, setDataSnapshot] = useState<ResumeData | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  if (!isLoaded) {
+  // Check if current data is different from what was used to generate the PDF
+  const isDirty = dataSnapshot && JSON.stringify(resume) !== JSON.stringify(dataSnapshot);
+
+  const handleGenerate = () => {
+    setIsGenerating(true);
+    // Artificial delay to show loading state and prevent instant re-render blocking
+    setTimeout(() => {
+      setDataSnapshot(resume);
+      setIsGenerating(false);
+    }, 400);
+  };
+
+  if (!dataSnapshot || isDirty || isGenerating) {
     return (
       <Button
         size={size}
@@ -45,17 +58,28 @@ export function PDFDownloadButton({ resume, className, size = "lg" }: PDFDownloa
             : "bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none",
           className
         )}
-        onClick={() => setIsLoaded(true)}
+        onClick={handleGenerate}
+        disabled={isGenerating}
       >
-        <Download className={cn("mr-2", size === "sm" ? "h-4 w-4" : "h-5 w-5")} />
-        <span className="hidden sm:inline">{size === "sm" ? "PDF" : "Generate PDF"}</span>
+        {isGenerating ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Download className={cn("mr-2", size === "sm" ? "h-4 w-4" : "h-5 w-5")} />
+        )}
+        <span className="hidden sm:inline">
+          {isGenerating 
+            ? "Preparing..." 
+            : isDirty 
+              ? (size === "sm" ? "Update" : "Update Resume (PDF)") 
+              : (size === "sm" ? "PDF" : "Generate Resume (PDF)")}
+        </span>
       </Button>
     );
   }
 
   return (
     <Suspense fallback={<PDFLoadingButton size={size} className={className} />}>
-      <ResumePDFLink resume={resume} size={size} className={className} />
+      <ResumePDFLink resume={dataSnapshot} size={size} className={className} />
     </Suspense>
   );
 }

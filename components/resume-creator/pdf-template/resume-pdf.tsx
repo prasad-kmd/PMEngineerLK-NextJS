@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   // ---- Experience ----
   experienceItem: {
     marginBottom: spacing.md,
-    paddingBottom: 2,
+    paddingBottom: 10,
   },
   expHeader: {
     flexDirection: "row",
