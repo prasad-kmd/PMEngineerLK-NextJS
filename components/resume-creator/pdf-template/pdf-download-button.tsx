@@ -1,44 +1,61 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import React, { useState, Suspense, lazy } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
-import { useState } from "react";
 import { type ResumeData } from "./resume-pdf";
+import { cn } from "@/lib/utils";
 
 interface PDFDownloadButtonProps {
   resume: ResumeData;
 }
 
-const ResumePDFLink = dynamic(() => import("./pdf-link"), {
-  ssr: false,
-  loading: () => (
+const ResumePDFLink = lazy(() => import("./pdf-link"));
+
+function PDFLoadingButton({ size, className }: { size: "default" | "sm" | "lg" | "icon"; className?: string }) {
+  return (
     <Button
-      size="lg"
-      className="rounded-full px-12 font-bold shadow-lg shadow-primary/20"
+      size={size}
+      className={cn(
+        "rounded-full px-6 font-bold transition-all duration-300",
+        size === "sm"
+          ? "bg-primary text-primary-foreground shadow-[0_8px_16px_-6px_hsl(var(--primary-h)_var(--primary-s)_var(--primary-l)/0.5)] border border-primary/20"
+          : "bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))]",
+        className
+      )}
       disabled
     >
-      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+      <Loader2 className={cn("mr-2 h-4 w-4 animate-spin")} />
       <span className="hidden sm:inline">Loading...</span>
     </Button>
-  ),
-});
+  );
+}
 
-export function PDFDownloadButton({ resume }: PDFDownloadButtonProps) {
+export function PDFDownloadButton({ resume, className, size = "lg" }: PDFDownloadButtonProps & { className?: string; size?: "default" | "sm" | "lg" | "icon" }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   if (!isLoaded) {
     return (
       <Button
-        size="lg"
-        className="rounded-full px-12 font-bold shadow-lg shadow-primary/20"
+        size={size}
+        className={cn(
+          "rounded-full px-6 font-bold transition-all duration-300",
+          size === "sm"
+            ? "bg-primary text-primary-foreground shadow-[0_8px_16px_-6px_hsl(var(--primary-h)_var(--primary-s)_var(--primary-l)/0.5)] border border-primary/20 hover:shadow-[0_12px_20px_-4px_hsl(var(--primary-h)_var(--primary-s)_var(--primary-l)/0.6)] hover:-translate-y-0.5 active:translate-y-0"
+            : "bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none",
+          className
+        )}
         onClick={() => setIsLoaded(true)}
       >
-        <Download className="mr-2 h-5 w-5" />
-        <span className="hidden sm:inline">Generate PDF</span>
+        <Download className={cn("mr-2", size === "sm" ? "h-4 w-4" : "h-5 w-5")} />
+        <span className="hidden sm:inline">{size === "sm" ? "PDF" : "Generate PDF"}</span>
       </Button>
     );
   }
 
-  return <ResumePDFLink resume={resume} />;
+  return (
+    <Suspense fallback={<PDFLoadingButton size={size} className={className} />}>
+      <ResumePDFLink resume={resume} size={size} className={className} />
+    </Suspense>
+  );
 }

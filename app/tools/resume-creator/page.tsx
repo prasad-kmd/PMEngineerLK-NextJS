@@ -321,31 +321,31 @@ export default function ResumeCreator() {
                          />
                       </div>
                    </div>
-                   <div className="flex gap-3">
-                      <Button
-                        variant="ghost"
-                        disabled={activeSection === "personal"}
-                        onClick={() => {
-                          const idx = sections.findIndex(s => s.id === activeSection);
-                          setActiveSection(sections[idx - 1].id as EditorSection);
-                          window.scrollTo({ top: 0, behavior: "smooth" });
-                        }}
-                        className="rounded-xl px-6"
-                      >
-                        Previous
-                      </Button>
-                      <Button
-                        disabled={activeSection === "projects"}
-                        onClick={() => {
-                          const idx = sections.findIndex(s => s.id === activeSection);
-                          setActiveSection(sections[idx + 1].id as EditorSection);
-                          window.scrollTo({ top: 0, behavior: "smooth" });
-                        }}
-                        className="rounded-xl px-8"
-                      >
-                        Next Section
-                      </Button>
-                   </div>
+                    <div className="flex gap-3">
+                       <Button
+                         variant="secondary"
+                         disabled={activeSection === "personal"}
+                         onClick={() => {
+                           const idx = sections.findIndex(s => s.id === activeSection);
+                           setActiveSection(sections[idx - 1].id as EditorSection);
+                           window.scrollTo({ top: 0, behavior: "smooth" });
+                         }}
+                         className="rounded-xl px-6 bg-secondary text-secondary-foreground shadow-[0_6px_0_0_hsl(216_20%_80%)] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none transition-all"
+                       >
+                         Previous
+                       </Button>
+                       <Button
+                         disabled={activeSection === "projects"}
+                         onClick={() => {
+                           const idx = sections.findIndex(s => s.id === activeSection);
+                           setActiveSection(sections[idx + 1].id as EditorSection);
+                           window.scrollTo({ top: 0, behavior: "smooth" });
+                         }}
+                         className="rounded-xl px-8 bg-primary text-primary-foreground shadow-[0_6px_0_0_hsl(var(--primary-h)_var(--primary-s)_calc(var(--primary-l)-10%))] hover:brightness-[1.02] active:translate-y-[2px] active:shadow-none transition-all"
+                       >
+                         Next Section
+                       </Button>
+                    </div>
                 </div>
              </Card>
 
@@ -363,7 +363,7 @@ export default function ResumeCreator() {
         </div>
 
         {/* Floating Action Bar */}
-        <div className="fixed bottom-15 left-6 right-6 z-40 pointer-events-none">
+        <div className="sticky bottom-12 z-40 mt-12 mb-8">
            <div className="pointer-events-auto mx-auto max-w-2xl rounded-2xl bg-card/70 border border-border p-2 backdrop-blur-xl shadow-2xl flex items-center justify-between gap-2 md:gap-4 px-4 md:px-6">
               
               {/* Desktop Actions */}
@@ -393,9 +393,9 @@ export default function ResumeCreator() {
                     setActiveSection(sections[idx - 1].id as EditorSection);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  className="rounded-full h-10 px-4 md:px-6 text-xs font-bold gap-2 bg-background/50"
+                  className="rounded-full h-9 px-3 text-[10px] font-bold gap-1.5 bg-background/50 transition-all"
                 >
-                  <ChevronRight className="h-4 w-4 rotate-180" /> <span className="hidden sm:inline">Previous</span>
+                  <ChevronRight className="h-3.5 w-3.5 rotate-180" /> <span className="hidden sm:inline">Previous</span>
                 </Button>
                 
                 <div className="hidden md:flex flex-col items-center px-4">
@@ -417,14 +417,14 @@ export default function ResumeCreator() {
                     setActiveSection(sections[idx + 1].id as EditorSection);
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  className="rounded-full h-10 px-4 md:px-6 text-xs font-bold gap-2 bg-background/50"
+                  className="rounded-full h-9 px-3 text-[10px] font-bold gap-1.5 bg-background/50 transition-all"
                 >
-                  <span className="hidden sm:inline">Next Section</span> <ChevronRight className="h-4 w-4" />
+                  <span className="hidden sm:inline">Next</span> <ChevronRight className="h-3.5 w-3.5" />
                 </Button>
               </div>
 
               <div className="flex items-center">
-                <PDFDownloadButton resume={resume} className="rounded-full h-10 px-6 shadow-lg shadow-primary/20" />
+                <PDFDownloadButton resume={resume} size="sm" className="h-9 px-4 text-[10px]" />
               </div>
            </div>
         </div>
