@@ -4,7 +4,7 @@ import React from "react";
 import { Plus, X, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+// import { Label } from "@/components/ui/label";
 import { ResumeData } from "../pdf-template/resume-pdf";
 
 interface SkillsEditorProps {
@@ -36,10 +36,10 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div>
-            <h3 className="text-lg font-bold amoriaregular">Technical Skills</h3>
-            <p className="text-xs text-muted-foreground">List your core technical expertise.</p>
+            <h3 className="text-lg font-bold font-mozilla-headline">Technical Skills</h3>
+            <p className="text-xs text-muted-foreground font-local-inter">List your core technical expertise.</p>
           </div>
-          <Button onClick={() => addItem("technicalSkills")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
+          <Button onClick={() => addItem("technicalSkills")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-google-sans">
             <Plus className="h-3.5 w-3.5" /> Add Skill
           </Button>
         </div>
@@ -63,7 +63,7 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
             </div>
           ))}
           {(resume.technicalSkills || []).length === 0 && (
-            <p className="text-sm text-muted-foreground italic py-4">No technical skills added yet.</p>
+            <p className="text-sm text-muted-foreground italic py-4 font-local-inter">No technical skills added yet.</p>
           )}
         </div>
       </div>
@@ -72,10 +72,10 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div>
-            <h3 className="text-lg font-bold amoriaregular">Personal Skills</h3>
-            <p className="text-xs text-muted-foreground">Soft skills, leadership, and personal traits.</p>
+            <h3 className="text-lg font-bold font-mozilla-headline">Personal Skills</h3>
+            <p className="text-xs text-muted-foreground font-local-inter">Soft skills, leadership, and personal traits.</p>
           </div>
-          <Button onClick={() => addItem("personalSkills")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
+          <Button onClick={() => addItem("personalSkills")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-google-sans">
             <Plus className="h-3.5 w-3.5" /> Add Skill
           </Button>
         </div>
@@ -99,7 +99,7 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
             </div>
           ))}
           {(resume.personalSkills || []).length === 0 && (
-            <p className="text-sm text-muted-foreground italic py-4">No personal skills added yet.</p>
+            <p className="text-sm text-muted-foreground italic py-4 font-local-inter">No personal skills added yet.</p>
           )}
         </div>
       </div>
@@ -108,10 +108,10 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div>
-            <h3 className="text-lg font-bold amoriaregular">Certifications</h3>
-            <p className="text-xs text-muted-foreground">Professional certificates and awards.</p>
+            <h3 className="text-lg font-bold font-mozilla-headline">Certifications</h3>
+            <p className="text-xs text-muted-foreground font-local-inter">Professional certificates and awards.</p>
           </div>
-          <Button onClick={() => addItem("certifications")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
+          <Button onClick={() => addItem("certifications")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-google-sans">
             <Plus className="h-3.5 w-3.5" /> Add Certification
           </Button>
         </div>
@@ -135,7 +135,7 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
             </div>
           ))}
           {(resume.certifications || []).length === 0 && (
-            <p className="text-sm text-muted-foreground italic py-4 col-span-2">No certifications added yet.</p>
+            <p className="text-sm text-muted-foreground italic py-4 col-span-2 font-local-inter">No certifications added yet.</p>
           )}
         </div>
       </div>

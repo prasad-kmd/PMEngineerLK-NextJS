@@ -58,7 +58,7 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
           ) : (
             <div className="flex flex-col items-center gap-1">
               <Camera className="h-6 w-6 text-muted-foreground" />
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Upload</span>
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-google-sans">Upload</span>
             </div>
           )}
           <input
@@ -71,13 +71,13 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
         </div>
         <div className="flex-1 space-y-2 text-center sm:text-left">
           <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground local-jetbrains-mono">Profile Photo</h3>
-          <p className="text-xs text-muted-foreground">JPG or PNG. Max size 2MB.</p>
+          <p className="text-xs text-muted-foreground font-google-sans">JPG or PNG. Max size 2MB.</p>
           <div className="flex items-center justify-center sm:justify-start gap-2 pt-1">
             <Button
               variant="outline"
               size="sm"
               onClick={() => fileInputRef.current?.click()}
-              className="h-8 text-xs"
+              className="h-8 text-xs font-google-sans"
             >
               {resume.image ? "Change" : "Select File"}
             </Button>
@@ -85,7 +85,7 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 text-xs text-destructive flex items-center gap-1"
+                className="h-8 text-xs text-destructive flex items-center gap-1 font-google-sans"
                 onClick={removeImage}
               >
                 <X className="h-3 w-3" /> Remove
@@ -97,7 +97,7 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label className="text-xs font-bold uppercase tracking-widest">Full Name</Label>
+          <Label className="text-xs font-bold uppercase tracking-widest font-noto-sans-display">Full Name</Label>
           <Input
             placeholder="John Doe"
             value={resume.name}
@@ -105,7 +105,7 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
           />
         </div>
         <div className="space-y-2">
-          <Label className="text-xs font-bold uppercase tracking-widest">Professional Title</Label>
+          <Label className="text-xs font-bold uppercase tracking-widest font-noto-sans-display">Professional Title</Label>
           <Input
             placeholder="Full Stack Engineer"
             value={resume.role}
@@ -113,7 +113,7 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
           />
         </div>
         <div className="space-y-2">
-          <Label className="text-xs font-bold uppercase tracking-widest">Email Address</Label>
+          <Label className="text-xs font-bold uppercase tracking-widest font-noto-sans-display">Email Address</Label>
           <Input
             type="email"
             placeholder="john@example.com"
@@ -122,7 +122,7 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
           />
         </div>
         <div className="space-y-2">
-          <Label className="text-xs font-bold uppercase tracking-widest">Phone Number</Label>
+          <Label className="text-xs font-bold uppercase tracking-widest font-noto-sans-display">Phone Number</Label>
           <Input
             placeholder="+1 (555) 000-0000"
             value={resume.phone}
@@ -130,7 +130,7 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
           />
         </div>
         <div className="space-y-2">
-          <Label className="text-xs font-bold uppercase tracking-widest">Location</Label>
+          <Label className="text-xs font-bold uppercase tracking-widest font-noto-sans-display">Location</Label>
           <Input
             placeholder="New York, NY"
             value={resume.location}
@@ -138,7 +138,7 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
           />
         </div>
         <div className="space-y-2">
-          <Label className="text-xs font-bold uppercase tracking-widest">Website / Portfolio</Label>
+          <Label className="text-xs font-bold uppercase tracking-widest font-noto-sans-display">Website / Portfolio</Label>
           <Input
             placeholder="johndoe.com"
             value={resume.website}
@@ -146,17 +146,17 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
           />
         </div>
         <div className="space-y-2">
-          <Label className="text-xs font-bold uppercase tracking-widest">LinkedIn Profile</Label>
+          <Label className="text-xs font-bold uppercase tracking-widest font-noto-sans-display">LinkedIn Username</Label>
           <Input
-            placeholder="linkedin.com/in/johndoe"
+            placeholder="e.g. johndoe"
             value={resume.linkedin}
             onChange={(e) => updateField("linkedin", e.target.value)}
           />
         </div>
         <div className="space-y-2">
-          <Label className="text-xs font-bold uppercase tracking-widest">GitHub Profile</Label>
+          <Label className="text-xs font-bold uppercase tracking-widest font-noto-sans-display">GitHub Username</Label>
           <Input
-            placeholder="github.com/johndoe"
+            placeholder="e.g. johndoe"
             value={resume.github}
             onChange={(e) => updateField("github", e.target.value)}
           />
@@ -165,7 +165,7 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <Label className="text-xs font-bold uppercase tracking-widest">Professional Summary</Label>
+          <Label className="text-xs font-bold uppercase tracking-widest font-noto-sans-display">Professional Summary</Label>
           <span className={cn("text-[10px] local-jetbrains-mono", resume.summary.length > 500 ? "text-destructive" : "text-muted-foreground")}>
             {resume.summary.length}/500
           </span>

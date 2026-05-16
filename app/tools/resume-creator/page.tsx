@@ -64,6 +64,7 @@ const initialResume: ResumeData = {
       degree: "B.S. in Computer Science",
       period: "2015 - 2019",
       grade: "3.9 GPA",
+      description: "Focused on Software Engineering and Algorithms.",
     },
   ],
   technicalSkills: [
@@ -129,9 +130,35 @@ export default function ResumeCreator() {
         }
         if (!migrated.referees) {
           migrated.referees = [];
+        } else {
+          // Migrate old contactDetails to email/phone
+          migrated.referees = (migrated.referees as any[]).map(ref => {
+            if (ref.contactDetails && !ref.email && !ref.phone) {
+              const details = ref.contactDetails;
+              if (details.includes("|")) {
+                const parts = details.split("|");
+                return { ...ref, email: parts[0].trim(), phone: parts[1]?.trim() || "" };
+              }
+              if (details.includes("@")) {
+                return { ...ref, email: details, phone: "" };
+              }
+              return { ...ref, email: "", phone: details };
+            }
+            return {
+              ...ref,
+              email: ref.email || "",
+              phone: ref.phone || ""
+            };
+          });
         }
 
-        // Clean up old fields
+        // Migrate education to include description
+        if (migrated.education) {
+          migrated.education = migrated.education.map(edu => ({
+            ...edu,
+            description: edu.description || ""
+          }));
+        }
         delete (migrated as any).skills;
         delete (migrated as any).volunteering;
 
@@ -281,7 +308,7 @@ export default function ResumeCreator() {
                          key={section.id}
                          onClick={() => setActiveSection(section.id as EditorSection)}
                          className={cn(
-                           "w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold transition-all group",
+                           "w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold transition-all group font-google-sans",
                            activeSection === section.id
                              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]"
                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -341,7 +368,7 @@ export default function ResumeCreator() {
                          })()}
                       </div>
                       <div>
-                         <h2 className="text-2xl font-bold tracking-tight philosopher">
+                         <h2 className="text-2xl font-bold tracking-tight font-mozilla-text">
                            {sections.find(s => s.id === activeSection)?.label}
                          </h2>
                          <p className="text-sm text-muted-foreground google-sans">
@@ -441,11 +468,11 @@ export default function ResumeCreator() {
                   }}
                   className="rounded-full h-9 px-3 text-[10px] font-bold gap-1.5 bg-background/50 transition-all"
                 >
-                  <ChevronRight className="h-3.5 w-3.5 rotate-180" /> <span className="hidden sm:inline">Previous</span>
+                  <ChevronRight className="h-3.5 w-3.5 rotate-180" /> <span className="hidden sm:inline font-local-jetbrains-mono">Previous</span>
                 </Button>
                 
                 <div className="hidden md:flex flex-col items-center px-4">
-                   <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground local-jetbrains-mono mb-1">Progress</span>
+                   <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground local-jetbrains-mono mb-1 ">Progress</span>
                    <div className="w-24 h-1 bg-muted rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-primary transition-all duration-500" 
@@ -465,7 +492,7 @@ export default function ResumeCreator() {
                   }}
                   className="rounded-full h-9 px-3 text-[10px] font-bold gap-1.5 bg-background/50 transition-all"
                 >
-                  <span className="hidden sm:inline">Next</span> <ChevronRight className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline font-local-jetbrains-mono">Next</span> <ChevronRight className="h-3.5 w-3.5" />
                 </Button>
               </div>
 

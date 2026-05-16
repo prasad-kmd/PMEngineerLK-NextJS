@@ -19,7 +19,7 @@ export function RefereesEditor({ resume, setResume }: RefereesEditorProps) {
       ...prev,
       referees: [
         ...(prev.referees || []),
-        { name: "", position: "", workingPlacement: "", contactDetails: "" },
+        { name: "", position: "", workingPlacement: "", email: "", phone: "" },
       ],
     }));
   };
@@ -39,6 +39,21 @@ export function RefereesEditor({ resume, setResume }: RefereesEditorProps) {
     setResume((prev) => ({ ...prev, referees: newList }));
   };
 
+  const moveUp = (index: number) => {
+    if (index === 0) return;
+    const newList = [...(resume.referees || [])];
+    [newList[index - 1], newList[index]] = [newList[index], newList[index - 1]];
+    setResume((prev) => ({ ...prev, referees: newList }));
+  };
+
+  const moveDown = (index: number) => {
+    const refs = resume.referees || [];
+    if (index === refs.length - 1) return;
+    const newList = [...refs];
+    [newList[index], newList[index + 1]] = [newList[index + 1], newList[index]];
+    setResume((prev) => ({ ...prev, referees: newList }));
+  };
+
   return (
     <div className="space-y-12">
       <div className="space-y-6">
@@ -48,11 +63,11 @@ export function RefereesEditor({ resume, setResume }: RefereesEditorProps) {
               <UserCheck className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold amoriaregular">Non Related Referees</h3>
-              <p className="text-xs text-muted-foreground">List people who can provide a professional reference.</p>
+              <h3 className="text-lg font-bold font-mozilla-headline">Non Related Referees</h3>
+              <p className="text-xs text-muted-foreground font-local-inter">List people who can provide a professional reference.</p>
             </div>
           </div>
-          <Button onClick={addReferee} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
+          <Button onClick={addReferee} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-google-sans">
             <Plus className="h-3.5 w-3.5" /> Add Referee
           </Button>
         </div>
@@ -64,11 +79,13 @@ export function RefereesEditor({ resume, setResume }: RefereesEditorProps) {
               title={ref.name || "Referee Name"}
               subtitle={ref.position}
               onRemove={() => removeReferee(idx)}
+              onMoveUp={idx > 0 ? () => moveUp(idx) : undefined}
+              onMoveDown={idx < (resume.referees || []).length - 1 ? () => moveDown(idx) : undefined}
               defaultExpanded={idx === (resume.referees || []).length - 1}
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Full Name</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Full Name</Label>
                   <Input
                     placeholder="e.g. Dr. Jane Smith"
                     value={ref.name}
@@ -76,7 +93,7 @@ export function RefereesEditor({ resume, setResume }: RefereesEditorProps) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Position</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Position</Label>
                   <Input
                     placeholder="e.g. Senior Manager"
                     value={ref.position}
@@ -84,7 +101,7 @@ export function RefereesEditor({ resume, setResume }: RefereesEditorProps) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Working Placement</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Working Placement</Label>
                   <Input
                     placeholder="e.g. Tech Solutions Inc."
                     value={ref.workingPlacement}
@@ -92,11 +109,19 @@ export function RefereesEditor({ resume, setResume }: RefereesEditorProps) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Contact Details</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Email Address</Label>
                   <Input
-                    placeholder="e.g. jane.smith@email.com | +123 456 789"
-                    value={ref.contactDetails}
-                    onChange={(e) => updateReferee(idx, "contactDetails", e.target.value)}
+                    placeholder="e.g. jane.smith@email.com"
+                    value={ref.email}
+                    onChange={(e) => updateReferee(idx, "email", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Phone Number</Label>
+                  <Input
+                    placeholder="e.g. +123 456 789"
+                    value={ref.phone}
+                    onChange={(e) => updateReferee(idx, "phone", e.target.value)}
                   />
                 </div>
               </div>

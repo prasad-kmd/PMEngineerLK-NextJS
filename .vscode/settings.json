@@ -11,5 +11,25 @@
       "other": "on"
     },
     "editor.minimap.enabled": true
-  }
+  },
+  "telemetry.feedback.enabled": false,
+  "files.autoSave": "afterDelay",
+  "editor.cursorStyle": "underline",
+  "editor.wordWrap": "on",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "workbench.colorCustomizations": {
+    "[GitHub Dark Default]": {}
+  },
+  "workbench.colorTheme": "GitHub Dark Default",
+  "workbench.iconTheme": "symbols",
+  "window.title": "${rootName}${separator}${profileName}${separator}PrasadM${separator}${activeEditorShort}${dirty}",
+  "scm.alwaysShowActions": true,
+  "scm.alwaysShowRepositories": true,
+  "scm.defaultViewMode": "tree",
+  "scm.providerCountBadge": "auto",
+  "extensions.ignoreRecommendations": true,
+  "terminal.integrated.hideOnStartup": "always",
+  "mediaPreview.video.loop": true,
+  "npm.packageManager": "pnpm",
+  "tailwindCSS.emmetCompletions": true
 }

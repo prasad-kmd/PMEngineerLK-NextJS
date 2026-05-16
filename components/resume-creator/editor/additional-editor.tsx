@@ -56,6 +56,20 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
     setResume((prev) => ({ ...prev, extraCurricular: newList }));
   };
 
+  const moveUpExtraCurricular = (index: number) => {
+    if (index === 0) return;
+    const newList = [...resume.extraCurricular];
+    [newList[index - 1], newList[index]] = [newList[index], newList[index - 1]];
+    setResume((prev) => ({ ...prev, extraCurricular: newList }));
+  };
+
+  const moveDownExtraCurricular = (index: number) => {
+    if (index === resume.extraCurricular.length - 1) return;
+    const newList = [...resume.extraCurricular];
+    [newList[index], newList[index + 1]] = [newList[index + 1], newList[index]];
+    setResume((prev) => ({ ...prev, extraCurricular: newList }));
+  };
+
   return (
     <div className="space-y-12">
       {/* Languages */}
@@ -66,11 +80,11 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
               <Globe className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold amoriaregular">Languages</h3>
-              <p className="text-xs text-muted-foreground">Languages you speak and your proficiency.</p>
+              <h3 className="text-lg font-bold font-noto-sans-display">Languages</h3>
+              <p className="text-xs text-muted-foreground font-local-inter">Languages you speak and your proficiency.</p>
             </div>
           </div>
-          <Button onClick={() => addStringItem("languages")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
+          <Button onClick={() => addStringItem("languages")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-noto-sans-display">
             <Plus className="h-3.5 w-3.5" /> Add Language
           </Button>
         </div>
@@ -78,7 +92,7 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
           {(resume.languages || []).map((lang, idx) => (
             <div key={idx} className="flex items-center gap-1 group animate-in zoom-in-95 duration-200">
               <Input
-                className="h-9 w-40 md:w-48 bg-background/50"
+                className="h-9 w-40 md:w-48 bg-background/50 font-google-sans"
                 placeholder="e.g. English (Fluent)"
                 value={lang}
                 onChange={(e) => updateStringItem("languages", idx, e.target.value)}
@@ -94,7 +108,7 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
             </div>
           ))}
           {(resume.languages || []).length === 0 && (
-            <p className="text-sm text-muted-foreground italic py-4">No languages added yet.</p>
+            <p className="text-sm text-muted-foreground italic py-4 font-noto-sans-display">No languages added yet.</p>
           )}
         </div>
       </div>
@@ -107,11 +121,11 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
               <Heart className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold amoriaregular">Extra Curriculum Activities</h3>
-              <p className="text-xs text-muted-foreground">Clubs, sports, community service, and other activities.</p>
+              <h3 className="text-lg font-bold font-noto-sans-display">Extra Curriculum Activities</h3>
+              <p className="text-xs text-muted-foreground font-local-inter">Clubs, sports, community service, and other activities.</p>
             </div>
           </div>
-          <Button onClick={addExtraCurricular} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
+          <Button onClick={addExtraCurricular} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-noto-sans-display">
             <Plus className="h-3.5 w-3.5" /> Add Entry
           </Button>
         </div>
@@ -124,11 +138,13 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
               subtitle={vol.company}
               period={vol.period}
               onRemove={() => removeExtraCurricular(idx)}
+              onMoveUp={idx > 0 ? () => moveUpExtraCurricular(idx) : undefined}
+              onMoveDown={idx < (resume.extraCurricular || []).length - 1 ? () => moveDownExtraCurricular(idx) : undefined}
               defaultExpanded={idx === (resume.extraCurricular || []).length - 1}
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Organisation/Institution</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Organisation/Institution</Label>
                   <Input
                     placeholder="e.g. Chess Club"
                     value={vol.company}
@@ -136,7 +152,7 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Role/Position</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Role/Position</Label>
                   <Input
                     placeholder="e.g. Captain"
                     value={vol.role}
@@ -144,7 +160,7 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Period</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Period</Label>
                   <Input
                     placeholder="e.g. 2022 - 2023"
                     value={vol.period}
@@ -154,7 +170,7 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label className="text-[10px] font-black uppercase tracking-widest">Contribution/Details</Label>
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Contribution/Details</Label>
                   <span className={cn("text-[9px] local-jetbrains-mono", vol.description.length > 500 ? "text-destructive" : "text-muted-foreground")}>
                     {vol.description.length}/500
                   </span>
@@ -164,7 +180,7 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
                   value={vol.description}
                   onChange={(e) => updateExtraCurricular(idx, "description", e.target.value)}
                   rows={3}
-                  className="resize-none"
+                  className="resize-none font-noto-sans-display"
                   maxLength={500}
                 />
               </div>

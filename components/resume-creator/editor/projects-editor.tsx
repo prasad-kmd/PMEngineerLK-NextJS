@@ -39,13 +39,27 @@ export function ProjectsEditor({ resume, setResume }: ProjectsEditorProps) {
     setResume((prev) => ({ ...prev, projects: newList }));
   };
 
+  const moveUp = (index: number) => {
+    if (index === 0) return;
+    const newList = [...resume.projects];
+    [newList[index - 1], newList[index]] = [newList[index], newList[index - 1]];
+    setResume((prev) => ({ ...prev, projects: newList }));
+  };
+
+  const moveDown = (index: number) => {
+    if (index === resume.projects.length - 1) return;
+    const newList = [...resume.projects];
+    [newList[index], newList[index + 1]] = [newList[index + 1], newList[index]];
+    setResume((prev) => ({ ...prev, projects: newList }));
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <p className="text-xs text-muted-foreground leading-relaxed">
+        <p className="text-xs text-muted-foreground leading-relaxed font-local-inter">
           Highlight your best projects, including open source work or personal experiments.
         </p>
-        <Button onClick={addItem} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px]">
+        <Button onClick={addItem} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-google-sans">
           <Plus className="h-3.5 w-3.5" /> Add Project
         </Button>
       </div>
@@ -57,11 +71,13 @@ export function ProjectsEditor({ resume, setResume }: ProjectsEditorProps) {
             title={proj.name || "Unnamed Project"}
             subtitle={proj.link}
             onRemove={() => removeItem(idx)}
+            onMoveUp={idx > 0 ? () => moveUp(idx) : undefined}
+            onMoveDown={idx < resume.projects.length - 1 ? () => moveDown(idx) : undefined}
             defaultExpanded={idx === resume.projects.length - 1}
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest">Project Name</Label>
+                <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Project Name</Label>
                 <Input
                   placeholder="e.g. Portfolio Website"
                   value={proj.name}
@@ -69,7 +85,7 @@ export function ProjectsEditor({ resume, setResume }: ProjectsEditorProps) {
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest">Project Link (Optional)</Label>
+                <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Project Link (Optional)</Label>
                 <Input
                   placeholder="e.g. github.com/user/repo"
                   value={proj.link}
@@ -79,7 +95,7 @@ export function ProjectsEditor({ resume, setResume }: ProjectsEditorProps) {
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-[10px] font-black uppercase tracking-widest">Project Description</Label>
+                <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Project Description</Label>
                 <span className={cn("text-[9px] local-jetbrains-mono", proj.description.length > 500 ? "text-destructive" : "text-muted-foreground")}>
                   {proj.description.length}/500
                 </span>
