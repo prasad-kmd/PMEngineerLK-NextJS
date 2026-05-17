@@ -1,94 +1,44 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import GalleryClient from "@/components/gallery-client";
-import { Breadcrumbs } from "@/components/breadcrumbs";
+import { generateContentMetadata } from "@/lib/seo/metadata";
+import { getGalleryItems } from "@/lib/notion/gallery";
 
-const title = "Project Gallery";
-const description =
-  "Visual documentation of my engineering journey, prototypes and field work.";
-
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    title,
-    description,
-    url: "/gallery",
-    images: [
-      {
-        url: `/api/og?title=${encodeURIComponent(title)}`,
-        width: 1200,
-        height: 630,
-        alt: title,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-    images: [`/api/og?title=${encodeURIComponent(title)}`],
-  },
+export const generateMetadata = async (): Promise<Metadata> => {
+  return generateContentMetadata({
+    title: "Project Gallery",
+    description: "A visual showcase of my engineering projects, research, and technical visualizations.",
+    slug: "gallery",
+    type: "website",
+  });
 };
 
-const galleryImages = [
-  {
-    src: "/img/page/ideas.webp",
-    alt: "Ideation Process",
-    title: "Initial Ideation",
-    category: "Planning",
-  },
-  {
-    src: "/img/page/ideas_2.webp",
-    alt: "Brainstorming Session",
-    title: "Brainstorming",
-    category: "Planning",
-  },
-  {
-    src: "/img/page/workflow.webp",
-    alt: "Engineering Workflow",
-    title: "Design Methodology",
-    category: "Workflow",
-  },
-  {
-    src: "/img/page/diary.webp",
-    alt: "Project Diary",
-    title: "Field Documentation",
-    category: "Research",
-  },
-  {
-    src: "/img/page/blackhole.webp",
-    alt: "Technical Visualization",
-    title: "Simulation & Modeling",
-    category: "Technical",
-  },
-  {
-    src: "/img/page/posts.webp",
-    alt: "Updates and Announcements",
-    title: "Community Outreach",
-    category: "Outreach",
-  },
-];
+export default async function GalleryPage() {
+  // Fetch initial data directly on the server
+  let initialData = { items: [], nextCursor: null, hasMore: false };
+  
+  try {
+    initialData = await getGalleryItems(undefined, 9);
+  } catch (error) {
+    console.error("Failed to fetch initial gallery data:", error);
+  }
 
-export default function GalleryPage() {
   return (
-    <div className="min-h-screen py-20 px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <Breadcrumbs
-          items={[{ label: "Gallery", href: "/gallery", active: true }]}
-          className="mb-8"
-        />
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold philosopher lg:text-5xl mb-4">
-            Project Gallery
-          </h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Visual highlights from my engineering journey. From early concepts
-            to technical implementations and field work.
-          </p>
-        </div>
-
-        <GalleryClient images={galleryImages} />
+    <div className="container mx-auto px-4 py-12">
+      <div className="mb-12 text-center">
+        <h1 className="mb-4 text-4xl font-bold tracking-tight sm:text-5xl">
+          Project Gallery
+        </h1>
+        <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+          A visual collection of engineering milestones, design iterations, and 
+          technical explorations. Managed dynamically via Notion.
+        </p>
       </div>
+
+      <GalleryClient 
+        initialItems={initialData.items} 
+        initialNextCursor={initialData.nextCursor}
+        initialHasMore={initialData.hasMore}
+      />
     </div>
   );
 }

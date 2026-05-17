@@ -53,7 +53,8 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 
 ### 📝 Content Management
 
-- **📔 Notion CMS Integration** - Fully integrated with Notion as a headless CMS for blog, articles, projects, tutorials, and wiki with support for `Thumbnail` and `RTime` properties
+- **📔 Notion CMS Integration** - Fully integrated with Notion as a headless CMS for blog, articles, projects, tutorials, wiki, and **Gallery** with support for `Thumbnail` and `RTime` properties
+- **🖼️ Dynamic Managed Gallery** - Notion-backed gallery with paginated API fetching, infinite scroll (Intersection Observer), and bandwidth-optimized loading (thumbnails for grid, full-res for modal)
 - **🎨 Enhanced Block Rendering** - Sophisticated rendering for Notion Callouts, Files, Bookmarks, and Mermaid diagrams with interactive copy buttons
 - **🧩 Custom Shortcodes** - Support for `[button]` and `[tabs]` shortcodes in Notion for advanced content layouts
 - **🧪 Tailwind Labs** - Interactive sandbox at `/tools/ts-labs/` for building accent-aware UI patterns like buttons with live previews and code export
@@ -92,7 +93,7 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 
 - **🚀 Performance-First Architecture** - Next.js 16 (App Router) with optimized client/server boundaries, deferred hydration of non-critical components, and smart prefetching
 - **🖼️ Image Excellence** - Next.js optimized images with responsive sizing, LQIP, and deferred video loading for mobile
-- **🔍 Semantic SEO** - Full Schema.org (JSON-LD) integration for articles, blog posts, and breadcrumbs, with comprehensive metadata and OG images for all public pages
+- **🔍 Semantic SEO** - Full Schema.org (JSON-LD) integration for articles, blog posts, and breadcrumbs. Features a centralized metadata engine that generates smart excerpts and content-specific OpenGraph images (including title, description, and type) for all public pages.
 - **⚡ Premium Shiki Highlighting** - VS Code-accurate syntax highlighting with lazy-loaded languages
 - **🔍 Site Verification** - Integrated Google site ownership verification
 - **📐 LaTeX Support** - Full math notation rendering via KaTeX (Inline: $F=ma$, Block: $$E=mc^2$$) with route-specific CSS loading

@@ -14,6 +14,7 @@ import { RelatedContent } from "@/components/related-content";
 import { ArticleSidebar } from "@/components/article-sidebar";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { generateContentMetadata } from "@/lib/seo/metadata";
 import {
   JsonLd,
   getContentSchema,
@@ -44,10 +45,7 @@ export async function generateMetadata({
     return {};
   }
 
-  return {
-    title: entry.title,
-    description: entry.description,
-  };
+  return generateContentMetadata(entry, "Article", "/articles");
 }
 
 export default async function ArticlePage({

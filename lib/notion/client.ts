@@ -29,6 +29,7 @@ export const DATABASE_IDS = {
   articles: env.NOTION_ARTICLES_ID,
   projects: env.NOTION_PROJECTS_ID,
   tutorials: env.NOTION_TUTORIALS_ID,
+  gallery: env.NOTION_GALLERY_ID,
   wiki: env.NOTION_WIKI_ID,
   authors: env.NOTION_AUTHORS_ID,
 };

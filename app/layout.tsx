@@ -103,7 +103,7 @@ import { ClientProviders } from "@/components/client-providers";
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    template: "%s | Blogfolio",
+    template: "%s | PrasadM Blogfolio",
     default: siteConfig.title,
   },
   description: siteConfig.description,
@@ -214,7 +214,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: `${siteConfig.author}'s Workspace`,
+    title: `${siteConfig.author} Blogfolio`,
   },
   verification: {
     google: "TymVN0yJdgi74htfNZ1E3oGvCs12mHv-5nnw3dSTpnE",

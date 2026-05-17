@@ -14,6 +14,7 @@ import { RelatedContent } from "@/components/related-content";
 import { ArticleSidebar } from "@/components/article-sidebar";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { generateContentMetadata } from "@/lib/seo/metadata";
 import { CommentsSection } from "@/components/comments/comments-section";
 import { CommentScrollButton } from "@/components/comment-scroll-button";
 
@@ -36,10 +37,7 @@ export async function generateMetadata({
     return {};
   }
 
-  return {
-    title: `${entry.title} | Engineering Wiki`,
-    description: entry.description,
-  };
+  return generateContentMetadata(entry, "Wiki", "/wiki");
 }
 
 export default async function WikiEntryPage({

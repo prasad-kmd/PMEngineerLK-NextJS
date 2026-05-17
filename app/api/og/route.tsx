@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
   );
 
   // Explicit allow-list to prevent tainted data from searchParams flowing into dynamic values
-  const rawType = searchParams.get("type") || "default";
+  const rawType = (searchParams.get("type") || "default").toLowerCase();
   const allowedTypes = new Set([
     "research",
     "articles",

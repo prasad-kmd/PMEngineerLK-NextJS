@@ -7,6 +7,7 @@ const envSchema = z.object({
   NOTION_ARTICLES_ID: z.string().optional(),
   NOTION_PROJECTS_ID: z.string().optional(),
   NOTION_TUTORIALS_ID: z.string().optional(),
+  NOTION_GALLERY_ID: z.string().optional(),
   NOTION_WIKI_ID: z.string().optional(),
   NOTION_AUTHORS_ID: z.string().optional(),
 

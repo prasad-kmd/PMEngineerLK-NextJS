@@ -9,6 +9,7 @@ import { ScrollProgress } from "@/components/scroll-progress";
 import { RelatedContent } from "@/components/related-content";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { generateContentMetadata } from "@/lib/seo/metadata";
 import { CommentsSection } from "@/components/comments/comments-section";
 import { CommentScrollButton } from "@/components/comment-scroll-button";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
@@ -27,10 +28,7 @@ export async function generateMetadata({
     return {};
   }
 
-  return {
-    title: project.title,
-    description: project.description,
-  };
+  return generateContentMetadata(project, "Project", "/projects");
 }
 
 export async function generateStaticParams() {

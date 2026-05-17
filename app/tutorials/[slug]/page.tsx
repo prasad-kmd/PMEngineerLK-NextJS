@@ -5,7 +5,7 @@ import {
   getContentItem,
   getAuthorBasic,
 } from "@/lib/content";
-import { siteConfig } from "@/lib/config";
+import { generateContentMetadata } from "@/lib/seo/metadata";
 import { Calendar, Clock } from "lucide-react";
 // import Link from "next/link";
 import { ContentRenderer } from "@/components/content-renderer";
@@ -30,40 +30,10 @@ export async function generateMetadata({
   const post = await getContentItem("tutorials", slug);
 
   if (!post) {
-    notFound();
+    return {};
   }
 
-  const description =
-    post.description || post.content.slice(0, 160).replace(/\*/g, "") + "...";
-  const ogImage = `${siteConfig.url}/api/og?title=${encodeURIComponent(
-    post.title,
-  )}`;
-  const postUrl = `${siteConfig.url}/tutorials/${post.slug}`;
-
-  return {
-    title: post.title,
-    description,
-    openGraph: {
-      title: post.title,
-      description,
-      type: "article",
-      url: postUrl,
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description,
-      images: [ogImage],
-    },
-  };
+  return generateContentMetadata(post, "Tutorial", "/tutorials");
 }
 
 export async function generateStaticParams() {

@@ -41,8 +41,8 @@ The project uses Notion to manage all content (Blogs, Articles, Projects, etc.).
     - Copy the **Internal Integration Token** (this is your `NOTION_AUTH_TOKEN`).
 
 2.  **Set Up Databases**:
-    - Create the following databases in Notion: **Blog**, **Articles**, **Tutorials**, **Projects**, **Wiki**, and **Authors**.
-    - **Required Properties**:
+    - Create the following databases in Notion: **Blog**, **Articles**, **Tutorials**, **Projects**, **Wiki**, **Authors**, and **Gallery**.
+    - **Required Properties (Content)**:
         - `Title` (Title)
         - `Slug` (Rich Text)
         - `Date` (Date)
@@ -52,7 +52,15 @@ The project uses Notion to manage all content (Blogs, Articles, Projects, etc.).
         - `Description` (Rich Text)
         - `Author` (Relation to Authors DB or Rich Text)
         - `Published` (Checkbox)
-    - For the **Authors** database: `Name` (Title), `Slug` (Rich Text), `Bio` (Rich Text), `Avatar` (Files & Media).
+    - **Required Properties (Authors)**: `Name` (Title), `Slug` (Rich Text), `Bio` (Rich Text), `Avatar` (Files & Media).
+    - **Required Properties (Gallery)**:
+        - `Title` (Title)
+        - `Description` (Rich Text)
+        - `Image` (Files & Media) - Primary image
+        - `Thumbnail` (Files & Media) - Optimized preview (optional)
+        - `Category` (Select)
+        - `Order` (Number) - Sort priority
+        - `Status` (Select: Published/Draft)
 
 3.  **Connect Databases**:
     - Open each database in Notion.
@@ -110,6 +118,7 @@ NOTION_PROJECTS_ID=...
 NOTION_TUTORIALS_ID=...
 NOTION_WIKI_ID=...
 NOTION_AUTHORS_ID=...
+NOTION_GALLERY_ID=...
 
 # Database
 DATABASE_URL=postgresql://postgres:[password]@db.[id].supabase.co:6543/postgres?pgbouncer=true

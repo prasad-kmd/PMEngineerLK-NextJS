@@ -3,6 +3,7 @@ import { FileText, BookOpen, GitBranch, Newspaper, Wrench } from "lucide-react";
 import FeaturedHero, { type HeroItem } from "@/components/featured-hero";
 import MagicBentoClient from "@/components/magic-bento-client";
 import { getContentByType } from "@/lib/content";
+import { getOgImageUrl } from "@/lib/seo/metadata";
 import { Calendar, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -10,6 +11,12 @@ import type { Metadata } from "next";
 const title = "PrasadM Blogfolio | Engineering Workspace";
 const description =
   "Personal engineering workspace documenting my journey in mechanical and mechatronics engineering, featuring research, projects, and professional tools.";
+
+const ogImage = getOgImageUrl({
+  title,
+  description,
+  type: "Workspace",
+});
 
 export const metadata: Metadata = {
   title,
@@ -19,10 +26,10 @@ export const metadata: Metadata = {
     description,
     images: [
       {
-        url: `/api/og?title=${encodeURIComponent(title)}`,
-        width: 1200,
-        height: 630,
-        alt: description,
+        url: ogImage,
+        width: 1280,
+        height: 720,
+        alt: title,
       },
     ],
   },
@@ -30,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: [`/api/og?title=${encodeURIComponent(title)}`],
+    images: [ogImage],
   },
 };
 
