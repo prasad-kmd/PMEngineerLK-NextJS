@@ -9,7 +9,7 @@ import { TechnicalBackground } from "@/components/technical-background";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Authors | Engineering Workspace",
+  title: "Authors | PrasadM Blogfolio",
   description:
     "Meet the experts behind our technical documentation and research.",
 };

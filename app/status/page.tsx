@@ -12,6 +12,27 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "System Status | PrasadM Blogfolio",
+  description:
+    "Real-time status updates for our engineering platform services and infrastructure.",
+  openGraph: {
+    title: "System Status | PrasadM Blogfolio",
+    description:
+      "Real-time status updates for our engineering platform services and infrastructure.",
+    url: "/status",
+    images: [
+      {
+        url: `/api/og?title=${encodeURIComponent("System Status")}`,
+        width: 1200,
+        height: 630,
+        alt: "System Status",
+      },
+    ],
+  },
+};
 
 // Server component with revalidation
 export const revalidate = 3600;

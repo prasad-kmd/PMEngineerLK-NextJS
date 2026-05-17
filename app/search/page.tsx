@@ -12,6 +12,11 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useSearchParams } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+// import type { Metadata } from "next";
+
+// const title = "Search Results | PrasadM Blogfolio";
+// const description =
+//   "Search across all engineering projects, technical articles, and documentation.";
 
 interface SearchResult {
   slug: string;

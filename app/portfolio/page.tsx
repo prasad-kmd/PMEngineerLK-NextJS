@@ -16,6 +16,25 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
+  openGraph: {
+    title,
+    description,
+    url: "/portfolio",
+    images: [
+      {
+        url: `/api/og?title=${encodeURIComponent(title)}`,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [`/api/og?title=${encodeURIComponent(title)}`],
+  },
 };
 
 export default async function PortfolioPage() {

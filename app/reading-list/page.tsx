@@ -12,6 +12,25 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
+  openGraph: {
+    title,
+    description,
+    url: "/reading-list",
+    images: [
+      {
+        url: `/api/og?title=${encodeURIComponent(title)}`,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [`/api/og?title=${encodeURIComponent(title)}`],
+  },
 };
 
 const readings = [

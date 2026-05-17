@@ -5,6 +5,34 @@ import MagicBentoClient from "@/components/magic-bento-client";
 import { getContentByType } from "@/lib/content";
 import { Calendar, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import type { Metadata } from "next";
+
+const title = "PrasadM Blogfolio | Engineering Workspace";
+const description =
+  "Personal engineering workspace documenting my journey in mechanical and mechatronics engineering, featuring research, projects, and professional tools.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    images: [
+      {
+        url: `/api/og?title=${encodeURIComponent(title)}`,
+        width: 1200,
+        height: 630,
+        alt: description,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [`/api/og?title=${encodeURIComponent(title)}`],
+  },
+};
 
 export default async function Home() {
   const blogs = await getContentByType("blog");

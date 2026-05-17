@@ -26,6 +26,20 @@ export const metadata: Metadata = {
     title,
     description,
     url: "/uses",
+    images: [
+      {
+        url: `/api/og?title=${encodeURIComponent(title)}`,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [`/api/og?title=${encodeURIComponent(title)}`],
   },
 };
 

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Code2, Copy, Search, Cpu } from "lucide-react";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 
+
 const snippets = [
   {
     title: "Next.js 15 Async Params",

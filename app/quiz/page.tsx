@@ -1,11 +1,34 @@
 import { getContentByType } from "@/lib/content";
 import { QuizList } from "@/components/quiz-library/quiz-list";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Quiz Library",
-  description:
-    "Challenge your engineering knowledge with our interactive quizzes.",
+const title = "Quiz Library";
+const description =
+  "Challenge your engineering knowledge with our interactive quizzes.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: "/quiz",
+    images: [
+      {
+        url: `/api/og?title=${encodeURIComponent(title)}`,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [`/api/og?title=${encodeURIComponent(title)}`],
+  },
 };
 
 export default async function QuizListPage() {

@@ -4,6 +4,7 @@ import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { AlertTriangle, ArrowRight, X } from "lucide-react";
 import Link from "next/link";
+
 import { Breadcrumbs } from "@/components/breadcrumbs";
 
 const REDIRECT_DELAY = 5; // seconds

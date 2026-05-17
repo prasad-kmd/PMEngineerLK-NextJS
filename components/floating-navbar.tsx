@@ -8,7 +8,6 @@ import {
   Share2,
   LayoutGrid,
   Wrench,
-  Tv,
 } from "lucide-react";
 import { useEffect, useState, startTransition } from "react";
 import Link from "next/link";
@@ -40,7 +39,7 @@ export function FloatingNavbar({
   const [isBookmarksOpen, setIsBookmarksOpen] = useState(false);
   const { bookmarks } = useBookmarks();
   const [copied, setCopied] = useState(false);
-  const { isAdmin } = useIsAdmin();
+  useIsAdmin();
 
   // Avoid hydration mismatch
   useEffect(() => {

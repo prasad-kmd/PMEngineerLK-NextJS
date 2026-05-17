@@ -14,6 +14,7 @@ import {
 import { SafeLink } from "@/components/ui/safe-link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 
+
 // Types for our license data
 type Category = "All" | "Software" | "Fonts" | "Assets";
 

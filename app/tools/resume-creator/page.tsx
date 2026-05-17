@@ -5,15 +5,12 @@ import {
   Briefcase,
   GraduationCap,
   Code2,
-  Award,
   User,
   Layout,
   RotateCcw,
-  FileDown,
   ChevronRight,
   Sparkles,
   Download,
-  Trash2,
   Database,
   Upload,
   Globe,
@@ -107,37 +104,45 @@ export default function ResumeCreator() {
 
   // Migration for new data structure fields
   useEffect(() => {
-    const needsMigration = 
-      resume && (
-        !resume.technicalSkills || 
-        !resume.personalSkills || 
-        !resume.extraCurricular || 
-        !resume.referees
-      );
+    const needsMigration =
+      resume &&
+      (!resume.technicalSkills ||
+        !resume.personalSkills ||
+        !resume.extraCurricular ||
+        !resume.referees);
 
     if (needsMigration) {
       setResume((prev) => {
         const migrated = { ...prev };
-        
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const prevAny = prev as any;
+
         if (!migrated.technicalSkills) {
-          migrated.technicalSkills = (prev as any).skills || [];
+          migrated.technicalSkills = prevAny.skills || [];
         }
         if (!migrated.personalSkills) {
           migrated.personalSkills = [];
         }
         if (!migrated.extraCurricular) {
-          migrated.extraCurricular = (prev as any).volunteering || [];
+          migrated.extraCurricular = prevAny.volunteering || [];
         }
         if (!migrated.referees) {
           migrated.referees = [];
         } else {
           // Migrate old contactDetails to email/phone
-          migrated.referees = (migrated.referees as any[]).map(ref => {
-            if (ref.contactDetails && !ref.email && !ref.phone) {
-              const details = ref.contactDetails;
+          migrated.referees = migrated.referees.map((ref) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const refAny = ref as any;
+            if (refAny.contactDetails && !ref.email && !ref.phone) {
+              const details = refAny.contactDetails;
               if (details.includes("|")) {
                 const parts = details.split("|");
-                return { ...ref, email: parts[0].trim(), phone: parts[1]?.trim() || "" };
+                return {
+                  ...ref,
+                  email: parts[0].trim(),
+                  phone: parts[1]?.trim() || "",
+                };
               }
               if (details.includes("@")) {
                 return { ...ref, email: details, phone: "" };
@@ -147,19 +152,21 @@ export default function ResumeCreator() {
             return {
               ...ref,
               email: ref.email || "",
-              phone: ref.phone || ""
+              phone: ref.phone || "",
             };
           });
         }
 
         // Migrate education to include description
         if (migrated.education) {
-          migrated.education = migrated.education.map(edu => ({
+          migrated.education = migrated.education.map((edu) => ({
             ...edu,
-            description: edu.description || ""
+            description: edu.description || "",
           }));
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         delete (migrated as any).skills;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         delete (migrated as any).volunteering;
 
         return migrated;

@@ -15,6 +15,8 @@ Disallow: /sign-in/
 Disallow: /external-link
 Disallow: /quiz/*
 Disallow: /invoice-gen/*
+Disallow: /admin-tools/
+Disallow: /roadmap
 
 User-Agent: GPTBot
 Disallow: /

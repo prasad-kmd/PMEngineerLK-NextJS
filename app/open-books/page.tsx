@@ -24,6 +24,7 @@ import Image from "next/image";
 import { SafeLink } from "@/components/ui/safe-link";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 
+
 interface Book {
   key: string;
   title: string;

@@ -86,7 +86,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/researches",
     "/open-books",
     "/authors",
-    "/roadmap",
     "/uses",
     "/now",
     "/search",

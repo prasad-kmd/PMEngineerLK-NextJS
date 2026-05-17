@@ -10,6 +10,13 @@ import { TechnicalBackground } from "@/components/technical-background";
 import Link from "next/link";
 import Image from "next/image";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign In | PrasadM Blogfolio",
+  description:
+    "Sign in to access your dashboard and sync preferences across all your devices.",
+};
 
 export default function SignInPage() {
   return (

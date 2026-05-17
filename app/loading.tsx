@@ -72,7 +72,7 @@ export default function Loading() {
             </div>
             <div className="flex-1 text-center">
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground local-jetbrains-mono">
-                System_Monitor.v16
+                System Monitor v16
               </span>
             </div>
           </div>
@@ -103,7 +103,7 @@ export default function Loading() {
             {/* Progress Bar Container */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-widest text-muted-foreground">
-                <span>Deployment_Progress</span>
+                <span>System Initialization</span>
                 <span className="local-jetbrains-mono">
                   {Math.round(progress)}%
                 </span>

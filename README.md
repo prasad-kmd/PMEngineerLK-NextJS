@@ -92,7 +92,7 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 
 - **🚀 Performance-First Architecture** - Next.js 16 (App Router) with optimized client/server boundaries, deferred hydration of non-critical components, and smart prefetching
 - **🖼️ Image Excellence** - Next.js optimized images with responsive sizing, LQIP, and deferred video loading for mobile
-- **🔍 Semantic SEO** - Full Schema.org (JSON-LD) integration for articles, blog posts, and breadcrumbs
+- **🔍 Semantic SEO** - Full Schema.org (JSON-LD) integration for articles, blog posts, and breadcrumbs, with comprehensive metadata and OG images for all public pages
 - **⚡ Premium Shiki Highlighting** - VS Code-accurate syntax highlighting with lazy-loaded languages
 - **🔍 Site Verification** - Integrated Google site ownership verification
 - **📐 LaTeX Support** - Full math notation rendering via KaTeX (Inline: $F=ma$, Block: $$E=mc^2$$) with route-specific CSS loading

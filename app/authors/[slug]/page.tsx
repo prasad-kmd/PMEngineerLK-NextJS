@@ -18,11 +18,44 @@ import {
   Sparkles,
   ChevronRight,
 } from "lucide-react";
+import type { Metadata } from "next";
 
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ page?: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const author = await getAuthorBySlug(slug);
+
+  if (!author) {
+    return {
+      title: "Author Not Found",
+    };
+  }
+
+  const title = `${author.name} | Authors`;
+  const description = author.bio || `Profile of ${author.name}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `/authors/${slug}`,
+      images: [
+        {
+          url: `/api/og?title=${encodeURIComponent(author.name)}`,
+          width: 1200,
+          height: 630,
+          alt: author.name,
+        },
+      ],
+    },
+  };
+}
 
 export default async function AuthorDetailPage({
   params,

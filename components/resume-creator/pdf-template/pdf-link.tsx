@@ -3,7 +3,7 @@
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { ResumePDF, type ResumeData } from "./resume-pdf";
 import { Button } from "@/components/ui/button";
-import { Download, Loader2 } from "lucide-react";
+import { Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ResumePDFLinkProps {

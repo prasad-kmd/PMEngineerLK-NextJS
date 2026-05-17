@@ -45,7 +45,7 @@ export default function GlobalError({
                 <div className="flex items-center gap-2 text-destructive">
                   <AlertTriangle className="h-5 w-5" />
                   <span className="text-xs font-black uppercase tracking-[0.3em]">
-                    System_Critical_Failure
+                    System Critical Failure
                   </span>
                 </div>
                 <h1 className="text-2xl font-black mozilla-headline tracking-tight uppercase">
@@ -102,15 +102,15 @@ export default function GlobalError({
               <div className="relative rounded-xl border border-border bg-black/90 p-5 font-mono text-[11px] leading-relaxed text-red-500/90 shadow-inner">
                 <div className="mb-2 flex items-center justify-between border-b border-white/10 pb-2">
                   <span className="text-white/40 uppercase tracking-widest">
-                    Diagnostic_Log
+                    Diagnostic Log
                   </span>
                   <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
                 </div>
                 <p className="mb-1 text-white/60">
-                  [{new Date().toISOString()}] FATAL_EXCEPTION_OCCURRED
+                  [{new Date().toISOString()}] FATAL EXCEPTION OCCURRED
                 </p>
                 <p className="break-all">
-                  MESSAGE:{" "}
+                  MESSAGE :{" "}
                   {error.message || "An unexpected core failure occurred."}
                 </p>
                 {error.digest && (
@@ -157,7 +157,7 @@ export default function GlobalError({
             {/* Footer */}
             <div className="flex items-center justify-between pt-4 border-t border-border">
               <span className="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-[0.3em]">
-                PMEngineerLK // Emergency_Protocol
+                PrasadM Blogfolio // Emergency Protocol
               </span>
               <div className="flex gap-1.5">
                 <div className="h-1 w-1 rounded-full bg-red-500/50" />

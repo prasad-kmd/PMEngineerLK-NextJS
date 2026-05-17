@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Plus, X, Globe, Heart, Trash2 } from "lucide-react";
+import { Plus, X, Globe, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

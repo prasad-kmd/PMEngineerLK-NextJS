@@ -1,6 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import { ShieldAlert, LogIn, UserX, Home, LayoutDashboard } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Not Authorized | PrasadM Blogfolio",
+  description: "You do not have permission to access this page.",
+};
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { SignOutButton } from "@/components/auth/SignOutButton";
