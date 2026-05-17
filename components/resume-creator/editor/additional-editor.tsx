@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Plus, X, Globe, Heart } from "lucide-react";
+import { Plus, X, Globe, Heart, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,6 +31,49 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
     const newList = [...resume[field]];
     newList[index] = value;
     setResume((prev) => ({ ...prev, [field]: newList }));
+  };
+
+  const addPublication = () => {
+    setResume((prev) => ({
+      ...prev,
+      publications: [
+        ...(prev.publications || []),
+        { title: "", publisher: "", date: "", link: "", description: "" },
+      ],
+    }));
+  };
+
+  const removePublication = (index: number) => {
+    setResume((prev) => ({
+      ...prev,
+      publications: (prev.publications || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const updatePublication = (index: number, field: string, value: string) => {
+    setResume((prev) => {
+      const newList = [...(prev.publications || [])];
+      newList[index] = { ...newList[index], [field]: value };
+      return { ...prev, publications: newList };
+    });
+  };
+
+  const moveUpPublication = (index: number) => {
+    if (index === 0) return;
+    setResume((prev) => {
+      const newList = [...(prev.publications || [])];
+      [newList[index - 1], newList[index]] = [newList[index], newList[index - 1]];
+      return { ...prev, publications: newList };
+    });
+  };
+
+  const moveDownPublication = (index: number) => {
+    setResume((prev) => {
+      const newList = [...(prev.publications || [])];
+      if (index === newList.length - 1) return prev;
+      [newList[index], newList[index + 1]] = [newList[index + 1], newList[index]];
+      return { ...prev, publications: newList };
+    });
   };
 
   const addExtraCurricular = () => {
@@ -188,6 +231,93 @@ export function AdditionalEditor({ resume, setResume }: AdditionalEditorProps) {
           ))}
           {(resume.extraCurricular || []).length === 0 && (
             <p className="text-sm text-muted-foreground italic py-4">No activities added yet.</p>
+          )}
+        </div>
+      </div>
+
+      {/* Publications & Patents */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between border-b border-border pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-500">
+              <BookOpen className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold font-noto-sans-display">Publications & Patents</h3>
+              <p className="text-xs text-muted-foreground font-local-inter">Research papers, journals, patents, or whitepapers.</p>
+            </div>
+          </div>
+          <Button onClick={addPublication} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-noto-sans-display">
+            <Plus className="h-3.5 w-3.5" /> Add Publication
+          </Button>
+        </div>
+        
+        <div className="space-y-4">
+          {(resume.publications || []).map((pub, idx) => (
+            <EditablePanel
+              key={idx}
+              title={pub.title || "Publication Title"}
+              subtitle={pub.publisher}
+              period={pub.date}
+              onRemove={() => removePublication(idx)}
+              onMoveUp={idx > 0 ? () => moveUpPublication(idx) : undefined}
+              onMoveDown={idx < (resume.publications || []).length - 1 ? () => moveDownPublication(idx) : undefined}
+              defaultExpanded={idx === (resume.publications || []).length - 1}
+            >
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Title</Label>
+                  <Input
+                    placeholder="e.g. Decentralized State Sync Optimization..."
+                    value={pub.title}
+                    onChange={(e) => updatePublication(idx, "title", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Publisher / Journal / Patent Office</Label>
+                  <Input
+                    placeholder="e.g. IEEE Software Engineering Journal"
+                    value={pub.publisher || ""}
+                    onChange={(e) => updatePublication(idx, "publisher", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Publication Date / Year</Label>
+                  <Input
+                    placeholder="e.g. 2024"
+                    value={pub.date || ""}
+                    onChange={(e) => updatePublication(idx, "date", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Link URL</Label>
+                  <Input
+                    placeholder="e.g. ieeexplore.ieee.org/document/123456"
+                    value={pub.link || ""}
+                    onChange={(e) => updatePublication(idx, "link", e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label className="text-[10px] font-black uppercase tracking-widest font-noto-sans-display">Description / Abstract</Label>
+                  <span className={cn("text-[9px] local-jetbrains-mono", (pub.description || "").length > 500 ? "text-destructive" : "text-muted-foreground")}>
+                    {(pub.description || "").length}/500
+                  </span>
+                </div>
+                <Textarea
+                  placeholder="Describe your research, contribution, or paper abstract..."
+                  value={pub.description || ""}
+                  onChange={(e) => updatePublication(idx, "description", e.target.value)}
+                  rows={3}
+                  className="resize-none font-noto-sans-display"
+                  maxLength={500}
+                />
+              </div>
+            </EditablePanel>
+          ))}
+          {(resume.publications || []).length === 0 && (
+            <p className="text-sm text-muted-foreground italic py-4">No publications or patents added yet.</p>
           )}
         </div>
       </div>

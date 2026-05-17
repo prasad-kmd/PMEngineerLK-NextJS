@@ -46,6 +46,9 @@ const initialResume: ResumeData = {
   image: null,
   summary:
     "Dedicated software engineer with 5+ years of experience building scalable web applications. Passionate about clean code, architecture, and mentoring teams.",
+  customLinks: [
+    { url: "leetcode.com/u/", username: "johndoe" }
+  ],
   experiences: [
     {
       company: "Tech Solutions Inc.",
@@ -78,7 +81,15 @@ const initialResume: ResumeData = {
     "Team Leadership",
     "Effective Communication",
   ],
+  coursework: [
+    "Advanced Algorithms",
+    "Distributed Systems",
+    "Cloud Computing"
+  ],
   certifications: ["AWS Certified Developer", "Google Cloud Professional"],
+  awards: [
+    { title: "Dean's List for Academic Excellence", description: "Awarded for keeping a 3.9 GPA or higher across consecutive semesters." }
+  ],
   projects: [
     {
       name: "E-commerce Platform",
@@ -88,6 +99,7 @@ const initialResume: ResumeData = {
     },
   ],
   languages: ["English (Professional)", "Sinhala (Native)"],
+  publications: [],
   extraCurricular: [],
   referees: [],
   interests: [
@@ -114,7 +126,11 @@ export default function ResumeCreator() {
         !resume.personalSkills ||
         !resume.extraCurricular ||
         !resume.referees ||
-        !resume.interests);
+        !resume.interests ||
+        !resume.customLinks ||
+        !resume.coursework ||
+        !resume.awards ||
+        !resume.publications);
 
     if (needsMigration) {
       setResume((prev) => {
@@ -134,6 +150,18 @@ export default function ResumeCreator() {
         }
         if (!migrated.interests) {
           migrated.interests = [];
+        }
+        if (!migrated.customLinks) {
+          migrated.customLinks = [];
+        }
+        if (!migrated.coursework) {
+          migrated.coursework = [];
+        }
+        if (!migrated.awards) {
+          migrated.awards = [];
+        }
+        if (!migrated.publications) {
+          migrated.publications = [];
         }
         if (!migrated.referees) {
           migrated.referees = [];
@@ -242,7 +270,7 @@ export default function ResumeCreator() {
   const renderActiveSection = () => {
     switch (activeSection) {
       case "personal":
-        return <PersonalInfoEditor resume={resume} updateField={updateField} />;
+        return <PersonalInfoEditor resume={resume} updateField={updateField} setResume={setResume} />;
       case "experience":
         return <ExperienceEditor resume={resume} setResume={setResume} />;
       case "education":

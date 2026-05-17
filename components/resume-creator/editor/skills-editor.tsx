@@ -13,19 +13,19 @@ interface SkillsEditorProps {
 }
 
 export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
-  const addItem = (field: "technicalSkills" | "personalSkills" | "certifications") => {
-    setResume((prev) => ({ ...prev, [field]: [...prev[field], ""] }));
+  const addItem = (field: "technicalSkills" | "personalSkills" | "certifications" | "coursework") => {
+    setResume((prev) => ({ ...prev, [field]: [...(prev[field] || []), ""] }));
   };
 
-  const removeItem = (field: "technicalSkills" | "personalSkills" | "certifications", index: number) => {
+  const removeItem = (field: "technicalSkills" | "personalSkills" | "certifications" | "coursework", index: number) => {
     setResume((prev) => ({
       ...prev,
-      [field]: prev[field].filter((_, i) => i !== index),
+      [field]: (prev[field] || []).filter((_, i) => i !== index),
     }));
   };
 
-  const updateItem = (field: "technicalSkills" | "personalSkills" | "certifications", index: number, value: string) => {
-    const newList = [...resume[field]];
+  const updateItem = (field: "technicalSkills" | "personalSkills" | "certifications" | "coursework", index: number, value: string) => {
+    const newList = [...(resume[field] || [])];
     newList[index] = value;
     setResume((prev) => ({ ...prev, [field]: newList }));
   };
@@ -52,6 +52,31 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
         [field]: value,
       };
       return { ...prev, interests: newInterests };
+    });
+  };
+
+  const addAward = () => {
+    setResume((prev) => ({
+      ...prev,
+      awards: [...(prev.awards || []), { title: "", description: "" }],
+    }));
+  };
+
+  const removeAward = (index: number) => {
+    setResume((prev) => ({
+      ...prev,
+      awards: (prev.awards || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateAward = (index: number, field: "title" | "description", value: string) => {
+    setResume((prev) => {
+      const newAwards = [...(prev.awards || [])];
+      newAwards[index] = {
+        ...newAwards[index],
+        [field]: value,
+      };
+      return { ...prev, awards: newAwards };
     });
   };
 
@@ -129,6 +154,42 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
         </div>
       </div>
 
+      {/* Relevant Coursework */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between border-b border-border pb-4">
+          <div>
+            <h3 className="text-lg font-bold font-mozilla-headline">Relevant Coursework</h3>
+            <p className="text-xs text-muted-foreground font-local-inter">List academic subjects or courses relevant to your target jobs.</p>
+          </div>
+          <Button onClick={() => addItem("coursework")} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-google-sans">
+            <Plus className="h-3.5 w-3.5" /> Add Course
+          </Button>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          {(resume.coursework || []).map((course, idx) => (
+            <div key={idx} className="flex items-center gap-1 group animate-in zoom-in-95 duration-200">
+              <Input
+                className="h-9 w-40 md:w-48 bg-background/50"
+                placeholder="e.g. Distributed Systems"
+                value={course}
+                onChange={(e) => updateItem("coursework", idx, e.target.value)}
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => removeItem("coursework", idx)}
+              >
+                <X className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          ))}
+          {(resume.coursework || []).length === 0 && (
+            <p className="text-sm text-muted-foreground italic py-4 font-local-inter">No coursework added yet.</p>
+          )}
+        </div>
+      </div>
+
       {/* Certifications */}
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-border pb-4">
@@ -161,6 +222,56 @@ export function SkillsEditor({ resume, setResume }: SkillsEditorProps) {
           ))}
           {(resume.certifications || []).length === 0 && (
             <p className="text-sm text-muted-foreground italic py-4 col-span-2 font-local-inter">No certifications added yet.</p>
+          )}
+        </div>
+      </div>
+
+      {/* Awards & Honors */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between border-b border-border pb-4">
+          <div>
+            <h3 className="text-lg font-bold font-mozilla-headline">Awards & Honors</h3>
+            <p className="text-xs text-muted-foreground font-local-inter">List academic honors, hackathon wins, or work achievements.</p>
+          </div>
+          <Button onClick={addAward} size="sm" variant="outline" className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-google-sans">
+            <Plus className="h-3.5 w-3.5" /> Add Award
+          </Button>
+        </div>
+        <div className="space-y-4">
+          {(resume.awards || []).map((award, idx) => (
+            <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 rounded-xl border border-border/60 bg-muted/20 group animate-in slide-in-from-left-2 duration-200">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground local-jetbrains-mono">Award Title</label>
+                  <Input
+                    className="h-9 bg-background/50"
+                    placeholder="e.g. Dean's List for Academic Excellence"
+                    value={award.title}
+                    onChange={(e) => updateAward(idx, "title", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground local-jetbrains-mono">Award Description / Issuer</label>
+                  <Input
+                    className="h-9 bg-background/50"
+                    placeholder="e.g. Maintained a 3.9/4.0 GPA across consecutive semesters."
+                    value={award.description || ""}
+                    onChange={(e) => updateAward(idx, "description", e.target.value)}
+                  />
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 text-muted-foreground hover:text-destructive sm:mt-5 shrink-0 transition-opacity"
+                onClick={() => removeAward(idx)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+          {(resume.awards || []).length === 0 && (
+            <p className="text-sm text-muted-foreground italic py-4 font-local-inter">No awards added yet.</p>
           )}
         </div>
       </div>

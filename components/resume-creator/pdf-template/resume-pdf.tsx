@@ -55,6 +55,24 @@ export interface Interest {
   details?: string;
 }
 
+export interface CustomLink {
+  url: string;      // Base URL, e.g. "leetcode.com/u/"
+  username: string; // Handle/username, e.g. "johndoe"
+}
+
+export interface Award {
+  title: string;
+  description?: string;
+}
+
+export interface Publication {
+  title: string;
+  publisher?: string;
+  date?: string;
+  link?: string;
+  description?: string;
+}
+
 export interface ResumeData {
   name: string;
   role: string;
@@ -76,6 +94,10 @@ export interface ResumeData {
   extraCurricular: Experience[];
   referees: Referee[];
   interests?: Interest[];
+  customLinks?: CustomLink[];
+  awards?: Award[];
+  coursework?: string[];
+  publications?: Publication[];
 }
 
 // --- Theme ---
@@ -337,6 +359,34 @@ const getSocialUrl = (platform: "linkedin" | "github", username: string) => {
   return "";
 };
 
+const getCleanLinkLabel = (url: string, username: string) => {
+  if (!url) return username;
+  try {
+    let cleanUrl = url.replace(/^(https?:\/\/)?(www\.)?/, "");
+    if (cleanUrl.endsWith("/")) {
+      cleanUrl = cleanUrl.slice(0, -1);
+    }
+    const domain = cleanUrl.split("/")[0];
+    const platformName = domain.split(".")[0];
+    const formattedPlatform = platformName.charAt(0).toUpperCase() + platformName.slice(1);
+    return `${formattedPlatform}: ${username}`;
+  } catch (e) {
+    return username;
+  }
+};
+
+const getCombinedLink = (url: string, username: string) => {
+  if (!url) return "";
+  let fullUrl = url;
+  if (!fullUrl.startsWith("http")) {
+    fullUrl = `https://${fullUrl}`;
+  }
+  if (!fullUrl.endsWith("/") && !username.startsWith("/")) {
+    fullUrl = `${fullUrl}/`;
+  }
+  return `${fullUrl}${username}`;
+};
+
 const renderDescription = (text: string) => {
   if (!text) return null;
   const lines = text.split("\n").filter((line) => line.trim() !== "");
@@ -449,6 +499,23 @@ export function ResumePDF({ resume }: ResumePDFProps) {
               </Link>
             </View>
           )}
+          {resume.customLinks &&
+            resume.customLinks.length > 0 &&
+            (resume.customLinks || [])
+              .filter((link) => link.url.trim() && link.username.trim())
+              .map((link, i) => (
+                <View key={i} style={styles.contactItem}>
+                  <View style={{ marginTop: -3 }}>
+                    <GlobeIcon size={8} color={colors.accent} />
+                  </View>
+                  <Link
+                    src={getCombinedLink(link.url, link.username)}
+                    style={styles.contactLink}
+                  >
+                    {getCleanLinkLabel(link.url, link.username)}
+                  </Link>
+                </View>
+              ))}
         </View>
 
         {/* Main Content Layout */}
@@ -577,6 +644,40 @@ export function ResumePDF({ resume }: ResumePDFProps) {
                     ))}
                 </View>
               )}
+
+            {/* Publications & Patents */}
+            {resume.publications &&
+              resume.publications.length > 0 &&
+              (resume.publications || []).some((pub) => pub.title.trim()) && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Publications & Patents</Text>
+                  {(resume.publications || [])
+                    .filter((pub) => pub.title.trim())
+                    .map((pub, i) => (
+                      <View key={i} style={styles.projectItem} wrap={false}>
+                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                          <Text style={styles.projectName}>{pub.title}</Text>
+                          {pub.date && <Text style={styles.expPeriod}>{pub.date}</Text>}
+                        </View>
+                        {pub.publisher && (
+                          <Text style={{ fontSize: 8.5, fontWeight: 600, color: colors.accent, marginBottom: 2 }}>
+                            {pub.publisher}
+                          </Text>
+                        )}
+                        {pub.link && (
+                          <Link src={normalizeUrl(pub.link)} style={styles.projectLink}>
+                            {pub.link}
+                          </Link>
+                        )}
+                        {pub.description && (
+                          <Text style={styles.projectDesc}>
+                            {pub.description}
+                          </Text>
+                        )}
+                      </View>
+                    ))}
+                </View>
+              )}
           </View>
 
           {/* Side Column */}
@@ -611,6 +712,24 @@ export function ResumePDF({ resume }: ResumePDFProps) {
                       .map((skill, i) => (
                         <Text key={i} style={styles.skillTag}>
                           {skill}
+                        </Text>
+                      ))}
+                  </View>
+                </View>
+              )}
+
+            {/* Relevant Coursework */}
+            {resume.coursework &&
+              resume.coursework.length > 0 &&
+              (resume.coursework || []).some((c) => c.trim()) && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Relevant Coursework</Text>
+                  <View style={styles.skillGroup}>
+                    {(resume.coursework || [])
+                      .filter((c) => c.trim())
+                      .map((course, i) => (
+                        <Text key={i} style={styles.skillTag}>
+                          {course}
                         </Text>
                       ))}
                   </View>
@@ -677,6 +796,29 @@ export function ResumePDF({ resume }: ResumePDFProps) {
                     .map((cert, i) => (
                       <View key={i} style={{ marginBottom: 4 }}>
                         <Text style={{ fontSize: 8.5 }}>{cert}</Text>
+                      </View>
+                    ))}
+                </View>
+              )}
+
+            {/* Awards & Honors */}
+            {resume.awards &&
+              resume.awards.length > 0 &&
+              (resume.awards || []).some((award) => award.title.trim()) && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Awards & Honors</Text>
+                  {(resume.awards || [])
+                    .filter((award) => award.title.trim())
+                    .map((award, i) => (
+                      <View key={i} style={{ marginBottom: 4 }} wrap={false}>
+                        <Text style={{ fontSize: 8.5, fontWeight: 700, color: colors.primary }}>
+                          • {award.title}
+                        </Text>
+                        {award.description && award.description.trim() && (
+                          <Text style={{ fontSize: 8, color: colors.textMuted, marginLeft: 8 }}>
+                            {award.description}
+                          </Text>
+                        )}
                       </View>
                     ))}
                 </View>

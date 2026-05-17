@@ -1,8 +1,7 @@
 "use client";
-
 import React, { useRef } from "react";
 import Image from "next/image";
-import { Camera, X } from "lucide-react";
+import { Camera, X, Plus, Trash2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,9 +13,10 @@ import { cn } from "@/lib/utils";
 interface PersonalInfoEditorProps {
   resume: ResumeData;
   updateField: (field: keyof ResumeData, value: string | null) => void;
+  setResume?: React.Dispatch<React.SetStateAction<ResumeData>>;
 }
 
-export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorProps) {
+export function PersonalInfoEditor({ resume, updateField, setResume }: PersonalInfoEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +37,34 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
   const removeImage = () => {
     updateField("image", null);
     if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const addCustomLink = () => {
+    if (!setResume) return;
+    setResume((prev) => ({
+      ...prev,
+      customLinks: [...(prev.customLinks || []), { url: "", username: "" }],
+    }));
+  };
+
+  const removeCustomLink = (index: number) => {
+    if (!setResume) return;
+    setResume((prev) => ({
+      ...prev,
+      customLinks: (prev.customLinks || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateCustomLink = (index: number, field: "url" | "username", value: string) => {
+    if (!setResume) return;
+    setResume((prev) => {
+      const newLinks = [...(prev.customLinks || [])];
+      newLinks[index] = {
+        ...newLinks[index],
+        [field]: value,
+      };
+      return { ...prev, customLinks: newLinks };
+    });
   };
 
   return (
@@ -160,6 +188,74 @@ export function PersonalInfoEditor({ resume, updateField }: PersonalInfoEditorPr
             value={resume.github}
             onChange={(e) => updateField("github", e.target.value)}
           />
+        </div>
+      </div>
+
+      {/* Custom Portfolio / Social Links */}
+      <div className="space-y-4 pt-4 border-t border-border">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Globe className="h-4 w-4 text-primary" />
+            <h4 className="text-sm font-bold uppercase tracking-widest font-noto-sans-display">
+              Custom Social & Portfolio Links
+            </h4>
+          </div>
+          <Button
+            type="button"
+            onClick={addCustomLink}
+            size="sm"
+            variant="outline"
+            className="h-8 gap-1.5 font-bold uppercase tracking-widest text-[10px] font-noto-sans-display"
+          >
+            <Plus className="h-3.5 w-3.5" /> Add Link
+          </Button>
+        </div>
+
+        <div className="space-y-3">
+          {(resume.customLinks || []).map((link, idx) => (
+            <div
+              key={idx}
+              className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] items-end bg-muted/30 p-3 rounded-xl border border-border animate-in fade-in slide-in-from-bottom-2 duration-200"
+            >
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-noto-sans-display">
+                  Base URL / Link Prefix
+                </Label>
+                <Input
+                  placeholder="e.g. leetcode.com/u/"
+                  value={link.url}
+                  onChange={(e) => updateCustomLink(idx, "url", e.target.value)}
+                  className="h-9 bg-background/50 font-google-sans"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-noto-sans-display">
+                  Username / Handle
+                </Label>
+                <Input
+                  placeholder="e.g. johndoe"
+                  value={link.username}
+                  onChange={(e) => updateCustomLink(idx, "username", e.target.value)}
+                  className="h-9 bg-background/50 font-google-sans"
+                />
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => removeCustomLink(idx)}
+                className="h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+
+          {(resume.customLinks || []).length === 0 && (
+            <p className="text-xs text-muted-foreground italic font-noto-sans-display py-2 text-center bg-muted/10 rounded-xl border border-dashed border-border/50">
+              No custom social or portfolio links added yet. Click "Add Link" to display platforms like LeetCode or Behance!
+            </p>
+          )}
         </div>
       </div>
 
