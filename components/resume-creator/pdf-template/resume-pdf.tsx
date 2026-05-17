@@ -50,6 +50,11 @@ export interface Referee {
   phone: string;
 }
 
+export interface Interest {
+  name: string;
+  details?: string;
+}
+
 export interface ResumeData {
   name: string;
   role: string;
@@ -70,6 +75,7 @@ export interface ResumeData {
   languages: string[];
   extraCurricular: Experience[];
   referees: Referee[];
+  interests?: Interest[];
 }
 
 // --- Theme ---
@@ -606,6 +612,37 @@ export function ResumePDF({ resume }: ResumePDFProps) {
                         <Text key={i} style={styles.skillTag}>
                           {skill}
                         </Text>
+                      ))}
+                  </View>
+                </View>
+              )}
+
+            {/* Interests */}
+            {resume.interests &&
+              resume.interests.length > 0 &&
+              (resume.interests || []).some((interest) => interest.name.trim()) && (
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Interests</Text>
+                  <View style={{ gap: 4 }}>
+                    {(resume.interests || [])
+                      .filter((interest) => interest.name.trim())
+                      .map((interest, i) => (
+                        <View key={i} style={{ marginBottom: 4 }} wrap={false}>
+                          <Text
+                            style={{
+                              fontSize: 9,
+                              fontWeight: 700,
+                              color: colors.primary,
+                            }}
+                          >
+                            {interest.name}
+                          </Text>
+                          {interest.details && interest.details.trim() && (
+                            <Text style={{ fontSize: 8, color: colors.textMuted }}>
+                              {interest.details}
+                            </Text>
+                          )}
+                        </View>
                       ))}
                   </View>
                 </View>

@@ -90,6 +90,10 @@ const initialResume: ResumeData = {
   languages: ["English (Professional)", "Sinhala (Native)"],
   extraCurricular: [],
   referees: [],
+  interests: [
+    { name: "Photography", details: "Landscape & street photography" },
+    { name: "Open Source", details: "Contributing to developer tool ecosystems" },
+  ],
 };
 
 type EditorSection = "personal" | "experience" | "education" | "skills" | "projects" | "additional" | "referees";
@@ -109,7 +113,8 @@ export default function ResumeCreator() {
       (!resume.technicalSkills ||
         !resume.personalSkills ||
         !resume.extraCurricular ||
-        !resume.referees);
+        !resume.referees ||
+        !resume.interests);
 
     if (needsMigration) {
       setResume((prev) => {
@@ -126,6 +131,9 @@ export default function ResumeCreator() {
         }
         if (!migrated.extraCurricular) {
           migrated.extraCurricular = prevAny.volunteering || [];
+        }
+        if (!migrated.interests) {
+          migrated.interests = [];
         }
         if (!migrated.referees) {
           migrated.referees = [];
