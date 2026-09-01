@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SpotlightCard } from "@/components/react-bits/components/SpotlightCard";
 import { TechnicalBackground } from "@/components/technical-background";
 import Link from "next/link";
 import Image from "next/image";
@@ -30,7 +31,7 @@ export default function SignInPage() {
         />
       </div>
 
-      <Card className="w-full max-w-md border-border/50 bg-card/30 backdrop-blur-2xl shadow-2xl relative z-10 transition-all duration-500 hover:shadow-primary/5">
+      <SpotlightCard className="w-full max-w-md border-border/50 bg-card/30 backdrop-blur-2xl shadow-2xl relative z-10 transition-all duration-500 hover:shadow-primary/5">
         <CardHeader className="text-center space-y-2 pb-2">
           <div className="mx-auto h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 mb-4 transition-transform duration-500 hover:scale-110">
             <Image
@@ -72,7 +73,7 @@ export default function SignInPage() {
             .
           </p>
         </CardContent>
-      </Card>
+      </SpotlightCard>
 
       {/* Subtle floating glow effect */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[160px] -z-20 animate-pulse pointer-events-none" />

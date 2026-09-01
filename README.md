@@ -66,6 +66,7 @@ Perfect for researchers, engineers, and developers who need a robust, scalable, 
 
 ### 🎨 User Experience
 
+- **✨ React Bits Micro-Interactions & Animations** - Comprehensive suite of animated text (`SplitText`, `BlurText`, `RotatingText`, `ShinyText`, `DecryptedText`), interactive components (`SpotlightCard`, `BorderGlow`, `Counter`, `AnimatedList`), animations (`Magnet`, `GlareHover`, `ElectricBorder`), and background treatments (`AuroraBackground`).
 - **♿ Custom Accessibility Controller** - Scoped text adjustments (size, font, spacing, contrast) with draggable interface and persistence
 - **🎯 Smart TOC** - Automatically generated Table of Contents with active-state scroll tracking
 - **🔍 Search & Command Palette** - Global `Cmd+K` search modal for quick navigation

@@ -4,6 +4,11 @@ import { useState, useEffect, startTransition } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { SplitText } from "@/components/react-bits/text-animations/SplitText";
+import { RotatingText } from "@/components/react-bits/text-animations/RotatingText";
+import { BlurText } from "@/components/react-bits/text-animations/BlurText";
+import { Magnet } from "@/components/react-bits/animations/Magnet";
+import { SpotlightCard } from "@/components/react-bits/components/SpotlightCard";
 
 export interface HeroItem {
   title: string;
@@ -92,15 +97,22 @@ export default function FeaturedHero({ items }: FeaturedHeroProps) {
         <div className="grid lg:grid-cols-12 gap-16 items-center">
           <div className="lg:col-span-7 space-y-8 md:space-y-10">
             <div className="space-y-4">
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.8 }}
-                className="text-3xl md:text-5xl xl:text-6xl font-black amoriaregular leading-[0.85] tracking-tight text-foreground"
-              >
-                Creative Ideas Came with <br />
-                <span className="text-primary italic relative">
-                  Infinite Imagination
+              <h1 className="text-3xl md:text-5xl xl:text-6xl font-black amoriaregular leading-[0.85] tracking-tight text-foreground">
+                <SplitText
+                  text="Creative Ideas Came with"
+                  className="block"
+                  stagger={0.02}
+                />
+                <span className="text-primary italic relative block mt-2">
+                  <RotatingText
+                    texts={[
+                      "Infinite Imagination",
+                      "Mechatronics Precision",
+                      "Digital Innovation",
+                      "Robotics Excellence",
+                    ]}
+                    duration={3500}
+                  />
                   <svg
                     className="absolute -bottom-4 left-0 w-full h-4 text-primary/20"
                     viewBox="0 0 300 20"
@@ -113,54 +125,44 @@ export default function FeaturedHero({ items }: FeaturedHeroProps) {
                     />
                   </svg>
                 </span>
-              </motion.h1>
+              </h1>
             </div>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-xl md:text-2xl text-muted-foreground max-w-2xl google-sans leading-relaxed font-light"
-            >
-              Architecting high-performance systems where{" "}
-              <span className="text-foreground font-bold">mechatronics</span>{" "}
-              meets{" "}
-              <span className="text-foreground font-bold">
-                digital innovation
-              </span>
-              . Documenting the frontier of hardware engineering.
-            </motion.p>
+            <div className="text-xl md:text-2xl text-muted-foreground max-w-2xl google-sans leading-relaxed font-light">
+              <BlurText
+                text="Architecting high-performance systems where mechatronics meets digital innovation. Documenting the frontier of hardware engineering."
+                delay={0.2}
+              />
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-wrap gap-4 pt-4"
-            >
-              {/* Primary Action - Thick Glass */}
-              <Link
-                href="/projects"
-                className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-2xl bg-foreground/10 px-10 text-sm font-bold text-foreground shadow-lg transition-all hover:bg-foreground/20 hover:scale-[1.02] active:scale-[0.98] border border-white/20 dark:border-white/10 backdrop-blur-2xl"
-              >
-                <span className="relative z-10 flex items-center gap-3 uppercase tracking-wider font-google-sans">
-                  Explore Works
-                  <ArrowRight
-                    size={18}
-                    className="transition-transform group-hover:translate-x-1"
-                  />
-                </span>
-                {/* Inner glow effect for iOS look */}
-                <div className="absolute inset-0 bg-linear-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Link>
+            <div className="flex flex-wrap gap-4 pt-4">
+              {/* Primary Action - Magnetic Button */}
+              <Magnet magnetStrength={0.2}>
+                <Link
+                  href="/projects"
+                  className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-2xl bg-foreground/10 px-10 text-sm font-bold text-foreground shadow-lg transition-all hover:bg-foreground/20 hover:scale-[1.02] active:scale-[0.98] border border-white/20 dark:border-white/10 backdrop-blur-2xl"
+                >
+                  <span className="relative z-10 flex items-center gap-3 uppercase tracking-wider font-google-sans">
+                    Explore Works
+                    <ArrowRight
+                      size={18}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </span>
+                  <div className="absolute inset-0 bg-linear-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+              </Magnet>
 
-              {/* Secondary Action - Light Glass */}
-              <Link
-                href="/blog"
-                className="inline-flex h-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-10 text-sm font-bold text-foreground/80 backdrop-blur-xl transition-all hover:bg-white/10 hover:text-foreground hover:border-white/20 uppercase tracking-wider shadow-sm font-amoria"
-              >
-                Read Blog
-              </Link>
-            </motion.div>
+              {/* Secondary Action - Light Glass with Magnet */}
+              <Magnet magnetStrength={0.15}>
+                <Link
+                  href="/blog"
+                  className="inline-flex h-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-10 text-sm font-bold text-foreground/80 backdrop-blur-xl transition-all hover:bg-white/10 hover:text-foreground hover:border-white/20 uppercase tracking-wider shadow-sm font-amoria"
+                >
+                  Read Blog
+                </Link>
+              </Magnet>
+            </div>
           </div>
 
           <motion.div

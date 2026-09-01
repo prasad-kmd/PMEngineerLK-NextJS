@@ -1,0 +1,1208 @@
+
+> PrasadM-Blogfolio@2.5.0 dev /app
+> next dev
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+✓ Ready in 608ms
+
+○ Compiling / ...
+ HEAD / 200 in 10.1s (next.js: 8.9s, application-code: 1127ms)
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: 'e236e82c-fa34-4e70-8d56-23594b155381'
+}
+Error fetching Notion content for blog: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:45:17)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:37:59 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343fc747a364fa9-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-CMG0cANnK9NEBdA+NXUr6rLdngo"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': 'e236e82c-fa34-4e70-8d56-23594b155381',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=1.RC0Zupy9R3uGqj.8CBRDDuo1KbPhA5HKS8q0_UXLw-1788262679.7566643-1.0.1.1-tv3p41CATmuBtG6qQY_8c.RolFIpa3ls1H9517jFrUDfg2KuSjpY4166Yvq5s5DKyQFpvzmA0dLtvUjS2XvySMZqX9MhUjiil3znRhxj2ZlSK0I8jG1WOs2p09B2m9z0; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:07:59 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"e236e82c-fa34-4e70-8d56-23594b155381"}',
+  additional_data: undefined,
+  request_id: 'e236e82c-fa34-4e70-8d56-23594b155381'
+}
+Cache fetch failed for blog Error [NotionAPIError]: Failed to fetch Notion content for blog
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:45:17)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:45:17)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:37:59 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343fc747a364fa9-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-CMG0cANnK9NEBdA+NXUr6rLdngo"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': 'e236e82c-fa34-4e70-8d56-23594b155381',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=1.RC0Zupy9R3uGqj.8CBRDDuo1KbPhA5HKS8q0_UXLw-1788262679.7566643-1.0.1.1-tv3p41CATmuBtG6qQY_8c.RolFIpa3ls1H9517jFrUDfg2KuSjpY4166Yvq5s5DKyQFpvzmA0dLtvUjS2XvySMZqX9MhUjiil3znRhxj2ZlSK0I8jG1WOs2p09B2m9z0; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:07:59 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"e236e82c-fa34-4e70-8d56-23594b155381"}',
+    additional_data: undefined,
+    request_id: 'e236e82c-fa34-4e70-8d56-23594b155381'
+  }
+}
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: '73a87e58-1967-4569-9ae9-b5d725db3dca'
+}
+Error fetching Notion content for articles: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:46:20)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:38:00 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343fc7779754fa9-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-7lCyOAigCH5PeaPa8ZoQeKtuRWQ"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': '73a87e58-1967-4569-9ae9-b5d725db3dca',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=g6GiB9wKOQXkRwCQN8d5J5MIQ1XCOB6DOX6zLs3EbEM-1788262680.236683-1.0.1.1-uTmJ5hk8BqroMCqBVshOjiI0YozcgN7eaEpb9DWw0pvwvzE1CEo_.zh5SnO1tY1ID1iKRjcM_0A5eg6ade6gV_IWFkzGEFv4u0Tl0c7jQHT2vqUOocoCrXCkeLRRF6db; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:08:00 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"73a87e58-1967-4569-9ae9-b5d725db3dca"}',
+  additional_data: undefined,
+  request_id: '73a87e58-1967-4569-9ae9-b5d725db3dca'
+}
+Cache fetch failed for articles Error [NotionAPIError]: Failed to fetch Notion content for articles
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:46:20)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:46:20)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:38:00 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343fc7779754fa9-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-7lCyOAigCH5PeaPa8ZoQeKtuRWQ"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': '73a87e58-1967-4569-9ae9-b5d725db3dca',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=g6GiB9wKOQXkRwCQN8d5J5MIQ1XCOB6DOX6zLs3EbEM-1788262680.236683-1.0.1.1-uTmJ5hk8BqroMCqBVshOjiI0YozcgN7eaEpb9DWw0pvwvzE1CEo_.zh5SnO1tY1ID1iKRjcM_0A5eg6ade6gV_IWFkzGEFv4u0Tl0c7jQHT2vqUOocoCrXCkeLRRF6db; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:08:00 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"73a87e58-1967-4569-9ae9-b5d725db3dca"}',
+    additional_data: undefined,
+    request_id: '73a87e58-1967-4569-9ae9-b5d725db3dca'
+  }
+}
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: 'f13f4de6-cc67-4d90-9dec-0beff0c285ef'
+}
+Error fetching Notion content for projects: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:47:20)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:38:00 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343fc7a2fdb4fa9-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-zCncAcQ2E5oTEZ8Dd1YYNN4F5pM"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': 'f13f4de6-cc67-4d90-9dec-0beff0c285ef',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=JbXGa9hrpyxQDDnqAnijCftYs7979.5GHw1Mp4FYAOo-1788262680.6713228-1.0.1.1-jMTy1aQL2iiFohvhA.7cIKOsRYmEc6yxgrtnTWuVOq6I057y4KMtEgpfV5HWwuy2p2Rc2Gn5g.3XH1bxMTxoDryZHgyznYisXfrgwroukj6CrPhQWn4Nu9OCsoYn4sUr; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:08:00 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"f13f4de6-cc67-4d90-9dec-0beff0c285ef"}',
+  additional_data: undefined,
+  request_id: 'f13f4de6-cc67-4d90-9dec-0beff0c285ef'
+}
+Cache fetch failed for projects Error [NotionAPIError]: Failed to fetch Notion content for projects
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:47:20)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:47:20)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:38:00 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343fc7a2fdb4fa9-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-zCncAcQ2E5oTEZ8Dd1YYNN4F5pM"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': 'f13f4de6-cc67-4d90-9dec-0beff0c285ef',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=JbXGa9hrpyxQDDnqAnijCftYs7979.5GHw1Mp4FYAOo-1788262680.6713228-1.0.1.1-jMTy1aQL2iiFohvhA.7cIKOsRYmEc6yxgrtnTWuVOq6I057y4KMtEgpfV5HWwuy2p2Rc2Gn5g.3XH1bxMTxoDryZHgyznYisXfrgwroukj6CrPhQWn4Nu9OCsoYn4sUr; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:08:00 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"f13f4de6-cc67-4d90-9dec-0beff0c285ef"}',
+    additional_data: undefined,
+    request_id: 'f13f4de6-cc67-4d90-9dec-0beff0c285ef'
+  }
+}
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: '30a6142e-a613-4f89-9949-1cf5df368fcf'
+}
+Error fetching Notion content for tutorials: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:48:21)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:38:01 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343fc7cdefb4fa9-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-qDmU84ZJP3RVl/z8Q4aQXsn373w"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': '30a6142e-a613-4f89-9949-1cf5df368fcf',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=KDuHdeOZBfkr6S2emXKWnHtLJyE0Ohv6pA4uHxdsqE8-1788262681.0969362-1.0.1.1-71avRGgJkCvteJnIbKU_JoJDiVsYAoGMY80OrWxJfXRrIR1z3GPFTHUZWTfUBQokPgQvwWoEslrM1Ol6z4lVOERKfIYvQd72G2nLg6mzS2ysTmY4EPDjeXP7ZFwHLtvv; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:08:01 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"30a6142e-a613-4f89-9949-1cf5df368fcf"}',
+  additional_data: undefined,
+  request_id: '30a6142e-a613-4f89-9949-1cf5df368fcf'
+}
+Cache fetch failed for tutorials Error [NotionAPIError]: Failed to fetch Notion content for tutorials
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:48:21)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:48:21)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:38:01 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343fc7cdefb4fa9-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-qDmU84ZJP3RVl/z8Q4aQXsn373w"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': '30a6142e-a613-4f89-9949-1cf5df368fcf',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=KDuHdeOZBfkr6S2emXKWnHtLJyE0Ohv6pA4uHxdsqE8-1788262681.0969362-1.0.1.1-71avRGgJkCvteJnIbKU_JoJDiVsYAoGMY80OrWxJfXRrIR1z3GPFTHUZWTfUBQokPgQvwWoEslrM1Ol6z4lVOERKfIYvQd72G2nLg6mzS2ysTmY4EPDjeXP7ZFwHLtvv; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:08:01 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"30a6142e-a613-4f89-9949-1cf5df368fcf"}',
+    additional_data: undefined,
+    request_id: '30a6142e-a613-4f89-9949-1cf5df368fcf'
+  }
+}
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: '47440e39-85ea-448d-a50a-ee70144517dc'
+}
+Error fetching Notion content for blog: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:45:17)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:40:19 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343ffda38b7f4e8-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-HeSC5lE9Sv/EEL2q1svIOTEtzBA"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': '47440e39-85ea-448d-a50a-ee70144517dc',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=9xwqaLAviz3kf.RR.niHZ72a3UKbRg8TVbIo0x8A.sE-1788262818.9186947-1.0.1.1-AyamONedFF5nU2iRw74bLAYVGQCJGCPC0iz3N4ag46C9d9JoDzwtNzvftB4P7CXUcoOmrA07FBqv1zucj0Bp45.V34tnG4w8IKYVVzDtOsglQv_7IQDJ6G5R4VV1RiGX; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:19 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"47440e39-85ea-448d-a50a-ee70144517dc"}',
+  additional_data: undefined,
+  request_id: '47440e39-85ea-448d-a50a-ee70144517dc'
+}
+Cache fetch failed for blog Error [NotionAPIError]: Failed to fetch Notion content for blog
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:45:17)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:45:17)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:40:19 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343ffda38b7f4e8-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-HeSC5lE9Sv/EEL2q1svIOTEtzBA"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': '47440e39-85ea-448d-a50a-ee70144517dc',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=9xwqaLAviz3kf.RR.niHZ72a3UKbRg8TVbIo0x8A.sE-1788262818.9186947-1.0.1.1-AyamONedFF5nU2iRw74bLAYVGQCJGCPC0iz3N4ag46C9d9JoDzwtNzvftB4P7CXUcoOmrA07FBqv1zucj0Bp45.V34tnG4w8IKYVVzDtOsglQv_7IQDJ6G5R4VV1RiGX; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:19 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"47440e39-85ea-448d-a50a-ee70144517dc"}',
+    additional_data: undefined,
+    request_id: '47440e39-85ea-448d-a50a-ee70144517dc'
+  }
+}
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: '25e5cb0d-00b0-4abf-9856-9c861776cde1'
+}
+Error fetching Notion content for articles: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:46:20)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:40:19 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343ffdcdfedf4e8-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-sbT1lESAIfvgUCie7VFMev/E86w"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': '25e5cb0d-00b0-4abf-9856-9c861776cde1',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=xVpdCgM6o7tQzQmauel5o3czCOXD8w3VVQCzEvqP.KQ-1788262819.3360212-1.0.1.1-QGn.YrjBKFbUcEhLOmza1L2IQgAvsWfQG5Nw0lFNIw9L6iQcIsMzl11iealAF8Q_lxAE9Jl3lLDF852j8SoarWvzkRc67QaJxlR.OljPPPqGwFdV1C0ADGP_CZQ5gREs; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:19 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"25e5cb0d-00b0-4abf-9856-9c861776cde1"}',
+  additional_data: undefined,
+  request_id: '25e5cb0d-00b0-4abf-9856-9c861776cde1'
+}
+Cache fetch failed for articles Error [NotionAPIError]: Failed to fetch Notion content for articles
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:46:20)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:46:20)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:40:19 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343ffdcdfedf4e8-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-sbT1lESAIfvgUCie7VFMev/E86w"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': '25e5cb0d-00b0-4abf-9856-9c861776cde1',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=xVpdCgM6o7tQzQmauel5o3czCOXD8w3VVQCzEvqP.KQ-1788262819.3360212-1.0.1.1-QGn.YrjBKFbUcEhLOmza1L2IQgAvsWfQG5Nw0lFNIw9L6iQcIsMzl11iealAF8Q_lxAE9Jl3lLDF852j8SoarWvzkRc67QaJxlR.OljPPPqGwFdV1C0ADGP_CZQ5gREs; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:19 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"25e5cb0d-00b0-4abf-9856-9c861776cde1"}',
+    additional_data: undefined,
+    request_id: '25e5cb0d-00b0-4abf-9856-9c861776cde1'
+  }
+}
+[browser] PostHog key missing. Analytics disabled. (instrumentation-client.ts:34:15)
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: '9029deca-b883-4efc-b975-2b340caf7be4'
+}
+Error fetching Notion content for projects: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:47:20)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:40:20 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343ffe2d9c6f4e8-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-mcaKU5xM+Dk4jYseIVX91MlYHyM"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': '9029deca-b883-4efc-b975-2b340caf7be4',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=l9TM2tXh0BGCtprpSn9MCDbqHegwOLLz3rVzLFGpYv8-1788262820.3001707-1.0.1.1-imEdrdMyaP2xxKOn0P_ocrNeDxK0yCdMTja5tCup79EdBUy8kejuWygn529CiKn4gc85A7aOTXEZlOlrCjORIdnvGxF0rOPrgxXB2qeQPkpo1CRka_sOphdNiu7yCOIo; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:20 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"9029deca-b883-4efc-b975-2b340caf7be4"}',
+  additional_data: undefined,
+  request_id: '9029deca-b883-4efc-b975-2b340caf7be4'
+}
+Cache fetch failed for projects Error [NotionAPIError]: Failed to fetch Notion content for projects
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:47:20)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:47:20)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:40:20 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343ffe2d9c6f4e8-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-mcaKU5xM+Dk4jYseIVX91MlYHyM"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': '9029deca-b883-4efc-b975-2b340caf7be4',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=l9TM2tXh0BGCtprpSn9MCDbqHegwOLLz3rVzLFGpYv8-1788262820.3001707-1.0.1.1-imEdrdMyaP2xxKOn0P_ocrNeDxK0yCdMTja5tCup79EdBUy8kejuWygn529CiKn4gc85A7aOTXEZlOlrCjORIdnvGxF0rOPrgxXB2qeQPkpo1CRka_sOphdNiu7yCOIo; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:20 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"9029deca-b883-4efc-b975-2b340caf7be4"}',
+    additional_data: undefined,
+    request_id: '9029deca-b883-4efc-b975-2b340caf7be4'
+  }
+}
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: 'c0056c2f-8891-481b-8cf2-061cb514fe09'
+}
+Error fetching Notion content for tutorials: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:48:21)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:40:20 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343ffe598ebf4e8-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-+6Q0Z1n2bRIzrFUpDMpupyrciUY"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': 'c0056c2f-8891-481b-8cf2-061cb514fe09',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=CtYrAJnduPLaa4DDyy.ybf06v5bfcBytCFQe6t76SSU-1788262820.734212-1.0.1.1-vrbomzxk2OG6qbN4VxDL1KCx6HSh750X.2H5Aqdg84nNfLkGkJfLxS9DaV1Ib1db4CZuCyrHvbu9JTPfPSLj4RlSz0lHghB3yF4oQT1MotnWpXAVDVZr64kQUnMwiPts; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:20 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"c0056c2f-8891-481b-8cf2-061cb514fe09"}',
+  additional_data: undefined,
+  request_id: 'c0056c2f-8891-481b-8cf2-061cb514fe09'
+}
+Cache fetch failed for tutorials Error [NotionAPIError]: Failed to fetch Notion content for tutorials
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:48:21)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:48:21)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:40:20 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343ffe598ebf4e8-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-+6Q0Z1n2bRIzrFUpDMpupyrciUY"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': 'c0056c2f-8891-481b-8cf2-061cb514fe09',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=CtYrAJnduPLaa4DDyy.ybf06v5bfcBytCFQe6t76SSU-1788262820.734212-1.0.1.1-vrbomzxk2OG6qbN4VxDL1KCx6HSh750X.2H5Aqdg84nNfLkGkJfLxS9DaV1Ib1db4CZuCyrHvbu9JTPfPSLj4RlSz0lHghB3yF4oQT1MotnWpXAVDVZr64kQUnMwiPts; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:20 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"c0056c2f-8891-481b-8cf2-061cb514fe09"}',
+    additional_data: undefined,
+    request_id: 'c0056c2f-8891-481b-8cf2-061cb514fe09'
+  }
+}
+ GET / 200 in 3.0s (next.js: 9ms, application-code: 3.0s)
+[browser] Image with src "/img/favicon/favicon-128.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+○ Compiling /api/auth/[...better-auth] ...
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: '363f2679-6dbc-4f71-891a-1281232e7929'
+}
+Error fetching Notion content for blog: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:45:17)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:40:23 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343fff50c38f4e8-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-EBSbJJg8332uYYkPL+3N/D5tawg"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': '363f2679-6dbc-4f71-891a-1281232e7929',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=bJEQcBn6LgSCsF3ueINEve6Cv7J2WzgmTmdTNV3IEN8-1788262823.204199-1.0.1.1-C8bkq4k8WakeAN7m2vOEHhWHtIrIBEA03_bZElrzvY_0jHP6cM5fpncMmn8fuVXqLaEFU5_KybG3iZ4HXD1tzZRkF0nty5YepondUHO9Q2jSudA0f_O8nYn2IBTvlNit; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:23 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"363f2679-6dbc-4f71-891a-1281232e7929"}',
+  additional_data: undefined,
+  request_id: '363f2679-6dbc-4f71-891a-1281232e7929'
+}
+Cache fetch failed for blog Error [NotionAPIError]: Failed to fetch Notion content for blog
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:45:17)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:45:17)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:40:23 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343fff50c38f4e8-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-EBSbJJg8332uYYkPL+3N/D5tawg"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': '363f2679-6dbc-4f71-891a-1281232e7929',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=bJEQcBn6LgSCsF3ueINEve6Cv7J2WzgmTmdTNV3IEN8-1788262823.204199-1.0.1.1-C8bkq4k8WakeAN7m2vOEHhWHtIrIBEA03_bZElrzvY_0jHP6cM5fpncMmn8fuVXqLaEFU5_KybG3iZ4HXD1tzZRkF0nty5YepondUHO9Q2jSudA0f_O8nYn2IBTvlNit; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:23 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"363f2679-6dbc-4f71-891a-1281232e7929"}',
+    additional_data: undefined,
+    request_id: '363f2679-6dbc-4f71-891a-1281232e7929'
+  }
+}
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: 'e1d7ec76-7f3b-47c0-a63c-dd5728f5716d'
+}
+Error fetching Notion content for articles: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:46:20)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:40:24 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343fffbc98ff4e8-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-F3NAPcRmluSfXKuAEYyoVcshuRg"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': 'e1d7ec76-7f3b-47c0-a63c-dd5728f5716d',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=SP8PQKeGCL.M9RDTxsD_htR.kTUvR4kq5Z4ZugKitMc-1788262824.2850566-1.0.1.1-m_kBX6p8hFT9VOUBHI06m_iogOBlxJ2zxaB_kOBkWXLqLTnnahEV9xbsoKLOa2HbeI0mHQrGn0Sr9Mnlj3IjYB1jjeY7AeOMjjnfp2MsKaHKT_UkHNT7HRDoCqdg3cG3; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:24 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"e1d7ec76-7f3b-47c0-a63c-dd5728f5716d"}',
+  additional_data: undefined,
+  request_id: 'e1d7ec76-7f3b-47c0-a63c-dd5728f5716d'
+}
+Cache fetch failed for articles Error [NotionAPIError]: Failed to fetch Notion content for articles
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:46:20)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:46:20)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:40:24 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343fffbc98ff4e8-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-F3NAPcRmluSfXKuAEYyoVcshuRg"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': 'e1d7ec76-7f3b-47c0-a63c-dd5728f5716d',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=SP8PQKeGCL.M9RDTxsD_htR.kTUvR4kq5Z4ZugKitMc-1788262824.2850566-1.0.1.1-m_kBX6p8hFT9VOUBHI06m_iogOBlxJ2zxaB_kOBkWXLqLTnnahEV9xbsoKLOa2HbeI0mHQrGn0Sr9Mnlj3IjYB1jjeY7AeOMjjnfp2MsKaHKT_UkHNT7HRDoCqdg3cG3; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:24 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"e1d7ec76-7f3b-47c0-a63c-dd5728f5716d"}',
+    additional_data: undefined,
+    request_id: 'e1d7ec76-7f3b-47c0-a63c-dd5728f5716d'
+  }
+}
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: '2489cc2c-698a-4da6-bffb-fb530e2b70b5'
+}
+Error fetching Notion content for projects: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:47:20)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:40:25 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a343ffffbdb7f4e8-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-EtyW2ki5z0t2Gdf52v4l9fxYLfc"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': '2489cc2c-698a-4da6-bffb-fb530e2b70b5',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=gdlCdO59TYzLc2lg9a9bwPAan0KU4EhWaDcAoU33B0E-1788262824.9180787-1.0.1.1-JghCNNDqb.lqBmCLO8XVR6iHGwgZdowt.BfI0LSI4XwKA5_QF0Oh1LdGgshIpTgJr_1qtZH1tRYC3Lx1a.O1g8BN8YJO5PhPcXvGoHbaXqt_Kl63tn3fmTgCqoIg8WJQ; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:25 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"2489cc2c-698a-4da6-bffb-fb530e2b70b5"}',
+  additional_data: undefined,
+  request_id: '2489cc2c-698a-4da6-bffb-fb530e2b70b5'
+}
+Cache fetch failed for projects Error [NotionAPIError]: Failed to fetch Notion content for projects
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:47:20)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:47:20)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:40:25 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a343ffffbdb7f4e8-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-EtyW2ki5z0t2Gdf52v4l9fxYLfc"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': '2489cc2c-698a-4da6-bffb-fb530e2b70b5',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=gdlCdO59TYzLc2lg9a9bwPAan0KU4EhWaDcAoU33B0E-1788262824.9180787-1.0.1.1-JghCNNDqb.lqBmCLO8XVR6iHGwgZdowt.BfI0LSI4XwKA5_QF0Oh1LdGgshIpTgJr_1qtZH1tRYC3Lx1a.O1g8BN8YJO5PhPcXvGoHbaXqt_Kl63tn3fmTgCqoIg8WJQ; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:25 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"2489cc2c-698a-4da6-bffb-fb530e2b70b5"}',
+    additional_data: undefined,
+    request_id: '2489cc2c-698a-4da6-bffb-fb530e2b70b5'
+  }
+}
+@notionhq/client warn: request fail {
+  code: 'validation_error',
+  message: 'Could not find property with name or id: Status',
+  attempt: 0,
+  requestId: 'c0a88293-2e04-40cb-a6f4-4878b3a1c769'
+}
+Error fetching Notion content for tutorials: Error [APIResponseError]: Could not find property with name or id: Status
+    at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:48:21)
+  39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+  40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+> 41 |     const response = await (notion as any).dataSources.query({
+     |                      ^
+  42 |       data_source_id: dataSourceId,
+  43 |       filter: {
+  44 |         property: "Status", {
+  code: 'validation_error',
+  status: 400,
+  headers: Headers {
+    date: 'Tue, 01 Sep 2026 11:40:25 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '169',
+    connection: 'keep-alive',
+    'cf-ray': 'a3440003685bf4e8-ORD',
+    'cf-cache-status': 'DYNAMIC',
+    etag: 'W/"a9-iSRXwAjM8Qad8jes7PggC/zXyLs"',
+    server: 'cloudflare',
+    'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+    vary: 'Accept-Encoding',
+    'content-security-policy': "default-src 'none'",
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'x-content-type-options': 'nosniff',
+    'x-dns-prefetch-control': 'off',
+    'x-download-options': 'noopen',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-notion-request-id': 'c0a88293-2e04-40cb-a6f4-4878b3a1c769',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-xss-protection': '0',
+    'set-cookie': '__cf_bm=R44es7YYlxMrRV.6Q_Yzys8nxsL3kX2TSjTAXSRMIm8-1788262825.502677-1.0.1.1-9lDlroH05gTUtLVV2wfJldszJpLhNftfJz2VKdP_4XMQ.k0DDjSeBi3t.wA_LwKApFYd2oeLre_9u5kPAjr.GtO46qbOpZf12nHm4akA8N13e2YI7SdvY.y..yxnlf3M; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:25 GMT'
+  },
+  body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"c0a88293-2e04-40cb-a6f4-4878b3a1c769"}',
+  additional_data: undefined,
+  request_id: 'c0a88293-2e04-40cb-a6f4-4878b3a1c769'
+}
+Cache fetch failed for tutorials Error [NotionAPIError]: Failed to fetch Notion content for tutorials
+    at fetchNotionContentByType (lib/content/notion.ts:109:11)
+    at async (lib/content.ts:39:14)
+    at async Home (app/page.tsx:48:21)
+  107 |   } catch (error) {
+  108 |     console.error(`Error fetching Notion content for ${type}:`, error);
+> 109 |     throw new NotionAPIError(
+      |           ^
+  110 |       `Failed to fetch Notion content for ${type}`,
+  111 |       500,
+  112 |       error, {
+  statusCode: 500,
+  originalError: Error [APIResponseError]: Could not find property with name or id: Status
+      at async fetchNotionContentByType (lib/content/notion.ts:41:22)
+      at async (lib/content.ts:39:14)
+      at async Home (app/page.tsx:48:21)
+    39 |     // @ts-expect-error - Notion SDK might not have data_sources yet
+    40 |     const dataSourceId = (dbObj as any).data_sources?.[0]?.id || databaseId;
+  > 41 |     const response = await (notion as any).dataSources.query({
+       |                      ^
+    42 |       data_source_id: dataSourceId,
+    43 |       filter: {
+    44 |         property: "Status", {
+    code: 'validation_error',
+    status: 400,
+    headers: Headers {
+      date: 'Tue, 01 Sep 2026 11:40:25 GMT',
+      'content-type': 'application/json; charset=utf-8',
+      'content-length': '169',
+      connection: 'keep-alive',
+      'cf-ray': 'a3440003685bf4e8-ORD',
+      'cf-cache-status': 'DYNAMIC',
+      etag: 'W/"a9-iSRXwAjM8Qad8jes7PggC/zXyLs"',
+      server: 'cloudflare',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      vary: 'Accept-Encoding',
+      'content-security-policy': "default-src 'none'",
+      'referrer-policy': 'strict-origin-when-cross-origin',
+      'x-content-type-options': 'nosniff',
+      'x-dns-prefetch-control': 'off',
+      'x-download-options': 'noopen',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-notion-request-id': 'c0a88293-2e04-40cb-a6f4-4878b3a1c769',
+      'x-permitted-cross-domain-policies': 'none',
+      'x-xss-protection': '0',
+      'set-cookie': '__cf_bm=R44es7YYlxMrRV.6Q_Yzys8nxsL3kX2TSjTAXSRMIm8-1788262825.502677-1.0.1.1-9lDlroH05gTUtLVV2wfJldszJpLhNftfJz2VKdP_4XMQ.k0DDjSeBi3t.wA_LwKApFYd2oeLre_9u5kPAjr.GtO46qbOpZf12nHm4akA8N13e2YI7SdvY.y..yxnlf3M; HttpOnly; SameSite=None; Secure; Path=/; Domain=notion.com; Expires=Tue, 01 Sep 2026 12:10:25 GMT'
+    },
+    body: '{"object":"error","status":400,"code":"validation_error","message":"Could not find property with name or id: Status","request_id":"c0a88293-2e04-40cb-a6f4-4878b3a1c769"}',
+    additional_data: undefined,
+    request_id: 'c0a88293-2e04-40cb-a6f4-4878b3a1c769'
+  }
+}
+ GET / 200 in 3.5s (next.js: 13ms, application-code: 3.5s)
+[2m2026-09-01T11:40:28.292Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+[2m2026-09-01T11:40:32.008Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+ GET /api/auth/get-session 200 in 13.2s (next.js: 13.1s, application-code: 61ms)
+ GET /tools 200 in 8.4s (next.js: 7.5s, application-code: 921ms)
+ GET /api/auth/get-session 200 in 91ms (next.js: 78ms, application-code: 12ms)
+[browser] PostHog key missing. Analytics disabled. (instrumentation-client.ts:34:15)
+[browser] Image with src "/img/favicon/favicon-128.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[2m2026-09-01T11:40:34.876Z[0m [33mWARN[0m [1m[Better Auth]:[0m [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+Error: `@theme` blocks must only contain custom properties or `@keyframes`.
+
+  @theme inline {
+>   .animate-shiny {
+>     animation: shiny 5s linear infinite;
+>   }
+  }
+
+    [2m[at /app/node_modules/.pnpm/tailwindcss@4.2.2/node_modules/tailwindcss/dist/lib.js:34:10][0m
+    [2m[at _r (/app/node_modules/.pnpm/tailwindcss@4.2.2/node_modules/tailwindcss/dist/lib.js:3:1733)][0m
+    [2m[at I (/app/node_modules/.pnpm/tailwindcss@4.2.2/node_modules/tailwindcss/dist/lib.js:3:1377)][0m
+    [2m[at /app/node_modules/.pnpm/tailwindcss@4.2.2/node_modules/tailwindcss/dist/lib.js:32:7186][0m
+    [2m[at _r (/app/node_modules/.pnpm/tailwindcss@4.2.2/node_modules/tailwindcss/dist/lib.js:3:1733)][0m
+    [2m[at I (/app/node_modules/.pnpm/tailwindcss@4.2.2/node_modules/tailwindcss/dist/lib.js:3:1377)][0m
+    [2m[at mn (/app/node_modules/.pnpm/tailwindcss@4.2.2/node_modules/tailwindcss/dist/lib.js:32:2712)][0m
+    [2m[at async gn (/app/node_modules/.pnpm/tailwindcss@4.2.2/node_modules/tailwindcss/dist/lib.js:38:631)][0m
+    [2m[at async Xr (/app/node_modules/.pnpm/@tailwindcss+node@4.2.2/node_modules/@tailwindcss/node/dist/index.js:10:3416)][0m
+    [2m[at async N (/app/node_modules/.pnpm/@tailwindcss+postcss@4.2.2/node_modules/@tailwindcss/postcss/dist/index.js:10:3979)][0m

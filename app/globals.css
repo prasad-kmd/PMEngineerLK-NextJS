@@ -198,6 +198,19 @@
     }
   }
 
+  @keyframes shiny {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .animate-shiny {
+    animation: shiny 5s linear infinite;
+  }
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);

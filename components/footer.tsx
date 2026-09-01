@@ -14,11 +14,13 @@ import {
   Rss,
 } from "lucide-react";
 import { siteConfig } from "@/lib/config";
+import { BorderGlow } from "@/components/react-bits/components/BorderGlow";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
+    <BorderGlow className="border-t-0 rounded-none">
     <footer className="relative border-t border-border bg-card/30 backdrop-blur-md overflow-hidden">
       {/* Decorative background elements with animations */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-40 dark:opacity-20 overflow-hidden">
@@ -201,5 +203,6 @@ export function Footer() {
         </div>
       </div>
     </footer>
+    </BorderGlow>
   );
 }

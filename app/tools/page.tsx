@@ -42,6 +42,7 @@ import {
 } from "lucide-react";
 import { AIContentIndicator } from "@/components/ai-content-indicator";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SpotlightCard } from "@/components/react-bits/components/SpotlightCard";
 
 interface Tool {
   name: string;
@@ -521,11 +522,13 @@ function ToolSection({
       </h2>
       <div className="grid gap-4 md:grid-cols-2">
         {tools.map((tool) => (
-          <Link
+          <SpotlightCard
             key={tool.slug}
-            href={`/tools/${tool.slug}`}
-            className="group block rounded-xl border border-border bg-card/50 p-5 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 hover:bg-card"
+            className="group relative block rounded-xl border border-border bg-card/50 p-5 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 hover:bg-card"
           >
+            <Link href={`/tools/${tool.slug}`} className="absolute inset-0 z-0">
+              <span className="sr-only">Open {tool.name}</span>
+            </Link>
             <div className="flex items-start gap-4">
               <div
                 className={`rounded-lg ${tool.bgColor} p-3 ${tool.color} shrink-0`}
@@ -551,7 +554,7 @@ function ToolSection({
                 </p>
               </div>
             </div>
-          </Link>
+          </SpotlightCard>
         ))}
       </div>
     </div>

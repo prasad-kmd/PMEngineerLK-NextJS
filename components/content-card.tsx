@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ContentItem, Author } from "@/lib/content";
 import { getAuthorBasic } from "@/lib/author-client";
 import { getContentImage } from "@/lib/content/images";
+import { SpotlightCard } from "@/components/react-bits/components/SpotlightCard";
 
 interface ContentCardProps {
   post: ContentItem;
@@ -54,10 +55,13 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
   const hasBackground = !!(post.thumbnail || post.firstImage);
 
   return (
-    <Link
-      href={`${basePath}/${post.slug}`}
-      className="group relative flex w-full flex-col overflow-hidden rounded-xl md:rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/40 hover:-translate-y-1.5 aspect-video md:aspect-3/2 min-h-[200px] md:min-h-[300px]"
-    >
+    <SpotlightCard className="group relative flex w-full flex-col overflow-hidden rounded-xl md:rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/40 hover:-translate-y-1.5 aspect-video md:aspect-3/2 min-h-[200px] md:min-h-[300px]">
+      <Link
+        href={`${basePath}/${post.slug}`}
+        className="absolute inset-0 z-0"
+      >
+        <span className="sr-only">View {post.title}</span>
+      </Link>
       {/* Background Layer */}
       {displayImage ? (
         <div className="absolute inset-0 z-0">
@@ -222,6 +226,6 @@ export function ContentCard({ post, basePath }: ContentCardProps) {
           )}
         </div>
       </div>
-    </Link>
+    </SpotlightCard>
   );
 }
